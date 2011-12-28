@@ -1,0 +1,84 @@
+= Amazon Web Services Pricing Ruby Gem
+
+== About aws-pricing
+
+Amazon Web Services offers cloud-based on demand compute, storage and application services. Due to the number of services, and the number of pricing variables in each service, the pricing model is very complex. In addition, this pricing changes periodically. The aws-pricing Ruby Gem is an interface library that simplifies the real-time retrieval of pricing information from Amazon.
+
+
+For the most complete and up-to date README information please visit the project homepage at:
+
+http://github.com/sonian/aws_pricing/tree/master
+
+
+== Installation
+
+This gem follows the standard conventions for installation on any system with Ruby and RubyGems installed and uses Bundler for gem installation and build management.
+
+=== Get an AWS account
+
+Before you can make use of this gem you will need an Amazon Web Services account.
+
+=== Install the aws-pricing gem (Canonical Release)
+
+This is the standard install for stable releases from RubyGems.
+
+  # Install the gem
+  [sudo] gem install aws-pricing
+
+=== Install from local Git clone (for aws-pricing developers)
+
+To install from git for adding features or fixing bugs, you'll need to clone and build.
+
+  git clone git://github.com/sonian/aws-pricing.git
+  cd aws-pricing
+  bundle install
+  rake test
+  rake build
+  rake install
+
+
+== Using aws-pricing
+
+The library exposes one main interface class AwsPricing::PriceList that allows you to retrieve pricing information from Amazon. The information is retrieved using undocumented json APIs - so has the potential to undergo change from time to time.
+
+=== The Basics
+
+The library exposes one main interface module
+
+  AwsPricing::PriceList
+
+== Additional Resources
+
+=== Project Websites
+
+* Project Home : http://github.com/BrindleFly/aws-pricing/tree/master
+* API Documentation : http://rdoc.info/projects/BrindleFly/aws-pricing
+* Report Bugs / Request Features : http://github.com/BrindleFly/aws-pricing/issues
+* Amazon Web Services : http://aws.amazon.com
+
+== Credits
+
+Thanks for Amazon developers for provided Json APIs to the pricing data (albeit undocumented).
+
+== Contact
+
+Comments, patches, Git pull requests and bug reports are welcome. Send an email to mailto:joe.kinsella@gmail.com.
+
+== Patches & Pull Requests
+
+Please follow these steps if you want to send a patch or a GitHub pull request:
+
+* Fork sonian/aws-pricing
+* Create a topic branch: `git checkout -b my_fix`
+* Make sure you add tests for your changes and that they all pass with 'rake test'
+* Don't change files that you don't own like the gemspec or version.rb
+* Commit your changes, one change/fix per commit
+* Push your fixes branch: `git push origin my_fix`
+* Open an Issue on GitHub referencing your branch and send a pull request.
+* Please do not push to `master` on your fork. Using a feature/bugfix branch will make everyone’s life easier.
+
+
+Enjoy!
+
+Sonian
+

@@ -1,0 +1,4 @@
+= Version 0.0.1
+
+  * Created basic framework for dynamically retrieving pricing information
+    on EC2 on-demand and reserved instances.
