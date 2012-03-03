@@ -15,7 +15,7 @@ end
 
 desc "Installs the gem"
 task :install => :gem do
-  sh "#{SUDO} gem install aws-pricing.gem --no-rdoc --no-ri"
+  sh "#{SUDO} gem install amazon-pricing.gem --no-rdoc --no-ri"
 end
 
 task :test do
@@ -24,7 +24,7 @@ end
 
 desc "Prints current EC2 pricing to console"
 task :print_price_list do
-  require 'lib/aws-pricing'
+  require 'lib/amazon-pricing'
   pricing = AwsPricing::PriceList.new
   pricing.regions.each do |region|
     puts "Region: #{region.name}"

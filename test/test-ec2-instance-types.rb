@@ -3,11 +3,11 @@
 #--
 # Amazon Web Services Pricing Ruby library
 #
-# Ruby Gem Name::  aws-pricing
+# Ruby Gem Name::  amazon-pricing
 # Author::    Joe Kinsella (mailto:joe.kinsella@gmail.com)
 # Copyright:: Copyright (c) 2011-2012 Sonian
 # License::   Distributes under the same terms as Ruby
-# Home::      http://github.com/sonian/aws-pricing
+# Home::      http://github.com/sonian/amazon-pricing
 #++
 
 require File.dirname(__FILE__) + '/helper.rb'
@@ -22,7 +22,15 @@ class TestEc2InstanceTypes < Test::Unit::TestCase
         assert_not_nil instance_type.api_name
         assert_not_nil instance_type.name
       end
-      region.ec2_reserved_instance_types.each do |instance_type|
+      region.ec2_reserved_instance_types(:light).each do |instance_type|
+        assert_not_nil instance_type.api_name
+        assert_not_nil instance_type.name
+      end
+      region.ec2_reserved_instance_types(:medium).each do |instance_type|
+        assert_not_nil instance_type.api_name
+        assert_not_nil instance_type.name
+      end
+      region.ec2_reserved_instance_types(:heavy).each do |instance_type|
         assert_not_nil instance_type.api_name
         assert_not_nil instance_type.name
       end
@@ -43,4 +51,11 @@ class TestEc2InstanceTypes < Test::Unit::TestCase
     assert region.instance_type_available?(:on_demand, 'm1.large')
   end
 
+  def test_memory
+    # Validate instance types in specific regions are available
+    pricing = AwsPricing::PriceList.new
+    region = pricing.get_region('us-east')
+    instance = region.get_instance_type(:on_demand, 'm1.large')
+    assert instance.memory_in_mb == 7500
+  end
 end
