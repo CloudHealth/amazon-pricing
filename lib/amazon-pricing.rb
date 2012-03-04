@@ -36,6 +36,15 @@ module AwsPricing
       @_regions.values
     end
 
+    # Type = :on_demand or :reserved
+    # reserved_usage_type = :light, :medium, :heavy
+    def get_instance_type(availability_zone, type, api_name, reserved_usage_type = :medium)
+      region_name = @@Availability_Zone_Lookup[availability_zone]
+      raise "Region not found for availability zone #{availability_zone}" if region_name.nil?
+      region = get_region(region_name)
+      region.get_instance_type(type, api_name, reserved_usage_type)
+    end
+
     protected
 
     attr_accessor :_regions
@@ -101,5 +110,14 @@ module AwsPricing
     EC2_RESERVED_INSTANCE_MEDIUM_PRICING_URL = 'http://aws.amazon.com/ec2/pricing/pricing-reserved-instances.json'
     EC2_RESERVED_INSTANCE_HEAVY_PRICING_URL = 'http://aws.amazon.com/ec2/pricing/pricing-reserved-instances-high-utilization.json'
 
+    @@Availability_Zone_Lookup = {
+      'us-east-1a' => 'us-east', 'us-east-1b' => 'us-east', 'us-east-1c' => 'us-east',
+      'us-east-1d' => 'us-east', 'us-east-1e' => 'us-east', 'us-west-1a' => 'us-west',
+      'us-west-1b' => 'us-west', 'us-west-1c' => 'us-west', 'us-west-2a' => 'us-west-2',
+      'us-west-2b' => 'us-west-2', 'eu-west-1a' => 'eu-ireland', 'eu-west-1b' => 'eu-ireland',
+      'eu-west-1c' => 'eu-ireland', 'ap-southeast-1a' => 'apac-sin', 'ap-southeast-1b' => 'apac-sin',
+      'ap-northeast-1a' => 'apac-tokyo', 'ap-northeast-1b' => 'apac-tokyo', 'sa-east-1a' => 'sa-east-1',
+      'sa-east-1b' => 'sa-east-1'
+    }
   end
 end
