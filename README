@@ -41,6 +41,10 @@ To install from git for adding features or fixing bugs, you'll need to clone and
 
 The library exposes one main interface class AwsPricing::PriceList that allows you to retrieve pricing information from Amazon. The information is retrieved using undocumented json APIs - so has the potential to undergo change from time to time.
 
+The following article provides a good introduction to using the gem:
+
+http://www.hightechinthehub.com/2012/03/programmatically-retrieving-aws-pricing/
+
 === The Basics
 
 The library exposes one main interface module
