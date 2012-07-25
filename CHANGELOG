@@ -1,3 +1,6 @@
+= Version 0.0.4
+  * Added support for High I/O instance type
+
 = Version 0.0.1
 
   * Created basic framework for dynamically retrieving pricing information
