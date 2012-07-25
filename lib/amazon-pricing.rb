@@ -29,7 +29,7 @@ module AwsPricing
     end
 
     def get_region(name)
-      @_regions[name]
+      @_regions[@@Region_Lookup[name] || name]
     end
 
     def regions
@@ -118,6 +118,16 @@ module AwsPricing
       'eu-west-1c' => 'eu-ireland', 'ap-southeast-1a' => 'apac-sin', 'ap-southeast-1b' => 'apac-sin',
       'ap-northeast-1a' => 'apac-tokyo', 'ap-northeast-1b' => 'apac-tokyo', 'sa-east-1a' => 'sa-east-1',
       'sa-east-1b' => 'sa-east-1'
+    }
+    
+    @@Region_Lookup = {
+      'us-east-1' => 'us-east',
+      'us-west-1' => 'us-west',
+      'us-west-2' => 'us-west-2',
+      'eu-west-1' => 'eu-ireland',
+      'ap-southeast-1' => 'apac-sin', 
+      'ap-northeast-1' => 'apac-tokyo', 
+      'sa-east-1' => 'sa-east-1'
     }
   end
 end

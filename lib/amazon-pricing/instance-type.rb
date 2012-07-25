@@ -77,51 +77,57 @@ module AwsPricing
 
 
     @@Api_Name_Lookup = {
-      'stdODI' => {'sm' => 'm1.small', 'lg' => 'm1.large', 'xl' => 'm1.xlarge'},
+      'stdODI' => {'sm' => 'm1.small', 'med' => 'm1.medium', 'lg' => 'm1.large', 'xl' => 'm1.xlarge'},
       'hiMemODI' => {'xl' => 'm2.xlarge', 'xxl' => 'm2.2xlarge', 'xxxxl' => 'm2.4xlarge'},
       'hiCPUODI' => {'med' => 'c1.medium', 'xl' => 'c1.xlarge'},
+      'hiIoODI' => {'xxxxl' => 'hi1.4xlarge'},
       'clusterGPUI' => {'xxxxl' => 'cg1.4xlarge'},
-      'clusterComputeI' => {'xxxxl' => 'cc1.4xlarge','xxxxxxxxl' => 'Cluster Compute Eight Extra Large'},
+      'clusterComputeI' => {'xxxxl' => 'cc1.4xlarge','xxxxxxxxl' => 'cc2.8xlarge'},
       'uODI' => {'u' => 't1.micro'},
     }
     @@Name_Lookup = {
-      'stdODI' => {'sm' => 'Standard Small', 'lg' => 'Standard Large', 'xl' => 'Standard Extra Large'},
+      'stdODI' => {'sm' => 'Standard Small', 'med' => 'Standard Medium', 'lg' => 'Standard Large', 'xl' => 'Standard Extra Large'},
       'hiMemODI' => {'xl' => 'Hi-Memory Extra Large', 'xxl' => 'Hi-Memory Double Extra Large', 'xxxxl' => 'Hi-Memory Quadruple Extra Large'},
       'hiCPUODI' => {'med' => 'High-CPU Medium', 'xl' => 'High-CPU Extra Large'},
+      'hiIoODI' => {'xxxxl' => 'High I/O Quadruple Extra Large'},
       'clusterGPUI' => {'xxxxl' => 'Cluster GPU Quadruple Extra Large'},
       'clusterComputeI' => {'xxxxl' => 'Cluster Compute Quadruple Extra Large', 'xxxxxxxxl' => 'Cluster Compute Eight Extra Large'},
       'uODI' => {'u' => 'Micro'},
     }
     @@Memory_Lookup = {
-      'm1.small' => 1700, 'm1.large' => 7500, 'm1.xlarge' => 15000,
+      'm1.small' => 1700, 'm1.medium' => 3750, 'm1.large' => 7500, 'm1.xlarge' => 15000,
       'm2.xlarge' => 17100, 'm2.2xlarge' => 34200, 'm2.4xlarge' => 68400,
       'c1.medium' => 1700, 'c1.xlarge' => 7000,
+      'hi1.4xlarge' => 60500,
       'cg1.4xlarge' => 22000,
-      'cc1.4xlarge' => 23000,
+      'cc1.4xlarge' => 23000, 'cc2.8xlarge' => 60500,
       't1.micro' => 1700,
     }
     @@Disk_Lookup = {
-      'm1.small' => 160, 'm1.large' =>850, 'm1.xlarge' => 1690,
+      'm1.small' => 160, 'm1.medium' => 410, 'm1.large' =>850, 'm1.xlarge' => 1690,
       'm2.xlarge' => 420, 'm2.2xlarge' => 850, 'm2.4xlarge' => 1690,
       'c1.medium' => 350, 'c1.xlarge' => 1690,
+      'hi1.4xlarge' => 2048,
       'cg1.4xlarge' => 1690,
-      'cc1.4xlarge' => 1690,
+      'cc1.4xlarge' => 1690, 'cc2.8xlarge' => 3370,
       't1.micro' => 160,
     }
     @@Platform_Lookup = {
-      'm1.small' => 32, 'm1.large' => 64, 'm1.xlarge' => 64,
+      'm1.small' => 32, 'm1.medium' => 32, 'm1.large' => 64, 'm1.xlarge' => 64,
       'm2.xlarge' => 64, 'm2.2xlarge' => 64, 'm2.4xlarge' => 64,
       'c1.medium' => 32, 'c1.xlarge' => 64,
+      'hi1.4xlarge' => 64,
       'cg1.4xlarge' => 64,
-      'cc1.4xlarge' => 64,
+      'cc1.4xlarge' => 64, 'cc2.8xlarge' => 64,
       't1.micro' => 32,
     }
     @@Compute_Units_Lookup = {
-      'm1.small' => 1, 'm1.large' => 4, 'm1.xlarge' => 8,
+      'm1.small' => 1, 'm1.medium' => 2, 'm1.large' => 4, 'm1.xlarge' => 8,
       'm2.xlarge' => 6, 'm2.2xlarge' => 13, 'm2.4xlarge' => 26,
       'c1.medium' => 5, 'c1.xlarge' => 20,
+      'hi1.4xlarge' => 35,
       'cg1.4xlarge' => 34,
-      'cc1.4xlarge' => 34,
+      'cc1.4xlarge' => 34, 'cc2.8xlarge' => 88,
       't1.micro' => 2,
     }
   end
