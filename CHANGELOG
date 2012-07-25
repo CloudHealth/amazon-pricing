@@ -1,3 +1,6 @@
+= Version 0.0.6
+  * Another missing instance type, cc2.8xlarge
+
 = Version 0.0.5
   * Added conventional region name lookup
 

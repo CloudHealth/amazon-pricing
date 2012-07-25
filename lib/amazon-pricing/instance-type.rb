@@ -82,7 +82,7 @@ module AwsPricing
       'hiCPUODI' => {'med' => 'c1.medium', 'xl' => 'c1.xlarge'},
       'hiIoODI' => {'xxxxl' => 'hi1.4xlarge'},
       'clusterGPUI' => {'xxxxl' => 'cg1.4xlarge'},
-      'clusterComputeI' => {'xxxxl' => 'cc1.4xlarge','xxxxxxxxl' => 'Cluster Compute Eight Extra Large'},
+      'clusterComputeI' => {'xxxxl' => 'cc1.4xlarge','xxxxxxxxl' => 'cc2.8xlarge'},
       'uODI' => {'u' => 't1.micro'},
     }
     @@Name_Lookup = {
@@ -100,7 +100,7 @@ module AwsPricing
       'c1.medium' => 1700, 'c1.xlarge' => 7000,
       'hi1.4xlarge' => 60500,
       'cg1.4xlarge' => 22000,
-      'cc1.4xlarge' => 23000,
+      'cc1.4xlarge' => 23000, 'cc2.8xlarge' => 60500,
       't1.micro' => 1700,
     }
     @@Disk_Lookup = {
@@ -109,7 +109,7 @@ module AwsPricing
       'c1.medium' => 350, 'c1.xlarge' => 1690,
       'hi1.4xlarge' => 2048,
       'cg1.4xlarge' => 1690,
-      'cc1.4xlarge' => 1690,
+      'cc1.4xlarge' => 1690, 'cc2.8xlarge' => 3370,
       't1.micro' => 160,
     }
     @@Platform_Lookup = {
@@ -118,7 +118,7 @@ module AwsPricing
       'c1.medium' => 32, 'c1.xlarge' => 64,
       'hi1.4xlarge' => 64,
       'cg1.4xlarge' => 64,
-      'cc1.4xlarge' => 64,
+      'cc1.4xlarge' => 64, 'cc2.8xlarge' => 64,
       't1.micro' => 32,
     }
     @@Compute_Units_Lookup = {
@@ -127,7 +127,7 @@ module AwsPricing
       'c1.medium' => 5, 'c1.xlarge' => 20,
       'hi1.4xlarge' => 35,
       'cg1.4xlarge' => 34,
-      'cc1.4xlarge' => 34,
+      'cc1.4xlarge' => 34, 'cc2.8xlarge' => 88,
       't1.micro' => 2,
     }
   end
