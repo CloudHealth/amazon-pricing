@@ -89,7 +89,7 @@ module AwsPricing
       'stdODI' => {'sm' => 'Standard Small', 'med' => 'Standard Medium', 'lg' => 'Standard Large', 'xl' => 'Standard Extra Large'},
       'hiMemODI' => {'xl' => 'Hi-Memory Extra Large', 'xxl' => 'Hi-Memory Double Extra Large', 'xxxxl' => 'Hi-Memory Quadruple Extra Large'},
       'hiCPUODI' => {'med' => 'High-CPU Medium', 'xl' => 'High-CPU Extra Large'},
-      'hiIoODI' => {'xxxxl' => 'High I/O Quadruple Extra Large Instance'},
+      'hiIoODI' => {'xxxxl' => 'High I/O Quadruple Extra Large'},
       'clusterGPUI' => {'xxxxl' => 'Cluster GPU Quadruple Extra Large'},
       'clusterComputeI' => {'xxxxl' => 'Cluster Compute Quadruple Extra Large', 'xxxxxxxxl' => 'Cluster Compute Eight Extra Large'},
       'uODI' => {'u' => 'Micro'},
