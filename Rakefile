@@ -1,5 +1,6 @@
 require 'bundler'
 require 'rake/testtask'
+require 'lib/amazon-pricing/version'
 
 Rake::TestTask.new(:test) do |test|
   test.libs << 'lib' << 'test'
@@ -11,6 +12,11 @@ end
 desc "Build the gem"
 task :gem do
   sh 'gem build *.gemspec'
+end
+
+desc "Publish the gem"
+task :publish do
+  sh "gem push amazon-pricing-#{AwsPricing::VERSION}.gem"
 end
 
 desc "Installs the gem"
