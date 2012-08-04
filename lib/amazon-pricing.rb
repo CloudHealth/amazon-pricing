@@ -82,7 +82,7 @@ module AwsPricing
     end
 
     def get_ec2_reserved_instance_pricing
-      fetch_ec2_reserved_instance_pricing(EC2_RESERVED_INSTANCE_LIGHT_PRICING_URL, :low)
+      fetch_ec2_reserved_instance_pricing(EC2_RESERVED_INSTANCE_LIGHT_PRICING_URL, :light)
       fetch_ec2_reserved_instance_pricing(EC2_RESERVED_INSTANCE_MEDIUM_PRICING_URL, :medium)
       fetch_ec2_reserved_instance_pricing(EC2_RESERVED_INSTANCE_HEAVY_PRICING_URL, :heavy)
     end

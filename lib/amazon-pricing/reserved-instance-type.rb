@@ -50,7 +50,7 @@ module AwsPricing
         'hiMemResI' => {'xl' => 'm2.xlarge', 'xxl' => 'm2.2xlarge', 'xxxxl' => 'm2.4xlarge'},
         'hiCPUResI' => {'med' => 'c1.medium', 'xl' => 'c1.xlarge'},
         'clusterGPUResI' => {'xxxxl' => 'cg1.4xlarge'},
-        'clusterCompResI' => {'xxxxl' => 'cc1.4xlarge', 'xxxxxxxxl' => 'Cluster Compute Eight Extra Large'},
+        'clusterCompResI' => {'xxxxl' => 'cc1.4xlarge', 'xxxxxxxxl' => 'cc2.8xlarge'},
         'uResI' => {'u' => 't1.micro'},
       }
       @@Name_Lookup_Reserved = {

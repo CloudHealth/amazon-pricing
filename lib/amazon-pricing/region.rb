@@ -30,7 +30,7 @@ module AwsPricing
     end
 
     # reserved_usage_type = :light, :medium, :heavy
-    def ec2_reserved_instance_types(reserved_usage_type)
+    def ec2_reserved_instance_types(reserved_usage_type = nil)
       case reserved_usage_type
       when :light
         @_ec2_reserved_instance_types_light.values
@@ -38,6 +38,8 @@ module AwsPricing
         @_ec2_reserved_instance_types_medium.values
       when :heavy
         @_ec2_reserved_instance_types_heavy.values
+      else
+        @_ec2_reserved_instance_types_light.values << @_ec2_reserved_instance_types_medium.values << @_ec2_reserved_instance_types_heavy.values
       end
     end
 

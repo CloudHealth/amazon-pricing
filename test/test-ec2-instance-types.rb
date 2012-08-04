@@ -21,18 +21,22 @@ class TestEc2InstanceTypes < Test::Unit::TestCase
       region.ec2_on_demand_instance_types.each do |instance_type|
         assert_not_nil instance_type.api_name
         assert_not_nil instance_type.name
+        assert instance_type.api_name != instance_type.name
       end
       region.ec2_reserved_instance_types(:light).each do |instance_type|
         assert_not_nil instance_type.api_name
         assert_not_nil instance_type.name
+        assert instance_type.api_name != instance_type.name
       end
       region.ec2_reserved_instance_types(:medium).each do |instance_type|
         assert_not_nil instance_type.api_name
         assert_not_nil instance_type.name
+        assert instance_type.api_name != instance_type.name
       end
       region.ec2_reserved_instance_types(:heavy).each do |instance_type|
         assert_not_nil instance_type.api_name
         assert_not_nil instance_type.name
+        assert instance_type.api_name != instance_type.name
       end
     end
   end
