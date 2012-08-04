@@ -14,6 +14,13 @@ require File.dirname(__FILE__) + '/helper.rb'
 require 'test/unit'
 
 class TestEc2InstanceTypes < Test::Unit::TestCase
+  def test_cc8xlarge_issue
+    pricing = AwsPricing::PriceList.new
+    obj = pricing.get_instance_type('us-east-1d', :reserved, 'cc2.8xlarge', :medium)
+    puts obj.inspect
+    assert obj.api_name == 'cc2.8xlarge'
+  end
+
   def test_name_lookup
     pricing = AwsPricing::PriceList.new
     pricing.regions.each do |region|
