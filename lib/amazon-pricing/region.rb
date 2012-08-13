@@ -39,7 +39,7 @@ module AwsPricing
       when :heavy
         @_ec2_reserved_instance_types_heavy.values
       else
-        @_ec2_reserved_instance_types_light.values << @_ec2_reserved_instance_types_medium.values << @_ec2_reserved_instance_types_heavy.values
+        @_ec2_reserved_instance_types_light.values + @_ec2_reserved_instance_types_medium.values + @_ec2_reserved_instance_types_heavy.values
       end
     end
 

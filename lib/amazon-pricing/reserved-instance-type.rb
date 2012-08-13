@@ -15,12 +15,12 @@ module AwsPricing
   # reserved instances have three usage types: light, medium and heavy.
   #
   class ReservedInstanceType < InstanceType
-    attr_accessor :prepay_1_year, :prepay_3_year
+    attr_accessor :prepay_1_year, :prepay_3_year, :usage_type
 
     # Initializes and InstanceType object given a region, the internal
     # type (e.g. stdODI) and the json for the specific instance. The json is
     # based on the current undocumented AWS pricing API.
-    def initialize(region, instance_type, json)
+    def initialize(region, instance_type, json, usage_type)
       super(region, instance_type, json)
 
       # Fixme: calling twice, fix later
@@ -28,6 +28,7 @@ module AwsPricing
 
       @prepay_1_year = values['yrTerm1'].to_f unless values['yrTerm1'].to_f == 0
       @prepay_3_year = values['yrTerm3'].to_f unless values['yrTerm3'].to_f == 0
+      @usage_type = usage_type
     end
 
     def to_s

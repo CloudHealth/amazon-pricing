@@ -16,7 +16,7 @@ module AwsPricing
   # $0.48/hour for Windows.
   #
   class InstanceType
-    attr_accessor :region, :name, :api_name, :linux_price_per_hour, :windows_price_per_hour,
+    attr_accessor :name, :api_name, :linux_price_per_hour, :windows_price_per_hour,
       :memory_in_mb, :disk_in_mb, :platform, :compute_units
 
     # Initializes and InstanceType object given a region, the internal
@@ -25,7 +25,6 @@ module AwsPricing
     def initialize(region, instance_type, json)
       values = get_values(json)
 
-      @region = region
       @size = json['size']
       @linux_price_per_hour = values['linux'].to_f
       @linux_price_per_hour = nil if @linux_price_per_hour == 0
@@ -48,10 +47,6 @@ module AwsPricing
       return @linux_price_per_hour != nil if platform == :linux
       return @windows_price_per_hour != nil if platform == :windows
       return @linux_price_per_hour != nil || @windows_price_per_hour != nil
-    end
-
-    def to_s
-      "Instance Type: #{@region.name} #{@api_name}, Linux=$#{@linux_price_per_hour}/hour, Windows=$#{@windows_price_per_hour}/hour"
     end
 
     protected

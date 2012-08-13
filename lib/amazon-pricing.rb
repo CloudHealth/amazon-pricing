@@ -30,7 +30,7 @@ module AwsPricing
     end
 
     def get_region(name)
-      @_regions[name]
+      @_regions[@@Region_Lookup[name] || name]
     end
 
     def regions
@@ -95,7 +95,7 @@ module AwsPricing
         region = find_or_create_region(region_name)
         reg['instanceTypes'].each do |type|
           type['sizes'].each do |size|
-            region.add_instance_type(:reserved, ReservedInstanceType.new(region, type['type'], size), reserved_usage_type)
+            region.add_instance_type(:reserved, ReservedInstanceType.new(region, type['type'], size, reserved_usage_type), reserved_usage_type)
           end
         end
       end
@@ -117,5 +117,15 @@ module AwsPricing
 
     EC2_BASE_URL = "http://aws.amazon.com/ec2/pricing/pricing-"
 
+    # Lookup allows us to map to AWS API region names
+    @@Region_Lookup = {
+      'us-east-1' => 'us-east',
+      'us-west-1' => 'us-west',
+      'us-west-2' => 'us-west-2',
+      'eu-west-1' => 'eu-ireland',
+      'ap-southeast-1' => 'apac-sin',
+      'ap-northeast-1' => 'apac-tokyo',
+      'sa-east-1' => 'sa-east-1'
+    }
   end
 end

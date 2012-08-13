@@ -32,15 +32,13 @@ desc "Prints current EC2 pricing to console"
 task :print_price_list do
   require 'lib/amazon-pricing'
   pricing = AwsPricing::PriceList.new
+  puts "Region,Instance Type,Linux PPH,Windows PPH"
   pricing.regions.each do |region|
-    puts "Region: #{region.name}"
-    puts "   On-demand instances"
-    region.ec2_on_demand_instance_types.each do |instance_type|
-      puts "      #{instance_type.to_s}"
+    region.ec2_on_demand_instance_types.each do |t|
+      puts "#{region.name},on-demand,#{t.api_name},#{t.linux_price_per_hour},#{t.windows_price_per_hour}"
     end
-    puts "   Reserved instances"
-    region.ec2_reserved_instance_types.each do |instance_type|
-      puts "      #{instance_type.to_s}"
+    region.ec2_reserved_instance_types.each do |t|
+      puts "#{region.name},#{t.usage_type},#{t.api_name},#{t.linux_price_per_hour},#{t.windows_price_per_hour}"
     end
   end
 end
