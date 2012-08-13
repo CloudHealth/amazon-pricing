@@ -69,6 +69,13 @@ class TestEc2InstanceTypes < Test::Unit::TestCase
     assert instance.memory_in_mb == 7500
   end
 
+  def test_non_standard_region_name
+    pricing = AwsPricing::PriceList.new
+    region = pricing.get_region('eu-west-1')
+    instance = region.get_instance_type(:on_demand, 'm1.large')
+    assert instance.memory_in_mb == 7500
+  end
+
   def test_ebs
     pricing = AwsPricing::PriceList.new
     region = pricing.get_region('us-east')
