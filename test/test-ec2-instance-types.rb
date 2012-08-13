@@ -16,8 +16,7 @@ require 'test/unit'
 class TestEc2InstanceTypes < Test::Unit::TestCase
   def test_cc8xlarge_issue
     pricing = AwsPricing::PriceList.new
-    obj = pricing.get_instance_type('us-east-1d', :reserved, 'cc2.8xlarge', :medium)
-    puts obj.inspect
+    obj = pricing.get_instance_type('us-east', :reserved, 'cc2.8xlarge', :medium)
     assert obj.api_name == 'cc2.8xlarge'
   end
 
@@ -68,5 +67,15 @@ class TestEc2InstanceTypes < Test::Unit::TestCase
     region = pricing.get_region('us-east')
     instance = region.get_instance_type(:on_demand, 'm1.large')
     assert instance.memory_in_mb == 7500
+  end
+
+  def test_ebs
+    pricing = AwsPricing::PriceList.new
+    region = pricing.get_region('us-east')
+    assert region.ebs_price.standard_per_gb == 0.10
+    assert region.ebs_price.standard_per_million_io == 0.10
+    assert region.ebs_price.preferred_per_gb == 0.125
+    assert region.ebs_price.preferred_per_iops == 0.10
+    assert region.ebs_price.s3_snaps_per_gb == 0.125
   end
 end

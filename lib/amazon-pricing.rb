@@ -26,10 +26,11 @@ module AwsPricing
       @_regions = {}
       get_ec2_on_demand_instance_pricing
       get_ec2_reserved_instance_pricing
+      fetch_ec2_ebs_pricing
     end
 
     def get_region(name)
-      @_regions[@@Region_Lookup[name] || name]
+      @_regions[name]
     end
 
     def regions
@@ -38,10 +39,9 @@ module AwsPricing
 
     # Type = :on_demand or :reserved
     # reserved_usage_type = :light, :medium, :heavy
-    def get_instance_type(availability_zone, type, api_name, reserved_usage_type = :medium)
-      region_name = @@Availability_Zone_Lookup[availability_zone]
-      raise "Region not found for availability zone #{availability_zone}" if region_name.nil?
+    def get_instance_type(region_name, type, api_name, reserved_usage_type = :medium)
       region = get_region(region_name)
+      raise "Region #{region_name} not found" if region.nil?
       region.get_instance_type(type, api_name, reserved_usage_type)
     end
 
@@ -66,9 +66,7 @@ module AwsPricing
 
     # Retrieves the EC2 on-demand instance pricing.
     def get_ec2_on_demand_instance_pricing
-      uri = URI.parse(EC2_STANDARD_INSTANCE_PRICING_URL)
-      page = Net::HTTP.get_response(uri)
-      res = JSON.parse(page.body)
+      res = fetch_url(EC2_BASE_URL + "on-demand-instances.json")
       @version_ec2_on_demand_instance = res['vers']
       res['config']['regions'].each do |reg|
         region_name = reg['region']
@@ -82,17 +80,15 @@ module AwsPricing
     end
 
     def get_ec2_reserved_instance_pricing
-      fetch_ec2_reserved_instance_pricing(EC2_RESERVED_INSTANCE_LIGHT_PRICING_URL, :light)
-      fetch_ec2_reserved_instance_pricing(EC2_RESERVED_INSTANCE_MEDIUM_PRICING_URL, :medium)
-      fetch_ec2_reserved_instance_pricing(EC2_RESERVED_INSTANCE_HEAVY_PRICING_URL, :heavy)
+      fetch_ec2_reserved_instance_pricing(EC2_BASE_URL + "reserved-instances-low-utilization.json", :light)
+      fetch_ec2_reserved_instance_pricing(EC2_BASE_URL + "reserved-instances.json", :medium)
+      fetch_ec2_reserved_instance_pricing(EC2_BASE_URL + "reserved-instances-high-utilization.json", :heavy)
     end
 
     # Retrieves the EC2 on-demand instance pricing.
     # reserved_usage_type = :light, :medium, :heavy
     def fetch_ec2_reserved_instance_pricing(url, reserved_usage_type)
-      uri = URI.parse(url)
-      page = Net::HTTP.get_response(uri)
-      res = JSON.parse(page.body)
+      res = fetch_url(url)
       @version_ec2_reserved_instance = res['vers']
       res['config']['regions'].each do |reg|
         region_name = reg['region']
@@ -105,29 +101,21 @@ module AwsPricing
       end
     end
 
-    EC2_STANDARD_INSTANCE_PRICING_URL = 'http://aws.amazon.com/ec2/pricing/pricing-on-demand-instances.json'
-    EC2_RESERVED_INSTANCE_LIGHT_PRICING_URL = 'http://aws.amazon.com/ec2/pricing/pricing-reserved-instances-low-utilization.json'
-    EC2_RESERVED_INSTANCE_MEDIUM_PRICING_URL = 'http://aws.amazon.com/ec2/pricing/pricing-reserved-instances.json'
-    EC2_RESERVED_INSTANCE_HEAVY_PRICING_URL = 'http://aws.amazon.com/ec2/pricing/pricing-reserved-instances-high-utilization.json'
+    def fetch_ec2_ebs_pricing
+      res = fetch_url(EC2_BASE_URL + "ebs.json")
+      res["config"]["regions"].each do |ebs_types|
+        region = get_region(ebs_types["region"])
+        region.ebs_price = EbsPrice.new(region, ebs_types)
+      end
+    end
 
-    @@Availability_Zone_Lookup = {
-      'us-east-1a' => 'us-east', 'us-east-1b' => 'us-east', 'us-east-1c' => 'us-east',
-      'us-east-1d' => 'us-east', 'us-east-1e' => 'us-east', 'us-west-1a' => 'us-west',
-      'us-west-1b' => 'us-west', 'us-west-1c' => 'us-west', 'us-west-2a' => 'us-west-2',
-      'us-west-2b' => 'us-west-2', 'eu-west-1a' => 'eu-ireland', 'eu-west-1b' => 'eu-ireland',
-      'eu-west-1c' => 'eu-ireland', 'ap-southeast-1a' => 'apac-sin', 'ap-southeast-1b' => 'apac-sin',
-      'ap-northeast-1a' => 'apac-tokyo', 'ap-northeast-1b' => 'apac-tokyo', 'sa-east-1a' => 'sa-east-1',
-      'sa-east-1b' => 'sa-east-1'
-    }
-    
-    @@Region_Lookup = {
-      'us-east-1' => 'us-east',
-      'us-west-1' => 'us-west',
-      'us-west-2' => 'us-west-2',
-      'eu-west-1' => 'eu-ireland',
-      'ap-southeast-1' => 'apac-sin', 
-      'ap-northeast-1' => 'apac-tokyo', 
-      'sa-east-1' => 'sa-east-1'
-    }
+    def fetch_url(url)
+      uri = URI.parse(url)
+      page = Net::HTTP.get_response(uri)
+      JSON.parse(page.body)
+    end
+
+    EC2_BASE_URL = "http://aws.amazon.com/ec2/pricing/pricing-"
+
   end
 end
