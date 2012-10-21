@@ -52,19 +52,23 @@ module AwsPricing
 
     # instance_type = :on_demand or :reserved
     # reserved_usage_type = :light, :medium, :heavy
-    def add_instance_type(type, instance_type, reserved_usage_type = :medium)
-      raise "Instance type #{instance_type.api_name} in region #{@name} already exists" if get_instance_type(type, instance_type.api_name, reserved_usage_type)
-      if type == :on_demand
-        @_ec2_on_demand_instance_types[instance_type.api_name] = instance_type
-      elsif type == :reserved
-        case reserved_usage_type
-        when :light
-          @_ec2_reserved_instance_types_light[instance_type.api_name] = instance_type
-        when :medium
-          @_ec2_reserved_instance_types_medium[instance_type.api_name] = instance_type
-        when :heavy
-          @_ec2_reserved_instance_types_heavy[instance_type.api_name] = instance_type
+    def add_or_update_instance_type(type, instance_type, reserved_usage_type = :medium)
+      current = get_instance_type(type, instance_type.api_name, reserved_usage_type)
+      if current.nil?
+        if type == :on_demand
+          @_ec2_on_demand_instance_types[instance_type.api_name] = instance_type
+        elsif type == :reserved
+          case reserved_usage_type
+          when :light
+            @_ec2_reserved_instance_types_light[instance_type.api_name] = instance_type
+          when :medium
+            @_ec2_reserved_instance_types_medium[instance_type.api_name] = instance_type
+          when :heavy
+            @_ec2_reserved_instance_types_heavy[instance_type.api_name] = instance_type
+          end
         end
+      else
+        current.update(instance_type)
       end
     end
 

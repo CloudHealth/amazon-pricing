@@ -49,6 +49,16 @@ module AwsPricing
       return @linux_price_per_hour != nil || @windows_price_per_hour != nil
     end
 
+    def is_reserved?
+      false
+    end
+
+    def update(instance_type)
+      # Due to new AWS json we have to make two passes through to populate an instance
+      @windows_price_per_hour = instance_type.windows_price_per_hour if @windows_price_per_hour.nil?
+      @linux_price_per_hour = instance_type.linux_price_per_hour if @linux_price_per_hour.nil?
+    end
+
     protected
 
     attr_accessor :size, :instance_type
