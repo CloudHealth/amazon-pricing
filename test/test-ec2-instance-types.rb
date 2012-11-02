@@ -10,7 +10,8 @@
 # Home::      http://github.com/sonian/amazon-pricing
 #++
 
-require File.dirname(__FILE__) + '/helper.rb'
+$: << File.expand_path(File.dirname(__FILE__))
+require 'helper'
 require 'test/unit'
 
 class TestEc2InstanceTypes < Test::Unit::TestCase
