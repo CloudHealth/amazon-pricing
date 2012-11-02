@@ -9,6 +9,9 @@
 #++
 module AwsPricing
 
+  class UnknownTypeError < NameError
+  end
+  
   # InstanceType is a specific type of instance in a region with a defined
   # price per hour. The price will vary by platform (Linux, Windows).
   #
@@ -64,7 +67,11 @@ module AwsPricing
     attr_accessor :size, :instance_type
 
     def self.get_api_name(instance_type, size)
-      @@Api_Name_Lookup[instance_type][size]
+      unless @@Api_Name_Lookup.has_key? instance_type
+        raise UnknownTypeError, "unknown instance type #{instance_type}", caller
+      else
+        @@Api_Name_Lookup[instance_type][size]
+      end
     end
 
     def self.get_name(instance_type, size)
