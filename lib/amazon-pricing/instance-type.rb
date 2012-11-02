@@ -35,8 +35,8 @@ module AwsPricing
       @windows_price_per_hour = nil if @windows_price_per_hour == 0
       @instance_type = instance_type
 
-      @api_name = InstanceType::get_api_name(@instance_type, @size)
-      @name = InstanceType::get_name(@instance_type, @size)
+      @api_name = self.class.get_api_name(@instance_type, @size)
+      @name = self.class.get_name(@instance_type, @size)
 
       @memory_in_mb = @@Memory_Lookup[@api_name]
       @disk_in_mb = @@Disk_Lookup[@api_name]

@@ -73,11 +73,15 @@ module AwsPricing
     protected
       attr_accessor :size, :instance_type
 
-      def get_api_name(instance_type, size)
-        @@Api_Name_Lookup_Reserved[instance_type][size]
+      def self.get_api_name(instance_type, size)
+        unless @@Api_Name_Lookup_Reserved.has_key? instance_type
+          raise UnknownTypeError, "unknown instance type #{instance_type}", caller
+        else
+          @@Api_Name_Lookup_Reserved[instance_type][size]
+        end
       end
 
-      def get_name(instance_type, size)
+      def self.get_name(instance_type, size)
         @@Name_Lookup_Reserved[instance_type][size]
       end
 
