@@ -74,6 +74,13 @@ module AwsPricing
       attr_accessor :size, :instance_type
 
       def get_api_name(instance_type, size)
+        # Let's handle new instances more gracefully
+        unless @@Api_Name_Lookup_Reserved.has_key?(instance_type)
+          raise "The instance type #{instance_type} is not found"
+        end
+        if @@Api_Name_Lookup_Reserved[instance_type][size].nil?
+          raise "The instance type #{instance_type} of size #{size} is not found"
+        end
         @@Api_Name_Lookup_Reserved[instance_type][size]
       end
 
@@ -89,6 +96,7 @@ module AwsPricing
         'clusterCompResI' => {'xxxxl' => 'cc1.4xlarge', 'xxxxxxxxl' => 'cc2.8xlarge'},
         'uResI' => {'u' => 't1.micro'},
         'hiIoResI' => {'xxxxl' => 'hi1.4xlarge'},
+        'secgenstdResI' => {'xl' => 'm3.xlarge', 'xxl' => 'm3.2xlarge'},
       }
       @@Name_Lookup_Reserved = {
         'stdResI' => {'sm' => 'Standard Small', 'med' => 'Standard Medium', 'lg' => 'Standard Large', 'xl' => 'Standard Extra Large'},
@@ -98,7 +106,8 @@ module AwsPricing
         'clusterCompResI' => {'xxxxl' => 'Cluster Compute Quadruple Extra Large', 'xxxxxxxxl' => 'Cluster Compute Eight Extra Large'},
         'uResI' => {'u' => 'Micro'},
         'hiIoResI' => {'xxxxl' => 'High I/O Quadruple Extra Large Instance'},
-      }
+        'secgenstdResI' => {'xl' => 'M3 Extra Large Instance', 'xxl' => 'M3 Double Extra Large Instance'},
+    }
   end
 
 end

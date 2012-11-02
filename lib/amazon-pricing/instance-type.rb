@@ -64,6 +64,13 @@ module AwsPricing
     attr_accessor :size, :instance_type
 
     def get_api_name(instance_type, size)
+      # Let's handle new instances more gracefully
+      unless @@Api_Name_Lookup.has_key?(instance_type)
+        raise "The instance type #{instance_type} is not found"
+      end
+      if @@Api_Name_Lookup[instance_type][size].nil?
+        raise "The instance type #{instance_type} of size #{size} is not found"
+      end
       @@Api_Name_Lookup[instance_type][size]
     end
 
@@ -89,6 +96,7 @@ module AwsPricing
       'clusterGPUI' => {'xxxxl' => 'cg1.4xlarge'},
       'clusterComputeI' => {'xxxxl' => 'cc1.4xlarge','xxxxxxxxl' => 'cc2.8xlarge'},
       'uODI' => {'u' => 't1.micro'},
+      'secgenstdODI' => {'xl' => 'm3.xlarge', 'xxl' => 'm3.2xlarge'},
     }
     @@Name_Lookup = {
       'stdODI' => {'sm' => 'Standard Small', 'med' => 'Standard Medium', 'lg' => 'Standard Large', 'xl' => 'Standard Extra Large'},
@@ -98,6 +106,7 @@ module AwsPricing
       'clusterGPUI' => {'xxxxl' => 'Cluster GPU Quadruple Extra Large'},
       'clusterComputeI' => {'xxxxl' => 'Cluster Compute Quadruple Extra Large', 'xxxxxxxxl' => 'Cluster Compute Eight Extra Large'},
       'uODI' => {'u' => 'Micro'},
+      'secgenstdODI' => {'xl' => 'M3 Extra Large Instance', 'xxl' => 'M3 Double Extra Large Instance'},
     }
     @@Memory_Lookup = {
       'm1.small' => 1700, 'm1.medium' => 3750, 'm1.large' => 7500, 'm1.xlarge' => 15000,
@@ -107,6 +116,7 @@ module AwsPricing
       'cg1.4xlarge' => 22000,
       'cc1.4xlarge' => 23000, 'cc2.8xlarge' => 60500,
       't1.micro' => 1700,
+      'm3.xlarge' => 15000, 'm3.xlarge' => 30000,
     }
     @@Disk_Lookup = {
       'm1.small' => 160, 'm1.medium' => 410, 'm1.large' =>850, 'm1.xlarge' => 1690,
@@ -116,6 +126,7 @@ module AwsPricing
       'cg1.4xlarge' => 1690,
       'cc1.4xlarge' => 1690, 'cc2.8xlarge' => 3370,
       't1.micro' => 160,
+      'm3.xlarge' => 0, 'm3.xlarge' => 0,
     }
     @@Platform_Lookup = {
       'm1.small' => 32, 'm1.medium' => 32, 'm1.large' => 64, 'm1.xlarge' => 64,
@@ -125,6 +136,7 @@ module AwsPricing
       'cg1.4xlarge' => 64,
       'cc1.4xlarge' => 64, 'cc2.8xlarge' => 64,
       't1.micro' => 32,
+      'm3.xlarge' => 64, 'm3.xlarge' => 64,
     }
     @@Compute_Units_Lookup = {
       'm1.small' => 1, 'm1.medium' => 2, 'm1.large' => 4, 'm1.xlarge' => 8,
@@ -134,6 +146,7 @@ module AwsPricing
       'cg1.4xlarge' => 34,
       'cc1.4xlarge' => 34, 'cc2.8xlarge' => 88,
       't1.micro' => 2,
+      'unknown' => 0,
     }
   end
 
