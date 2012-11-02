@@ -23,7 +23,7 @@ module AwsPricing
     # type (e.g. stdODI) and the json for the specific instance. The json is
     # based on the current undocumented AWS pricing API.
     def initialize(region, instance_type, json)
-      values = get_values(json)
+      values = InstanceType::get_values(json)
 
       @size = json['size']
       @linux_price_per_hour = values['linux'].to_f
@@ -32,8 +32,8 @@ module AwsPricing
       @windows_price_per_hour = nil if @windows_price_per_hour == 0
       @instance_type = instance_type
 
-      @api_name = get_api_name(@instance_type, @size)
-      @name = get_name(@instance_type, @size)
+      @api_name = InstanceType::get_api_name(@instance_type, @size)
+      @name = InstanceType::get_name(@instance_type, @size)
 
       @memory_in_mb = @@Memory_Lookup[@api_name]
       @disk_in_mb = @@Disk_Lookup[@api_name]
@@ -63,16 +63,16 @@ module AwsPricing
 
     attr_accessor :size, :instance_type
 
-    def get_api_name(instance_type, size)
+    def self.get_api_name(instance_type, size)
       @@Api_Name_Lookup[instance_type][size]
     end
 
-    def get_name(instance_type, size)
+    def self.get_name(instance_type, size)
       @@Name_Lookup[instance_type][size]
     end
 
     # Turn json into hash table for parsing
-    def get_values(json)
+    def self.get_values(json)
       values = {}
       json['valueColumns'].each do |val|
         values[val['name']] = val['prices']['USD']
