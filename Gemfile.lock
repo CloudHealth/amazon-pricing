@@ -1,0 +1,14 @@
+PATH
+  remote: .
+  specs:
+    amazon-pricing (0.0.10)
+
+GEM
+  remote: https://rubygems.org/
+  specs:
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  amazon-pricing!
