@@ -88,6 +88,7 @@ module AwsPricing
       @@Api_Name_Lookup_Reserved = {
         'stdResI' => {'sm' => 'm1.small', 'med' => 'm1.medium', 'lg' => 'm1.large', 'xl' => 'm1.xlarge'},
         'hiMemResI' => {'xl' => 'm2.xlarge', 'xxl' => 'm2.2xlarge', 'xxxxl' => 'm2.4xlarge'},
+        'secgenstdResI' => { 'xl' => 'm3.xlarge', 'xxl' => 'm3.2xlarge' },
         'hiCPUResI' => {'med' => 'c1.medium', 'xl' => 'c1.xlarge'},
         'clusterGPUResI' => {'xxxxl' => 'cg1.4xlarge'},
         'clusterCompResI' => {'xxxxl' => 'cc1.4xlarge', 'xxxxxxxxl' => 'cc2.8xlarge'},
@@ -97,6 +98,7 @@ module AwsPricing
       @@Name_Lookup_Reserved = {
         'stdResI' => {'sm' => 'Standard Small', 'med' => 'Standard Medium', 'lg' => 'Standard Large', 'xl' => 'Standard Extra Large'},
         'hiMemResI' => {'xl' => 'Hi-Memory Extra Large', 'xxl' => 'Hi-Memory Double Extra Large', 'xxxxl' => 'Hi-Memory Quadruple Extra Large'},
+        'secgenstdResI' => { 'xl' => 'Second Generation Standard Extra Large', 'xxl' => 'Second Generation Standard Double Extra Large' },
         'hiCPUResI' => {'med' => 'High-CPU Medium', 'xl' => 'High-CPU Extra Large'},
         'clusterGPUResI' => {'xxxxl' => 'Cluster GPU Quadruple Extra Large'},
         'clusterCompResI' => {'xxxxl' => 'Cluster Compute Quadruple Extra Large', 'xxxxxxxxl' => 'Cluster Compute Eight Extra Large'},
