@@ -1,6 +1,9 @@
 require 'bundler'
 require 'rake/testtask'
-require File.expand_path('lib/amazon-pricing/version')
+
+$: << File.expand_path(File.dirname(__FILE__), 'lib')
+
+require 'amazon-pricing/version'
 
 Rake::TestTask.new(:test) do |test|
   test.libs << 'lib' << 'test'

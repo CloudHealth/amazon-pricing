@@ -1,5 +1,5 @@
 #--
-# IBM SmartCloud Ruby library
+# Amazon Web Services Pricing Ruby library
 #
 # Ruby Gem Name::  amazon-pricing
 # Author::    Joe Kinsella (mailto:joe.kinsella@gmail.com)

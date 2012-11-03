@@ -9,6 +9,9 @@
 #++
 module AwsPricing
 
+  class UnknownTypeError < NameError
+  end
+
   # InstanceType is a specific type of instance in a region with a defined
   # price per hour. The price will vary by platform (Linux, Windows).
   #
@@ -23,7 +26,7 @@ module AwsPricing
     # type (e.g. stdODI) and the json for the specific instance. The json is
     # based on the current undocumented AWS pricing API.
     def initialize(region, instance_type, json)
-      values = get_values(json)
+      values = InstanceType::get_values(json)
 
       @size = json['size']
       @linux_price_per_hour = values['linux'].to_f
@@ -32,8 +35,8 @@ module AwsPricing
       @windows_price_per_hour = nil if @windows_price_per_hour == 0
       @instance_type = instance_type
 
-      @api_name = get_api_name(@instance_type, @size)
-      @name = get_name(@instance_type, @size)
+      @api_name = self.class.get_api_name(@instance_type, @size)
+      @name = self.class.get_name(@instance_type, @size)
 
       @memory_in_mb = @@Memory_Lookup[@api_name]
       @disk_in_mb = @@Disk_Lookup[@api_name]
@@ -63,23 +66,21 @@ module AwsPricing
 
     attr_accessor :size, :instance_type
 
-    def get_api_name(instance_type, size)
+    def self.get_api_name(instance_type, size)
       # Let's handle new instances more gracefully
-      unless @@Api_Name_Lookup.has_key?(instance_type)
-        raise "The instance type #{instance_type} is not found"
+      unless @@Api_Name_Lookup.has_key? instance_type
+        raise UnknownTypeError, "Unknown instance type #{instance_type}", caller
+      else
+        @@Api_Name_Lookup[instance_type][size]
       end
-      if @@Api_Name_Lookup[instance_type][size].nil?
-        raise "The instance type #{instance_type} of size #{size} is not found"
-      end
-      @@Api_Name_Lookup[instance_type][size]
     end
 
-    def get_name(instance_type, size)
+    def self.get_name(instance_type, size)
       @@Name_Lookup[instance_type][size]
     end
 
     # Turn json into hash table for parsing
-    def get_values(json)
+    def self.get_values(json)
       values = {}
       json['valueColumns'].each do |val|
         values[val['name']] = val['prices']['USD']

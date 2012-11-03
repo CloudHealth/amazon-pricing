@@ -73,7 +73,11 @@ module AwsPricing
         region = find_or_create_region(region_name)
         reg['instanceTypes'].each do |type|
           type['sizes'].each do |size|
-            region.add_or_update_instance_type(:on_demand, InstanceType.new(region, type['type'], size))
+            begin
+              region.add_or_update_instance_type(:on_demand, InstanceType.new(region, type['type'], size))
+            rescue UnknownTypeError
+              $stderr.puts "WARNING: encountered #{$!.message}"
+            end
           end
         end
       end
@@ -98,7 +102,11 @@ module AwsPricing
         region = find_or_create_region(region_name)
         reg['instanceTypes'].each do |type|
           type['sizes'].each do |size|
-            region.add_or_update_instance_type(:reserved, ReservedInstanceType.new(region, type['type'], size, reserved_usage_type, platform), reserved_usage_type)
+            begin
+              region.add_or_update_instance_type(:reserved, ReservedInstanceType.new(region, type['type'], size, reserved_usage_type, platform), reserved_usage_type)
+            rescue UnknownTypeError
+              $stderr.puts "WARNING: encountered #{$!.message}"
+            end
           end
         end
       end
