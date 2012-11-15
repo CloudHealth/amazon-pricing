@@ -87,4 +87,14 @@ class TestEc2InstanceTypes < Test::Unit::TestCase
     assert region.ebs_price.preferred_per_iops == 0.10
     assert region.ebs_price.s3_snaps_per_gb == 0.125
   end
+
+  def test_ebs_not_null
+    pricing = AwsPricing::PriceList.new
+    pricing.regions.each do |region|
+      # Everyone should have standard pricing
+      assert_not_nil region.ebs_price.standard_per_gb
+      assert_not_nil region.ebs_price.standard_per_million_io
+      assert_not_nil region.ebs_price.s3_snaps_per_gb
+    end
+  end
 end

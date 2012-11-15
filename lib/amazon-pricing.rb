@@ -135,6 +135,7 @@ module AwsPricing
       'us-west-2' => 'us-west-2',
       'eu-west-1' => 'eu-ireland',
       'ap-southeast-1' => 'apac-sin',
+      'ap-southeast-2' => 'apac-syd',
       'ap-northeast-1' => 'apac-tokyo',
       'sa-east-1' => 'sa-east-1'
     }
