@@ -97,4 +97,12 @@ class TestEc2InstanceTypes < Test::Unit::TestCase
       assert_not_nil region.ebs_price.s3_snaps_per_gb
     end
   end
+
+  def test_virtual_cores
+    pricing = AwsPricing::PriceList.new
+    region = pricing.get_region('us-east')
+    instance = region.get_instance_type(:on_demand, 'm1.large')
+    assert instance.virtual_cores == 2
+  end
+
 end

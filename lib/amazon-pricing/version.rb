@@ -8,5 +8,5 @@
 # Home::      http://github.com/sonian/amazon-pricing
 #++
 module AwsPricing
-  VERSION = '0.1.3'
+  VERSION = '0.1.4'
 end
