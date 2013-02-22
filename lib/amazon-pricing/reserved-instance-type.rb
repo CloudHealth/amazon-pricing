@@ -95,6 +95,8 @@ module AwsPricing
         'uResI' => {'u' => 't1.micro'},
         'hiIoResI' => {'xxxxl' => 'hi1.4xlarge'},
         'secgenstdResI' => {'xl' => 'm3.xlarge', 'xxl' => 'm3.2xlarge'},
+        'clusterHiMemResI' => {'xxxxxxxxl' => 'cr1.8xlarge'},
+        'hiStoreResI' => {'xxxxxxxxl' => 'hs1.8xlarge'},
       }
       @@Name_Lookup_Reserved = {
         'stdResI' => {'sm' => 'Standard Small', 'med' => 'Standard Medium', 'lg' => 'Standard Large', 'xl' => 'Standard Extra Large'},
@@ -105,6 +107,8 @@ module AwsPricing
         'uResI' => {'u' => 'Micro'},
         'hiIoResI' => {'xxxxl' => 'High I/O Quadruple Extra Large Instance'},
         'secgenstdResI' => {'xl' => 'M3 Extra Large Instance', 'xxl' => 'M3 Double Extra Large Instance'},
+        'clusterHiMemResI' => {'xxxxxxxxl' => 'High-Memory Cluster Eight Extra Large'},
+        'hiStoreResI' => {'xxxxxxxxl' => 'High-Storage Eight Extra Large'},
     }
   end
 

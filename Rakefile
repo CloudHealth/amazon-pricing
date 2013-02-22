@@ -19,7 +19,7 @@ end
 
 desc "Publish the gem"
 task :publish do
-  sh "gem push amazon-pricing-#{AwsPricing::VERSION}.gem"
+  sh "gem push amazon-pricing-#{'0.1.4'}.gem"
 end
 
 desc "Installs the gem"

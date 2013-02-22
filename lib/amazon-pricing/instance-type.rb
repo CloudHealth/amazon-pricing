@@ -99,6 +99,8 @@ module AwsPricing
       'clusterComputeI' => {'xxxxl' => 'cc1.4xlarge','xxxxxxxxl' => 'cc2.8xlarge'},
       'uODI' => {'u' => 't1.micro'},
       'secgenstdODI' => {'xl' => 'm3.xlarge', 'xxl' => 'm3.2xlarge'},
+      'clusterHiMemODI' => {'xxxxxxxxl' => 'cr1.8xlarge'},
+      'hiStoreODI' => {'xxxxxxxxl' => 'hs1.8xlarge'},
     }
     @@Name_Lookup = {
       'stdODI' => {'sm' => 'Standard Small', 'med' => 'Standard Medium', 'lg' => 'Standard Large', 'xl' => 'Standard Extra Large'},
@@ -109,6 +111,8 @@ module AwsPricing
       'clusterComputeI' => {'xxxxl' => 'Cluster Compute Quadruple Extra Large', 'xxxxxxxxl' => 'Cluster Compute Eight Extra Large'},
       'uODI' => {'u' => 'Micro'},
       'secgenstdODI' => {'xl' => 'M3 Extra Large Instance', 'xxl' => 'M3 Double Extra Large Instance'},
+      'clusterHiMemODI' => {'xxxxxxxxl' => 'High-Memory Cluster Eight Extra Large'},
+      'hiStoreODI' => {'xxxxxxxxl' => 'High-Storage Eight Extra Large'},
     }
     @@Memory_Lookup = {
       'm1.small' => 1700, 'm1.medium' => 3750, 'm1.large' => 7500, 'm1.xlarge' => 15000,
@@ -120,6 +124,8 @@ module AwsPricing
       'cc1.4xlarge' => 23000, 'cc2.8xlarge' => 60500,
       't1.micro' => 1700,
       'm3.xlarge' => 15000, 'm3.xlarge' => 30000,
+      'cr1.8xlarge' => 244000,
+      'hs1.8xlarge' => 117000,
     }
     @@Disk_Lookup = {
       'm1.small' => 160, 'm1.medium' => 410, 'm1.large' =>850, 'm1.xlarge' => 1690,
@@ -131,6 +137,8 @@ module AwsPricing
       'cc1.4xlarge' => 1690, 'cc2.8xlarge' => 3370,
       't1.micro' => 160,
       'm3.xlarge' => 0, 'm3.xlarge' => 0,
+      'cr1.8xlarge' => 240,
+      'hs1.8xlarge' => 48000,
     }
     @@Platform_Lookup = {
       'm1.small' => 32, 'm1.medium' => 32, 'm1.large' => 64, 'm1.xlarge' => 64,
@@ -142,6 +150,8 @@ module AwsPricing
       'cc1.4xlarge' => 64, 'cc2.8xlarge' => 64,
       't1.micro' => 32,
       'm3.xlarge' => 64, 'm3.xlarge' => 64,
+      'cr1.8xlarge' => 64,
+      'hs1.8xlarge' => 64,
     }
     @@Compute_Units_Lookup = {
       'm1.small' => 1, 'm1.medium' => 2, 'm1.large' => 4, 'm1.xlarge' => 8,
@@ -152,6 +162,8 @@ module AwsPricing
       'cg1.4xlarge' => 34,
       'cc1.4xlarge' => 34, 'cc2.8xlarge' => 88,
       't1.micro' => 2,
+      'cr1.8xlarge' => 88,
+      'hs1.8xlarge' => 35,
       'unknown' => 0,
     }
     @@Virtual_Cores_Lookup = {
@@ -163,6 +175,8 @@ module AwsPricing
       'cg1.4xlarge' => 8,
       'cc1.4xlarge' => 8, 'cc2.8xlarge' => 16,
       't1.micro' => 0,
+      'cr1.8xlarge' => 16,
+      'hs1.8xlarge' => 16,
       'unknown' => 0,
     }
   end
