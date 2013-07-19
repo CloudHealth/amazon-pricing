@@ -64,9 +64,26 @@ module AwsPricing
 
     protected
 
-    # Retrieves the EC2 on-demand instance pricing.
+    @@OS_TYPES = [:linux, :mswin, :rhel, :sles, :mswinSQL, :mswinSQLWeb]
+    @@RES_TYPES = [:light, :medium, :heavy]
+
     def get_ec2_on_demand_instance_pricing
-      res = fetch_url(EC2_BASE_URL + "pricing-on-demand-instances.json")
+      @@OS_TYPES.each do |os|
+        fetch_ec2_on_demand_instance_pricing(EC2_BASE_URL + "json/#{os}-od.json", os)
+      end
+    end
+
+    def get_ec2_reserved_instance_pricing
+      @@OS_TYPES.each do |os|
+        @@RES_TYPES.each do |res_type|
+          fetch_ec2_reserved_instance_pricing(EC2_BASE_URL + "json/#{os}-ri-#{res_type}.json", res_type, os)
+        end
+      end
+    end
+
+    # Retrieves the EC2 on-demand instance pricing.
+    def fetch_ec2_on_demand_instance_pricing(url, platform)
+      res = fetch_url(url)
       @version_ec2_on_demand_instance = res['vers']
       res['config']['regions'].each do |reg|
         region_name = reg['region']
@@ -74,7 +91,7 @@ module AwsPricing
         reg['instanceTypes'].each do |type|
           type['sizes'].each do |size|
             begin
-              region.add_or_update_instance_type(:on_demand, InstanceType.new(region, type['type'], size))
+              region.add_or_update_instance_type(:on_demand, InstanceType.new(region, type['type'], size, platform))
             rescue UnknownTypeError
               $stderr.puts "WARNING: encountered #{$!.message}"
             end
@@ -82,16 +99,6 @@ module AwsPricing
         end
       end
     end
-
-    def get_ec2_reserved_instance_pricing
-      fetch_ec2_reserved_instance_pricing(EC2_BASE_URL + "ri-light-linux.json", :light, :linux)
-      fetch_ec2_reserved_instance_pricing(EC2_BASE_URL + "ri-light-mswin.json", :light, :windows)
-      fetch_ec2_reserved_instance_pricing(EC2_BASE_URL + "ri-medium-linux.json", :medium, :linux)
-      fetch_ec2_reserved_instance_pricing(EC2_BASE_URL + "ri-medium-mswin.json", :medium, :windows)
-      fetch_ec2_reserved_instance_pricing(EC2_BASE_URL + "ri-heavy-linux.json", :heavy, :linux)
-      fetch_ec2_reserved_instance_pricing(EC2_BASE_URL + "ri-heavy-mswin.json", :heavy, :windows)
-    end
-
     # Retrieves the EC2 on-demand instance pricing.
     # reserved_usage_type = :light, :medium, :heavy
     def fetch_ec2_reserved_instance_pricing(url, reserved_usage_type, platform)

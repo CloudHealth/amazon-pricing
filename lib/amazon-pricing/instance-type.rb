@@ -20,19 +20,37 @@ module AwsPricing
   #
   class InstanceType
     attr_accessor :name, :api_name, :linux_price_per_hour, :windows_price_per_hour,
-      :memory_in_mb, :disk_in_mb, :platform, :compute_units, :virtual_cores
+      :memory_in_mb, :disk_in_mb, :platform, :compute_units, :virtual_cores,
+      :rhel_price_per_hour, :sles_price_per_hour, :mswinSQL_price_per_hour, :mswinSQLWeb_price_per_hour
 
     # Initializes and InstanceType object given a region, the internal
     # type (e.g. stdODI) and the json for the specific instance. The json is
     # based on the current undocumented AWS pricing API.
-    def initialize(region, instance_type, json)
+    def initialize(region, instance_type, json, platform)
+      # e.g. json = {"size"=>"sm", "valueColumns"=>[{"name"=>"linux", "prices"=>{"USD"=>"0.060"}}]}
+
+      # e.g. {"linux"=>"0.060"}
       values = InstanceType::get_values(json)
 
       @size = json['size']
-      @linux_price_per_hour = values['linux'].to_f
-      @linux_price_per_hour = nil if @linux_price_per_hour == 0
-      @windows_price_per_hour = values['mswin'].to_f
-      @windows_price_per_hour = nil if @windows_price_per_hour == 0
+
+      pph = values[platform.to_s]
+      pph = nil if pph == "N/A"
+
+      if platform == :mswin
+        @windows_price_per_hour = pph
+      elsif platform == :linux
+        @linux_price_per_hour = pph
+      elsif platform == :rhel
+        @rhel_price_per_hour = pph
+      elsif platform == :sles
+        @sles_price_per_hour = pph
+      elsif platform == :mswinSQL
+        @mswinSQL_price_per_hour = pph
+      elsif platform == :mswinSQLWeb
+        @mswinSQLWeb_price_per_hour = pph
+      end
+
       @instance_type = instance_type
 
       @api_name = self.class.get_api_name(@instance_type, @size)
@@ -50,7 +68,12 @@ module AwsPricing
     def available?(platform = nil)
       return @linux_price_per_hour != nil if platform == :linux
       return @windows_price_per_hour != nil if platform == :windows
-      return @linux_price_per_hour != nil || @windows_price_per_hour != nil
+      return @rhel_price_per_hour != nil if platform == :rhel
+      return @sles_price_per_hour != nil if platform == :sles
+      return @mswinSQL_price_per_hour != nil if platform == :mswinSQL
+      return @mswinSQLWeb_price_per_hour != nil if platform == :mswinSQLWeb
+      return @linux_price_per_hour != nil || @windows_price_per_hour != nil || @rhel_price_per_hour ||
+        @sles_price_per_hour != nil || @mswinSQL_price_per_hour != nil || @mswinSQLWeb_price_per_hour
     end
 
     def is_reserved?
@@ -59,8 +82,12 @@ module AwsPricing
 
     def update(instance_type)
       # Due to new AWS json we have to make two passes through to populate an instance
-      @windows_price_per_hour = instance_type.windows_price_per_hour if @windows_price_per_hour.nil?
-      @linux_price_per_hour = instance_type.linux_price_per_hour if @linux_price_per_hour.nil?
+      @windows_price_per_hour ||= instance_type.windows_price_per_hour
+      @linux_price_per_hour ||= instance_type.linux_price_per_hour
+      @rhel_price_per_hour ||= instance_type.rhel_price_per_hour
+      @sles_price_per_hour ||= instance_type.sles_price_per_hour 
+      @mswinSQL_price_per_hour ||= instance_type.mswinSQL_price_per_hour
+      @mswinSQLWeb_price_per_hour ||= instance_type.mswinSQLWeb_price_per_hour 
     end
 
     protected
