@@ -21,6 +21,12 @@ module AwsPricing
       @name = name
     end
 
+    # Returns whether an instance_type is available. 
+    # type_of_instance = :ondemand, :light, :medium, :heavy
+    def available?(type_of_instance = :ondemand)
+      not price_per_hour(type_of_instance).nil?
+    end
+
     # type_of_instance = :ondemand, :light, :medium, :heavy
     # term = :year_1, :year_3, nil
     def prepay(type_of_instance = :ondemand, term = nil)

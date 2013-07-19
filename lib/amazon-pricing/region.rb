@@ -32,10 +32,7 @@ module AwsPricing
     def instance_type_available?(api_name, type_of_instance = :ondemand, operating_system = :linux)
       instance = @instance_types[api_name]
       return false if instance.nil?
-      os = instance.get_operating_system(operating_system)
-      return false if os.nil?
-      pph = os.price_per_hour(type_of_instance)
-      not pph.nil?
+      instance.available?(type_of_instance, operating_system)
     end
 
     # type_of_instance = :ondemand, :light, :medium, :heavy

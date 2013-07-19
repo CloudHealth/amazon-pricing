@@ -48,6 +48,21 @@ class TestEc2InstanceTypes < Test::Unit::TestCase
     assert region.instance_type_available?('m1.large')
   end
 
+  def test_fetch_all_breakeven_months
+    pricing = AwsPricing::PriceList.new
+    pricing.regions.each do |region|
+      region.instance_types.each do |instance|
+        instance.operating_systems.each do |os|
+          [:light, :medium, :heavy].each do |res_type|
+            next if not instance.available?(res_type)
+            assert_not_nil(os.get_breakeven_month(res_type, :year1))
+            assert_not_nil(os.get_breakeven_month(res_type, :year3))
+          end
+        end
+      end
+    end
+  end
+
   def test_breakeven_month
     pricing = AwsPricing::PriceList.new
     region = pricing.get_region('us-east')

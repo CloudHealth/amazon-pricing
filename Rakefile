@@ -31,7 +31,7 @@ task :test do
   ruby "test/test-ec2-instance-types.rb"
 end
 
-desc "Prints current EC2 pricing to console"
+desc "Prints current EC2 pricing in CSV format"
 task :print_price_list do
   require 'lib/amazon-pricing'
   pricing = AwsPricing::PriceList.new

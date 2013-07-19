@@ -46,6 +46,15 @@ module AwsPricing
       @operating_systems[name]
     end
 
+    # Returns whether an instance_type is available. 
+    # operating_system = :linux, :mswin, :rhel, :sles, :mswinSQL, :mswinSQLWeb
+    # type_of_instance = :ondemand, :light, :medium, :heavy
+    def available?(type_of_instance = :ondemand, operating_system = :linux)
+      os = get_operating_system(operating_system)
+      return false if os.nil?
+      os.available?(type_of_instance)
+    end
+
     # type_of_instance = :ondemand, :light, :medium, :heavy
     # term = :year_1, :year_3, nil
     def price_per_hour(operating_system, type_of_instance, term = nil)
