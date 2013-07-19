@@ -11,6 +11,7 @@ Gem::Specification.new do |s|
   s.homepage    = "http://github.com/sonian/amazon-pricing"
   s.summary     = "Amazon Web Services Pricing Ruby gem"
   s.description = "A Ruby library for retrieving pricing for Amazon Web Services"
+  s.license     = 'MIT'
 
   s.rubyforge_project = "amazon-pricing"
 
