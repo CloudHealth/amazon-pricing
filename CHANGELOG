@@ -1,3 +1,7 @@
+= Version 0.1.7
+  * Refactored model to simplify access (one instance type for all usages), 
+  introduced operating system pricing to suppport RHEL, SLES, etc...
+
 = Version 0.0.6
   * Another missing instance type, cc2.8xlarge
 
