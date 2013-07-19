@@ -19,42 +19,17 @@ module AwsPricing
   # $0.48/hour for Windows.
   #
   class InstanceType
-    attr_accessor :name, :api_name, :linux_price_per_hour, :windows_price_per_hour,
-      :memory_in_mb, :disk_in_mb, :platform, :compute_units, :virtual_cores,
-      :rhel_price_per_hour, :sles_price_per_hour, :mswinSQL_price_per_hour, :mswinSQLWeb_price_per_hour
+    attr_accessor :name, :api_name, :memory_in_mb, :disk_in_mb, :platform, :compute_units, :virtual_cores
 
     # Initializes and InstanceType object given a region, the internal
     # type (e.g. stdODI) and the json for the specific instance. The json is
     # based on the current undocumented AWS pricing API.
-    def initialize(region, instance_type, json, platform)
-      # e.g. json = {"size"=>"sm", "valueColumns"=>[{"name"=>"linux", "prices"=>{"USD"=>"0.060"}}]}
+    def initialize(region, api_name, name)
+      @operating_systems = {}
 
-      # e.g. {"linux"=>"0.060"}
-      values = InstanceType::get_values(json)
-
-      @size = json['size']
-
-      pph = values[platform.to_s]
-      pph = nil if pph == "N/A"
-
-      if platform == :mswin
-        @windows_price_per_hour = pph
-      elsif platform == :linux
-        @linux_price_per_hour = pph
-      elsif platform == :rhel
-        @rhel_price_per_hour = pph
-      elsif platform == :sles
-        @sles_price_per_hour = pph
-      elsif platform == :mswinSQL
-        @mswinSQL_price_per_hour = pph
-      elsif platform == :mswinSQLWeb
-        @mswinSQLWeb_price_per_hour = pph
-      end
-
-      @instance_type = instance_type
-
-      @api_name = self.class.get_api_name(@instance_type, @size)
-      @name = self.class.get_name(@instance_type, @size)
+      @region = region
+      @name = name
+      @api_name = api_name
 
       @memory_in_mb = @@Memory_Lookup[@api_name]
       @disk_in_mb = @@Disk_Lookup[@api_name]
@@ -63,59 +38,95 @@ module AwsPricing
       @virtual_cores = @@Virtual_Cores_Lookup[@api_name]
     end
 
-    # Returns whether an instance_type is available. 
-    # Optionally can specify the specific platform (:linix or :windows).
-    def available?(platform = nil)
-      return @linux_price_per_hour != nil if platform == :linux
-      return @windows_price_per_hour != nil if platform == :windows
-      return @rhel_price_per_hour != nil if platform == :rhel
-      return @sles_price_per_hour != nil if platform == :sles
-      return @mswinSQL_price_per_hour != nil if platform == :mswinSQL
-      return @mswinSQLWeb_price_per_hour != nil if platform == :mswinSQLWeb
-      return @linux_price_per_hour != nil || @windows_price_per_hour != nil || @rhel_price_per_hour ||
-        @sles_price_per_hour != nil || @mswinSQL_price_per_hour != nil || @mswinSQLWeb_price_per_hour
+    def operating_systems
+      @operating_systems.values
     end
 
-    def is_reserved?
-      false
+    def get_operating_system(name)
+      @operating_systems[name]
     end
 
-    def update(instance_type)
-      # Due to new AWS json we have to make two passes through to populate an instance
-      @windows_price_per_hour ||= instance_type.windows_price_per_hour
-      @linux_price_per_hour ||= instance_type.linux_price_per_hour
-      @rhel_price_per_hour ||= instance_type.rhel_price_per_hour
-      @sles_price_per_hour ||= instance_type.sles_price_per_hour 
-      @mswinSQL_price_per_hour ||= instance_type.mswinSQL_price_per_hour
-      @mswinSQLWeb_price_per_hour ||= instance_type.mswinSQLWeb_price_per_hour 
+    # type_of_instance = :ondemand, :light, :medium, :heavy
+    # term = :year_1, :year_3, nil
+    def price_per_hour(operating_system, type_of_instance, term = nil)
+      os = get_operating_system(operating_system)
+      os.price_per_hour(type_of_instance, term)
+    end
+
+    # type_of_instance = :ondemand, :light, :medium, :heavy
+    # term = :year_1, :year_3, nil
+    def prepay(operating_system, type_of_instance, term = nil)
+      os = get_operating_system(operating_system)
+      os.prepay(type_of_instance, term)
+    end
+
+    # operating_system = :linux, :mswin, :rhel, :sles, :mswinSQL, :mswinSQLWeb
+    # type_of_instance = :ondemand, :light, :medium, :heavy
+    def update_pricing(operating_system, type_of_instance, json)
+      os = get_operating_system(operating_system)
+      if os.nil?
+        os = OperatingSystem.new(self, operating_system)
+        @operating_systems[operating_system] = os
+      end
+
+      if type_of_instance == :ondemand
+        # e.g. {"size"=>"sm", "valueColumns"=>[{"name"=>"linux", "prices"=>{"USD"=>"0.060"}}]}
+        values = InstanceType::get_values(json)
+        price = values[operating_system.to_s]
+        price = nil if price == "N/A"
+
+        os.set_price_per_hour(type_of_instance, nil, price)
+      else
+        json['valueColumns'].each do |val|
+          price = val['prices']['USD']
+          price = nil if price == "N/A"
+
+          case val["name"]
+          when "yrTerm1"
+            os.set_prepay(type_of_instance, :year1, price)
+          when "yrTerm3"
+            os.set_prepay(type_of_instance, :year3, price)
+          when "yrTerm1Hourly"
+            os.set_price_per_hour(type_of_instance, :year1, price)
+          when "yrTerm3Hourly"
+            os.set_price_per_hour(type_of_instance, :year3, price)
+          end
+        end
+      end
     end
 
     protected
 
     attr_accessor :size, :instance_type
 
-    def self.get_api_name(instance_type, size)
+    # Returns [api_name, name]
+    def self.get_name(instance_type, size, is_reserved = false)
+      lookup = @@Api_Name_Lookup
+      lookup = @@Api_Name_Lookup_Reserved if is_reserved
+
       # Let's handle new instances more gracefully
-      unless @@Api_Name_Lookup.has_key? instance_type
+      unless lookup.has_key? instance_type
         raise UnknownTypeError, "Unknown instance type #{instance_type}", caller
       else
-        @@Api_Name_Lookup[instance_type][size]
+        api_name = lookup[instance_type][size]
       end
-    end
 
-    def self.get_name(instance_type, size)
-      @@Name_Lookup[instance_type][size]
+      lookup = @@Name_Lookup
+      lookup = @@Name_Lookup_Reserved if is_reserved
+      name = lookup[instance_type][size]
+
+      [api_name, name]
     end
 
     # Turn json into hash table for parsing
     def self.get_values(json)
+      # e.g. json = {"size"=>"xl", "valueColumns"=>[{"name"=>"mswinSQL", "prices"=>{"USD"=>"2.427"}}]}
       values = {}
       json['valueColumns'].each do |val|
         values[val['name']] = val['prices']['USD']
       end
       values
     end
-
 
     @@Api_Name_Lookup = {
       'stdODI' => {'sm' => 'm1.small', 'med' => 'm1.medium', 'lg' => 'm1.large', 'xl' => 'm1.xlarge'},
@@ -141,6 +152,31 @@ module AwsPricing
       'clusterHiMemODI' => {'xxxxxxxxl' => 'High-Memory Cluster Eight Extra Large'},
       'hiStoreODI' => {'xxxxxxxxl' => 'High-Storage Eight Extra Large'},
     }
+    @@Api_Name_Lookup_Reserved = {
+      'stdResI' => {'sm' => 'm1.small', 'med' => 'm1.medium', 'lg' => 'm1.large', 'xl' => 'm1.xlarge'},
+      'hiMemResI' => {'xl' => 'm2.xlarge', 'xxl' => 'm2.2xlarge', 'xxxxl' => 'm2.4xlarge'},
+      'hiCPUResI' => {'med' => 'c1.medium', 'xl' => 'c1.xlarge'},
+      'clusterGPUResI' => {'xxxxl' => 'cg1.4xlarge'},
+      'clusterCompResI' => {'xxxxl' => 'cc1.4xlarge', 'xxxxxxxxl' => 'cc2.8xlarge'},
+      'uResI' => {'u' => 't1.micro'},
+      'hiIoResI' => {'xxxxl' => 'hi1.4xlarge'},
+      'secgenstdResI' => {'xl' => 'm3.xlarge', 'xxl' => 'm3.2xlarge'},
+      'clusterHiMemResI' => {'xxxxxxxxl' => 'cr1.8xlarge'},
+      'hiStoreResI' => {'xxxxxxxxl' => 'hs1.8xlarge'},
+    }
+    @@Name_Lookup_Reserved = {
+      'stdResI' => {'sm' => 'Standard Small', 'med' => 'Standard Medium', 'lg' => 'Standard Large', 'xl' => 'Standard Extra Large'},
+      'hiMemResI' => {'xl' => 'Hi-Memory Extra Large', 'xxl' => 'Hi-Memory Double Extra Large', 'xxxxl' => 'Hi-Memory Quadruple Extra Large'},
+      'hiCPUResI' => {'med' => 'High-CPU Medium', 'xl' => 'High-CPU Extra Large'},
+      'clusterGPUResI' => {'xxxxl' => 'Cluster GPU Quadruple Extra Large'},
+      'clusterCompResI' => {'xxxxl' => 'Cluster Compute Quadruple Extra Large', 'xxxxxxxxl' => 'Cluster Compute Eight Extra Large'},
+      'uResI' => {'u' => 'Micro'},
+      'hiIoResI' => {'xxxxl' => 'High I/O Quadruple Extra Large Instance'},
+      'secgenstdResI' => {'xl' => 'M3 Extra Large Instance', 'xxl' => 'M3 Double Extra Large Instance'},
+      'clusterHiMemResI' => {'xxxxxxxxl' => 'High-Memory Cluster Eight Extra Large'},
+      'hiStoreResI' => {'xxxxxxxxl' => 'High-Storage Eight Extra Large'},
+    }
+
     @@Memory_Lookup = {
       'm1.small' => 1700, 'm1.medium' => 3750, 'm1.large' => 7500, 'm1.xlarge' => 15000,
       'm2.xlarge' => 17100, 'm2.2xlarge' => 34200, 'm2.4xlarge' => 68400,
