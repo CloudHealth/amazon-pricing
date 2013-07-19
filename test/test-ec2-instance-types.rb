@@ -48,6 +48,14 @@ class TestEc2InstanceTypes < Test::Unit::TestCase
     assert region.instance_type_available?('m1.large')
   end
 
+  def test_breakeven_month
+    pricing = AwsPricing::PriceList.new
+    region = pricing.get_region('us-east')
+    instance = region.get_instance_type('m1.large')
+    bem = instance.get_breakeven_month(:linux, :heavy, :year1)
+    assert bem == 6
+  end
+
   def test_memory
     # Validate instance types in specific regions are available
     pricing = AwsPricing::PriceList.new

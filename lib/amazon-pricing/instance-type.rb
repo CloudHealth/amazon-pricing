@@ -72,14 +72,12 @@ module AwsPricing
       if type_of_instance == :ondemand
         # e.g. {"size"=>"sm", "valueColumns"=>[{"name"=>"linux", "prices"=>{"USD"=>"0.060"}}]}
         values = InstanceType::get_values(json)
-        price = values[operating_system.to_s]
-        price = nil if price == "N/A"
+        price = coerce_price(values[operating_system.to_s])
 
         os.set_price_per_hour(type_of_instance, nil, price)
       else
         json['valueColumns'].each do |val|
-          price = val['prices']['USD']
-          price = nil if price == "N/A"
+          price = coerce_price(val['prices']['USD'])
 
           case val["name"]
           when "yrTerm1"
@@ -95,9 +93,21 @@ module AwsPricing
       end
     end
 
+    # type_of_instance = :ondemand, :light, :medium, :heavy
+    # term = :year_1, :year_3, nil
+    def get_breakeven_month(operating_system, type_of_instance, term)
+      os = get_operating_system(operating_system)
+      os.get_breakeven_month(type_of_instance, term)
+    end
+
     protected
 
-    attr_accessor :size, :instance_type
+    def coerce_price(price)
+      return nil if price.nil? || price == "N/A"
+      price.to_f
+    end
+
+    #attr_accessor :size, :instance_type
 
     # Returns [api_name, name]
     def self.get_name(instance_type, size, is_reserved = false)

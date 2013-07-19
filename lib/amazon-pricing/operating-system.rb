@@ -127,16 +127,19 @@ module AwsPricing
       end
     end
 
-    def get_breakeven_month(type_of_instance = :light)
+    # type_of_instance = :ondemand, :light, :medium, :heavy
+    # term = :year_1, :year_3, nil
+    def get_breakeven_month(type_of_instance, term)
       # Some regions and types do not have reserved available
-      pph = price_per_hour(type_of_instance)
-      return nil if pph.nil?
+      ondemand_pph = price_per_hour(:ondemand)
+      reserved_pph = price_per_hour(type_of_instance, term)
+      return nil if ondemand_pph.nil? || reserved_pph.nil?
 
       on_demand = 0
-      reserved = prepay
+      reserved = prepay(type_of_instance, term)
       for i in 1..36 do
-        on_demand +=  @ondemand_price_per_hour * 24 * 30.4 
-        reserved += pph * 24 * 30.4 
+        on_demand +=  ondemand_pph * 24 * 30.4 
+        reserved += reserved_pph * 24 * 30.4 
         return i if reserved < on_demand
       end
       nil

@@ -24,7 +24,7 @@ end
 
 desc "Installs the gem"
 task :install => :gem do
-  sh "#{SUDO} gem install amazon-pricing.gem --no-rdoc --no-ri"
+  sh "sudo gem install amazon-pricing-#{AwsPricing::VERSION}.gem --no-rdoc --no-ri"
 end
 
 task :test do
