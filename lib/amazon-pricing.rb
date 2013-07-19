@@ -19,8 +19,7 @@ module AwsPricing
   # information will be retrieved from Amazon via currently undocumented
   # json APIs.
   class PriceList
-    attr_accessor :regions, :version_ec2_on_demand_instance,
-      :version_ec2_reserved_instance
+    attr_accessor :regions
 
     def initialize
       @_regions = {}
@@ -37,12 +36,10 @@ module AwsPricing
       @_regions.values
     end
 
-    # Type = :on_demand or :reserved
-    # reserved_usage_type = :light, :medium, :heavy
-    def get_instance_type(region_name, type, api_name, reserved_usage_type = :medium)
+    def get_instance_type(region_name, api_name)
       region = get_region(region_name)
       raise "Region #{region_name} not found" if region.nil?
-      region.get_instance_type(type, api_name, reserved_usage_type)
+      region.get_instance_type(api_name)
     end
 
     protected
@@ -69,48 +66,33 @@ module AwsPricing
 
     def get_ec2_on_demand_instance_pricing
       @@OS_TYPES.each do |os|
-        fetch_ec2_on_demand_instance_pricing(EC2_BASE_URL + "json/#{os}-od.json", os)
+        fetch_ec2_instance_pricing(EC2_BASE_URL + "json/#{os}-od.json", :ondemand, os)
       end
     end
 
     def get_ec2_reserved_instance_pricing
       @@OS_TYPES.each do |os|
         @@RES_TYPES.each do |res_type|
-          fetch_ec2_reserved_instance_pricing(EC2_BASE_URL + "json/#{os}-ri-#{res_type}.json", res_type, os)
+          fetch_ec2_instance_pricing(EC2_BASE_URL + "json/#{os}-ri-#{res_type}.json", res_type, os)
         end
       end
     end
 
     # Retrieves the EC2 on-demand instance pricing.
-    def fetch_ec2_on_demand_instance_pricing(url, platform)
+    # type_of_instance = :ondemand, :light, :medium, :heavy
+    def fetch_ec2_instance_pricing(url, type_of_instance, operating_system)
       res = fetch_url(url)
-      @version_ec2_on_demand_instance = res['vers']
       res['config']['regions'].each do |reg|
         region_name = reg['region']
         region = find_or_create_region(region_name)
+        # e.g. type = {"type"=>"hiCPUODI", "sizes"=>[{"size"=>"med", "valueColumns"=>[{"name"=>"mswinSQL", "prices"=>{"USD"=>"N/A"}}]}, {"size"=>"xl", "valueColumns"=>[{"name"=>"mswinSQL", "prices"=>{"USD"=>"2.427"}}]}]}
         reg['instanceTypes'].each do |type|
+          # e.g. size = {"size"=>"xl", "valueColumns"=>[{"name"=>"mswinSQL", "prices"=>{"USD"=>"2.427"}}]}
           type['sizes'].each do |size|
             begin
-              region.add_or_update_instance_type(:on_demand, InstanceType.new(region, type['type'], size, platform))
-            rescue UnknownTypeError
-              $stderr.puts "WARNING: encountered #{$!.message}"
-            end
-          end
-        end
-      end
-    end
-    # Retrieves the EC2 on-demand instance pricing.
-    # reserved_usage_type = :light, :medium, :heavy
-    def fetch_ec2_reserved_instance_pricing(url, reserved_usage_type, platform)
-      res = fetch_url(url)
-      @version_ec2_reserved_instance = res['vers']
-      res['config']['regions'].each do |reg|
-        region_name = reg['region']
-        region = find_or_create_region(region_name)
-        reg['instanceTypes'].each do |type|
-          type['sizes'].each do |size|
-            begin
-              region.add_or_update_instance_type(:reserved, ReservedInstanceType.new(region, type['type'], size, reserved_usage_type, platform), reserved_usage_type)
+              api_name, name = InstanceType.get_name(type["type"], size["size"], type_of_instance != :ondemand)
+
+              region.add_or_update_instance_type(api_name, name, operating_system, type_of_instance, size)
             rescue UnknownTypeError
               $stderr.puts "WARNING: encountered #{$!.message}"
             end
