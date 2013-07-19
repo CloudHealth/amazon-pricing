@@ -19,81 +19,39 @@ module AwsPricing
 
     def initialize(name)
       @name = name
-      @_ec2_on_demand_instance_types = {}
-      @_ec2_reserved_instance_types_light = {}
-      @_ec2_reserved_instance_types_medium = {}
-      @_ec2_reserved_instance_types_heavy = {}
+      @instance_types = {}
     end
 
-    def ec2_on_demand_instance_types
-      @_ec2_on_demand_instance_types.values
+    def instance_types
+      @instance_types.values
     end
 
-    # reserved_usage_type = :light, :medium, :heavy
-    def ec2_reserved_instance_types(reserved_usage_type = nil)
-      case reserved_usage_type
-      when :light
-        @_ec2_reserved_instance_types_light.values
-      when :medium
-        @_ec2_reserved_instance_types_medium.values
-      when :heavy
-        @_ec2_reserved_instance_types_heavy.values
-      else
-        @_ec2_reserved_instance_types_light.values + @_ec2_reserved_instance_types_medium.values + @_ec2_reserved_instance_types_heavy.values
-      end
+    # Returns whether an instance_type is available. 
+    # operating_system = :linux, :mswin, :rhel, :sles, :mswinSQL, :mswinSQLWeb
+    # type_of_instance = :ondemand, :light, :medium, :heavy
+    def instance_type_available?(api_name, type_of_instance = :ondemand, operating_system = :linux)
+      instance = @instance_types[api_name]
+      return false if instance.nil?
+      os = instance.get_operating_system(operating_system)
+      return false if os.nil?
+      pph = os.price_per_hour(type_of_instance)
+      not pph.nil?
     end
 
-    # Returns whether an instance_type is available. Must specify the type
-    # (:on_demand or :reserved) and instance type (m1.large). Optionally can
-    # specify the specific platform (:linix or :windows).
-    def instance_type_available?(type, api_name, platform = nil)
-      get_instance_type(type, api_name).available?(platform)
-    end
-
-    # instance_type = :on_demand or :reserved
-    # reserved_usage_type = :light, :medium, :heavy
-    def add_or_update_instance_type(type, instance_type, reserved_usage_type = :medium)
-      current = get_instance_type(type, instance_type.api_name, reserved_usage_type)
+    # type_of_instance = :ondemand, :light, :medium, :heavy
+    def add_or_update_instance_type(api_name, name, operating_system, type_of_instance, json)
+      current = get_instance_type(api_name)
       if current.nil?
-        if type == :on_demand
-          @_ec2_on_demand_instance_types[instance_type.api_name] = instance_type
-        elsif type == :reserved
-          case reserved_usage_type
-          when :light
-            @_ec2_reserved_instance_types_light[instance_type.api_name] = instance_type
-          when :medium
-            @_ec2_reserved_instance_types_medium[instance_type.api_name] = instance_type
-          when :heavy
-            @_ec2_reserved_instance_types_heavy[instance_type.api_name] = instance_type
-          end
-        end
-      else
-        current.update(instance_type)
+        current = InstanceType.new(self, api_name, name)
+        @instance_types[api_name] = current
       end
+      current.update_pricing(operating_system, type_of_instance, json)
+      current
     end
 
-    # Type = :on_demand or :reserved
-    # reserved_usage_type = :light, :medium, :heavy
-    def get_instance_type(type, api_name, reserved_usage_type = :medium)
-      if type == :on_demand
-        @_ec2_on_demand_instance_types[api_name]
-      elsif type == :reserved
-        case reserved_usage_type
-        when :light
-          @_ec2_reserved_instance_types_light[api_name]
-        when :medium
-          @_ec2_reserved_instance_types_medium[api_name]
-        when :heavy
-          @_ec2_reserved_instance_types_heavy[api_name]
-        end
-      else
-        nil
-      end
+    def get_instance_type(api_name)
+      @instance_types[api_name]
     end
-
-    protected
-
-    attr_accessor :_ec2_on_demand_instance_types, :_ec2_reserved_instance_types_light, :_ec2_reserved_instance_types_medium, :_ec2_reserved_instance_types_heavy
 
   end
 

@@ -17,7 +17,7 @@ require 'test/unit'
 class TestEc2InstanceTypes < Test::Unit::TestCase
   def test_cc8xlarge_issue
     pricing = AwsPricing::PriceList.new
-    obj = pricing.get_instance_type('us-east', :reserved, 'cc2.8xlarge', :medium)
+    obj = pricing.get_instance_type('us-east', 'cc2.8xlarge')
     assert obj.api_name == 'cc2.8xlarge'
   end
 
@@ -25,25 +25,10 @@ class TestEc2InstanceTypes < Test::Unit::TestCase
     pricing = AwsPricing::PriceList.new
     pricing.regions.each do |region|
       assert_not_nil region.name
-      region.ec2_on_demand_instance_types.each do |instance_type|
-        assert_not_nil instance_type.api_name
-        assert_not_nil instance_type.name
-        assert instance_type.api_name != instance_type.name
-      end
-      region.ec2_reserved_instance_types(:light).each do |instance_type|
-        assert_not_nil instance_type.api_name
-        assert_not_nil instance_type.name
-        assert instance_type.api_name != instance_type.name
-      end
-      region.ec2_reserved_instance_types(:medium).each do |instance_type|
-        assert_not_nil instance_type.api_name
-        assert_not_nil instance_type.name
-        assert instance_type.api_name != instance_type.name
-      end
-      region.ec2_reserved_instance_types(:heavy).each do |instance_type|
-        assert_not_nil instance_type.api_name
-        assert_not_nil instance_type.name
-        assert instance_type.api_name != instance_type.name
+
+      region.instance_types.each do |instance|
+        assert_not_nil(instance.api_name)
+        assert_not_nil(instance.name)
       end
     end
   end
@@ -60,21 +45,21 @@ class TestEc2InstanceTypes < Test::Unit::TestCase
     # Validate instance types in specific regions are available
     pricing = AwsPricing::PriceList.new
     region = pricing.get_region('us-east')
-    assert region.instance_type_available?(:on_demand, 'm1.large')
+    assert region.instance_type_available?('m1.large')
   end
 
   def test_memory
     # Validate instance types in specific regions are available
     pricing = AwsPricing::PriceList.new
     region = pricing.get_region('us-east')
-    instance = region.get_instance_type(:on_demand, 'm1.large')
+    instance = region.get_instance_type('m1.large')
     assert instance.memory_in_mb == 7500
   end
 
   def test_non_standard_region_name
     pricing = AwsPricing::PriceList.new
     region = pricing.get_region('eu-west-1')
-    instance = region.get_instance_type(:on_demand, 'm1.large')
+    instance = region.get_instance_type('m1.large')
     assert instance.memory_in_mb == 7500
   end
 
@@ -101,7 +86,7 @@ class TestEc2InstanceTypes < Test::Unit::TestCase
   def test_virtual_cores
     pricing = AwsPricing::PriceList.new
     region = pricing.get_region('us-east')
-    instance = region.get_instance_type(:on_demand, 'm1.large')
+    instance = region.get_instance_type('m1.large')
     assert instance.virtual_cores == 2
   end
 
