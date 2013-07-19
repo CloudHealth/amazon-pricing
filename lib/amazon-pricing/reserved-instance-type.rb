@@ -15,44 +15,56 @@ module AwsPricing
   # reserved instances have three usage types: light, medium and heavy.
   #
   class ReservedInstanceType < InstanceType
-    attr_accessor :prepay_1_year, :prepay_3_year, :usage_type, :linux_price_per_hour_3_year, :windows_price_per_hour_3_year
+    attr_accessor :prepay_1_year, :prepay_3_year, :usage_type, 
+      :linux_price_per_hour_3_year, :windows_price_per_hour_3_year, :rhel_price_per_hour_3_year, :sles_price_per_hour_3_year, :mswinSQL_price_per_hour_3_year, :mswinSQLWeb_price_per_hour_3_year
 
     # Initializes and InstanceType object given a region, the internal
     # type (e.g. stdODI) and the json for the specific instance. The json is
     # based on the current undocumented AWS pricing API.
     def initialize(region, instance_type, json, usage_type, platform)
-      super(region, instance_type, json)
+      super(region, instance_type, json, platform)
 
       # Fixme: calling twice, fix later
       json['valueColumns'].each do |val|
+        price = val['prices']['USD']
+        price = nil if price == "N/A"
+
         case val["name"]
         when "yrTerm1"
-          @prepay_1_year = val['prices']['USD'].to_f unless val['prices']['USD'].to_f == 0
+          @prepay_1_year ||= price
         when "yrTerm1Hourly"
-          if platform == :windows
-            @windows_price_per_hour = val['prices']['USD']
+          if platform == :mswin
+            @windows_price_per_hour = price
           elsif platform == :linux
-            @linux_price_per_hour = val['prices']['USD']
+            @linux_price_per_hour = price
+          elsif platform == :rhel
+            @rhel_price_per_hour = price
+          elsif platform == :sles
+            @sles_price_per_hour = price
+          elsif platform == :mswinSQL
+            @mswinSQL_price_per_hour = price
+          elsif platform == :mswinSQLWeb
+            @mswinSQLWeb_price_per_hour = price
           end
         when "yrTerm3"
-          @prepay_3_year = val['prices']['USD'].to_f unless val['prices']['USD'].to_f == 0
+          @prepay_3_year ||= price
         when "yrTerm3Hourly"
-          if platform == :windows
-            @windows_price_per_hour_3_year = val['prices']['USD']
+          if platform == :mswin
+            @windows_price_per_hour_3_year = price
           elsif platform == :linux
-            @linux_price_per_hour_3_year = val['prices']['USD']
+            @linux_price_per_hour_3_year = price
+          elsif platform == :rhel
+            @rhel_price_per_hour_3_year = price
+          elsif platform == :sles
+            @sles_price_per_hour_3_year = price
+          elsif platform == :mswinSQL
+            @mswinSQL_price_per_hour_3_year = price
+          elsif platform == :mswinSQLWeb
+            @mswinSQLWeb_price_per_hour_3_year = price
           end
         end
       end
       @usage_type = usage_type
-    end
-
-    def linux_price_per_hour_1_year
-      self.linux_price_per_hour
-    end
-
-    def windows_price_per_hour_1_year
-      self.windows_price_per_hour
     end
 
     def to_s
@@ -66,8 +78,12 @@ module AwsPricing
     def update(instance_type)
       super
       # Due to new AWS json we have to make two passes through to populate an instance
-      @linux_price_per_hour_3_year = instance_type.linux_price_per_hour_3_year if @linux_price_per_hour_3_year.nil?
-      @windows_price_per_hour_3_year = instance_type.windows_price_per_hour_3_year if @windows_price_per_hour_3_year.nil?
+      @linux_price_per_hour_3_year ||= instance_type.linux_price_per_hour_3_year
+      @windows_price_per_hour_3_year ||= instance_type.windows_price_per_hour_3_year
+      @rhel_price_per_hour_3_year ||= instance_type.rhel_price_per_hour_3_year
+      @sles_price_per_hour_3_year ||= instance_type.sles_price_per_hour_3_year
+      @mswinSQL_price_per_hour_3_year ||= instance_type.mswinSQL_price_per_hour_3_year
+      @mswinSQLWeb_price_per_hour_3_year ||= instance_type.mswinSQLWeb_price_per_hour_3_year
     end
 
     protected
