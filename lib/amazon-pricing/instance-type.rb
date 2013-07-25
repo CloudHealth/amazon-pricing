@@ -199,7 +199,7 @@ module AwsPricing
     @@Memory_Lookup = {
       'm1.small' => 1700, 'm1.medium' => 3750, 'm1.large' => 7500, 'm1.xlarge' => 15000,
       'm2.xlarge' => 17100, 'm2.2xlarge' => 34200, 'm2.4xlarge' => 68400,
-      #'m3.xlarge' => 15, 'm3.2xlarge' => 30,
+      'm3.xlarge' => 15000, 'm3.2xlarge' => 30000,
       'c1.medium' => 1700, 'c1.xlarge' => 7000,
       'hi1.4xlarge' => 60500,
       'cg1.4xlarge' => 22000,
@@ -212,7 +212,7 @@ module AwsPricing
     @@Disk_Lookup = {
       'm1.small' => 160, 'm1.medium' => 410, 'm1.large' =>850, 'm1.xlarge' => 1690,
       'm2.xlarge' => 420, 'm2.2xlarge' => 850, 'm2.4xlarge' => 1690,
-      #'m3.xlarge' => 0, 'm3.2xlarge' => 0,
+      'm3.xlarge' => 0, 'm3.2xlarge' => 0,
       'c1.medium' => 350, 'c1.xlarge' => 1690,
       'hi1.4xlarge' => 2048,
       'cg1.4xlarge' => 1690,
@@ -225,7 +225,7 @@ module AwsPricing
     @@Platform_Lookup = {
       'm1.small' => 32, 'm1.medium' => 32, 'm1.large' => 64, 'm1.xlarge' => 64,
       'm2.xlarge' => 64, 'm2.2xlarge' => 64, 'm2.4xlarge' => 64,
-      #'m3.xlarge' => 64, 'm3.2xlarge' => 64,
+      'm3.xlarge' => 64, 'm3.2xlarge' => 64,
       'c1.medium' => 32, 'c1.xlarge' => 64,
       'hi1.4xlarge' => 64,
       'cg1.4xlarge' => 64,
@@ -238,7 +238,7 @@ module AwsPricing
     @@Compute_Units_Lookup = {
       'm1.small' => 1, 'm1.medium' => 2, 'm1.large' => 4, 'm1.xlarge' => 8,
       'm2.xlarge' => 6, 'm2.2xlarge' => 13, 'm2.4xlarge' => 26,
-      #'m3.xlarge' => 13, 'm3.2xlarge' => 26,
+      'm3.xlarge' => 13, 'm3.2xlarge' => 26,
       'c1.medium' => 5, 'c1.xlarge' => 20,
       'hi1.4xlarge' => 35,
       'cg1.4xlarge' => 34,
@@ -251,7 +251,7 @@ module AwsPricing
     @@Virtual_Cores_Lookup = {
       'm1.small' => 1, 'm1.medium' => 1, 'm1.large' => 2, 'm1.xlarge' => 4,
       'm2.xlarge' => 2, 'm2.2xlarge' => 4, 'm2.4xlarge' => 8,
-      #'m3.xlarge' => 4, 'm3.2xlarge' => 8,
+      'm3.xlarge' => 4, 'm3.2xlarge' => 8,
       'c1.medium' => 2, 'c1.xlarge' => 8,
       'hi1.4xlarge' => 16,
       'cg1.4xlarge' => 8,
