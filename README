@@ -7,7 +7,7 @@ Amazon Web Services offers cloud-based on demand compute, storage and applicatio
 
 For the most complete and up-to date README information please visit the project homepage at:
 
-http://github.com/sonian/amazon-pricing/tree/master
+http://github.com/CloudHealth/amazon-pricing/tree/master
 
 
 == Installation
@@ -29,7 +29,7 @@ This is the standard install for stable releases from RubyGems.
 
 To install from git for adding features or fixing bugs, you'll need to clone and build.
 
-  git clone git://github.com/sonian/amazon-pricing.git
+  git clone git://github.com/CloudHealth/amazon-pricing.git
   cd amazon-pricing
   bundle install
   rake test
@@ -55,9 +55,9 @@ The library exposes one main interface module
 
 === Project Websites
 
-* Project Home : http://github.com/sonian/amazon-pricing/tree/master
-* API Documentation : http://rdoc.info/projects/sonian/amazon-pricing
-* Report Bugs / Request Features : http://github.com/sonian/amazon-pricing/issues
+* Project Home : http://github.com/CloudHealth/amazon-pricing/tree/master
+* API Documentation : http://rdoc.info/projects/CloudHealth/amazon-pricing
+* Report Bugs / Request Features : http://github.com/CloudHealth/amazon-pricing/issues
 * Amazon Web Services : http://aws.amazon.com
 
 == Credits
@@ -72,7 +72,7 @@ Comments, patches, Git pull requests and bug reports are welcome. Send an email 
 
 Please follow these steps if you want to send a patch or a GitHub pull request:
 
-* Fork sonian/amazon-pricing
+* Fork CloudHealth/amazon-pricing
 * Create a topic branch: `git checkout -b my_fix`
 * Make sure you add tests for your changes and that they all pass with 'rake test'
 * Don't change files that you don't own like the gemspec or version.rb
@@ -84,5 +84,5 @@ Please follow these steps if you want to send a patch or a GitHub pull request:
 
 Enjoy!
 
-Sonian
+CloudHealth
 
