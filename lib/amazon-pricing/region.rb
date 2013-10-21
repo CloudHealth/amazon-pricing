@@ -20,6 +20,7 @@ module AwsPricing
     def initialize(name)
       @name = name
       @instance_types = {}
+      @rds_instance_types = {}
     end
 
     def instance_types
@@ -49,7 +50,33 @@ module AwsPricing
     def get_instance_type(api_name)
       @instance_types[api_name]
     end
+    
+    def rds_instance_types
+      @rds_instance_types.values
+    end
 
+    # Returns whether an instance_type is available. 
+    # database_type = :mysql, :oracle, :sqlserver
+    # type_of_instance = :ondemand, :light, :medium, :heavy
+    def rds_instance_type_available?(api_name, type_of_rds_instance = :ondemand, database_type = :linux)
+      instance = @rds_instance_types[api_name]
+      return false if instance.nil?
+      instance.available?(type_of_rds_instance, database_type)
+    end
+
+    # type_of_instance = :ondemand, :light, :medium, :heavy
+    def add_or_update_rds_instance_type(api_name, name, database_type, type_of_rds_instance, json)
+      current = get_rds_instance_type(api_name)
+      if current.nil?
+        current = RdsInstanceType.new(self, api_name, name)
+        @rds_instance_types[api_name] = current
+      end
+      current.update_pricing(database_type, type_of_rds_instance, json)
+      current
+    end
+
+    def get_rds_instance_type(api_name)
+      @rds_instance_types[api_name]
+    end    
   end
-
 end
