@@ -52,7 +52,7 @@ class TestEc2InstanceTypes < Test::Unit::TestCase
     pricing = AwsPricing::PriceList.new
     pricing.regions.each do |region|
       region.instance_types.each do |instance|
-        instance.operating_systems.each do |os|
+        instance.category_types.each do |os|
           [:light, :medium, :heavy].each do |res_type|
             next if not instance.available?(res_type)
             assert_not_nil(os.get_breakeven_month(res_type, :year1))

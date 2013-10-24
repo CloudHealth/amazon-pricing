@@ -64,8 +64,8 @@ end
 
 desc "Prints current RDS pricing in CSV format"
 task :print_rds_price_list do
-  require 'lib/amazon-rds-pricing'
-  pricing = AwsPricing::RdsPriceList.new  
+  require 'lib/amazon-pricing'
+  pricing = AwsPricing::RdsPriceList.new    
 end
 
 task :default => [:test]
