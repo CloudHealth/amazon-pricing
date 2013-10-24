@@ -12,11 +12,14 @@ module AwsPricing
   class UnknownTypeError < NameError
   end
 
-  class InstanceType
+  # RdsInstanceType is a specific type of instance in a region with a defined
+  # price per hour. The price will vary by platform (Linux, Windows).
+  #
+  class RdsInstanceType
     attr_accessor :name, :api_name, :memory_in_mb, :disk_in_mb, :platform, :compute_units, :virtual_cores
-    
+
     def initialize(region, api_name, name)
-      @category_types = {}
+      @database_types = {}
 
       @region = region
       @name = name
@@ -29,72 +32,72 @@ module AwsPricing
       @virtual_cores = @@Virtual_Cores_Lookup[@api_name]
     end
 
-    def category_types
-      @category_types.values
+    def database_types
+      @database_types.values
     end
 
-    def get_category_type(name)
-      @category_types[name]
+    def get_database_type(name)
+      @database_types[name]
     end
 
     # Returns whether an instance_type is available. 
-    # category_type = :mysql, :oracle, :sqlserver, :linux, :mswin, :rhel, :sles, :mswinSQL, :mswinSQLWeb
-    # type_of_instance = :ondemand, :light, :medium, :heavy
-    def available?(type_of_instance = :ondemand, category_type = :linux)
-      db = get_category_type(category_type)
+    # database_type = :mysql, :oracle, :sqlserver
+    # type_of_rds_instance = :ondemand, :light, :medium, :heavy
+    def available?(type_of_rds_instance = :ondemand, database_type = :linux)
+      db = get_database_type(database_type)
       return false if db.nil?
-      db.available?(type_of_instance)
+      db.available?(type_of_rds_instance)
     end
 
-    # type_of_instance = :ondemand, :light, :medium, :heavy
+    # type_of_rds_instance = :ondemand, :light, :medium, :heavy
     # term = :year_1, :year_3, nil
-    def price_per_hour(category_type, type_of_instance, term = nil)
-      db = get_category_type(category_type)
-      db.price_per_hour(type_of_instance, term)
+    def price_per_hour(database_type, type_of_rds_instance, term = nil)
+      db = get_database_type(database_type)
+      db.price_per_hour(type_of_rds_instance, term)
     end
 
-    # type_of_instance = :ondemand, :light, :medium, :heavy
+    # type_of_rds_instance = :ondemand, :light, :medium, :heavy
     # term = :year_1, :year_3, nil
-    def prepay(category_type, type_of_instance, term = nil)
-      db = get_category_type(category_type)
-      db.prepay(type_of_instance, term)
+    def prepay(database_type, type_of_rds_instance, term = nil)
+      db = get_database_type(database_type)
+      db.prepay(type_of_rds_instance, term)
     end
 
-    # category_type = :mysql, :oracle, :sqlserver
-    # type_of_instance = :ondemand, :light, :medium, :heavy
-    def update_pricing(category_type, type_of_instance, json)
-      db = get_category_type(category_type)
+    # database_type = :mysql, :oracle, :sqlserver
+    # type_of_rds_instance = :ondemand, :light, :medium, :heavy
+    def update_pricing(database_type, type_of_rds_instance, json)
+      db = get_database_type(database_type)
       if db.nil?
-        db = CategoryType.new(self, category_type)
-        @category_types[category_type] = db
+        db = DatabaseType.new(self, database_type)
+        @database_types[database_type] = db
       end
 
-      if type_of_instance == :ondemand
-        values = InstanceType::get_values(json,category_type)
-        price = coerce_price(values[category_type.to_sym])
-        db.set_price_per_hour(type_of_instance, nil, price)
+      if type_of_rds_instance == :ondemand
+        values = RdsInstanceType::get_values(json,database_type)
+        price = coerce_price(values[database_type.to_sym])
+        db.set_price_per_hour(type_of_rds_instance, nil, price)
       else
         json['valueColumns'].each do |val|
           price = coerce_price(val['prices']['USD'])
           case val["name"]
           when "yrTerm1"
-            db.set_prepay(type_of_instance, :year1, price)
+            db.set_prepay(type_of_rds_instance, :year1, price)
           when "yrTerm3"
-            db.set_prepay(type_of_instance, :year3, price)
+            db.set_prepay(type_of_rds_instance, :year3, price)
           when "yrTerm1Hourly"
-            db.set_price_per_hour(type_of_instance, :year1, price)
+            db.set_price_per_hour(type_of_rds_instance, :year1, price)
           when "yrTerm3Hourly"
-            db.set_price_per_hour(type_of_instance, :year3, price)
+            db.set_price_per_hour(type_of_rds_instance, :year3, price)
           end
         end
       end
     end
 
-    # type_of_instance = :ondemand, :light, :medium, :heavy
+    # type_of_rds_instance = :ondemand, :light, :medium, :heavy
     # term = :year_1, :year_3, nil
-    def get_breakeven_month(category_type, type_of_instance, term)
-      db = get_category_type(category_type)
-      db.get_breakeven_month(type_of_instance, term)
+    def get_breakeven_month(database_type, type_of_rds_instance, term)
+      db = get_database_type(database_type)
+      db.get_breakeven_month(type_of_rds_instance, term)
     end
 
     protected
@@ -123,87 +126,42 @@ module AwsPricing
       [api_name, name]
     end
 
-    def self.get_values(json, category_type)
+    # Turn json into hash table for parsing
+    def self.get_values(json,database_type)
+      #json: {"prices"=>{"USD"=>"4.345"}, "name"=>"xxxxDBInst"}
       values = {}
-      unless json['valueColumns'].nil?
-        json['valueColumns'].each do |val|
-          values[val['name']] = val['prices']['USD']
-        end
-      else
-        values[category_type] = json['prices']['USD']
-      end       
+        values[database_type] = json['prices']['USD']
       values
     end
 
     @@Api_Name_Lookup = {
-      'stdODI' => {'sm' => 'm1.small', 'med' => 'm1.medium', 'lg' => 'm1.large', 'xl' => 'm1.xlarge'},
-      'hiMemODI' => {'xl' => 'm2.xlarge', 'xxl' => 'm2.2xlarge', 'xxxxl' => 'm2.4xlarge'},
-      'hiCPUODI' => {'med' => 'c1.medium', 'xl' => 'c1.xlarge'},
-      'hiIoODI' => {'xxxxl' => 'hi1.4xlarge'},
-      'clusterGPUI' => {'xxxxl' => 'cg1.4xlarge'},
-      'clusterComputeI' => {'xxxxl' => 'cc1.4xlarge','xxxxxxxxl' => 'cc2.8xlarge'},
-      'uODI' => {'u' => 't1.micro'},
-      'secgenstdODI' => {'xl' => 'm3.xlarge', 'xxl' => 'm3.2xlarge'},
-      'clusterHiMemODI' => {'xxxxxxxxl' => 'cr1.8xlarge'},
-      'hiStoreODI' => {'xxxxxxxxl' => 'hs1.8xlarge'},
-
-      # RDS On-Demand Instances
+      
       'udbInstClass' => {'uDBInst'=>'t1.micro'},
       'dbInstClass'=> {'uDBInst' => 't1.micro', 'smDBInst' => 'm1.small', 'medDBInst' => 'm1.medium', 'lgDBInst' => 'm1.large', 'xlDBInst' => 'm1.xlarge'},
       'hiMemDBInstClass'=> {'xlDBInst' => 'm2.xlarge', 'xxlDBInst' => 'm2.2xlarge', 'xxxxDBInst' => 'm2.4xlarge'},
       'clusterHiMemDB' => {'xxxxxxxxl' => 'm2.8xlarge'},
-      'multiAZDBInstClass'=> {'uDBInst' => 't1.micro', 'smDBInst' => 'm1.small', 'medDBInst' => 'm1.medium', 'lgDBInst' => 'm1.large', 'xlDBInst' => 'm1.xlarge'},
-      'multiAZHiMemInstClass'=> {'xlDBInst' => 'm2.xlarge', 'xxlDBInst' => 'm2.2xlarge', 'xxxxDBInst' => 'm2.4xlarge'}    
-    }
-    @@Name_Lookup = {
-      'stdODI' => {'sm' => 'Standard Small', 'med' => 'Standard Medium', 'lg' => 'Standard Large', 'xl' => 'Standard Extra Large'},
-      'hiMemODI' => {'xl' => 'Hi-Memory Extra Large', 'xxl' => 'Hi-Memory Double Extra Large', 'xxxxl' => 'Hi-Memory Quadruple Extra Large'},
-      'hiCPUODI' => {'med' => 'High-CPU Medium', 'xl' => 'High-CPU Extra Large'},
-      'hiIoODI' => {'xxxxl' => 'High I/O Quadruple Extra Large'},
-      'clusterGPUI' => {'xxxxl' => 'Cluster GPU Quadruple Extra Large'},
-      'clusterComputeI' => {'xxxxl' => 'Cluster Compute Quadruple Extra Large', 'xxxxxxxxl' => 'Cluster Compute Eight Extra Large'},
-      'uODI' => {'u' => 'Micro'},
-      'secgenstdODI' => {'xl' => 'M3 Extra Large Instance', 'xxl' => 'M3 Double Extra Large Instance'},
-      'clusterHiMemODI' => {'xxxxxxxxl' => 'High-Memory Cluster Eight Extra Large'},
-      'hiStoreODI' => {'xxxxxxxxl' => 'High-Storage Eight Extra Large'},
 
-      # RDS On-Demand Instances
+      'multiAZDBInstClass'=> {'uDBInst' => 't1.micro', 'smDBInst' => 'm1.small', 'medDBInst' => 'm1.medium', 'lgDBInst' => 'm1.large', 'xlDBInst' => 'm1.xlarge'},
+      'multiAZHiMemInstClass'=> {'xlDBInst' => 'm2.xlarge', 'xxlDBInst' => 'm2.2xlarge', 'xxxxDBInst' => 'm2.4xlarge'}
+    
+    }
+
+    @@Name_Lookup = {
       'udbInstClass' => {'uDBInst'=>'Standard Micro'},
       'dbInstClass'=> {'uDBInst' => 'Standard Micro', 'smDBInst' => 'Standard Small', 'medDBInst' => 'Standard Medium', 'lgDBInst' => 'Standard Large', 'xlDBInst' => 'Standard Extra Large'},
       'hiMemDBInstClass'=> {'xlDBInst' => 'Standard High-Memory Extra Large', 'xxlDBInst' => 'Standard High-Memory Double Extra Large', 'xxxxDBInst' => 'Standard High-Memory Quadruple Extra Large'},
       'clusterHiMemDB' => {'xxxxxxxxl' => 'Standard High-Memory Cluster Eight Extra Large'},
+
       'multiAZDBInstClass'=> {'uDBInst' => 'Multi-AZ Micro', 'smDBInst' => 'Multi-AZ Small', 'medDBInst' => 'Multi-AZ Medium', 'lgDBInst' => 'Multi-AZ Large', 'xlDBInst' => 'Multi-AZ Extra Large'},
       'multiAZHiMemInstClass'=> {'xlDBInst' => 'Multi-AZ High-Memory Extra Large', 'xxlDBInst' => 'Multi-AZ High-Memory Double Extra Large', 'xxxxDBInst' => 'Multi-AZ High-Memory Quadruple Extra Large'}
     }
+
     @@Api_Name_Lookup_Reserved = {
-      'stdResI' => {'sm' => 'm1.small', 'med' => 'm1.medium', 'lg' => 'm1.large', 'xl' => 'm1.xlarge'},
-      'hiMemResI' => {'xl' => 'm2.xlarge', 'xxl' => 'm2.2xlarge', 'xxxxl' => 'm2.4xlarge'},
-      'hiCPUResI' => {'med' => 'c1.medium', 'xl' => 'c1.xlarge'},
-      'clusterGPUResI' => {'xxxxl' => 'cg1.4xlarge'},
-      'clusterCompResI' => {'xxxxl' => 'cc1.4xlarge', 'xxxxxxxxl' => 'cc2.8xlarge'},
-      'uResI' => {'u' => 't1.micro'},
-      'hiIoResI' => {'xxxxl' => 'hi1.4xlarge'},
-      'secgenstdResI' => {'xl' => 'm3.xlarge', 'xxl' => 'm3.2xlarge'},
-      'clusterHiMemResI' => {'xxxxxxxxl' => 'cr1.8xlarge'},
-      'hiStoreResI' => {'xxxxxxxxl' => 'hs1.8xlarge'},
-      
-      # RDS Reserved Instances
       'stdDeployRes' => {'u' => 't1.micro', 'micro' => 't1.micro', 'sm' => 'm1.small', 'med' => 'm1.medium', 'lg' => 'm1.large', 'xl' => 'm1.xlarge', 'xlHiMem' => 'm2.xlarge', 'xxlHiMem' => 'm2.2xlarge', 'xxxxlHiMem' => 'm2.4xlarge'}  ,
       'multiAZdeployRes' => {'u' => 't1.micro', 'micro' => 't1.micro', 'sm' => 'm1.small', 'med' => 'm1.medium', 'lg' => 'm1.large', 'xl' => 'm1.xlarge', 'xlHiMem' => 'm2.xlarge', 'xxlHiMem' => 'm2.2xlarge', 'xxxxlHiMem' => 'm2.4xlarge'}  
     }
-    @@Name_Lookup_Reserved = {
-      'stdResI' => {'sm' => 'Standard Small', 'med' => 'Standard Medium', 'lg' => 'Standard Large', 'xl' => 'Standard Extra Large'},
-      'hiMemResI' => {'xl' => 'Hi-Memory Extra Large', 'xxl' => 'Hi-Memory Double Extra Large', 'xxxxl' => 'Hi-Memory Quadruple Extra Large'},
-      'hiCPUResI' => {'med' => 'High-CPU Medium', 'xl' => 'High-CPU Extra Large'},
-      'clusterGPUResI' => {'xxxxl' => 'Cluster GPU Quadruple Extra Large'},
-      'clusterCompResI' => {'xxxxl' => 'Cluster Compute Quadruple Extra Large', 'xxxxxxxxl' => 'Cluster Compute Eight Extra Large'},
-      'uResI' => {'u' => 'Micro'},
-      'hiIoResI' => {'xxxxl' => 'High I/O Quadruple Extra Large Instance'},
-      'secgenstdResI' => {'xl' => 'M3 Extra Large Instance', 'xxl' => 'M3 Double Extra Large Instance'},
-      'clusterHiMemResI' => {'xxxxxxxxl' => 'High-Memory Cluster Eight Extra Large'},
-      'hiStoreResI' => {'xxxxxxxxl' => 'High-Storage Eight Extra Large'},
 
-      # RDS Reserved Instances
+    @@Name_Lookup_Reserved = {
       'stdDeployRes' => {'u' => 'Standard Micro', 'micro' => 'Standard Micro', 'sm' => 'Standard Small', 'med' => 'Standard Medium', 'lg' => 'Standard Large', 'xl' => 'Standard Extra Large', 'xlHiMem' => 'Standard Extra Large High-Memory', 'xxlHiMem' => 'Standard Double Extra Large High-Memory', 'xxxxlHiMem' => 'Standard Quadruple Extra Large High-Memory', 'xxxxxxxxl' => 'Standard Eight Extra Large'}  ,
       'multiAZdeployRes' => {'u' => 'Multi-AZ Micro', 'micro' => 'Multi-AZ Micro', 'sm' => 'Multi-AZ Small', 'med' => 'Multi-AZ Medium', 'lg' => 'Multi-AZ Large', 'xl' => 'Multi-AZ Extra Large', 'xlHiMem' => 'Multi-AZ Extra Large High-Memory', 'xxlHiMem' => 'Multi-AZ Double Extra Large High-Memory', 'xxxxlHiMem' => 'Multi-AZ Quadruple Extra Large High-Memory', 'xxxxxxxxl' => 'Multi-AZ Eight Extra Large'}  
     }
