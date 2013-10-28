@@ -71,7 +71,7 @@ module AwsPricing
 
       if type_of_instance == :ondemand
         values = InstanceType::get_values(json,category_type)
-        price = coerce_price(values[category_type.to_sym])
+        price = coerce_price(values[category_type.to_s])
         db.set_price_per_hour(type_of_instance, nil, price)
       else
         json['valueColumns'].each do |val|
