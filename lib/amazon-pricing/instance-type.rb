@@ -130,7 +130,7 @@ module AwsPricing
           values[val['name']] = val['prices']['USD']
         end
       else
-        values[category_type] = json['prices']['USD']
+        values[category_type.to_s] = json['prices']['USD']
       end       
       values
     end
