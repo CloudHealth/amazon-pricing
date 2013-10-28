@@ -9,7 +9,7 @@
 #++
 module AwsPricing
 
-  class OperatingSystem
+  class CategoryType
     attr_accessor :instance_type, :name, 
       :ondemand_price_per_hour, :light_price_per_hour_1_year, :medium_price_per_hour_1_year, :heavy_price_per_hour_1_year,
       :light_price_per_hour_3_year, :medium_price_per_hour_3_year, :heavy_price_per_hour_3_year,
@@ -150,7 +150,6 @@ module AwsPricing
       end
       nil
     end
-
   end
 
 end
