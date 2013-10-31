@@ -62,4 +62,33 @@ task :print_price_list do
   end
 end
 
-task :default => [:test]
+desc "Prints current RDS pricing in CSV format"
+task :print_rds_price_list do
+  require 'lib/amazon-pricing'
+  pricing = AwsPricing::RdsPriceList.new
+  line = "Region,Instance Type,API Name,Memory (MB),Disk (MB),Compute Units, Virtual Cores,OD Mysql PPH,OD Oracle PPH,OD Sqlserver PPH,"
+  [:year1, :year3].each do |term|
+    [:light, :medium, :heavy].each do |res_type|
+      [:mysql,:oracle, :sqlserver].each do |db|
+        line += "#{term} #{res_type} #{db} Prepay,#{term} #{res_type} #{db} PPH,"
+      end
+    end
+  end
+  puts line.chop
+  pricing.regions.each do |region|
+    region.instance_types.each do |t|
+      line = "#{region.name},#{t.name},#{t.api_name},#{t.memory_in_mb},#{t.disk_in_mb},#{t.compute_units},#{t.virtual_cores},"
+      [:mysql, :oracle, :sqlserver].each do |db|
+        line += "#{t.price_per_hour(db, :ondemand)}," unless t.price_per_hour(db, :ondemand).nil?
+      end
+      [:year1, :year3].each do |term|
+        [:light, :medium, :heavy].each do |res_type|
+          [:mysql, :oracle, :sqlserver].each do |db|
+            line += "#{t.prepay(db, res_type, term)},#{t.price_per_hour(db, res_type, term)}," unless t.price_per_hour(db, :ondemand).nil?
+          end
+        end
+      end
+      puts line.chop
+    end
+  end    
+end
