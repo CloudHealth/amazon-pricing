@@ -12,20 +12,11 @@ module AwsPricing
   class UnknownTypeError < NameError
   end
 
-  # InstanceType is a specific type of instance in a region with a defined
-  # price per hour. The price will vary by platform (Linux, Windows).
-  #
-  # e.g. m1.large instance in US-East region will cost $0.34/hour for Linux and
-  # $0.48/hour for Windows.
-  #
   class InstanceType
     attr_accessor :name, :api_name, :memory_in_mb, :disk_in_mb, :platform, :compute_units, :virtual_cores
-
-    # Initializes and InstanceType object given a region, the internal
-    # type (e.g. stdODI) and the json for the specific instance. The json is
-    # based on the current undocumented AWS pricing API.
+    
     def initialize(region, api_name, name)
-      @operating_systems = {}
+      @category_types = {}
 
       @region = region
       @name = name
@@ -38,65 +29,71 @@ module AwsPricing
       @virtual_cores = @@Virtual_Cores_Lookup[@api_name]
     end
 
-    def operating_systems
-      @operating_systems.values
+    def category_types
+      @category_types.values
     end
 
-    def get_operating_system(name)
-      @operating_systems[name]
+    def get_category_type(name)
+      @category_types[name]
+    end
+
+    def getprint(name)
+      @category_types[name]
     end
 
     # Returns whether an instance_type is available. 
-    # operating_system = :linux, :mswin, :rhel, :sles, :mswinSQL, :mswinSQLWeb
+    # category_type = :mysql, :oracle, :sqlserver, :linux, :mswin, :rhel, :sles, :mswinSQL, :mswinSQLWeb
     # type_of_instance = :ondemand, :light, :medium, :heavy
-    def available?(type_of_instance = :ondemand, operating_system = :linux)
-      os = get_operating_system(operating_system)
-      return false if os.nil?
-      os.available?(type_of_instance)
+    def available?(type_of_instance = :ondemand, category_type = :linux)
+      cat = get_category_type(category_type)
+      return false if cat.nil?
+      cat.available?(type_of_instance)
     end
 
     # type_of_instance = :ondemand, :light, :medium, :heavy
     # term = :year_1, :year_3, nil
-    def price_per_hour(operating_system, type_of_instance, term = nil)
-      os = get_operating_system(operating_system)
-      os.price_per_hour(type_of_instance, term)
+    def price_per_hour(category_type, type_of_instance, term = nil)
+      cat = get_category_type(category_type) 
+      cat.price_per_hour(type_of_instance, term) unless cat.nil?
     end
 
     # type_of_instance = :ondemand, :light, :medium, :heavy
     # term = :year_1, :year_3, nil
-    def prepay(operating_system, type_of_instance, term = nil)
-      os = get_operating_system(operating_system)
-      os.prepay(type_of_instance, term)
+    def prepay(category_type, type_of_instance, term = nil)
+      cat = get_category_type(category_type)
+      cat.prepay(type_of_instance, term) unless cat.nil?
     end
 
-    # operating_system = :linux, :mswin, :rhel, :sles, :mswinSQL, :mswinSQLWeb
+    # category_type = :mysql, :oracle, :sqlserver
     # type_of_instance = :ondemand, :light, :medium, :heavy
-    def update_pricing(operating_system, type_of_instance, json)
-      os = get_operating_system(operating_system)
-      if os.nil?
-        os = OperatingSystem.new(self, operating_system)
-        @operating_systems[operating_system] = os
+    def update_pricing(category_type, type_of_instance, json)
+      cat = get_category_type(category_type)
+      if cat.nil?
+        cat = CategoryType.new(self, category_type)
+        @category_types[category_type] = cat
       end
 
       if type_of_instance == :ondemand
-        # e.g. {"size"=>"sm", "valueColumns"=>[{"name"=>"linux", "prices"=>{"USD"=>"0.060"}}]}
-        values = InstanceType::get_values(json)
-        price = coerce_price(values[operating_system.to_s])
-
-        os.set_price_per_hour(type_of_instance, nil, price)
+        values = InstanceType::get_values(json,category_type)
+        price = coerce_price(values[category_type.to_s])
+        cat.set_price_per_hour(type_of_instance, nil, price)
       else
         json['valueColumns'].each do |val|
           price = coerce_price(val['prices']['USD'])
-
           case val["name"]
           when "yrTerm1"
-            os.set_prepay(type_of_instance, :year1, price)
+            cat.set_prepay(type_of_instance, :year1, price)
           when "yrTerm3"
-            os.set_prepay(type_of_instance, :year3, price)
+            cat.set_prepay(type_of_instance, :year3, price)
           when "yrTerm1Hourly"
-            os.set_price_per_hour(type_of_instance, :year1, price)
+            cat.set_price_per_hour(type_of_instance, :year1, price)
           when "yrTerm3Hourly"
-            os.set_price_per_hour(type_of_instance, :year3, price)
+            cat.set_price_per_hour(type_of_instance, :year3, price)
+
+          when "yearTerm1Hourly"
+            cat.set_price_per_hour(type_of_instance, :year1, price)
+          when "yearTerm3Hourly"
+            cat.set_price_per_hour(type_of_instance, :year3, price)     
           end
         end
       end
@@ -104,9 +101,9 @@ module AwsPricing
 
     # type_of_instance = :ondemand, :light, :medium, :heavy
     # term = :year_1, :year_3, nil
-    def get_breakeven_month(operating_system, type_of_instance, term)
-      os = get_operating_system(operating_system)
-      os.get_breakeven_month(type_of_instance, term)
+    def get_breakeven_month(category_type, type_of_instance, term)
+      cat = get_category_type(category_type)
+      cat.get_breakeven_month(type_of_instance, term)
     end
 
     protected
@@ -115,8 +112,6 @@ module AwsPricing
       return nil if price.nil? || price == "N/A"
       price.to_f
     end
-
-    #attr_accessor :size, :instance_type
 
     # Returns [api_name, name]
     def self.get_name(instance_type, size, is_reserved = false)
@@ -137,13 +132,15 @@ module AwsPricing
       [api_name, name]
     end
 
-    # Turn json into hash table for parsing
-    def self.get_values(json)
-      # e.g. json = {"size"=>"xl", "valueColumns"=>[{"name"=>"mswinSQL", "prices"=>{"USD"=>"2.427"}}]}
+    def self.get_values(json, category_type)
       values = {}
-      json['valueColumns'].each do |val|
-        values[val['name']] = val['prices']['USD']
-      end
+      unless json['valueColumns'].nil?
+        json['valueColumns'].each do |val|
+          values[val['name']] = val['prices']['USD']
+        end
+      else
+        values[category_type.to_s] = json['prices']['USD']
+      end       
       values
     end
 
@@ -158,6 +155,35 @@ module AwsPricing
       'secgenstdODI' => {'xl' => 'm3.xlarge', 'xxl' => 'm3.2xlarge'},
       'clusterHiMemODI' => {'xxxxxxxxl' => 'cr1.8xlarge'},
       'hiStoreODI' => {'xxxxxxxxl' => 'hs1.8xlarge'},
+
+      # RDS On-Demand Instances
+      
+      #Mysql
+      'udbInstClass' => {'uDBInst'=>'udb.t1.micro'},
+      'dbInstClass'=> {'uDBInst' => 't1.micro', 'smDBInst' => 'm1.small', 'medDBInst' => 'm1.medium', 'lgDBInst' => 'm1.large', 'xlDBInst' => 'm1.xlarge'},
+      'hiMemDBInstClass'=> {'xlDBInst' => 'm2.xlarge', 'xxlDBInst' => 'm2.2xlarge', 'xxxxDBInst' => 'm2.4xlarge'},
+      'clusterHiMemDB' => {'xxxxxxxxl' => 'm2.8xlarge'},
+      'multiclusterHiMemDB' => {'xxxxxxxxl' => 'mul.m2.8xlarge'},
+      'multiAZDBInstClass'=> {'uDBInst' => 'mul.t1.micro', 'smDBInst' => 'mul.m1.small', 'medDBInst' => 'mul.m1.medium', 'lgDBInst' => 'mul.m1.large', 'xlDBInst' => 'mul.m1.xlarge'},
+      'multiAZHiMemInstClass'=> {'xlDBInst' => 'mul.m2.xlarge', 'xxlDBInst' => 'mul.m2.2xlarge', 'xxxxDBInst' => 'mul.m2.4xlarge'},
+      #Oracle
+      'li-standard-dbInstClass'=> {'uDBInst' => 'li.standard.t1.micro', 'smDBInst' => 'li.standard.m1.small', 'medDBInst' => 'li.standard.m1.medium', 'lgDBInst' => 'li.standard.m1.large', 'xlDBInst' => 'li.standard.m1.xlarge'},
+      'li-standard-hiMemDBInstClass'=> {'xlDBInst' => 'li.standard.m2.xlarge', 'xxlDBInst' => 'li.standard.m2.2xlarge', 'xxxxDBInst' => 'li.standard.m2.4xlarge'},
+      'li-multiAZ-dbInstClass'=> {'uDBInst' => 'li.multiAZ.t1.micro', 'smDBInst' => 'li.multiAZ.m1.small', 'medDBInst' => 'li.multiAZ.m1.medium', 'lgDBInst' => 'li.multiAZ.m1.large', 'xlDBInst' => 'li.multiAZ.m1.xlarge'},
+      'li-multiAZ-hiMemDBInstClass'=> {'xlDBInst' => 'li.multiAZ.m2.xlarge', 'xxlDBInst' => 'li.multiAZ.m2.2xlarge', 'xxxxDBInst' => 'li.multiAZ.m2.4xlarge'},
+      'byol-standard-dbInstClass'=> {'uDBInst' => 'byol.standard.t1.micro', 'smDBInst' => 'byol.standard.m1.small', 'medDBInst' => 'byol.standard.m1.medium', 'lgDBInst' => 'byol.standard.m1.large', 'xlDBInst' => 'byol.standard.m1.xlarge'},
+      'byol-standard-hiMemDBInstClass'=> {'xlDBInst' => 'byol.standard.m2.xlarge', 'xxlDBInst' => 'byol.standard.m2.2xlarge', 'xxxxDBInst' => 'byol.standard.m2.4xlarge'},
+      'byol-multiAZ-multiAZDBInstClass'=> {'uDBInst' => 'byol.multiAZ.t1.micro', 'smDBInst' => 'byol.multiAZ.m1.small', 'medDBInst' => 'byol.multiAZ.m1.medium', 'lgDBInst' => 'byol.multiAZ.m1.large', 'xlDBInst' => 'byol.multiAZ.m1.xlarge'},
+      'byol-multiAZ-multiAZHiMemInstClass'=> {'xlDBInst' => 'byol.multiAZ.m2.xlarge', 'xxlDBInst' => 'byol.multiAZ.m2.2xlarge', 'xxxxDBInst' => 'byol.multiAZ.m2.4xlarge'},
+      #Sqlserver
+      'li-ex-udbInstClass' => {'uDBInst'=>'li.ex.t1.micro'},
+      'li-ex-dbInstClass'=> {'uDBInst' => 'li.ex.t1.micro', 'smDBInst' => 'li.ex.m1.small'},
+      'li-web-dbInstClass'=> {'uDBInst' => 'li.web.t1.micro', 'smDBInst' => 'li.web.m1.small', 'medDBInst' => 'li.web.m1.medium', 'lgDBInst' => 'li.web.m1.large', 'xlDBInst' => 'li.web.m1.xlarge'},
+      'li-web-hiMemDBInstClass'=> {'xlDBInst' => 'li.web.m2.xlarge', 'xxlDBInst' => 'li.web.m2.2xlarge', 'xxxxDBInst' => 'li.web.m2.4xlarge'},
+      'li-se-dbInstClass'=> {'uDBInst' => 'li.se.t1.micro', 'smDBInst' => 'li.se.m1.small', 'medDBInst' => 'li.se.m1.medium', 'lgDBInst' => 'li.se.m1.large', 'xlDBInst' => 'li.se.m1.xlarge'},
+      'li-se-hiMemDBInstClass'=> {'xlDBInst' => 'li.se.m2.xlarge', 'xxlDBInst' => 'li.se.m2.2xlarge', 'xxxxDBInst' => 'li.se.m2.4xlarge'},
+      'byol-dbInstClass'=> {'uDBInst' => 'byol.t1.micro', 'smDBInst' => 'byol.m1.small', 'medDBInst' => 'byol.m1.medium', 'lgDBInst' => 'byol.m1.large', 'xlDBInst' => 'byol.m1.xlarge'},
+      'byol-hiMemDBInstClass'=> {'xlDBInst' => 'byol.m2.xlarge', 'xxlDBInst' => 'byol.m2.2xlarge', 'xxxxDBInst' => 'byol.m2.4xlarge'}
     }
     @@Name_Lookup = {
       'stdODI' => {'sm' => 'Standard Small', 'med' => 'Standard Medium', 'lg' => 'Standard Large', 'xl' => 'Standard Extra Large'},
@@ -170,7 +196,39 @@ module AwsPricing
       'secgenstdODI' => {'xl' => 'M3 Extra Large Instance', 'xxl' => 'M3 Double Extra Large Instance'},
       'clusterHiMemODI' => {'xxxxxxxxl' => 'High-Memory Cluster Eight Extra Large'},
       'hiStoreODI' => {'xxxxxxxxl' => 'High-Storage Eight Extra Large'},
+
+      #
+      # RDS On-Demand Instances
+      #
+      #Mysql
+      'udbInstClass' => {'uDBInst'=>'Standard Micro'},
+      'dbInstClass'=> {'uDBInst' => 'Standard Micro', 'smDBInst' => 'Standard Small', 'medDBInst' => 'Standard Medium', 'lgDBInst' => 'Standard Large', 'xlDBInst' => 'Standard Extra Large'},
+      'hiMemDBInstClass'=> {'xlDBInst' => 'Standard High-Memory Extra Large', 'xxlDBInst' => 'Standard High-Memory Double Extra Large', 'xxxxDBInst' => 'Standard High-Memory Quadruple Extra Large'},
+      'clusterHiMemDB' => {'xxxxxxxxl' => 'Standard High-Memory Cluster Eight Extra Large'},
+      'multiclusterHiMemDB' => {'xxxxxxxxl' => 'Multi-AZ High-Memory Cluster Eight Extra Large'},
+      'multiAZDBInstClass'=> {'uDBInst' => 'Multi-AZ Micro', 'smDBInst' => 'Multi-AZ Small', 'medDBInst' => 'Multi-AZ Medium', 'lgDBInst' => 'Multi-AZ Large', 'xlDBInst' => 'Multi-AZ Extra Large'},
+      'multiAZHiMemInstClass'=> {'xlDBInst' => 'Multi-AZ High-Memory Extra Large', 'xxlDBInst' => 'Multi-AZ High-Memory Double Extra Large', 'xxxxDBInst' => 'Multi-AZ High-Memory Quadruple Extra Large'},
+       #Oracle
+      'li-standard-dbInstClass'=> {'uDBInst' => 'Li-Standard Micro', 'smDBInst' => 'Li-Standard Small', 'medDBInst' => 'Li-Standard Medium', 'lgDBInst' => 'Li-Standard Large', 'xlDBInst' => 'Li-Standard Extra Large'},
+      'li-standard-hiMemDBInstClass'=> {'xlDBInst' => 'Li-Standard High-Memory Extra Large', 'xxlDBInst' => 'Li-Standard High-Memory Double Extra Large', 'xxxxDBInst' => 'Li-Standard High-Memory Quadruple Extra Large'},
+      'li-multiAZ-dbInstClass'=> {'uDBInst' => 'Li-Multi-AZ Micro', 'smDBInst' => 'Li-Multi-AZ Small', 'medDBInst' => 'Li-Multi-AZ Medium', 'lgDBInst' => 'Li-Multi-AZ Large', 'xlDBInst' => 'Li-Multi-AZ Extra Large'},
+      'li-multiAZ-hiMemDBInstClass'=> {'xlDBInst' => 'Li-Multi-AZ High-Memory Extra Large', 'xxlDBInst' => 'Li-Multi-AZ High-Memory Double Extra Large', 'xxxxDBInst' => 'Li-Multi-AZ High-Memory Quadruple Extra Large'},
+      'byol-standard-dbInstClass'=> {'uDBInst' => 'Byol-Standard Micro', 'smDBInst' => 'Byol-Standard Small', 'medDBInst' => 'Byol-Standard Medium', 'lgDBInst' => 'Byol-Standard Large', 'xlDBInst' => 'Byol-Standard Extra Large'},
+      'byol-standard-hiMemDBInstClass'=> {'xlDBInst' => 'Byol-Standard High-Memory Extra Large', 'xxlDBInst' => 'Byol-Standard High-Memory Double Extra Large', 'xxxxDBInst' => 'Byol-Standard High-Memory Quadruple Extra Large'},
+      'byol-multiAZ-multiAZDBInstClass'=> {'uDBInst' => 'Byol-Multi-AZ Micro', 'smDBInst' => 'Byol-Multi-AZ Small', 'medDBInst' => 'Byol-Multi-AZ Medium', 'lgDBInst' => 'Byol-Multi-AZ Large', 'xlDBInst' => 'Byol-Multi-AZ Extra Large'},
+      'byol-multiAZ-multiAZHiMemInstClass'=> {'xlDBInst' => 'Byol-Multi-AZ High-Memory Extra Large', 'xxlDBInst' => 'Byol-Multi-AZ High-Memory Double Extra Large', 'xxxxDBInst' => 'Byol-Multi-AZ High-Memory Quadruple Extra Large'},
+       #Sqlserver
+      'li-ex-udbInstClass' => {'uDBInst'=>'Li-Express Micro'},
+      'li-ex-dbInstClass'=> {'uDBInst' => 'Li-Express Micro', 'smDBInst' => 'Li-Express Small'},
+      'li-web-dbInstClass'=> {'uDBInst' => 'Li-Web Micro', 'smDBInst' => 'Li-Web Small', 'medDBInst' => 'Li-Web Medium', 'lgDBInst' => 'Li-Web Large', 'xlDBInst' => 'Li-Web Extra Large'},
+      'li-web-hiMemDBInstClass'=> {'xlDBInst' => 'Li-Web High-Memory Extra Large', 'xxlDBInst' => 'Li-Web High-Memory Double Extra Large', 'xxxxDBInst' => 'Li-Web High-Memory Quadruple Extra Large'},
+      'li-se-dbInstClass'=> {'uDBInst' => 'Li-Se Micro', 'smDBInst' => 'Li-Se Small', 'medDBInst' => 'Li-Se Medium', 'lgDBInst' => 'Li-Se Large', 'xlDBInst' => 'Li-Se Extra Large'},
+      'li-se-hiMemDBInstClass'=> {'xlDBInst' => 'Li-Se High-Memory Extra Large', 'xxlDBInst' => 'Li-Se High-Memory Double Extra Large', 'xxxxDBInst' => 'Li-Se High-Memory Quadruple Extra Large'},
+      'byol-dbInstClass'=> {'uDBInst' => 'Byol Micro', 'smDBInst' => 'Byol Small', 'medDBInst' => 'Byol Medium', 'lgDBInst' => 'Byol Large', 'xlDBInst' => 'Byol Extra Large'},
+      'byol-hiMemDBInstClass'=> {'xlDBInst' => 'Byol High-Memory Extra Large', 'xxlDBInst' => 'Byol High-Memory Double Extra Large', 'xxxxDBInst' => 'Byol High-Memory Quadruple Extra Large'}
+
     }
+    
     @@Api_Name_Lookup_Reserved = {
       'stdResI' => {'sm' => 'm1.small', 'med' => 'm1.medium', 'lg' => 'm1.large', 'xl' => 'm1.xlarge'},
       'hiMemResI' => {'xl' => 'm2.xlarge', 'xxl' => 'm2.2xlarge', 'xxxxl' => 'm2.4xlarge'},
@@ -182,7 +240,25 @@ module AwsPricing
       'secgenstdResI' => {'xl' => 'm3.xlarge', 'xxl' => 'm3.2xlarge'},
       'clusterHiMemResI' => {'xxxxxxxxl' => 'cr1.8xlarge'},
       'hiStoreResI' => {'xxxxxxxxl' => 'hs1.8xlarge'},
+      
+      #
+      # RDS Reserved Instances
+      #
+      #Mysql
+      'stdDeployRes' => {'u' => 't1.micro', 'micro' => 't1.micro', 'sm' => 'm1.small', 'med' => 'm1.medium', 'lg' => 'm1.large', 'xl' => 'm1.xlarge', 'xlHiMem' => 'm2.xlarge', 'xxlHiMem' => 'm2.2xlarge', 'xxxxlHiMem' => 'm2.4xlarge', 'xxxxxxxxl' => 'm2.8xlarge'},
+      'multiAZdeployRes' => {'u' => 'mul.t1.micro', 'micro' => 'mul.t1.micro', 'sm' => 'mul.m1.small', 'med' => 'mul.m1.medium', 'lg' => 'mul.m1.large', 'xl' => 'mul.m1.xlarge', 'xlHiMem' => 'mul.m2.xlarge', 'xxlHiMem' => 'mul.m2.2xlarge', 'xxxxlHiMem' => 'mul.m2.4xlarge', 'xxxxxxxxl' => 'mul.m2.8xlarge'},
+      #Oracle
+      'li-stdDeployRes' => {'u' => 'li.standard.t1.micro', 'micro' => 'li.standard.t1.micro', 'sm' => 'li.standard.m1.small', 'med' => 'li.standard.m1.medium', 'lg' => 'li.standard.m1.large', 'xl' => 'li.standard.m1.xlarge', 'xlHiMem' => 'li.standard.m2.xlarge', 'xxlHiMem' => 'li.standard.m2.2xlarge', 'xxxxlHiMem' => 'li.standard.m2.4xlarge', 'xxxxxxxxl' => 'li.standard.m2.8xlarge'},
+      'li-multiAZdeployRes' => {'u' => 'li.multiAZ.t1.micro', 'micro' => 'li.multiAZ.t1.micro', 'sm' => 'li.multiAZ.m1.small', 'med' => 'li.multiAZ.m1.medium', 'lg' => 'li.multiAZ.m1.large', 'xl' => 'li.multiAZ.m1.xlarge', 'xlHiMem' => 'li.multiAZ.m2.xlarge', 'xxlHiMem' => 'li.multiAZ.m2.2xlarge', 'xxxxlHiMem' => 'li.multiAZ.m2.4xlarge', 'xxxxxxxxl' => 'li.multiAZ.m2.8xlarge'},
+      'byol-stdDeployRes' => {'u' => 'byol.standard.t1.micro', 'micro' => 'byol.standard.t1.micro', 'sm' => 'byol.standard.m1.small', 'med' => 'byol.standard.m1.medium', 'lg' => 'byol.standard.m1.large', 'xl' => 'byol.standard.m1.xlarge', 'xlHiMem' => 'byol.standard.m2.xlarge', 'xxlHiMem' => 'byol.standard.m2.2xlarge', 'xxxxlHiMem' => 'byol.standard.m2.4xlarge', 'xxxxxxxxl' => 'byol.standard.m2.8xlarge'},
+      'byol-multiAZdeployRes' => {'u' => 'byol.multiAZ.t1.micro', 'micro' => 'byol.multiAZ.t1.micro', 'sm' => 'byol.multiAZ.m1.small', 'med' => 'byol.multiAZ.m1.medium', 'lg' => 'byol.multiAZ.m1.large', 'xl' => 'byol.multiAZ.m1.xlarge', 'xlHiMem' => 'byol.multiAZ.m2.xlarge', 'xxlHiMem' => 'byol.multiAZ.m2.2xlarge', 'xxxxlHiMem' => 'byol.multiAZ.m2.4xlarge', 'xxxxxxxxl' => 'byol.multiAZ.m2.8xlarge'},
+      #Sqlserver
+      'li-ex-stdDeployRes' => {'u' => 'li.ex.t1.micro', 'micro' => 'li.ex.t1.micro', 'sm' => 'li.ex.m1.small'},
+      'li-web-stdDeployRes' => {'u' => 'li.web.t1.micro', 'micro' => 'li.web.t1.micro', 'sm' => 'li.web.m1.small', 'med' => 'li.web.m1.medium', 'lg' => 'li.web.m1.large', 'xl' => 'li.web.m1.xlarge', 'xlHiMem' => 'li.web.m2.xlarge', 'xxlHiMem' => 'li.web.m2.2xlarge', 'xxxxlHiMem' => 'li.web.m2.4xlarge', 'xxxxxxxxl' => 'li.web.m2.8xlarge'},
+      'li-se-stdDeployRes' => {'u' => 'li.se.t1.micro', 'micro' => 'li.se.t1.micro', 'sm' => 'li.se.m1.small', 'med' => 'li.se.m1.medium', 'lg' => 'li.se.m1.large', 'xl' => 'li.se.m1.xlarge', 'xlHiMem' => 'li.se.m2.xlarge', 'xxlHiMem' => 'li.se.m2.2xlarge', 'xxxxlHiMem' => 'li.se.m2.4xlarge', 'xxxxxxxxl' => 'li.se.m2.8xlarge'},
+      'sql-byol-stdDeployRes' => {'u' => 'byol.t1.micro', 'micro' => 'byol.t1.micro', 'sm' => 'byol.m1.small', 'med' => 'byol.m1.medium', 'lg' => 'byol.m1.large', 'xl' => 'byol.m1.xlarge', 'xlHiMem' => 'byol.m2.xlarge', 'xxlHiMem' => 'byol.m2.2xlarge', 'xxxxlHiMem' => 'byol.m2.4xlarge', 'xxxxxxxxl' => 'byol.m2.8xlarge'}
     }
+
     @@Name_Lookup_Reserved = {
       'stdResI' => {'sm' => 'Standard Small', 'med' => 'Standard Medium', 'lg' => 'Standard Large', 'xl' => 'Standard Extra Large'},
       'hiMemResI' => {'xl' => 'Hi-Memory Extra Large', 'xxl' => 'Hi-Memory Double Extra Large', 'xxxxl' => 'Hi-Memory Quadruple Extra Large'},
@@ -194,11 +270,28 @@ module AwsPricing
       'secgenstdResI' => {'xl' => 'M3 Extra Large Instance', 'xxl' => 'M3 Double Extra Large Instance'},
       'clusterHiMemResI' => {'xxxxxxxxl' => 'High-Memory Cluster Eight Extra Large'},
       'hiStoreResI' => {'xxxxxxxxl' => 'High-Storage Eight Extra Large'},
+
+      #
+      # RDS Reserved Instances
+      #
+      #mysql
+      'stdDeployRes' => {'u' => 'Standard Micro', 'micro' => 'Standard Micro', 'sm' => 'Standard Small', 'med' => 'Standard Medium', 'lg' => 'Standard Large', 'xl' => 'Standard Extra Large', 'xlHiMem' => 'Standard Extra Large High-Memory', 'xxlHiMem' => 'Standard Double Extra Large High-Memory', 'xxxxlHiMem' => 'Standard Quadruple Extra Large High-Memory', 'xxxxxxxxl' => 'Standard Eight Extra Large'}  ,
+      'multiAZdeployRes' => {'u' => 'Multi-AZ Micro', 'micro' => 'Multi-AZ Micro', 'sm' => 'Multi-AZ Small', 'med' => 'Multi-AZ Medium', 'lg' => 'Multi-AZ Large', 'xl' => 'Multi-AZ Extra Large', 'xlHiMem' => 'Multi-AZ Extra Large High-Memory', 'xxlHiMem' => 'Multi-AZ Double Extra Large High-Memory', 'xxxxlHiMem' => 'Multi-AZ Quadruple Extra Large High-Memory', 'xxxxxxxxl' => 'Multi-AZ Eight Extra Large'},  
+      #Oracle
+      'li-stdDeployRes' => {'u' => 'Li-Standard Micro', 'micro' => 'Li-Standard Micro', 'sm' => 'Li-Standard Small', 'med' => 'Li-Standard Medium', 'lg' => 'Li-Standard Large', 'xl' => 'Li-Standard Extra Large', 'xlHiMem' => 'Li-Standard Extra Large High-Memory', 'xxlHiMem' => 'Li-Standard Double Extra Large High-Memory', 'xxxxlHiMem' => 'Li-Standard Quadruple Extra Large High-Memory', 'xxxxxxxxl' => 'Li-Standard Eight Extra Large'}  ,
+      'li-multiAZdeployRes' => {'u' => 'Li-Multi-AZ Micro', 'micro' => 'Li-Multi-AZ Micro', 'sm' => 'Li-Multi-AZ Small', 'med' => 'Li-Multi-AZ Medium', 'lg' => 'Li-Multi-AZ Large', 'xl' => 'Li-Multi-AZ Extra Large', 'xlHiMem' => 'Li-Multi-AZ Extra Large High-Memory', 'xxlHiMem' => 'Li-Multi-AZ Double Extra Large High-Memory', 'xxxxlHiMem' => 'Li-Multi-AZ Quadruple Extra Large High-Memory', 'xxxxxxxxl' => 'Li-Multi-AZ Eight Extra Large'},  
+      'byol-stdDeployRes' => {'u' => 'Byol-Standard Micro', 'micro' => 'Byol-Standard Micro', 'sm' => 'Byol-Standard Small', 'med' => 'Byol-Standard Medium', 'lg' => 'Byol-Standard Large', 'xl' => 'Byol-Standard Extra Large', 'xlHiMem' => 'Byol-Standard Extra Large High-Memory', 'xxlHiMem' => 'Byol-Standard Double Extra Large High-Memory', 'xxxxlHiMem' => 'Byol-Standard Quadruple Extra Large High-Memory', 'xxxxxxxxl' => 'Byol-Standard Eight Extra Large'},
+      'byol-multiAZdeployRes' => {'u' => 'Byol-Multi-AZ Micro', 'micro' => 'Byol-Multi-AZ Micro', 'sm' => 'Byol-Multi-AZ Small', 'med' => 'Byol-Multi-AZ Medium', 'lg' => 'Byol-Multi-AZ Large', 'xl' => 'Byol-Multi-AZ Extra Large', 'xlHiMem' => 'Byol-Multi-AZ Extra Large High-Memory', 'xxlHiMem' => 'Byol-Multi-AZ Double Extra Large High-Memory', 'xxxxlHiMem' => 'Byol-Multi-AZ Quadruple Extra Large High-Memory', 'xxxxxxxxl' => 'Byol-Multi-AZ Eight Extra Large'},  
+      #Sqlserver
+      'li-ex-stdDeployRes' => {'u' => 'Li-Express Micro', 'micro' => 'Li-Express Micro', 'sm' => 'Li-Express Small', 'med' => 'Li-Express Medium', 'lg' => 'Li-Express Large', 'xl' => 'Li-Express Extra Large', 'xlHiMem' => 'Li-Express Extra Large High-Memory', 'xxlHiMem' => 'Li-Express Double Extra Large High-Memory', 'xxxxlHiMem' => 'Li-Express Quadruple Extra Large High-Memory', 'xxxxxxxxl' => 'Li-Express Eight Extra Large'},
+      'li-web-stdDeployRes' => {'u' => 'Li-Web Micro', 'micro' => 'Li-Web Micro', 'sm' => 'Li-Web Small', 'med' => 'Li-Web Medium', 'lg' => 'Li-Web Large', 'xl' => 'Li-Web Extra Large', 'xlHiMem' => 'Li-Web Extra Large High-Memory', 'xxlHiMem' => 'Li-Web Double Extra Large High-Memory', 'xxxxlHiMem' => 'Li-Web Quadruple Extra Large High-Memory', 'xxxxxxxxl' => 'Li-Web Eight Extra Large'},
+      'li-se-stdDeployRes' => {'u' => 'Li-Se Micro', 'micro' => 'Li-Se Micro', 'sm' => 'Li-Se Small', 'med' => 'Li-Se Medium', 'lg' => 'Li-Se Large', 'xl' => 'Li-Se Extra Large', 'xlHiMem' => 'Li-Se Extra Large High-Memory', 'xxlHiMem' => 'Li-Se Double Extra Large High-Memory', 'xxxxlHiMem' => 'Li-Se Quadruple Extra Large High-Memory', 'xxxxxxxxl' => 'Li-Se Eight Extra Large'},
+      'sql-byol-stdDeployRes' => {'u' => 'Byol Micro', 'micro' => 'Byol Micro', 'sm' => 'Byol Small', 'med' => 'Byol Medium', 'lg' => 'Byol Large', 'xl' => 'Byol Extra Large', 'xlHiMem' => 'Byol Extra Large High-Memory', 'xxlHiMem' => 'Byol Double Extra Large High-Memory', 'xxxxlHiMem' => 'Byol Quadruple Extra Large High-Memory', 'xxxxxxxxl' => 'Byol Eight Extra Large'}
     }
 
     @@Memory_Lookup = {
       'm1.small' => 1700, 'm1.medium' => 3750, 'm1.large' => 7500, 'm1.xlarge' => 15000,
-      'm2.xlarge' => 17100, 'm2.2xlarge' => 34200, 'm2.4xlarge' => 68400,
+      'm2.xlarge' => 17100, 'm2.2xlarge' => 34200, 'm2.4xlarge' => 68400, 'm2.8xlarge' => 136800,
       'm3.xlarge' => 15000, 'm3.2xlarge' => 30000,
       'c1.medium' => 1700, 'c1.xlarge' => 7000,
       'hi1.4xlarge' => 60500,
@@ -208,10 +301,27 @@ module AwsPricing
       'm3.xlarge' => 15000, 'm3.xlarge' => 30000,
       'cr1.8xlarge' => 244000,
       'hs1.8xlarge' => 117000,
+      'li.standard.m1.small' => 1700, 'li.standard.m1.medium' => 3750, 'li.standard.m1.large' => 7500, 'li.standard.m1.xlarge' => 15000,
+      'li.standard.m2.xlarge' => 17100, 'li.standard.m2.2xlarge' => 34200, 'li.standard.m2.4xlarge' => 68400, 'li.standard.m2.8xlarge' => 136800,
+      'li.multiAZ.m1.small' => 1700, 'li.multiAZ.m1.medium' => 3750, 'li.multiAZ.m1.large' => 7500, 'li.multiAZ.m1.xlarge' => 15000,
+      'li.multiAZ.m2.xlarge' => 17100, 'li.multiAZ.m2.2xlarge' => 34200, 'li.multiAZ.m2.4xlarge' => 68400, 'li.multiAZ.m2.8xlarge' => 136800,
+      'byol.multiAZ.m1.small' => 1700, 'byol.multiAZ.m1.medium' => 3750, 'byol.multiAZ.m1.large' => 7500, 'byol.multiAZ.m1.xlarge' => 15000,
+      'byol.multiAZ.m2.xlarge' => 17100, 'byol.multiAZ.m2.2xlarge' => 34200, 'byol.multiAZ.m2.4xlarge' => 68400, 'byol.multiAZ.m2.8xlarge' => 136800,
+      'byol.standard.m1.small' => 1700, 'byol.standard.m1.medium' => 3750, 'byol.standard.m1.large' => 7500, 'byol.standard.m1.xlarge' => 15000,
+      'byol.standard.m2.xlarge' => 17100, 'byol.standard.m2.2xlarge' => 34200, 'byol.standard.m2.4xlarge' => 68400, 'byol.standard.m2.8xlarge' => 136800,
+      'li.ex.m1.small' => 1700, 'li.ex.m1.medium' => 3750, 'li.ex.m1.large' => 7500, 'li.ex.m1.xlarge' => 15000,
+      'li.ex.m2.xlarge' => 17100, 'li.ex.m2.2xlarge' => 34200, 'li.ex.m2.4xlarge' => 68400, 'li.ex.m2.8xlarge' => 136800,
+      'li.web.m1.small' => 1700, 'li.web.m1.medium' => 3750, 'li.web.m1.large' => 7500, 'li.web.m1.xlarge' => 15000,
+      'li.web.m2.xlarge' => 17100, 'li.web.m2.2xlarge' => 34200, 'li.web.m2.4xlarge' => 68400, 'li.web.m2.8xlarge' => 136800,
+      'li.se.m1.small' => 1700, 'li.se.m1.medium' => 3750, 'li.se.m1.large' => 7500, 'li.se.m1.xlarge' => 15000,
+      'li.se.m2.xlarge' => 17100, 'li.se.m2.2xlarge' => 34200, 'li.se.m2.4xlarge' => 68400, 'li.se.m2.8xlarge' => 136800,
+      'byol.m1.small' => 1700, 'byol.m1.medium' => 3750, 'byol.m1.large' => 7500, 'byol.m1.xlarge' => 15000,
+      'byol.m2.xlarge' => 17100, 'byol.m2.2xlarge' => 34200, 'byol.m2.4xlarge' => 68400, 'byol.m2.8xlarge' => 136800,         
+
     }
     @@Disk_Lookup = {
       'm1.small' => 160, 'm1.medium' => 410, 'm1.large' =>850, 'm1.xlarge' => 1690,
-      'm2.xlarge' => 420, 'm2.2xlarge' => 850, 'm2.4xlarge' => 1690,
+      'm2.xlarge' => 420, 'm2.2xlarge' => 850, 'm2.4xlarge' => 1690, 'm2.8xlarge' => 000,
       'm3.xlarge' => 0, 'm3.2xlarge' => 0,
       'c1.medium' => 350, 'c1.xlarge' => 1690,
       'hi1.4xlarge' => 2048,
@@ -221,10 +331,29 @@ module AwsPricing
       'm3.xlarge' => 0, 'm3.xlarge' => 0,
       'cr1.8xlarge' => 240,
       'hs1.8xlarge' => 48000,
+      'li.standard.m1.small' => 160, 'li.standard.m1.medium' => 410, 'li.standard.m1.large' => 850, 'li.standard.m1.xlarge' => 1690,
+      'li.standard.m2.xlarge' => 420, 'li.standard.m2.2xlarge' => 850, 'li.standard.m2.4xlarge' => 1690, 'li.standard.m2.8xlarge' => 000,
+      'mul.m1.small' => 160, 'mul.m1.medium' => 410, 'mul.m1.large' => 850, 'mul.m1.xlarge' => 1690,
+      'mul.m2.xlarge' => 420, 'mul.m2.2xlarge' => 850, 'mul.m2.4xlarge' => 1690, 'mul.m2.8xlarge' => 000,
+      'li.multiAZ.m1.small' => 160, 'li.multiAZ.m1.medium' => 410, 'li.multiAZ.m1.large' => 850, 'li.multiAZ.m1.xlarge' => 1690,
+      'li.multiAZ.m2.xlarge' => 420, 'li.multiAZ.m2.2xlarge' => 850, 'li.multiAZ.m2.4xlarge' => 1690, 'li.multiAZ.m2.8xlarge' => 000,
+      'byol.multiAZ.m1.small' => 160, 'byol.multiAZ.m1.medium' => 410, 'byol.multiAZ.m1.large' => 850, 'byol.multiAZ.m1.xlarge' => 1690,
+      'byol.multiAZ.m2.xlarge' => 420, 'byol.multiAZ.m2.2xlarge' => 850, 'byol.multiAZ.m2.4xlarge' => 1690, 'byol.multiAZ.m2.8xlarge' => 000,
+      'byol.standard.m1.small' => 160, 'byol.standard.m1.medium' => 410, 'byol.standard.m1.large' => 850, 'byol.standard.m1.xlarge' => 1690,
+      'byol.standard.m2.xlarge' => 420, 'byol.standard.m2.2xlarge' => 850, 'byol.standard.m2.4xlarge' => 1690, 'byol.standard.m2.8xlarge' => 000,
+      'li.ex.m1.small' => 160, 'li.ex.m1.medium' => 410, 'li.ex.m1.large' => 850, 'li.ex.m1.xlarge' => 1690,
+      'li.ex.m2.xlarge' => 420, 'li.ex.m2.2xlarge' => 850, 'li.ex.m2.4xlarge' => 1690, 'li.ex.m2.8xlarge' => 000,
+      'li.web.m1.small' => 160, 'li.web.m1.medium' => 410, 'li.web.m1.large' => 850, 'li.web.m1.xlarge' => 1690,
+      'li.web.m2.xlarge' => 420, 'li.web.m2.2xlarge' => 850, 'li.web.m2.4xlarge' => 1690, 'li.web.m2.8xlarge' => 000,
+      'li.se.m1.small' => 160, 'li.se.m1.medium' => 410, 'li.se.m1.large' => 850, 'li.se.m1.xlarge' => 1690,
+      'li.se.m2.xlarge' => 420, 'li.se.m2.2xlarge' => 850, 'li.se.m2.4xlarge' => 1690, 'li.se.m2.8xlarge' => 000,
+      'byol.m1.small' => 160, 'byol.m1.medium' => 410, 'byol.m1.large' => 850, 'byol.m1.xlarge' => 1690,
+      'byol.m2.xlarge' => 420, 'byol.m2.2xlarge' => 850, 'byol.m2.4xlarge' => 1690, 'byol.m2.8xlarge' => 000,         
+
     }
     @@Platform_Lookup = {
       'm1.small' => 32, 'm1.medium' => 32, 'm1.large' => 64, 'm1.xlarge' => 64,
-      'm2.xlarge' => 64, 'm2.2xlarge' => 64, 'm2.4xlarge' => 64,
+      'm2.xlarge' => 64, 'm2.2xlarge' => 64, 'm2.4xlarge' => 64, 'm2.8xlarge' => 64,
       'm3.xlarge' => 64, 'm3.2xlarge' => 64,
       'c1.medium' => 32, 'c1.xlarge' => 64,
       'hi1.4xlarge' => 64,
@@ -234,10 +363,29 @@ module AwsPricing
       'm3.xlarge' => 64, 'm3.xlarge' => 64,
       'cr1.8xlarge' => 64,
       'hs1.8xlarge' => 64,
+      'li.standard.m1.small' => 32, 'li.standard.m1.medium' => 32, 'li.standard.m1.large' => 64, 'li.standard.m1.xlarge' => 64,
+      'li.standard.m2.xlarge' => 64, 'li.standard.m2.2xlarge' => 64, 'li.standard.m2.4xlarge' => 64, 'li.standard.m2.8xlarge' => 64,
+      'mul.m1.small' => 32, 'mul.m1.medium' => 32, 'mul.m1.large' => 64, 'mul.m1.xlarge' => 64,
+      'mul.m2.xlarge' => 64, 'mul.m2.2xlarge' => 64, 'mul.m2.4xlarge' => 64, 'mul.m2.8xlarge' => 64,
+      'li.multiAZ.m1.small' => 32, 'li.multiAZ.m1.medium' => 32, 'li.multiAZ.m1.large' => 64, 'li.multiAZ.m1.xlarge' => 64,
+      'li.multiAZ.m2.xlarge' => 64, 'li.multiAZ.m2.2xlarge' => 64, 'li.multiAZ.m2.4xlarge' => 64, 'li.multiAZ.m2.8xlarge' => 64,
+      'byol.multiAZ.m1.small' => 32, 'byol.multiAZ.m1.medium' => 32, 'byol.multiAZ.m1.large' => 64, 'byol.multiAZ.m1.xlarge' => 64,
+      'byol.multiAZ.m2.xlarge' => 64, 'byol.multiAZ.m2.2xlarge' => 64, 'byol.multiAZ.m2.4xlarge' => 64, 'byol.multiAZ.m2.8xlarge' => 64,
+      'byol.standard.m1.small' => 32, 'byol.standard.m1.medium' => 32, 'byol.standard.m1.large' => 64, 'byol.standard.m1.xlarge' => 64,
+      'byol.standard.m2.xlarge' => 64, 'byol.standard.m2.2xlarge' => 64, 'byol.standard.m2.4xlarge' => 64, 'byol.standard.m2.8xlarge' => 64,
+      'li.ex.m1.small' => 32, 'li.ex.m1.medium' => 32, 'li.ex.m1.large' => 64, 'li.ex.m1.xlarge' => 64,
+      'li.ex.m2.xlarge' => 64, 'li.ex.m2.2xlarge' => 64, 'li.ex.m2.4xlarge' => 64, 'li.ex.m2.8xlarge' => 64,
+      'li.web.m1.small' => 32, 'li.web.m1.medium' => 32, 'li.web.m1.large' => 64, 'li.web.m1.xlarge' => 64,
+      'li.web.m2.xlarge' => 64, 'li.web.m2.2xlarge' => 64, 'li.web.m2.4xlarge' => 64, 'li.web.m2.8xlarge' => 64,
+      'li.se.m1.small' => 32, 'li.se.m1.medium' => 32, 'li.se.m1.large' => 64, 'li.se.m1.xlarge' => 64,
+      'li.se.m2.xlarge' => 64, 'li.se.m2.2xlarge' => 64, 'li.se.m2.4xlarge' => 64, 'li.se.m2.8xlarge' => 64,
+      'byol.m1.small' => 32, 'byol.m1.medium' => 32, 'byol.m1.large' => 64, 'byol.m1.xlarge' => 64,
+      'byol.m2.xlarge' => 64, 'byol.m2.2xlarge' => 64, 'byol.m2.4xlarge' => 64, 'byol.m2.8xlarge' => 64,         
+
     }
     @@Compute_Units_Lookup = {
       'm1.small' => 1, 'm1.medium' => 2, 'm1.large' => 4, 'm1.xlarge' => 8,
-      'm2.xlarge' => 6, 'm2.2xlarge' => 13, 'm2.4xlarge' => 26,
+      'm2.xlarge' => 6, 'm2.2xlarge' => 13, 'm2.4xlarge' => 26, 'm2.8xlarge' => 52,
       'm3.xlarge' => 13, 'm3.2xlarge' => 26,
       'c1.medium' => 5, 'c1.xlarge' => 20,
       'hi1.4xlarge' => 35,
@@ -247,10 +395,28 @@ module AwsPricing
       'cr1.8xlarge' => 88,
       'hs1.8xlarge' => 35,
       'unknown' => 0,
+      'li.standard.m1.small' => 1, 'li.standard.m1.medium' => 2, 'li.standard.m1.large' => 4, 'li.standard.m1.xlarge' => 8,
+      'li.standard.m2.xlarge' => 6, 'li.standard.m2.2xlarge' => 13, 'li.standard.m2.4xlarge' => 26, 'li.standard.m2.8xlarge' => 52,
+      'mul.m1.small' => 1, 'mul.m1.medium' => 2, 'mul.m1.large' => 4, 'mul.m1.xlarge' => 8,
+      'mul.m2.xlarge' => 6, 'mul.m2.2xlarge' => 13, 'mul.m2.4xlarge' => 26, 'mul.m2.8xlarge' => 52,
+      'li.multiAZ.m1.small' => 1, 'li.multiAZ.m1.medium' => 2, 'li.multiAZ.m1.large' => 4, 'li.multiAZ.m1.xlarge' => 8,
+      'li.multiAZ.m2.xlarge' => 6, 'li.multiAZ.m2.2xlarge' => 13, 'li.multiAZ.m2.4xlarge' => 26, 'li.multiAZ.m2.8xlarge' => 52,
+      'byol.multiAZ.m1.small' => 1, 'byol.multiAZ.m1.medium' => 2, 'byol.multiAZ.m1.large' => 4, 'byol.multiAZ.m1.xlarge' => 8,
+      'byol.multiAZ.m2.xlarge' => 6, 'byol.multiAZ.m2.2xlarge' => 13, 'byol.multiAZ.m2.4xlarge' => 26, 'byol.multiAZ.m2.8xlarge' => 52,
+      'byol.standard.m1.small' => 1, 'byol.standard.m1.medium' => 2, 'byol.standard.m1.large' => 4, 'byol.standard.m1.xlarge' => 8,
+      'byol.standard.m2.xlarge' => 6, 'byol.standard.m2.2xlarge' => 13, 'byol.standard.m2.4xlarge' => 26, 'byol.standard.m2.8xlarge' => 52,
+      'li.ex.m1.small' => 1, 'li.ex.m1.medium' => 2, 'li.ex.m1.large' => 4, 'li.ex.m1.xlarge' => 8,
+      'li.ex.m2.xlarge' => 6, 'li.ex.m2.2xlarge' => 13, 'li.ex.m2.4xlarge' => 26, 'li.ex.m2.8xlarge' => 52,
+      'li.web.m1.small' => 1, 'li.web.m1.medium' => 2, 'li.web.m1.large' => 4, 'li.web.m1.xlarge' => 8,
+      'li.web.m2.xlarge' => 6, 'li.web.m2.2xlarge' => 13, 'li.web.m2.4xlarge' => 26, 'li.web.m2.8xlarge' => 52,
+      'li.se.m1.small' => 1, 'li.se.m1.medium' => 2, 'li.se.m1.large' => 4, 'li.se.m1.xlarge' => 8,
+      'li.se.m2.xlarge' => 6, 'li.se.m2.2xlarge' => 13, 'li.se.m2.4xlarge' => 26, 'li.se.m2.8xlarge' => 52,
+      'byol.m1.small' => 1, 'byol.m1.medium' => 2, 'byol.m1.large' => 4, 'byol.m1.xlarge' => 8,
+      'byol.m2.xlarge' => 6, 'byol.m2.2xlarge' => 13, 'byol.m2.4xlarge' => 26, 'byol.m2.8xlarge' => 52, 
     }
     @@Virtual_Cores_Lookup = {
       'm1.small' => 1, 'm1.medium' => 1, 'm1.large' => 2, 'm1.xlarge' => 4,
-      'm2.xlarge' => 2, 'm2.2xlarge' => 4, 'm2.4xlarge' => 8,
+      'm2.xlarge' => 2, 'm2.2xlarge' => 4, 'm2.4xlarge' => 8, 'm2.8xlarge' => 16,
       'm3.xlarge' => 4, 'm3.2xlarge' => 8,
       'c1.medium' => 2, 'c1.xlarge' => 8,
       'hi1.4xlarge' => 16,
@@ -260,7 +426,24 @@ module AwsPricing
       'cr1.8xlarge' => 16,
       'hs1.8xlarge' => 16,
       'unknown' => 0,
+      'li.standard.m1.small' => 1, 'li.standard.m1.medium' => 1, 'li.standard.m1.large' => 2, 'li.standard.m1.xlarge' => 4,
+      'li.standard.m2.xlarge' => 2, 'li.standard.m2.2xlarge' => 4, 'li.standard.m2.4xlarge' => 8, 'li.standard.m2.8xlarge' => 16,
+      'mul.m1.small' => 1, 'mul.m1.medium' => 1, 'mul.m1.large' => 2, 'mul.m1.xlarge' => 4,
+      'mul.m2.xlarge' => 2, 'mul.m2.2xlarge' => 4, 'mul.m2.4xlarge' => 8, 'mul.m2.8xlarge' => 16,
+      'li.multiAZ.m1.small' => 1, 'li.multiAZ.m1.medium' => 1, 'li.multiAZ.m1.large' => 2, 'li.multiAZ.m1.xlarge' => 4,
+      'li.multiAZ.m2.xlarge' => 2, 'li.multiAZ.m2.2xlarge' => 4, 'li.multiAZ.m2.4xlarge' => 8, 'li.multiAZ.m2.8xlarge' => 16,
+      'byol.multiAZ.m1.small' => 1, 'byol.multiAZ.m1.medium' => 1, 'byol.multiAZ.m1.large' => 2, 'byol.multiAZ.m1.xlarge' => 4,
+      'byol.multiAZ.m2.xlarge' => 2, 'byol.multiAZ.m2.2xlarge' => 4, 'byol.multiAZ.m2.4xlarge' => 8, 'byol.multiAZ.m2.8xlarge' => 16,
+      'byol.standard.m1.small' => 1, 'byol.standard.m1.medium' => 1, 'byol.standard.m1.large' => 2, 'byol.standard.m1.xlarge' => 4,
+      'byol.standard.m2.xlarge' => 2, 'byol.standard.m2.2xlarge' => 4, 'byol.standard.m2.4xlarge' => 8, 'byol.standard.m2.8xlarge' => 16,
+      'li.ex.m1.small' => 1, 'li.ex.m1.medium' => 1, 'li.ex.m1.large' => 2, 'li.ex.m1.xlarge' => 4,
+      'li.ex.m2.xlarge' => 2, 'li.ex.m2.2xlarge' => 4, 'li.ex.m2.4xlarge' => 8, 'li.ex.m2.8xlarge' => 16,
+      'li.web.m1.small' => 1, 'li.web.m1.medium' => 1, 'li.web.m1.large' => 2, 'li.web.m1.xlarge' => 4,
+      'li.web.m2.xlarge' => 2, 'li.web.m2.2xlarge' => 4, 'li.web.m2.4xlarge' => 8, 'li.web.m2.8xlarge' => 16,
+      'li.se.m1.small' => 1, 'li.se.m1.medium' => 1, 'li.se.m1.large' => 2, 'li.se.m1.xlarge' => 4,
+      'li.se.m2.xlarge' => 2, 'li.se.m2.2xlarge' => 4, 'li.se.m2.4xlarge' => 8, 'li.se.m2.8xlarge' => 16,
+      'byol.m1.small' => 1, 'byol.m1.medium' => 1, 'byol.m1.large' => 2, 'byol.m1.xlarge' => 4,
+      'byol.m2.xlarge' => 2, 'byol.m2.2xlarge' => 4, 'byol.m2.4xlarge' => 8, 'byol.m2.8xlarge' => 16, 
     }
   end
-
 end
