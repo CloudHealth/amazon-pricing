@@ -10,7 +10,7 @@
 module AwsPricing
 
   class OperatingSystem
-    attr_accessor :instance_type, :name, 
+    attr_accessor  :instance_type, :name, 
       :ondemand_price_per_hour, :light_price_per_hour_1_year, :medium_price_per_hour_1_year, :heavy_price_per_hour_1_year,
       :light_price_per_hour_3_year, :medium_price_per_hour_3_year, :heavy_price_per_hour_3_year,
       :light_prepay_1_year, :light_prepay_3_year, :medium_prepay_1_year, :medium_prepay_3_year, :heavy_prepay_1_year, :heavy_prepay_3_year
@@ -29,7 +29,7 @@ module AwsPricing
 
     # type_of_instance = :ondemand, :light, :medium, :heavy
     # term = :year_1, :year_3, nil
-    def prepay(type_of_instance = :ondemand, term = nil)
+    def prepay(type_of_instance = :ondemand, term = nil, deploy_type=nil)
       case type_of_instance
       when :ondemand
         0
@@ -56,7 +56,7 @@ module AwsPricing
 
     # type_of_instance = :ondemand, :light, :medium, :heavy
     # term = :year_1, :year_3, nil
-    def set_prepay(type_of_instance, term, price)
+    def set_prepay(type_of_instance, term, price, deploy_type=nil)
       case type_of_instance
       when :light
         if term == :year1
@@ -81,7 +81,7 @@ module AwsPricing
 
     # type_of_instance = :ondemand, :light, :medium, :heavy
     # term = :year_1, :year_3, nil
-    def price_per_hour(type_of_instance = :ondemand, term = nil)
+    def price_per_hour(type_of_instance = :ondemand, term = nil, deploy_type=nil)
       case type_of_instance
       when :ondemand
         @ondemand_price_per_hour
@@ -108,7 +108,7 @@ module AwsPricing
 
     # type_of_instance = :ondemand, :light, :medium, :heavy
     # term = :year_1, :year_3, nil
-    def set_price_per_hour(type_of_instance, term, price_per_hour)
+    def set_price_per_hour(type_of_instance, term, price_per_hour, deploy_type=nil)
       case type_of_instance
       when :ondemand
         @ondemand_price_per_hour = price_per_hour
@@ -150,7 +150,5 @@ module AwsPricing
       end
       nil
     end
-
   end
-
 end
