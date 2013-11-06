@@ -20,12 +20,9 @@ module AwsPricing
   #
   class InstanceType
     attr_accessor :name, :api_name, :memory_in_mb, :disk_in_mb, :platform, :compute_units, :virtual_cores
-
-    # Initializes and InstanceType object given a region, the internal
-    # type (e.g. stdODI) and the json for the specific instance. The json is
-    # based on the current undocumented AWS pricing API.
+    
     def initialize(region, api_name, name)
-      @operating_systems = {}
+      @category_types = {}
 
       @region = region
       @name = name
@@ -38,74 +35,41 @@ module AwsPricing
       @virtual_cores = @@Virtual_Cores_Lookup[@api_name]
     end
 
-    def operating_systems
-      @operating_systems.values
+    def category_types
+      @category_types.values
     end
 
-    def get_operating_system(name)
-      @operating_systems[name]
-    end
-
-    # Returns whether an instance_type is available. 
-    # operating_system = :linux, :mswin, :rhel, :sles, :mswinSQL, :mswinSQLWeb
-    # type_of_instance = :ondemand, :light, :medium, :heavy
-    def available?(type_of_instance = :ondemand, operating_system = :linux)
-      os = get_operating_system(operating_system)
-      return false if os.nil?
-      os.available?(type_of_instance)
+    def get_category_type(name)
+      @category_types[name]
     end
 
     # type_of_instance = :ondemand, :light, :medium, :heavy
     # term = :year_1, :year_3, nil
-    def price_per_hour(operating_system, type_of_instance, term = nil)
-      os = get_operating_system(operating_system)
-      os.price_per_hour(type_of_instance, term)
-    end
-
-    # type_of_instance = :ondemand, :light, :medium, :heavy
-    # term = :year_1, :year_3, nil
-    def prepay(operating_system, type_of_instance, term = nil)
-      os = get_operating_system(operating_system)
-      os.prepay(type_of_instance, term)
-    end
-
-    # operating_system = :linux, :mswin, :rhel, :sles, :mswinSQL, :mswinSQLWeb
-    # type_of_instance = :ondemand, :light, :medium, :heavy
-    def update_pricing(operating_system, type_of_instance, json)
-      os = get_operating_system(operating_system)
-      if os.nil?
-        os = OperatingSystem.new(self, operating_system)
-        @operating_systems[operating_system] = os
-      end
-
-      if type_of_instance == :ondemand
-        # e.g. {"size"=>"sm", "valueColumns"=>[{"name"=>"linux", "prices"=>{"USD"=>"0.060"}}]}
-        values = InstanceType::get_values(json)
-        price = coerce_price(values[operating_system.to_s])
-
-        os.set_price_per_hour(type_of_instance, nil, price)
+    def price_per_hour(category_type, type_of_instance, term = nil, isMultiAz = false)
+      cat = get_category_type(category_type)
+      if isMultiAz
+        cat.price_per_hour(type_of_instance, term, isMultiAz) unless cat.nil?
       else
-        json['valueColumns'].each do |val|
-          price = coerce_price(val['prices']['USD'])
-
-          case val["name"]
-          when "yrTerm1"
-            os.set_prepay(type_of_instance, :year1, price)
-          when "yrTerm3"
-            os.set_prepay(type_of_instance, :year3, price)
-          when "yrTerm1Hourly"
-            os.set_price_per_hour(type_of_instance, :year1, price)
-          when "yrTerm3Hourly"
-            os.set_price_per_hour(type_of_instance, :year3, price)
-          end
-        end
-      end
+        cat.price_per_hour(type_of_instance, term) unless cat.nil?
+      end      
     end
 
     # type_of_instance = :ondemand, :light, :medium, :heavy
     # term = :year_1, :year_3, nil
-    def get_breakeven_month(operating_system, type_of_instance, term)
-      os = get_operating_system(operating_system)
+    def prepay(category_type, type_of_instance, term = nil, isMultiAz = false)
+      cat = get_category_type(category_type)
+      if isMultiAz
+        cat.prepay(type_of_instance, term, isMultiAz) unless cat.nil?  
+      else
+        cat.prepay(type_of_instance, term) unless cat.nil?
+      end
+      
+    end
+
+    # type_of_instance = :ondemand, :light, :medium, :heavy
+    # term = :year_1, :year_3, nil
+    def get_breakeven_month(category_types, type_of_instance, term)
+      os = get_category_type(category_types)
       os.get_breakeven_month(type_of_instance, term)
     end
 
@@ -113,10 +77,8 @@ module AwsPricing
 
     def coerce_price(price)
       return nil if price.nil? || price == "N/A"
-      price.to_f
+      price.gsub(",","").to_f
     end
-
-    #attr_accessor :size, :instance_type
 
     # Returns [api_name, name]
     def self.get_name(instance_type, size, is_reserved = false)
@@ -137,12 +99,14 @@ module AwsPricing
       [api_name, name]
     end
 
-    # Turn json into hash table for parsing
-    def self.get_values(json)
-      # e.g. json = {"size"=>"xl", "valueColumns"=>[{"name"=>"mswinSQL", "prices"=>{"USD"=>"2.427"}}]}
+    def self.get_values(json, category_type)
       values = {}
-      json['valueColumns'].each do |val|
-        values[val['name']] = val['prices']['USD']
+      unless json['valueColumns'].nil?
+        json['valueColumns'].each do |val|
+          values[val['name']] = val['prices']['USD']
+        end
+      else
+        values[category_type.to_s] = json['prices']['USD']
       end
       values
     end
@@ -158,6 +122,14 @@ module AwsPricing
       'secgenstdODI' => {'xl' => 'm3.xlarge', 'xxl' => 'm3.2xlarge'},
       'clusterHiMemODI' => {'xxxxxxxxl' => 'cr1.8xlarge'},
       'hiStoreODI' => {'xxxxxxxxl' => 'hs1.8xlarge'},
+
+      # RDS On-Demand Instances
+      'udbInstClass' => {'uDBInst'=>'db.t1.micro'},
+      'dbInstClass'=> {'uDBInst' => 'db.t1.micro', 'smDBInst' => 'db.m1.small', 'medDBInst' => 'db.m1.medium', 'lgDBInst' => 'db.m1.large', 'xlDBInst' => 'db.m1.xlarge'},
+      'hiMemDBInstClass'=> {'xlDBInst' => 'db.m2.xlarge', 'xxlDBInst' => 'db.m2.2xlarge', 'xxxxDBInst' => 'db.m2.4xlarge'},
+      'clusterHiMemDB' => {'xxxxxxxxl' => 'db.m2.8xlarge'},
+      'multiAZDBInstClass'=> {'uDBInst' => 'db.t1.micro', 'smDBInst' => 'db.m1.small', 'medDBInst' => 'db.m1.medium', 'lgDBInst' => 'db.m1.large', 'xlDBInst' => 'db.m1.xlarge'},
+      'multiAZHiMemInstClass'=> {'xlDBInst' => 'db.m2.xlarge', 'xxlDBInst' => 'db.m2.2xlarge', 'xxxxDBInst' => 'db.m2.4xlarge'},
     }
     @@Name_Lookup = {
       'stdODI' => {'sm' => 'Standard Small', 'med' => 'Standard Medium', 'lg' => 'Standard Large', 'xl' => 'Standard Extra Large'},
@@ -170,6 +142,14 @@ module AwsPricing
       'secgenstdODI' => {'xl' => 'M3 Extra Large Instance', 'xxl' => 'M3 Double Extra Large Instance'},
       'clusterHiMemODI' => {'xxxxxxxxl' => 'High-Memory Cluster Eight Extra Large'},
       'hiStoreODI' => {'xxxxxxxxl' => 'High-Storage Eight Extra Large'},
+
+      # RDS On-Demand Instances
+      'udbInstClass' => {'uDBInst'=>'Standard Micro'},
+      'dbInstClass'=> {'uDBInst' => 'Standard Micro', 'smDBInst' => 'Standard Small', 'medDBInst' => 'Standard Medium', 'lgDBInst' => 'Standard Large', 'xlDBInst' => 'Standard Extra Large'},
+      'hiMemDBInstClass'=> {'xlDBInst' => 'Standard High-Memory Extra Large', 'xxlDBInst' => 'Standard High-Memory Double Extra Large', 'xxxxDBInst' => 'Standard High-Memory Quadruple Extra Large'},
+      'clusterHiMemDB' => {'xxxxxxxxl' => 'Standard High-Memory Cluster Eight Extra Large'},
+      'multiAZDBInstClass'=> {'uDBInst' => 'Multi-AZ Micro', 'smDBInst' => 'Multi-AZ Small', 'medDBInst' => 'Multi-AZ Medium', 'lgDBInst' => 'Multi-AZ Large', 'xlDBInst' => 'Multi-AZ Extra Large'},
+      'multiAZHiMemInstClass'=> {'xlDBInst' => 'Multi-AZ High-Memory Extra Large', 'xxlDBInst' => 'Multi-AZ High-Memory Double Extra Large', 'xxxxDBInst' => 'Multi-AZ High-Memory Quadruple Extra Large'},
     }
     @@Api_Name_Lookup_Reserved = {
       'stdResI' => {'sm' => 'm1.small', 'med' => 'm1.medium', 'lg' => 'm1.large', 'xl' => 'm1.xlarge'},
@@ -182,6 +162,10 @@ module AwsPricing
       'secgenstdResI' => {'xl' => 'm3.xlarge', 'xxl' => 'm3.2xlarge'},
       'clusterHiMemResI' => {'xxxxxxxxl' => 'cr1.8xlarge'},
       'hiStoreResI' => {'xxxxxxxxl' => 'hs1.8xlarge'},
+
+      # RDS Reserved Instances
+      'stdDeployRes' => {'u' => 'db.t1.micro', 'micro' => 'db.t1.micro', 'sm' => 'db.m1.small', 'med' => 'db.m1.medium', 'lg' => 'db.m1.large', 'xl' => 'db.m1.xlarge', 'xlHiMem' => 'db.m2.xlarge', 'xxlHiMem' => 'db.m2.2xlarge', 'xxxxlHiMem' => 'db.m2.4xlarge', 'xxxxxxxxl' => 'db.m2.8xlarge'},
+      'multiAZdeployRes' => {'u' => 'db.t1.micro', 'micro' => 'db.t1.micro', 'sm' => 'db.m1.small', 'med' => 'db.m1.medium', 'lg' => 'db.m1.large', 'xl' => 'db.m1.xlarge', 'xlHiMem' => 'db.m2.xlarge', 'xxlHiMem' => 'db.m2.2xlarge', 'xxxxlHiMem' => 'db.m2.4xlarge', 'xxxxxxxxl' => 'db.m2.8xlarge'},
     }
     @@Name_Lookup_Reserved = {
       'stdResI' => {'sm' => 'Standard Small', 'med' => 'Standard Medium', 'lg' => 'Standard Large', 'xl' => 'Standard Extra Large'},
@@ -194,6 +178,10 @@ module AwsPricing
       'secgenstdResI' => {'xl' => 'M3 Extra Large Instance', 'xxl' => 'M3 Double Extra Large Instance'},
       'clusterHiMemResI' => {'xxxxxxxxl' => 'High-Memory Cluster Eight Extra Large'},
       'hiStoreResI' => {'xxxxxxxxl' => 'High-Storage Eight Extra Large'},
+
+      # RDS Reserved Instances
+      'stdDeployRes' => {'u' => 'Standard Micro', 'micro' => 'Standard Micro', 'sm' => 'Standard Small', 'med' => 'Standard Medium', 'lg' => 'Standard Large', 'xl' => 'Standard Extra Large', 'xlHiMem' => 'Standard Extra Large High-Memory', 'xxlHiMem' => 'Standard Double Extra Large High-Memory', 'xxxxlHiMem' => 'Standard Quadruple Extra Large High-Memory', 'xxxxxxxxl' => 'Standard Eight Extra Large'}  ,
+      'multiAZdeployRes' => {'u' => 'Multi-AZ Micro', 'micro' => 'Multi-AZ Micro', 'sm' => 'Multi-AZ Small', 'med' => 'Multi-AZ Medium', 'lg' => 'Multi-AZ Large', 'xl' => 'Multi-AZ Extra Large', 'xlHiMem' => 'Multi-AZ Extra Large High-Memory', 'xxlHiMem' => 'Multi-AZ Double Extra Large High-Memory', 'xxxxlHiMem' => 'Multi-AZ Quadruple Extra Large High-Memory', 'xxxxxxxxl' => 'Multi-AZ Eight Extra Large'},
     }
 
     @@Memory_Lookup = {
@@ -208,6 +196,8 @@ module AwsPricing
       'm3.xlarge' => 15000, 'm3.xlarge' => 30000,
       'cr1.8xlarge' => 244000,
       'hs1.8xlarge' => 117000,
+      'db.m1.small' => 1700, 'db.m1.medium' => 3750, 'db.m1.large' => 7500, 'db.m1.xlarge' => 15000,
+      'db.m2.xlarge' => 17100, 'db.m2.2xlarge' => 34200, 'db.m2.4xlarge' => 68400, 'db.m2.8xlarge' => 136800
     }
     @@Disk_Lookup = {
       'm1.small' => 160, 'm1.medium' => 410, 'm1.large' =>850, 'm1.xlarge' => 1690,
@@ -221,6 +211,8 @@ module AwsPricing
       'm3.xlarge' => 0, 'm3.xlarge' => 0,
       'cr1.8xlarge' => 240,
       'hs1.8xlarge' => 48000,
+      'db.m1.small' => 160, 'db.m1.medium' => 410, 'db.m1.large' =>850, 'db.m1.xlarge' => 1690,
+      'db.m2.xlarge' => 420, 'db.m2.2xlarge' => 850, 'db.m2.4xlarge' => 1690, 'db.m2.8xlarge' => 0
     }
     @@Platform_Lookup = {
       'm1.small' => 32, 'm1.medium' => 32, 'm1.large' => 64, 'm1.xlarge' => 64,
@@ -234,6 +226,8 @@ module AwsPricing
       'm3.xlarge' => 64, 'm3.xlarge' => 64,
       'cr1.8xlarge' => 64,
       'hs1.8xlarge' => 64,
+      'db.m1.small' => 32, 'db.m1.medium' => 32, 'db.m1.large' => 64, 'db.m1.xlarge' => 64,
+      'db.m2.xlarge' => 64, 'db.m2.2xlarge' => 64, 'db.m2.4xlarge' => 64, 'db.m2.8xlarge' => 64
     }
     @@Compute_Units_Lookup = {
       'm1.small' => 1, 'm1.medium' => 2, 'm1.large' => 4, 'm1.xlarge' => 8,
@@ -247,6 +241,8 @@ module AwsPricing
       'cr1.8xlarge' => 88,
       'hs1.8xlarge' => 35,
       'unknown' => 0,
+      'db.m1.small' => 1, 'db.m1.medium' => 2, 'db.m1.large' => 4, 'db.m1.xlarge' => 8,
+      'db.m2.xlarge' => 6, 'db.m2.2xlarge' => 13, 'db.m2.4xlarge' => 26, 'db.m2.8xlarge' => 52
     }
     @@Virtual_Cores_Lookup = {
       'm1.small' => 1, 'm1.medium' => 1, 'm1.large' => 2, 'm1.xlarge' => 4,
@@ -260,6 +256,8 @@ module AwsPricing
       'cr1.8xlarge' => 16,
       'hs1.8xlarge' => 16,
       'unknown' => 0,
+      'db.m1.small' => 1, 'db.m1.medium' => 1, 'db.m1.large' => 2, 'db.m1.xlarge' => 4,
+      'db.m2.xlarge' => 2, 'db.m2.2xlarge' => 4, 'db.m2.4xlarge' => 8, 'db.m2.8xlarge' => 16
     }
   end
 
