@@ -43,6 +43,11 @@ module AwsPricing
       end
     end
 
+    # Maintained for backward compatibility reasons
+    def operating_systems
+      category_types
+    end
+
     protected
     # Returns [api_name, name]
     def self.get_name(instance_type, api_name, is_reserved = false)

@@ -1,4 +1,4 @@
-require 'rds-amazon-pricing'
+require 'amazon-pricing'
 
 describe AwsPricing::RdsPriceList do
 
