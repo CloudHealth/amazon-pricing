@@ -35,7 +35,7 @@ desc "Prints current EC2 pricing in CSV format"
 task :print_price_list do
   require 'ec2-amazon-pricing'
   pricing = AwsPricing::Ec2PriceList.new
-  line = "Region,Instance Type,API Name,Memory (MB),Disk (MB),Compute Units, Virtual Cores,OD Linux PPH,OD Windows PPH,OD RHEL PPH,OD SLES PPH,OD MsWinSQL PPH,OD MsWinSQLWeb PPH,"
+  line = "Region,Instance Type,API Name,Memory (MB),Disk (GB),Compute Units,Virtual Cores,Disk Type,OD Linux PPH,OD Windows PPH,OD RHEL PPH,OD SLES PPH,OD MsWinSQL PPH,OD MsWinSQLWeb PPH,"
   [:year1, :year3].each do |term|
     [:light, :medium, :heavy].each do |res_type|
       [:linux, :mswin, :rhel, :sles, :mswinSQL, :mswinSQLWeb].each do |os|
@@ -46,7 +46,7 @@ task :print_price_list do
   puts line.chop
   pricing.regions.each do |region|
     region.ec2_instance_types.each do |t|
-      line = "#{region.name},#{t.name},#{t.api_name},#{t.memory_in_mb},#{t.disk_in_mb},#{t.compute_units},#{t.virtual_cores},"
+      line = "#{region.name},#{t.name},#{t.api_name},#{t.memory_in_mb},#{t.disk_in_gb},#{t.compute_units},#{t.virtual_cores},#{t.disk_type},"
       [:linux, :mswin, :rhel, :sles, :mswinSQL, :mswinSQLWeb].each do |os|
         line += "#{t.price_per_hour(os, :ondemand)},"
       end
@@ -68,7 +68,7 @@ task :print_rds_price_list do
   require 'rds-amazon-pricing'
   pricing = AwsPricing::RdsPriceList.new
 
-  line = "Region,Instance Type,API Name,Memory (MB),Disk (MB),Compute Units, Virtual Cores,"
+  line = "Region,Instance Type,API Name,Memory (MB),Disk (GB),Compute Units,Virtual Cores,Disk Type,"
 
 
   [:mysql, :oracle, :oracle_byol, :sqlserver, :sqlserver_express, :sqlserver_web, :sqlserver_byol].each do |db|
@@ -101,7 +101,7 @@ task :print_rds_price_list do
 
   pricing.regions.each do |region|
     region.rds_instance_types.each do |t|
-      line = "#{region.name},#{t.name},#{t.api_name},#{t.memory_in_mb},#{t.disk_in_mb},#{t.compute_units},#{t.virtual_cores},"
+      line = "#{region.name},#{t.name},#{t.api_name},#{t.memory_in_mb},#{t.disk_in_gb},#{t.compute_units},#{t.virtual_cores},#{t.disk_type},"
       [:mysql, :oracle, :oracle_byol, :sqlserver, :sqlserver_express, :sqlserver_web, :sqlserver_byol].each do |db|
          if [:mysql, :oracle, :oracle_byol].include? db
             [:standard,:multiAZ].each do |deploy_type|

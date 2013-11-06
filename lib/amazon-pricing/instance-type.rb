@@ -19,7 +19,7 @@ module AwsPricing
   # $0.48/hour for Windows.
   #
   class InstanceType
-    attr_accessor :name, :api_name, :memory_in_mb, :disk_in_mb, :platform, :compute_units, :virtual_cores
+    attr_accessor :name, :api_name, :memory_in_mb, :platform, :compute_units, :virtual_cores, :disk_type, :disk_in_gb
     
     def initialize(region, api_name, name)
       @category_types = {}
@@ -29,10 +29,20 @@ module AwsPricing
       @api_name = api_name
 
       @memory_in_mb = @@Memory_Lookup[@api_name]
-      @disk_in_mb = @@Disk_Lookup[@api_name]
+      @disk_in_gb = @@Disk_Lookup[@api_name]
       @platform = @@Platform_Lookup[@api_name]
       @compute_units = @@Compute_Units_Lookup[@api_name]
       @virtual_cores = @@Virtual_Cores_Lookup[@api_name]
+      @disk_type = @@Disk_Type_Lookup[@api_name]
+    end
+
+    # Keep this in for backwards compatibility within current major version of gem
+    def disk_in_mb
+      @disk_in_gb * 1000
+    end
+
+    def memory_in_gb
+      @memory_in_mb / 1000
     end
 
     def category_types
@@ -115,7 +125,7 @@ module AwsPricing
       'm3.xlarge' => 0, 'm3.xlarge' => 0,
       'cr1.8xlarge' => 240,
       'hs1.8xlarge' => 48000,
-      'g2.2xlarge' => 60,
+      'g2.2xlarge' => 60000,
       'db.m1.small' => 160, 'db.m1.medium' => 410, 'db.m1.large' =>850, 'db.m1.xlarge' => 1690,
       'db.m2.xlarge' => 420, 'db.m2.2xlarge' => 850, 'db.m2.4xlarge' => 1690, 'db.m2.8xlarge' => 0
     }
@@ -166,6 +176,22 @@ module AwsPricing
       'unknown' => 0,
       'db.m1.small' => 1, 'db.m1.medium' => 1, 'db.m1.large' => 2, 'db.m1.xlarge' => 4,
       'db.m2.xlarge' => 2, 'db.m2.2xlarge' => 4, 'db.m2.4xlarge' => 8, 'db.m2.8xlarge' => 16
+    }
+    @@Disk_Type_Lookup = {
+      'm1.small' => :ephemeral, 'm1.medium' => :ephemeral, 'm1.large' => :ephemeral, 'm1.xlarge' => :ephemeral,
+      'm2.xlarge' => :ephemeral, 'm2.2xlarge' => :ephemeral, 'm2.4xlarge' => :ephemeral,
+      'm3.xlarge' => :ephemeral, 'm3.2xlarge' => :ephemeral,
+      'c1.medium' => :ephemeral, 'c1.xlarge' => :ephemeral,
+      'hi1.4xlarge' => :ssd,
+      'cg1.4xlarge' => :ephemeral,
+      'cc1.4xlarge' => :ephemeral, 'cc2.8xlarge' => :ephemeral,
+      't1.micro' => :ebs,
+      'cr1.8xlarge' => :ssd,
+      'hs1.8xlarge' => :ephemeral,
+      'g2.2xlarge' => :ssd,
+      'unknown' => :ephemeral,
+      'db.m1.small' => :ephemeral, 'db.m1.medium' => :ephemeral, 'db.m1.large' => :ephemeral, 'db.m1.xlarge' => :ephemeral,
+      'db.m2.xlarge' => :ephemeral, 'db.m2.2xlarge' => :ephemeral, 'db.m2.4xlarge' => :ephemeral, 'db.m2.8xlarge' => :ephemeral
     }
   end
 
