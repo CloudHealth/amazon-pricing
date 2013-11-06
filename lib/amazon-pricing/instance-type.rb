@@ -20,6 +20,58 @@ module AwsPricing
   #
   class InstanceType
     attr_accessor :name, :api_name, :memory_in_mb, :disk_in_mb, :platform, :compute_units, :virtual_cores
+    
+    def initialize(region, api_name, name)
+      @category_types = {}
+
+      @region = region
+      @name = name
+      @api_name = api_name
+
+      @memory_in_mb = @@Memory_Lookup[@api_name]
+      @disk_in_mb = @@Disk_Lookup[@api_name]
+      @platform = @@Platform_Lookup[@api_name]
+      @compute_units = @@Compute_Units_Lookup[@api_name]
+      @virtual_cores = @@Virtual_Cores_Lookup[@api_name]
+    end
+
+    def category_types
+      @category_types.values
+    end
+
+    def get_category_type(name)
+      @category_types[name]
+    end
+
+    # type_of_instance = :ondemand, :light, :medium, :heavy
+    # term = :year_1, :year_3, nil
+    def price_per_hour(category_type, type_of_instance, term = nil, isMultiAz = false)
+      cat = get_category_type(category_type)
+      if isMultiAz
+        cat.price_per_hour(type_of_instance, term, isMultiAz) unless cat.nil?
+      else
+        cat.price_per_hour(type_of_instance, term) unless cat.nil?
+      end      
+    end
+
+    # type_of_instance = :ondemand, :light, :medium, :heavy
+    # term = :year_1, :year_3, nil
+    def prepay(category_type, type_of_instance, term = nil, isMultiAz = false)
+      cat = get_category_type(category_type)
+      if isMultiAz
+        cat.prepay(type_of_instance, term, isMultiAz) unless cat.nil?  
+      else
+        cat.prepay(type_of_instance, term) unless cat.nil?
+      end
+      
+    end
+
+    # type_of_instance = :ondemand, :light, :medium, :heavy
+    # term = :year_1, :year_3, nil
+    def get_breakeven_month(category_types, type_of_instance, term)
+      os = get_category_type(category_types)
+      os.get_breakeven_month(type_of_instance, term)
+    end
 
     protected
 
@@ -45,6 +97,18 @@ module AwsPricing
       name = lookup[instance_type][size]
 
       [api_name, name]
+    end
+
+    def self.get_values(json, category_type)
+      values = {}
+      unless json['valueColumns'].nil?
+        json['valueColumns'].each do |val|
+          values[val['name']] = val['prices']['USD']
+        end
+      else
+        values[category_type.to_s] = json['prices']['USD']
+      end
+      values
     end
 
     @@Api_Name_Lookup = {

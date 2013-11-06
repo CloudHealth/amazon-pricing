@@ -1,4 +1,4 @@
-require "lib/amazon-pricing"
+require "amazon-pricing"
 module AwsPricing
 
   class RdsPriceList < PriceList

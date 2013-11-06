@@ -33,7 +33,7 @@ end
 
 desc "Prints current EC2 pricing in CSV format"
 task :print_price_list do
-  require 'lib/ec2-amazon-pricing'
+  require 'ec2-amazon-pricing'
   pricing = AwsPricing::Ec2PriceList.new
   line = "Region,Instance Type,API Name,Memory (MB),Disk (MB),Compute Units, Virtual Cores,OD Linux PPH,OD Windows PPH,OD RHEL PPH,OD SLES PPH,OD MsWinSQL PPH,OD MsWinSQLWeb PPH,"
   [:year1, :year3].each do |term|
@@ -65,7 +65,7 @@ end
 
 desc "Prints current RDS pricing in CSV format"
 task :print_rds_price_list do
-  require 'lib/rds-amazon-pricing'
+  require 'rds-amazon-pricing'
   pricing = AwsPricing::RdsPriceList.new
 
   line = "Region,Instance Type,API Name,Memory (MB),Disk (MB),Compute Units, Virtual Cores,"
