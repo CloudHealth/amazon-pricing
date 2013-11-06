@@ -23,6 +23,11 @@ module AwsPricing
       @rds_instance_types = {}
     end
 
+    # Maintained for backward compatibility reasons (retrieves EC2 instance type)
+    def instance_types
+      ec2_instance_types
+    end
+
     def ec2_instance_types
       @ec2_instance_types.values
     end
