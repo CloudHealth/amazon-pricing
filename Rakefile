@@ -43,7 +43,7 @@ task :print_price_list do
       end
     end
   end
-  puts line.chop
+  #puts line.chop
   pricing.regions.each do |region|
     region.ec2_instance_types.each do |t|
       line = "#{region.name},#{t.name},#{t.api_name},#{t.memory_in_mb},#{t.disk_in_mb},#{t.compute_units},#{t.virtual_cores},"
