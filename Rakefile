@@ -3,7 +3,7 @@ require 'rake/testtask'
 
 $: << File.expand_path(File.dirname(__FILE__), 'lib')
 
-require 'amazon-pricing/version'
+require File.join('amazon-pricing','version')
 
 Rake::TestTask.new(:test) do |test|
   test.libs << 'lib' << 'test'
@@ -32,8 +32,8 @@ task :test do
 end
 
 desc "Prints current EC2 pricing in CSV format"
-task :print_price_list do
-  require 'ec2-amazon-pricing'
+task :print_ec2_price_list do
+  require 'amazon-pricing'
   pricing = AwsPricing::Ec2PriceList.new
   line = "Region,Instance Type,API Name,Memory (MB),Disk (GB),Compute Units,Virtual Cores,Disk Type,OD Linux PPH,OD Windows PPH,OD RHEL PPH,OD SLES PPH,OD MsWinSQL PPH,OD MsWinSQLWeb PPH,"
   [:year1, :year3].each do |term|
@@ -65,7 +65,7 @@ end
 
 desc "Prints current RDS pricing in CSV format"
 task :print_rds_price_list do
-  require 'rds-amazon-pricing'
+  require 'amazon-pricing'
   pricing = AwsPricing::RdsPriceList.new
 
   line = "Region,Instance Type,API Name,Memory (MB),Disk (GB),Compute Units,Virtual Cores,Disk Type,"

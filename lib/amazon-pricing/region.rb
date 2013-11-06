@@ -61,6 +61,10 @@ module AwsPricing
       current
     end
 
+    # Maintained for backward compatibility reasons (retrieves EC2 instance type)
+    def get_instance_type(api_name)
+      get_ec2_instance_type(api_name)
+    end
 
     def get_ec2_instance_type(api_name)
       @ec2_instance_types[api_name]
