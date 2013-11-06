@@ -26,7 +26,7 @@ class TestEc2InstanceTypes < Test::Unit::TestCase
     pricing.regions.each do |region|
       assert_not_nil region.name
 
-      region.instance_types.each do |instance|
+      region.ec2_instance_types.each do |instance|
         assert_not_nil(instance.api_name)
         assert_not_nil(instance.name)
       end
@@ -51,7 +51,7 @@ class TestEc2InstanceTypes < Test::Unit::TestCase
   def test_fetch_all_breakeven_months
     pricing = AwsPricing::PriceList.new
     pricing.regions.each do |region|
-      region.instance_types.each do |instance|
+      region.ec2_instance_types.each do |instance|
         instance.operating_systems.each do |os|
           [:light, :medium, :heavy].each do |res_type|
             next if not instance.available?(res_type)
@@ -66,7 +66,7 @@ class TestEc2InstanceTypes < Test::Unit::TestCase
   def test_breakeven_month
     pricing = AwsPricing::PriceList.new
     region = pricing.get_region('us-east')
-    instance = region.get_instance_type('m1.large')
+    instance = region.get_ec2_instance_type('m1.large')
     bem = instance.get_breakeven_month(:linux, :heavy, :year1)
     assert bem == 6
   end
@@ -75,14 +75,14 @@ class TestEc2InstanceTypes < Test::Unit::TestCase
     # Validate instance types in specific regions are available
     pricing = AwsPricing::PriceList.new
     region = pricing.get_region('us-east')
-    instance = region.get_instance_type('m1.large')
+    instance = region.get_ec2_instance_type('m1.large')
     assert instance.memory_in_mb == 7500
   end
 
   def test_non_standard_region_name
     pricing = AwsPricing::PriceList.new
     region = pricing.get_region('eu-west-1')
-    instance = region.get_instance_type('m1.large')
+    instance = region.get_ec2_instance_type('m1.large')
     assert instance.memory_in_mb == 7500
   end
 
@@ -109,7 +109,7 @@ class TestEc2InstanceTypes < Test::Unit::TestCase
   def test_virtual_cores
     pricing = AwsPricing::PriceList.new
     region = pricing.get_region('us-east')
-    instance = region.get_instance_type('m1.large')
+    instance = region.get_ec2_instance_type('m1.large')
     assert instance.virtual_cores == 2
   end
 
