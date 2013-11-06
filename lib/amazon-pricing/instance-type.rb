@@ -119,20 +119,13 @@ module AwsPricing
     #attr_accessor :size, :instance_type
 
     # Returns [api_name, name]
-    def self.get_name(instance_type, size, is_reserved = false)
-      lookup = @@Api_Name_Lookup
-      lookup = @@Api_Name_Lookup_Reserved if is_reserved
-
+    def self.get_name(instance_type, api_name, is_reserved = false)
       # Let's handle new instances more gracefully
-      unless lookup.has_key? instance_type
-        raise UnknownTypeError, "Unknown instance type #{instance_type}", caller
-      else
-        api_name = lookup[instance_type][size]
+      unless @@Memory_Lookup.has_key? api_name
+        raise UnknownTypeError, "Unknown instance type #{instance_type} #{api_name}", caller
       end
 
-      lookup = @@Name_Lookup
-      lookup = @@Name_Lookup_Reserved if is_reserved
-      name = lookup[instance_type][size]
+      name = @@Name_Lookup[api_name]
 
       [api_name, name]
     end
@@ -147,55 +140,19 @@ module AwsPricing
       values
     end
 
-    @@Api_Name_Lookup = {
-      'stdODI' => {'sm' => 'm1.small', 'med' => 'm1.medium', 'lg' => 'm1.large', 'xl' => 'm1.xlarge'},
-      'hiMemODI' => {'xl' => 'm2.xlarge', 'xxl' => 'm2.2xlarge', 'xxxxl' => 'm2.4xlarge'},
-      'hiCPUODI' => {'med' => 'c1.medium', 'xl' => 'c1.xlarge'},
-      'hiIoODI' => {'xxxxl' => 'hi1.4xlarge'},
-      'clusterGPUI' => {'xxxxl' => 'cg1.4xlarge'},
-      'clusterComputeI' => {'xxxxl' => 'cc1.4xlarge','xxxxxxxxl' => 'cc2.8xlarge'},
-      'uODI' => {'u' => 't1.micro'},
-      'secgenstdODI' => {'xl' => 'm3.xlarge', 'xxl' => 'm3.2xlarge'},
-      'clusterHiMemODI' => {'xxxxxxxxl' => 'cr1.8xlarge'},
-      'hiStoreODI' => {'xxxxxxxxl' => 'hs1.8xlarge'},
-    }
     @@Name_Lookup = {
-      'stdODI' => {'sm' => 'Standard Small', 'med' => 'Standard Medium', 'lg' => 'Standard Large', 'xl' => 'Standard Extra Large'},
-      'hiMemODI' => {'xl' => 'Hi-Memory Extra Large', 'xxl' => 'Hi-Memory Double Extra Large', 'xxxxl' => 'Hi-Memory Quadruple Extra Large'},
-      'hiCPUODI' => {'med' => 'High-CPU Medium', 'xl' => 'High-CPU Extra Large'},
-      'hiIoODI' => {'xxxxl' => 'High I/O Quadruple Extra Large'},
-      'clusterGPUI' => {'xxxxl' => 'Cluster GPU Quadruple Extra Large'},
-      'clusterComputeI' => {'xxxxl' => 'Cluster Compute Quadruple Extra Large', 'xxxxxxxxl' => 'Cluster Compute Eight Extra Large'},
-      'uODI' => {'u' => 'Micro'},
-      'secgenstdODI' => {'xl' => 'M3 Extra Large Instance', 'xxl' => 'M3 Double Extra Large Instance'},
-      'clusterHiMemODI' => {'xxxxxxxxl' => 'High-Memory Cluster Eight Extra Large'},
-      'hiStoreODI' => {'xxxxxxxxl' => 'High-Storage Eight Extra Large'},
+      'm1.small' => 'Standard Small', 'm1.medium' => 'Standard Medium', 'm1.large' => 'Standard Large', 'm1.xlarge' => 'Standard Extra Large',
+      'm2.xlarge' => 'Hi-Memory Extra Large', 'm2.2xlarge' => 'Hi-Memory Double Extra Large', 'm2.4xlarge' => 'Hi-Memory Quadruple Extra Large',
+      'm3.xlarge' => 'M3 Extra Large Instance', 'm3.2xlarge' => 'M3 Double Extra Large Instance',
+      'c1.medium' => 'High-CPU Medium', 'c1.xlarge' => 'High-CPU Extra Large',
+      'hi1.4xlarge' => 'High I/O Quadruple Extra Large',
+      'cg1.4xlarge' => 'Cluster GPU Quadruple Extra Large',
+      'cc1.4xlarge' => 'Cluster Compute Quadruple Extra Large', 'cc2.8xlarge' => 'Cluster Compute Eight Extra Large',
+      't1.micro' => 'Micro',
+      'cr1.8xlarge' => 'High-Memory Cluster Eight Extra Large',
+      'hs1.8xlarge' => 'High-Storage Eight Extra Large',
+      'g2.2xlarge' => 'Cluster GPU Double Extra Large',
     }
-    @@Api_Name_Lookup_Reserved = {
-      'stdResI' => {'sm' => 'm1.small', 'med' => 'm1.medium', 'lg' => 'm1.large', 'xl' => 'm1.xlarge'},
-      'hiMemResI' => {'xl' => 'm2.xlarge', 'xxl' => 'm2.2xlarge', 'xxxxl' => 'm2.4xlarge'},
-      'hiCPUResI' => {'med' => 'c1.medium', 'xl' => 'c1.xlarge'},
-      'clusterGPUResI' => {'xxxxl' => 'cg1.4xlarge'},
-      'clusterCompResI' => {'xxxxl' => 'cc1.4xlarge', 'xxxxxxxxl' => 'cc2.8xlarge'},
-      'uResI' => {'u' => 't1.micro'},
-      'hiIoResI' => {'xxxxl' => 'hi1.4xlarge'},
-      'secgenstdResI' => {'xl' => 'm3.xlarge', 'xxl' => 'm3.2xlarge'},
-      'clusterHiMemResI' => {'xxxxxxxxl' => 'cr1.8xlarge'},
-      'hiStoreResI' => {'xxxxxxxxl' => 'hs1.8xlarge'},
-    }
-    @@Name_Lookup_Reserved = {
-      'stdResI' => {'sm' => 'Standard Small', 'med' => 'Standard Medium', 'lg' => 'Standard Large', 'xl' => 'Standard Extra Large'},
-      'hiMemResI' => {'xl' => 'Hi-Memory Extra Large', 'xxl' => 'Hi-Memory Double Extra Large', 'xxxxl' => 'Hi-Memory Quadruple Extra Large'},
-      'hiCPUResI' => {'med' => 'High-CPU Medium', 'xl' => 'High-CPU Extra Large'},
-      'clusterGPUResI' => {'xxxxl' => 'Cluster GPU Quadruple Extra Large'},
-      'clusterCompResI' => {'xxxxl' => 'Cluster Compute Quadruple Extra Large', 'xxxxxxxxl' => 'Cluster Compute Eight Extra Large'},
-      'uResI' => {'u' => 'Micro'},
-      'hiIoResI' => {'xxxxl' => 'High I/O Quadruple Extra Large Instance'},
-      'secgenstdResI' => {'xl' => 'M3 Extra Large Instance', 'xxl' => 'M3 Double Extra Large Instance'},
-      'clusterHiMemResI' => {'xxxxxxxxl' => 'High-Memory Cluster Eight Extra Large'},
-      'hiStoreResI' => {'xxxxxxxxl' => 'High-Storage Eight Extra Large'},
-    }
-
     @@Memory_Lookup = {
       'm1.small' => 1700, 'm1.medium' => 3750, 'm1.large' => 7500, 'm1.xlarge' => 15000,
       'm2.xlarge' => 17100, 'm2.2xlarge' => 34200, 'm2.4xlarge' => 68400,
@@ -208,6 +165,7 @@ module AwsPricing
       'm3.xlarge' => 15000, 'm3.xlarge' => 30000,
       'cr1.8xlarge' => 244000,
       'hs1.8xlarge' => 117000,
+      'g2.2xlarge' => 15000,
     }
     @@Disk_Lookup = {
       'm1.small' => 160, 'm1.medium' => 410, 'm1.large' =>850, 'm1.xlarge' => 1690,
@@ -221,6 +179,7 @@ module AwsPricing
       'm3.xlarge' => 0, 'm3.xlarge' => 0,
       'cr1.8xlarge' => 240,
       'hs1.8xlarge' => 48000,
+      'g2.2xlarge' => 60,
     }
     @@Platform_Lookup = {
       'm1.small' => 32, 'm1.medium' => 32, 'm1.large' => 64, 'm1.xlarge' => 64,
@@ -234,6 +193,7 @@ module AwsPricing
       'm3.xlarge' => 64, 'm3.xlarge' => 64,
       'cr1.8xlarge' => 64,
       'hs1.8xlarge' => 64,
+      'g2.2xlarge' => 64,
     }
     @@Compute_Units_Lookup = {
       'm1.small' => 1, 'm1.medium' => 2, 'm1.large' => 4, 'm1.xlarge' => 8,
@@ -246,6 +206,7 @@ module AwsPricing
       't1.micro' => 2,
       'cr1.8xlarge' => 88,
       'hs1.8xlarge' => 35,
+      'g2.2xlarge' => 26,
       'unknown' => 0,
     }
     @@Virtual_Cores_Lookup = {
@@ -259,6 +220,7 @@ module AwsPricing
       't1.micro' => 0,
       'cr1.8xlarge' => 16,
       'hs1.8xlarge' => 16,
+      'g2.2xlarge' => 8,
       'unknown' => 0,
     }
   end
