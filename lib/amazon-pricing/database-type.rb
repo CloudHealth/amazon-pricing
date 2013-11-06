@@ -8,6 +8,6 @@
 # Home::      http://github.com/CloudHealth/amazon-pricing
 #++
 module AwsPricing
-  class OperatingSystem < CategoryType
+  class DatabaseType < CategoryType
   end
 end
