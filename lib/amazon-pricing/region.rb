@@ -56,13 +56,13 @@ module AwsPricing
       current
     end
 
-    def add_or_update_rds_instance_type(api_name, name, db_type, type_of_instance, json, isMultiAz)
+    def add_or_update_rds_instance_type(api_name, name, db_type, type_of_instance, json, isMultiAz, is_byol)
       current = get_rds_instance_type(api_name)
       if current.nil?
         current = RdsInstanceType.new(self, api_name, name)
         @rds_instance_types[api_name] = current
       end
-      current.update_pricing(db_type, type_of_instance, json, isMultiAz)
+      current.update_pricing(db_type, type_of_instance, json, isMultiAz, is_byol)
       current
     end
 

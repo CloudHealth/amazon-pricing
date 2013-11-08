@@ -137,8 +137,6 @@ module AwsPricing
 
   end
 
-
-
   class RdsPriceList < PriceList
     
     def initialize
@@ -154,19 +152,24 @@ module AwsPricing
     
     @@OD_DB_DEPLOY_TYPE = {
                            :mysql=> {:mysql=>["standard","multiAZ"]},
-                           :oracle=> {:oracle=>["li-standard","li-multiAZ"], :oracle_byol=>["byol-standard","byol-multiAZ"]},
-                           :sqlserver=> {:sqlserver=>["li-se"], :sqlserver_express=>["li-ex"], :sqlserver_web=>["li-web"], :sqlserver_byol=>["byol"]}
+                           :oracle=> {:oracle_se1=>["li-standard","li-multiAZ","byol-standard","byol-multiAZ"], :oracle_se=>["byol-standard","byol-multiAZ"], :oracle_ee=>["byol-standard","byol-multiAZ"]},
+                           :sqlserver=> {:sqlserver_ex=>["li-ex"], :sqlserver_web=>["li-web"], :sqlserver_se=>["li-se", "byol"], :sqlserver_ee=>["byol"]}
                         }
 
 
     @@RESERVED_DB_DEPLOY_TYPE = {
-                           :oracle=> {:oracle=>"li", :oracle_byol=>"byol"},
-                           :sqlserver=> {:sqlserver=>"li-se", :sqlserver_express=>"li-ex", :sqlserver_web=>"li-web", :sqlserver_byol=>"byol"}
+                           :oracle=> {:oracle_se1=>["li","byol"], :oracle_se=>["byol"], :oracle_ee=>["byol"]},
+                           :sqlserver=> {:sqlserver_ex=>["li-ex"], :sqlserver_web=>["li-web"], :sqlserver_se=>["li-se","byol"], :sqlserver_ee=>["byol"]}
                           }
 
     
     def is_multi_az?(type)
       return true if type.match("multiAZ")
+      false
+    end
+
+    def is_byol?(type)
+      return true if type.match("byol")
       false
     end                                  
 
@@ -174,10 +177,14 @@ module AwsPricing
       @@DB_TYPE.each do |db|
         @@OD_DB_DEPLOY_TYPE[db].each {|db_type, db_instances|
           db_instances.each do |dp_type|
+            #
+            # to find out the byol type
+            is_byol = is_byol? dp_type
+
             if db == :mysql or db == :oracle
-              fetch_on_demand_rds_instance_pricing(RDS_BASE_URL+"#{db}/pricing-#{dp_type}-deployments.json",:ondemand, db_type)
+              fetch_on_demand_rds_instance_pricing(RDS_BASE_URL+"#{db}/pricing-#{dp_type}-deployments.json",:ondemand, db_type, is_byol)
             elsif db == :sqlserver
-              fetch_on_demand_rds_instance_pricing(RDS_BASE_URL+"#{db}/sqlserver-#{dp_type}-ondemand.json",:ondemand, db_type)
+              fetch_on_demand_rds_instance_pricing(RDS_BASE_URL+"#{db}/sqlserver-#{dp_type}-ondemand.json",:ondemand, db_type, is_byol)
             end
           end
         }
@@ -188,20 +195,26 @@ module AwsPricing
        @@DB_TYPE.each do |db|
         if db == :mysql
           @@RES_TYPES.each do |res_type|
-            fetch_reserved_rds_instance_pricing(RDS_BASE_URL+"#{db}/pricing-#{res_type}-utilization-reserved-instances.json", res_type, db)
+            fetch_reserved_rds_instance_pricing(RDS_BASE_URL+"#{db}/pricing-#{res_type}-utilization-reserved-instances.json", res_type, db, false)
           end
         else
           @@RESERVED_DB_DEPLOY_TYPE[db].each {|db_type, db_instance|
             @@RES_TYPES.each do |res_type|
-              fetch_reserved_rds_instance_pricing(RDS_BASE_URL+"#{db}/pricing-#{db_instance}-#{res_type}-utilization-reserved-instances.json", res_type, db_type) if db == :oracle
-              fetch_reserved_rds_instance_pricing(RDS_BASE_URL+"#{db}/sqlserver-#{db_instance}-#{res_type}-ri.json", res_type, db_type) if db == :sqlserver           
+              db_instance.each do |dp_type|
+                is_byol = is_byol? dp_type
+                if db == :oracle
+                  fetch_reserved_rds_instance_pricing(RDS_BASE_URL+"#{db}/pricing-#{dp_type}-#{res_type}-utilization-reserved-instances.json", res_type, db_type, is_byol) 
+                elsif db == :sqlserver
+                  fetch_reserved_rds_instance_pricing(RDS_BASE_URL+"#{db}/sqlserver-#{dp_type}-#{res_type}-ri.json", res_type, db_type, is_byol)
+                end
+              end    
             end            
           }
         end
       end
     end
 
-    def fetch_on_demand_rds_instance_pricing(url, type_of_rds_instance, db_type)
+    def fetch_on_demand_rds_instance_pricing(url, type_of_rds_instance, db_type, is_byol)
       res = fetch_url(url)
       res['config']['regions'].each do |reg|
         region_name = reg['region']
@@ -218,16 +231,16 @@ module AwsPricing
               end              
               api_name, name = RdsInstanceType.get_name(type["name"], tier["name"], type_of_rds_instance != :ondemand)
               
-              region.add_or_update_rds_instance_type(api_name, name, db_type, type_of_rds_instance, tier, isMultiAz)
+              region.add_or_update_rds_instance_type(api_name, name, db_type, type_of_rds_instance, tier, isMultiAz, is_byol)
             rescue UnknownTypeError
               $stderr.puts "WARNING: encountered #{$!.message}"
             end
           end
-        end
+        end                        
       end
     end
 
-    def fetch_reserved_rds_instance_pricing(url, type_of_rds_instance, db_type)
+    def fetch_reserved_rds_instance_pricing(url, type_of_rds_instance, db_type, is_byol)
       res = fetch_url(url)
       res['config']['regions'].each do |reg|
         region_name = reg['region']
@@ -238,7 +251,7 @@ module AwsPricing
                 isMultiAz = is_multi_az? type["type"]
                 api_name, name = RdsInstanceType.get_name(type["type"], tier["size"], true)
                 
-                region.add_or_update_rds_instance_type(api_name, name, db_type, type_of_rds_instance, tier, isMultiAz)
+                region.add_or_update_rds_instance_type(api_name, name, db_type, type_of_rds_instance, tier, isMultiAz, is_byol)
             rescue UnknownTypeError
               $stderr.puts "WARNING: encountered #{$!.message}"
             end
@@ -247,6 +260,4 @@ module AwsPricing
       end
     end                              
   end
-
-
 end
