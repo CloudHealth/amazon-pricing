@@ -16,11 +16,11 @@ module AwsPricing
 		'oracle_se1_standard'=> 'Oracle Database Standard Edition One',
 		'oracle_se1_multiaz'=> 'Oracle Database Standard Edition One (Multi-AZ)',
 		'oracle_se1_byol'=> 'Oracle Database Standard Edition One (BYOL)',
-		'oracle_se1_byol_multiaz'=> 'Oracle Database Standard Edition One (BYOL, Multi-AZ)',
+		'oracle_se1_byol_multiaz'=> 'Oracle Database Standard Edition One (BYOL Multi-AZ)',
 		'oracle_se_byol'=> 'Oracle Database Standard Edition (BYOL)',
-		'oracle_se_byol_multiaz'=> 'Oracle Database Standard Edition (BYOL, Multi-AZ)',
+		'oracle_se_byol_multiaz'=> 'Oracle Database Standard Edition (BYOL Multi-AZ)',
 		'oracle_ee_byol'=> 'Oracle Database Enterprise Edition (BYOL)',
-		'oracle_ee_byol_multiaz'=> 'Oracle Database Enterprise Edition (BYOL, Multi-AZ)',
+		'oracle_ee_byol_multiaz'=> 'Oracle Database Enterprise Edition (BYOL Multi-AZ)',
 		'sqlserver_ex'=> 'Microsoft SQL Server Express Edition',
 		'sqlserver_web'=> 'Microsoft SQL Server Web Edition',
 		'sqlserver_se_standard'=> 'Microsoft SQL Server Standard Edition',
@@ -48,5 +48,9 @@ module AwsPricing
   	def self.get_available_types(db)
   		@@DB_Deploy_Types[db]	
   	end
+
+  	def display_name
+		self.class.display_name(name)
+	end
   end
 end
