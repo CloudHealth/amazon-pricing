@@ -103,7 +103,11 @@ task :print_rds_price_list do
      AwsPricing::DatabaseType.get_database_name.each do |db|
        unless AwsPricing::DatabaseType.get_available_types(db).nil?
           AwsPricing::DatabaseType.get_available_types(db).each do |deploy_type|
-            line += "#{t.price_per_hour(db, :ondemand, nil, deploy_type == :multiaz, deploy_type == :byol)},"
+            if deploy_type == :byol_multiaz
+              line += "#{t.price_per_hour(db, :ondemand, nil, true, true)},"
+            else
+              line += "#{t.price_per_hour(db, :ondemand, nil, deploy_type == :multiaz, deploy_type == :byol)},"
+            end  
           end
        else
           line += "#{t.price_per_hour(db, :ondemand, nil)},"
@@ -114,7 +118,11 @@ task :print_rds_price_list do
          AwsPricing::DatabaseType.get_database_name.each do |db|
             unless AwsPricing::DatabaseType.get_available_types(db).nil?
               AwsPricing::DatabaseType.get_available_types(db).each do |deploy_type|
-                line += "#{t.prepay(db, res_type, term, deploy_type == :multiaz, deploy_type == :byol)},#{t.price_per_hour(db, res_type, term, deploy_type == :multiaz, deploy_type == :byol)},"
+                if deploy_type == :byol_multiaz
+                  line += "#{t.prepay(db, res_type, term, true, true)},#{t.price_per_hour(db, res_type, term, true, true)},"
+                else  
+                  line += "#{t.prepay(db, res_type, term, deploy_type == :multiaz, deploy_type == :byol)},#{t.price_per_hour(db, res_type, term, deploy_type == :multiaz, deploy_type == :byol)},"
+                end  
               end
             else
               line += "#{t.prepay(db, res_type, term)},#{t.price_per_hour(db, res_type, term)},"
