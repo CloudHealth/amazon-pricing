@@ -16,7 +16,7 @@ module AwsPricing
       :light_prepay_1_year, :light_prepay_3_year, :medium_prepay_1_year, :medium_prepay_3_year, :heavy_prepay_1_year, :heavy_prepay_3_year
 
 
-    def initialize(instance_type, name)
+    def initialize(instance_type=nil, name=nil)
       @instance_type = instance_type
       @name = name
     end

@@ -67,67 +67,72 @@ desc "Prints current RDS pricing in CSV format"
 task :print_rds_price_list do
   require 'amazon-pricing'
   pricing = AwsPricing::RdsPriceList.new
-
+  
   line = "Region,Instance Type,API Name,Memory (MB),Disk (GB),Compute Units,Virtual Cores,Disk Type,"
-
-
-  [:mysql, :oracle, :oracle_byol, :sqlserver, :sqlserver_express, :sqlserver_web, :sqlserver_byol].each do |db|
-    if [:mysql, :oracle, :oracle_byol].include? db
-      [:standard,:multiAZ].each do |deploy_type|
-        line += "OD #{db} #{deploy_type} PPH,"
+  
+  AwsPricing::DatabaseType.get_database_name.each do |db|
+    unless AwsPricing::DatabaseType.get_available_types(db).nil?
+      AwsPricing::DatabaseType.get_available_types(db).each do |deploy_type|
+        line += "OD "+ AwsPricing::DatabaseType.display_name("#{db}_#{deploy_type}") +" PPH,"
       end
     else
-      line += "OD #{db} PPH,"
-    end  
+      line += "OD "+ AwsPricing::DatabaseType.display_name(db.to_s) +" PPH,"
+    end      
   end
 
-
   [:year1, :year3].each do |term|
-    [:light, :medium, :heavy].each do |res_type|
-      [:mysql, :oracle, :oracle_byol, :sqlserver, :sqlserver_express, :sqlserver_web, :sqlserver_byol].each do |db|
-        if [:mysql, :oracle, :oracle_byol].include? db
-          [:standard,:multiAZ].each do |deploy_type|
-            line += "#{term} #{res_type} #{deploy_type} #{db} Prepay,#{term} #{res_type} #{deploy_type} #{db} PPH,"
+   [:light, :medium, :heavy].each do |res_type|
+       AwsPricing::DatabaseType.get_database_name.each do |db|
+          unless AwsPricing::DatabaseType.get_available_types(db).nil?
+            AwsPricing::DatabaseType.get_available_types(db).each do |deploy_type|
+              line += "#{term} #{res_type} "+ AwsPricing::DatabaseType.display_name("#{db}_#{deploy_type}") +" Prepay,#{term} #{res_type} "+ AwsPricing::DatabaseType.display_name("#{db}_#{deploy_type}") +" PPH,"
+            end
+          else
+            line += "#{term} #{res_type} "+ AwsPricing::DatabaseType.display_name(db.to_s) +" Prepay,#{term} #{res_type} "+ AwsPricing::DatabaseType.display_name(db.to_s) +" PPH,"
           end
-        else
-          line += "#{term} #{res_type} #{db} Prepay,#{term} #{res_type} #{db} PPH,"
-        end
-      end
-    end
+       end
+   end
   end
 
  
-  puts line.chop
+ puts line.chop
 
-  pricing.regions.each do |region|
-    region.rds_instance_types.each do |t|
-      line = "#{region.name},#{t.name},#{t.api_name},#{t.memory_in_mb},#{t.disk_in_gb},#{t.compute_units},#{t.virtual_cores},#{t.disk_type},"
-      [:mysql, :oracle, :oracle_byol, :sqlserver, :sqlserver_express, :sqlserver_web, :sqlserver_byol].each do |db|
-         if [:mysql, :oracle, :oracle_byol].include? db
-            [:standard,:multiAZ].each do |deploy_type|
-              line += "#{t.price_per_hour(db, :ondemand, nil, deploy_type == :multiAZ)},"
-            end
-         else
-            line += "#{t.price_per_hour(db, :ondemand, nil, false)},"
-         end          
-      end
-
-      [:year1, :year3].each do |term|
-        [:light, :medium, :heavy].each do |res_type|
-          [:mysql, :oracle, :oracle_byol, :sqlserver, :sqlserver_express, :sqlserver_web, :sqlserver_byol].each do |db|
-            if [:mysql, :oracle, :oracle_byol].include? db
-              [:standard,:multiAZ].each do |deploy_type|
-                line += "#{t.prepay(db, res_type, term, deploy_type == :multiAZ)},#{t.price_per_hour(db, res_type, term, deploy_type == :multiAZ)},"
+ pricing.regions.each do |region|
+   region.rds_instance_types.each do |t|
+     line = "#{region.name},#{t.name},#{t.api_name},#{t.memory_in_mb},#{t.disk_in_gb},#{t.compute_units},#{t.virtual_cores},#{t.disk_type},"
+     AwsPricing::DatabaseType.get_database_name.each do |db|
+       unless AwsPricing::DatabaseType.get_available_types(db).nil?
+          AwsPricing::DatabaseType.get_available_types(db).each do |deploy_type|
+            if deploy_type == :byol_multiaz
+              line += "#{t.price_per_hour(db, :ondemand, nil, true, true)},"
+            else
+              line += "#{t.price_per_hour(db, :ondemand, nil, deploy_type == :multiaz, deploy_type == :byol)},"
+            end  
+          end
+       else
+          line += "#{t.price_per_hour(db, :ondemand, nil)},"
+       end
+     end
+     [:year1, :year3].each do |term|
+       [:light, :medium, :heavy].each do |res_type|
+         AwsPricing::DatabaseType.get_database_name.each do |db|
+            unless AwsPricing::DatabaseType.get_available_types(db).nil?
+              AwsPricing::DatabaseType.get_available_types(db).each do |deploy_type|
+                if deploy_type == :byol_multiaz
+                  line += "#{t.prepay(db, res_type, term, true, true)},#{t.price_per_hour(db, res_type, term, true, true)},"
+                else  
+                  line += "#{t.prepay(db, res_type, term, deploy_type == :multiaz, deploy_type == :byol)},#{t.price_per_hour(db, res_type, term, deploy_type == :multiaz, deploy_type == :byol)},"
+                end  
               end
             else
-              line += "#{t.prepay(db, res_type, term, false)},#{t.price_per_hour(db, res_type, term, false)},"
+              line += "#{t.prepay(db, res_type, term)},#{t.price_per_hour(db, res_type, term)},"
             end
-          end
-        end
-      end
-      puts line.chop
-    end
-  end
+         end
+       end
+     end
+     puts line.chop
+   end
+ end
 end
 
 task :default => [:test]

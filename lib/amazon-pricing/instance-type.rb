@@ -49,9 +49,13 @@ module AwsPricing
       @category_types.values
     end
 
-    def get_category_type(name, multiAz = false)
-      if multiAz
-        db = @category_types["#{name}_multiAz"]
+    def get_category_type(name, multi_az = false, byol = false)
+      if multi_az == true and byol == true
+        db = @category_types["#{name}_byol_multiaz"]
+      elsif multi_az == true and byol == false
+        db = @category_types["#{name}_multiaz"]
+      elsif multi_az == false and byol == true
+        db = @category_types["#{name}_byol"]
       else
         db = @category_types[name]
       end      
@@ -59,15 +63,15 @@ module AwsPricing
 
     # type_of_instance = :ondemand, :light, :medium, :heavy
     # term = :year_1, :year_3, nil
-    def price_per_hour(category_type, type_of_instance, term = nil, isMultiAz = false)
-      cat = get_category_type(category_type, isMultiAz)
+    def price_per_hour(category_type, type_of_instance, term = nil, is_multi_az = false, isByol = false)
+      cat = get_category_type(category_type, is_multi_az, isByol)
       cat.price_per_hour(type_of_instance, term) unless cat.nil?      
     end
 
     # type_of_instance = :ondemand, :light, :medium, :heavy
     # term = :year_1, :year_3, nil
-    def prepay(category_type, type_of_instance, term = nil, isMultiAz = false)
-      cat = get_category_type(category_type, isMultiAz)
+    def prepay(category_type, type_of_instance, term = nil, is_multi_az = false, isByol = false)
+      cat = get_category_type(category_type, is_multi_az, isByol)
       cat.prepay(type_of_instance, term) unless cat.nil?      
     end
 
