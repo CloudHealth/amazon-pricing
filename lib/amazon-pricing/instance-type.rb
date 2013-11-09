@@ -51,9 +51,9 @@ module AwsPricing
 
     def get_category_type(name, multiAz = false, byol = false)
       if multiAz == true and byol == true
-        db = @category_types["#{name}_byol_multiAz"]
+        db = @category_types["#{name}_byol_multiaz"]
       elsif multiAz == true and byol == false
-        db = @category_types["#{name}_multiAz"]
+        db = @category_types["#{name}_multiaz"]
       elsif multiAz == false and byol == true
         db = @category_types["#{name}_byol"]
       else

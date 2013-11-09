@@ -9,9 +9,9 @@ module AwsPricing
         db = DatabaseType.new(self, database_type)        
         
         if isMultiAz == true and is_byol == true
-          @category_types["#{database_type}_byol_multiAz"] = db
+          @category_types["#{database_type}_byol_multiaz"] = db
         elsif isMultiAz == true and is_byol == false
-          @category_types["#{database_type}_multiAz"] = db
+          @category_types["#{database_type}_multiaz"] = db
         elsif isMultiAz == false and is_byol == true
           @category_types["#{database_type}_byol"] = db
         else

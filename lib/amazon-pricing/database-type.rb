@@ -12,15 +12,15 @@ module AwsPricing
 
   	@@Database_Name_Lookup = {
 	    'mysql_standard'=> 'MySQL Community Edition',
-		'mysql_multiAZ'=> 'MySQL Community Edition (Multi-AZ)',
+		'mysql_multiaz'=> 'MySQL Community Edition (Multi-AZ)',
 		'oracle_se1_standard'=> 'Oracle Database Standard Edition One',
-		'oracle_se1_multiAZ'=> 'Oracle Database Standard Edition One (Multi-AZ)',
+		'oracle_se1_multiaz'=> 'Oracle Database Standard Edition One (Multi-AZ)',
 		'oracle_se1_byol'=> 'Oracle Database Standard Edition One (BYOL)',
-		'oracle_se1_byol_multiAZ'=> 'Oracle Database Standard Edition One (BYOL, Multi-AZ)',
+		'oracle_se1_byol_multiaz'=> 'Oracle Database Standard Edition One (BYOL, Multi-AZ)',
 		'oracle_se_byol'=> 'Oracle Database Standard Edition (BYOL)',
-		'oracle_se_byol_multiAZ'=> 'Oracle Database Standard Edition (BYOL, Multi-AZ)',
+		'oracle_se_byol_multiaz'=> 'Oracle Database Standard Edition (BYOL, Multi-AZ)',
 		'oracle_ee_byol'=> 'Oracle Database Enterprise Edition (BYOL)',
-		'oracle_ee_byol_multiAZ'=> 'Oracle Database Enterprise Edition (BYOL, Multi-AZ)',
+		'oracle_ee_byol_multiaz'=> 'Oracle Database Enterprise Edition (BYOL, Multi-AZ)',
 		'sqlserver_ex'=> 'Microsoft SQL Server Express Edition',
 		'sqlserver_web'=> 'Microsoft SQL Server Web Edition',
 		'sqlserver_se_standard'=> 'Microsoft SQL Server Standard Edition',
@@ -28,8 +28,25 @@ module AwsPricing
 		'sqlserver_ee_byol'=> 'Microsoft SQL Server Enterprise Edition (BYOL)'	
 	  }
 
+	  @@DB_Deploy_Types = {
+	  	:mysql=>[:standard, :multiaz],
+	  	:oracle_se1=>[:standard, :multiaz, :byol, :byol_multiaz],
+	  	:oracle_se=>[:byol, :byol_multiaz],
+	  	:oracle_ee=>[:byol, :byol_multiaz],
+	  	:sqlserver_se=>[:standard, :byol],
+	  	:sqlserver_ee=>[:byol]
+	  }
+
   	def display_name(name)
 	  @@Database_Name_Lookup[name]
+  	end
+
+  	def get_database_name
+  		[:mysql, :oracle_se1, :oracle_se, :oracle_ee, :sqlserver_ex, :sqlserver_web, :sqlserver_se, :sqlserver_ee]
+  	end
+
+  	def get_available_types(db)
+  		@@DB_Deploy_Types[db]	
   	end
   end
 end

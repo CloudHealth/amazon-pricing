@@ -69,146 +69,63 @@ task :print_rds_price_list do
   pricing = AwsPricing::RdsPriceList.new
   db_name = AwsPricing::DatabaseType.new
 
-  line =  "Region,Instance Type,API Name,Memory (MB),Disk (GB),Compute Units,Virtual Cores,Disk Type,"
-
-  [:mysql, :oracle_se1, :oracle_se, :oracle_ee, :sqlserver_ex, :sqlserver_web, :sqlserver_se, :sqlserver_ee].each do |db|
-    if [:mysql].include? db
-      [:standard, :multiAZ].each do |deploy_type|
-        line += "OD "+ db_name.display_name("#{db}_#{deploy_type}") +" PPH,"       
-      end
-    elsif [:oracle_se1].include? db
-      [:standard, :multiAZ, :byol, :byol_multiAZ].each do |deploy_type|
-        line += "OD "+ db_name.display_name("#{db}_#{deploy_type}") +" PPH,"
-      end  
-    elsif [:oracle_se, :oracle_ee].include? db
-      [:byol, :byol_multiAZ].each do |deploy_type|
+  line = "Region,Instance Type,API Name,Memory (MB),Disk (GB),Compute Units,Virtual Cores,Disk Type,"
+  
+  db_name.get_database_name.each do |db|
+    unless db_name.get_available_types(db).nil?
+      db_name.get_available_types(db).each do |deploy_type|
         line += "OD "+ db_name.display_name("#{db}_#{deploy_type}") +" PPH,"
       end
-    elsif [:sqlserver_ex, :sqlserver_web].include? db
-        line += "OD "+ db_name.display_name(db.to_s) +" PPH,"       
-    elsif [:sqlserver_se].include? db
-      [:standard, :byol].each do |deploy_type|
-        line += "OD "+ db_name.display_name("#{db}_#{deploy_type}") +" PPH,"
-      end
-    elsif [:sqlserver_ee].include? db
-      [:byol].each do |deploy_type|
-        line += "OD "+ db_name.display_name("#{db}_#{deploy_type}") +" PPH,"
-      end
-    end
+    else
+      line += "OD "+ db_name.display_name(db.to_s) +" PPH,"
+    end      
   end
 
-
   [:year1, :year3].each do |term|
-    [:light, :medium, :heavy].each do |res_type|      
-        [:mysql, :oracle_se1, :oracle_se, :oracle_ee, :sqlserver_ex, :sqlserver_web, :sqlserver_se, :sqlserver_ee].each do |db|
-          if [:mysql].include? db
-            [:standard, :multiAZ].each do |deploy_type|
+   [:light, :medium, :heavy].each do |res_type|
+       db_name.get_database_name.each do |db|
+          unless db_name.get_available_types(db).nil?
+            db_name.get_available_types(db).each do |deploy_type|
               line += "#{term} #{res_type} "+ db_name.display_name("#{db}_#{deploy_type}") +" Prepay,#{term} #{res_type} "+ db_name.display_name("#{db}_#{deploy_type}") +" PPH,"
             end
-          elsif [:oracle_se1].include? db
-            [:standard, :multiAZ, :byol, :byol_multiAZ].each do |deploy_type|
-              line += "#{term} #{res_type} "+ db_name.display_name("#{db}_#{deploy_type}") +" Prepay,#{term} #{res_type} "+ db_name.display_name("#{db}_#{deploy_type}") +" PPH,"
-            end
-          elsif [:oracle_se, :oracle_ee].include? db
-            [:byol, :byol_multiAZ].each do |deploy_type|
-              line += "#{term} #{res_type} "+ db_name.display_name("#{db}_#{deploy_type}") +" Prepay,#{term} #{res_type} "+ db_name.display_name("#{db}_#{deploy_type}") +" PPH,"
-            end
-          elsif [:sqlserver_ex, :sqlserver_web].include? db
-              line += "#{term} #{res_type} "+ db_name.display_name(db.to_s) +" Prepay,#{term} #{res_type} "+ db_name.display_name(db.to_s) +" PPH,"
-          elsif [:sqlserver_se].include? db
-            [:standard, :byol].each do |deploy_type|
-              line += "#{term} #{res_type} "+ db_name.display_name("#{db}_#{deploy_type}") +" Prepay,#{term} #{res_type} "+ db_name.display_name("#{db}_#{deploy_type}") +" PPH,"
-            end
-          elsif [:sqlserver_ee].include? db
-            [:byol].each do |deploy_type|
-              line += "#{term} #{res_type} "+ db_name.display_name("#{db}_#{deploy_type}") +" Prepay,#{term} #{res_type} "+ db_name.display_name("#{db}_#{deploy_type}") +" PPH,"
-            end
+          else
+            line += "#{term} #{res_type} "+ db_name.display_name(db.to_s) +" Prepay,#{term} #{res_type} "+ db_name.display_name(db.to_s) +" PPH,"
           end
-        end
-    end
+       end
+   end
   end
 
  
-  puts line.chop
+ puts line.chop
 
-  pricing.regions.each do |region|
-    region.rds_instance_types.each do |t|
-      line = "#{region.name},#{t.name},#{t.api_name},#{t.memory_in_mb},#{t.disk_in_gb},#{t.compute_units},#{t.virtual_cores},#{t.disk_type},"
-      
-      [:mysql, :oracle_se1, :oracle_se, :oracle_ee, :sqlserver_ex, :sqlserver_web, :sqlserver_se, :sqlserver_ee].each do |db|
-        if [:mysql].include? db
-          [:standard, :multiAZ].each do |deploy_type|
-            line += "#{t.price_per_hour(db, :ondemand, nil, deploy_type == :multiAZ)},"       
+ pricing.regions.each do |region|
+   region.rds_instance_types.each do |t|
+     line = "#{region.name},#{t.name},#{t.api_name},#{t.memory_in_mb},#{t.disk_in_gb},#{t.compute_units},#{t.virtual_cores},#{t.disk_type},"
+     db_name.get_database_name.each do |db|
+       unless db_name.get_available_types(db).nil?
+          db_name.get_available_types(db).each do |deploy_type|
+            line += "#{t.price_per_hour(db, :ondemand, nil, deploy_type == :multiaz, deploy_type == :byol)},"
           end
-        elsif [:oracle_se1].include? db
-          [:standard, :multiAZ, :byol, :byol_multiAZ].each do |deploy_type|
-            if deploy_type == :byol_multiAZ
-              line += "#{t.price_per_hour(db, :ondemand, nil, true, true)},"       
+       else
+          line += "#{t.price_per_hour(db, :ondemand, nil)},"
+       end
+     end
+     [:year1, :year3].each do |term|
+       [:light, :medium, :heavy].each do |res_type|
+         db_name.get_database_name.each do |db|
+            unless db_name.get_available_types(db).nil?
+              db_name.get_available_types(db).each do |deploy_type|
+                line += "#{t.prepay(db, res_type, term, deploy_type == :multiaz, deploy_type == :byol)},#{t.price_per_hour(db, res_type, term, deploy_type == :multiaz, deploy_type == :byol)},"
+              end
             else
-              line += "#{t.price_per_hour(db, :ondemand, nil, deploy_type == :multiAZ, deploy_type == :byol)},"       
+              line += "#{t.prepay(db, res_type, term)},#{t.price_per_hour(db, res_type, term)},"
             end
-          end  
-        elsif [:oracle_se, :oracle_ee].include? db
-          [:byol, :byol_multiAZ].each do |deploy_type|
-            if deploy_type == :byol_multiAZ
-              line += "#{t.price_per_hour(db, :ondemand, nil, true, true)},"       
-            else
-              line += "#{t.price_per_hour(db, :ondemand, nil, false, deploy_type == :byol)},"       
-            end
-          end
-        elsif [:sqlserver_ex, :sqlserver_web].include? db
-            line += "#{t.price_per_hour(db, :ondemand, nil)},"
-        elsif [:sqlserver_se].include? db
-          [:standard, :byol].each do |deploy_type|
-            line += "#{t.price_per_hour(db, :ondemand, nil, false, deploy_type == :byol)},"       
-          end
-        elsif [:sqlserver_ee].include? db
-          [:byol].each do |deploy_type|
-            line += "#{t.price_per_hour(db, :ondemand, nil, false, deploy_type == :byol)},"
-          end
-        end
-      end
-      
-      [:year1, :year3].each do |term|
-        [:light, :medium, :heavy].each do |res_type|      
-          [:mysql, :oracle_se1, :oracle_se, :oracle_ee, :sqlserver_ex, :sqlserver_web, :sqlserver_se, :sqlserver_ee].each do |db|
-            if [:mysql].include? db
-              [:standard, :multiAZ].each do |deploy_type|
-                line += "#{t.prepay(db, res_type, term, deploy_type == :multiAZ)},#{t.price_per_hour(db, res_type, term, deploy_type == :multiAZ)},"                  
-              end
-            elsif [:oracle_se1].include? db
-              [:standard, :multiAZ, :byol, :byol_multiAZ].each do |deploy_type|
-                if deploy_type == :byol_multiAZ
-                  line += "#{t.prepay(db, res_type, term, true, true)},#{t.price_per_hour(db, res_type, term, true, true)},"
-                else
-                  line += "#{t.prepay(db, res_type, term, deploy_type == :multiAZ, deploy_type == :byol)},#{t.price_per_hour(db, res_type, term, deploy_type == :multiAZ, deploy_type == :byol)},"
-                end                  
-              end
-            elsif [:oracle_se, :oracle_ee].include? db
-              [:byol, :byol_multiAZ].each do |deploy_type|
-                if deploy_type == :byol_multiAZ
-                  line += "#{t.prepay(db, res_type, term, true, true)},#{t.price_per_hour(db, res_type, term, true, true)},"
-                else
-                  line += "#{t.prepay(db, res_type, term, false, deploy_type == :byol)},#{t.price_per_hour(db, res_type, term, false, deploy_type == :byol)},"
-                end                  
-              end
-            elsif [:sqlserver_ex, :sqlserver_web].include? db
-                line += "#{t.prepay(db, res_type, term)},#{t.price_per_hour(db, res_type, term)},"
-            elsif [:sqlserver_se].include? db
-              [:standard, :byol].each do |deploy_type|
-                line += "#{t.prepay(db, res_type, term, false, deploy_type == :byol)},#{t.price_per_hour(db, res_type, term, false, deploy_type == :byol)},"
-              end
-            elsif [:sqlserver_ee].include? db
-              [:byol].each do |deploy_type|
-                line += "#{t.prepay(db, res_type, term, false, deploy_type == :byol)},#{t.price_per_hour(db, res_type, term, false, deploy_type == :byol)},"
-              end
-            end
-          end
-        end
-      end
-      puts line.chop
-    end
-  end
+         end
+       end
+     end
+     puts line.chop
+   end
+ end
 end
 
 task :default => [:test]
