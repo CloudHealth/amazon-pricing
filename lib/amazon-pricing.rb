@@ -225,13 +225,13 @@ module AwsPricing
               #
               # this is special case URL, it is oracle - multiAZ type of deployment but it doesn't have mutliAZ attributes in json.
               if url == "http://aws.amazon.com/rds/pricing/oracle/pricing-li-multiAZ-deployments.json"
-                isMultiAz = true
+                is_multi_az = true
               else
-                isMultiAz = is_multi_az? type["name"]
+                is_multi_az = is_multi_az? type["name"]
               end              
               api_name, name = RdsInstanceType.get_name(type["name"], tier["name"], type_of_rds_instance != :ondemand)
               
-              region.add_or_update_rds_instance_type(api_name, name, db_type, type_of_rds_instance, tier, isMultiAz, is_byol)
+              region.add_or_update_rds_instance_type(api_name, name, db_type, type_of_rds_instance, tier, is_multi_az, is_byol)
             rescue UnknownTypeError
               $stderr.puts "WARNING: encountered #{$!.message}"
             end
@@ -248,10 +248,10 @@ module AwsPricing
         reg['instanceTypes'].each do |type|
           type['tiers'].each do |tier|
             begin
-                isMultiAz = is_multi_az? type["type"]
+                is_multi_az = is_multi_az? type["type"]
                 api_name, name = RdsInstanceType.get_name(type["type"], tier["size"], true)
                 
-                region.add_or_update_rds_instance_type(api_name, name, db_type, type_of_rds_instance, tier, isMultiAz, is_byol)
+                region.add_or_update_rds_instance_type(api_name, name, db_type, type_of_rds_instance, tier, is_multi_az, is_byol)
             rescue UnknownTypeError
               $stderr.puts "WARNING: encountered #{$!.message}"
             end

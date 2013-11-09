@@ -37,15 +37,15 @@ module AwsPricing
 	  	:sqlserver_ee=>[:byol]
 	  }
 
-  	def display_name(name)
+  	def self.display_name(name)
 	  @@Database_Name_Lookup[name]
   	end
 
-  	def get_database_name
+  	def self.get_database_name
   		[:mysql, :oracle_se1, :oracle_se, :oracle_ee, :sqlserver_ex, :sqlserver_web, :sqlserver_se, :sqlserver_ee]
   	end
 
-  	def get_available_types(db)
+  	def self.get_available_types(db)
   		@@DB_Deploy_Types[db]	
   	end
   end
