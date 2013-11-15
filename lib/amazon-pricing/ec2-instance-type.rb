@@ -74,6 +74,7 @@ module AwsPricing
       'cr1.8xlarge' => 'High-Memory Cluster Eight Extra Large',
       'hs1.8xlarge' => 'High-Storage Eight Extra Large',
       'g2.2xlarge' => 'Cluster GPU Double Extra Large',
+      'c3.large' => 'High-Compute Large', 'c3.xlarge' => 'High-Compute Extra Large', 'c3.2xlarge' => 'High-Compute Double Extra Large', 'c3.4xlarge' => 'High-Compute Quadruple Extra Large', 'c3.8xlarge' => 'High-Compute Eight Extra Large',
     }    
    end
 end
