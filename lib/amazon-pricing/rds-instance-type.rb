@@ -3,6 +3,13 @@ module AwsPricing
   class RdsInstanceType < InstanceType
     # database_type = :mysql, :oracle, :sqlserver
     # type_of_instance = :ondemand, :light, :medium, :heavy
+
+    def available?(database_type = :mysql, type_of_instance = :ondemand, is_multi_az, is_byol)
+      db = get_category_type(database_type, is_multi_az, is_byol)
+      return false if db.nil?
+      db.available?(type_of_instance)
+    end
+
     def update_pricing(database_type, type_of_instance, json, is_multi_az, is_byol)
       db = get_category_type(database_type, is_multi_az, is_byol)
       if db.nil?

@@ -1,4 +1,5 @@
 require 'amazon-pricing'
+require 'amazon-pricing/database-type'
 
 describe AwsPricing::RdsPriceList do
 
@@ -27,8 +28,42 @@ describe AwsPricing::RdsPriceList do
   describe '::get_api_name' do
     it "raises an UnknownTypeError on an unexpected instance type" do
       expect {
-        AwsPricing::InstanceType::get_name 'QuantumODI', 'huge'
+        AwsPricing::RdsInstanceType::get_name 'QuantumODI', 'huge'
       }.to raise_error(AwsPricing::UnknownTypeError)
+    end
+  end
+
+  describe 'get_breakeven_months' do 
+    it "test_fetch_all_breakeven_months" do
+      pricing = AwsPricing::RdsPriceList.new
+      pricing.regions.each do |region|
+        region.rds_instance_types.each do |instance|
+          [:year1, :year3].each do |term|
+             [:light, :medium, :heavy].each do |res_type|
+               [:mysql, :postgresql, :oracle_se1, :oracle_se, :oracle_ee, :sqlserver_se, :sqlserver_ee].each do |db|
+                  if db == :postgresql
+                    if :heavy
+                      AwsPricing::DatabaseType.get_available_types(db).each do |deploy_type|
+                        next if not instance.available?(db, res_type, deploy_type == :multiaz, false)
+                        instance.get_breakeven_month(db, res_type, term, deploy_type == :multiaz, false).should_not be_nil
+                      end
+                    end
+                  else
+                    AwsPricing::DatabaseType.get_available_types(db).each do |deploy_type|
+                      if deploy_type == :byol_multiaz
+                        next if not instance.available?(db, res_type, true, true)
+                        instance.get_breakeven_month(db, res_type, term, true, true).should_not be_nil
+                      else 
+                        next if not instance.available?(db, res_type, deploy_type == :multiaz, deploy_type == :byol)
+                        instance.get_breakeven_month(db, res_type, term, deploy_type == :multiaz, deploy_type == :byol).should_not be_nil
+                      end  
+                    end
+                  end                      
+               end
+             end
+          end          
+        end
+      end
     end
   end
 end

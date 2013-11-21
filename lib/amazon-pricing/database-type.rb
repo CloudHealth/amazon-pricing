@@ -13,6 +13,8 @@ module AwsPricing
   	@@Database_Name_Lookup = {
 	    'mysql_standard'=> 'MySQL Community Edition',
 		'mysql_multiaz'=> 'MySQL Community Edition (Multi-AZ)',
+		'postgresql_standard'=> 'PostgreSql Community Edition(Beta)',
+		'postgresql_multiaz'=> 'PostgreSql Community Edition(Beta) (Multi-AZ)',
 		'oracle_se1_standard'=> 'Oracle Database Standard Edition One',
 		'oracle_se1_multiaz'=> 'Oracle Database Standard Edition One (Multi-AZ)',
 		'oracle_se1_byol'=> 'Oracle Database Standard Edition One (BYOL)',
@@ -30,6 +32,7 @@ module AwsPricing
 
 	  @@DB_Deploy_Types = {
 	  	:mysql=>[:standard, :multiaz],
+	  	:postgresql=>[:standard, :multiaz],
 	  	:oracle_se1=>[:standard, :multiaz, :byol, :byol_multiaz],
 	  	:oracle_se=>[:byol, :byol_multiaz],
 	  	:oracle_ee=>[:byol, :byol_multiaz],
@@ -42,7 +45,7 @@ module AwsPricing
   	end
 
   	def self.get_database_name
-  		[:mysql, :oracle_se1, :oracle_se, :oracle_ee, :sqlserver_ex, :sqlserver_web, :sqlserver_se, :sqlserver_ee]
+  		[:mysql, :postgresql, :oracle_se1, :oracle_se, :oracle_ee, :sqlserver_ex, :sqlserver_web, :sqlserver_se, :sqlserver_ee]
   	end
 
   	def self.get_available_types(db)
