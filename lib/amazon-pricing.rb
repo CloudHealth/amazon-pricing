@@ -147,11 +147,12 @@ module AwsPricing
 
     protected
 
-    @@DB_TYPE = [:mysql, :oracle, :sqlserver]
+    @@DB_TYPE = [:mysql, :postgresql, :oracle, :sqlserver]
     @@RES_TYPES = [:light, :medium, :heavy]
     
     @@OD_DB_DEPLOY_TYPE = {
                            :mysql=> {:mysql=>["standard","multiAZ"]},
+                           :postgresql=> {:postgresql=>["standard","multiAZ"]},
                            :oracle=> {:oracle_se1=>["li-standard","li-multiAZ","byol-standard","byol-multiAZ"], :oracle_se=>["byol-standard","byol-multiAZ"], :oracle_ee=>["byol-standard","byol-multiAZ"]},
                            :sqlserver=> {:sqlserver_ex=>["li-ex"], :sqlserver_web=>["li-web"], :sqlserver_se=>["li-se", "byol"], :sqlserver_ee=>["byol"]}
                         }
@@ -181,7 +182,7 @@ module AwsPricing
             # to find out the byol type
             is_byol = is_byol? dp_type
 
-            if db == :mysql or db == :oracle
+            if [:mysql, :postgresql, :oracle].include? db
               fetch_on_demand_rds_instance_pricing(RDS_BASE_URL+"#{db}/pricing-#{dp_type}-deployments.json",:ondemand, db_type, is_byol)
             elsif db == :sqlserver
               fetch_on_demand_rds_instance_pricing(RDS_BASE_URL+"#{db}/sqlserver-#{dp_type}-ondemand.json",:ondemand, db_type, is_byol)
@@ -193,9 +194,13 @@ module AwsPricing
 
     def get_rds_reserved_instance_pricing
        @@DB_TYPE.each do |db|
-        if db == :mysql
+        if [:mysql, :postgresql].include? db
           @@RES_TYPES.each do |res_type|
-            fetch_reserved_rds_instance_pricing(RDS_BASE_URL+"#{db}/pricing-#{res_type}-utilization-reserved-instances.json", res_type, db, false)
+            if db == :postgresql and res_type == :heavy
+              fetch_reserved_rds_instance_pricing(RDS_BASE_URL+"#{db}/pricing-#{res_type}-utilization-reserved-instances.json", res_type, db, false)
+            elsif db == :mysql
+              fetch_reserved_rds_instance_pricing(RDS_BASE_URL+"#{db}/pricing-#{res_type}-utilization-reserved-instances.json", res_type, db, false)
+            end            
           end
         else
           @@RESERVED_DB_DEPLOY_TYPE[db].each {|db_type, db_instance|
