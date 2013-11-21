@@ -40,16 +40,25 @@ describe AwsPricing::RdsPriceList do
         region.rds_instance_types.each do |instance|
           [:year1, :year3].each do |term|
              [:light, :medium, :heavy].each do |res_type|
-               [:mysql, :oracle_se1, :oracle_se, :oracle_ee, :sqlserver_se, :sqlserver_ee].each do |db|
-                  AwsPricing::DatabaseType.get_available_types(db).each do |deploy_type|
-                    if deploy_type == :byol_multiaz
-                      next if not instance.available?(db, res_type, true, true)
-                      instance.get_breakeven_month(db, res_type, term, true, true).should_not be_nil
-                    else 
-                      next if not instance.available?(db, res_type, deploy_type == :multiaz, deploy_type == :byol)
-                      instance.get_breakeven_month(db, res_type, term, deploy_type == :multiaz, deploy_type == :byol).should_not be_nil
-                    end  
-                  end                    
+               [:mysql, :postgresql, :oracle_se1, :oracle_se, :oracle_ee, :sqlserver_se, :sqlserver_ee].each do |db|
+                  if db == :postgresql
+                    if :heavy
+                      AwsPricing::DatabaseType.get_available_types(db).each do |deploy_type|
+                        next if not instance.available?(db, res_type, deploy_type == :multiaz, false)
+                        instance.get_breakeven_month(db, res_type, term, deploy_type == :multiaz, false).should_not be_nil
+                      end
+                    end
+                  else
+                    AwsPricing::DatabaseType.get_available_types(db).each do |deploy_type|
+                      if deploy_type == :byol_multiaz
+                        next if not instance.available?(db, res_type, true, true)
+                        instance.get_breakeven_month(db, res_type, term, true, true).should_not be_nil
+                      else 
+                        next if not instance.available?(db, res_type, deploy_type == :multiaz, deploy_type == :byol)
+                        instance.get_breakeven_month(db, res_type, term, deploy_type == :multiaz, deploy_type == :byol).should_not be_nil
+                      end  
+                    end
+                  end                      
                end
              end
           end          
