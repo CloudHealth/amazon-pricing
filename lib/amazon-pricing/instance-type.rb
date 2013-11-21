@@ -77,9 +77,9 @@ module AwsPricing
 
     # type_of_instance = :ondemand, :light, :medium, :heavy
     # term = :year_1, :year_3, nil
-    def get_breakeven_month(category_types, type_of_instance, term)
-      os = get_category_type(category_types)
-      os.get_breakeven_month(type_of_instance, term)
+    def get_breakeven_month(category_types, type_of_instance, term, is_multi_az = false, isByol = false)
+      cat = get_category_type(category_types, is_multi_az, isByol)
+      cat.get_breakeven_month(type_of_instance, term) unless cat.nil?
     end
 
     protected
