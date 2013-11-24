@@ -113,10 +113,10 @@ module AwsPricing
       'm3.xlarge' => 15000, 'm3.xlarge' => 30000,
       'cr1.8xlarge' => 244000,
       'hs1.8xlarge' => 117000,
-      'g2.2xlarge' => 15000,
+      'g2.2xlarge' => 15000,      
       'db.m1.small' => 1700, 'db.m1.medium' => 3750, 'db.m1.large' => 7500, 'db.m1.xlarge' => 15000,
-      'db.m2.xlarge' => 17100, 'db.m2.2xlarge' => 34200, 'db.m2.4xlarge' => 68400, 'db.m2.8xlarge' => 136800,
-      'db.t1.micro' => 1700,
+      'db.m2.xlarge' => 17100, 'db.m2.2xlarge' => 34000, 'db.m2.4xlarge' => 68000, 'db.cr1.8xlarge' => 244000,
+      'db.t1.micro' => 613,
       'c3.large' => 3750, 'c3.xlarge' => 7000, 'c3.2xlarge' => 15000, 'c3.4xlarge' => 30000, 'c3.8xlarge' => 60000, 
     }
     @@Disk_Lookup = {
@@ -131,9 +131,9 @@ module AwsPricing
       'm3.xlarge' => 0, 'm3.xlarge' => 0,
       'cr1.8xlarge' => 240,
       'hs1.8xlarge' => 48000,
-      'g2.2xlarge' => 60,
+      'g2.2xlarge' => 60,      
       'db.m1.small' => 160, 'db.m1.medium' => 410, 'db.m1.large' =>850, 'db.m1.xlarge' => 1690,
-      'db.m2.xlarge' => 420, 'db.m2.2xlarge' => 850, 'db.m2.4xlarge' => 1690, 'db.m2.8xlarge' => 0,
+      'db.m2.xlarge' => 420, 'db.m2.2xlarge' => 850, 'db.m2.4xlarge' => 1690, 'db.cr1.8xlarge' => 1690,
       'db.t1.micro' => 160,
       'c3.large' => 32, 'c3.xlarge' => 80, 'c3.2xlarge' => 160, 'c3.4xlarge' => 320, 'c3.8xlarge' => 640, 
     }
@@ -149,10 +149,10 @@ module AwsPricing
       'm3.xlarge' => 64, 'm3.xlarge' => 64,
       'cr1.8xlarge' => 64,
       'hs1.8xlarge' => 64,
-      'g2.2xlarge' => 64,
-      'db.m1.small' => 32, 'db.m1.medium' => 32, 'db.m1.large' => 64, 'db.m1.xlarge' => 64,
-      'db.m2.xlarge' => 64, 'db.m2.2xlarge' => 64, 'db.m2.4xlarge' => 64, 'db.m2.8xlarge' => 64,
-      'db.t1.micro' => 32,
+      'g2.2xlarge' => 64,      
+      'db.m1.small' => 64, 'db.m1.medium' => 64, 'db.m1.large' => 64, 'db.m1.xlarge' => 64,
+      'db.m2.xlarge' => 64, 'db.m2.2xlarge' => 64, 'db.m2.4xlarge' => 64, 'db.cr1.8xlarge' => 64,
+      'db.t1.micro' => 64,
       'c3.large' => 64, 'c3.xlarge' => 64, 'c3.2xlarge' => 64, 'c3.4xlarge' => 64, 'c3.8xlarge' => 64, 
     }
     @@Compute_Units_Lookup = {
@@ -167,10 +167,10 @@ module AwsPricing
       'cr1.8xlarge' => 88,
       'hs1.8xlarge' => 35,
       'g2.2xlarge' => 26,
-      'unknown' => 0,
+      'unknown' => 0,      
       'db.m1.small' => 1, 'db.m1.medium' => 2, 'db.m1.large' => 4, 'db.m1.xlarge' => 8,
-      'db.m2.xlarge' => 6, 'db.m2.2xlarge' => 13, 'db.m2.4xlarge' => 26, 'db.m2.8xlarge' => 52,
-      'db.t1.micro' => 2,
+      'db.m2.xlarge' => 6.5, 'db.m2.2xlarge' => 13, 'db.m2.4xlarge' => 26, 'db.cr1.8xlarge' => 88,
+      'db.t1.micro' => 1,
       'c3.large' => 7, 'c3.xlarge' => 14, 'c3.2xlarge' => 28, 'c3.4xlarge' => 55, 'c3.8xlarge' => 108, 
     }
     @@Virtual_Cores_Lookup = {
@@ -185,9 +185,9 @@ module AwsPricing
       'cr1.8xlarge' => 16,
       'hs1.8xlarge' => 16,
       'g2.2xlarge' => 8,
-      'unknown' => 0,
+      'unknown' => 0,      
       'db.m1.small' => 1, 'db.m1.medium' => 1, 'db.m1.large' => 2, 'db.m1.xlarge' => 4,
-      'db.m2.xlarge' => 2, 'db.m2.2xlarge' => 4, 'db.m2.4xlarge' => 8, 'db.m2.8xlarge' => 16,
+      'db.m2.xlarge' => 2, 'db.m2.2xlarge' => 4, 'db.m2.4xlarge' => 8, 'db.cr1.8xlarge' => 16,
       'db.t1.micro' => 0,
       'c3.large' => 2, 'c3.xlarge' => 4, 'c3.2xlarge' => 8, 'c3.4xlarge' => 16, 'c3.8xlarge' => 32, 
     }
@@ -203,9 +203,9 @@ module AwsPricing
       'cr1.8xlarge' => :ssd,
       'hs1.8xlarge' => :ephemeral,
       'g2.2xlarge' => :ssd,
-      'unknown' => :ephemeral,
+      'unknown' => :ephemeral,      
       'db.m1.small' => :ephemeral, 'db.m1.medium' => :ephemeral, 'db.m1.large' => :ephemeral, 'db.m1.xlarge' => :ephemeral,
-      'db.m2.xlarge' => :ephemeral, 'db.m2.2xlarge' => :ephemeral, 'db.m2.4xlarge' => :ephemeral, 'db.m2.8xlarge' => :ephemeral,
+      'db.m2.xlarge' => :ephemeral, 'db.m2.2xlarge' => :ephemeral, 'db.m2.4xlarge' => :ephemeral, 'db.cr1.8xlarge' => :ephemeral,
       'db.t1.micro' => :ebs,
       'c3.large' => :ssd, 'c3.xlarge' => :ssd, 'c3.2xlarge' => :ssd, 'c3.4xlarge' => :ssd, 'c3.8xlarge' => :ssd, 
     }
