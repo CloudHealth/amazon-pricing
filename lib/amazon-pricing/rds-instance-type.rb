@@ -78,7 +78,7 @@ module AwsPricing
       'udbInstClass' => {'uDBInst'=>'db.t1.micro'},
       'dbInstClass'=> {'uDBInst' => 'db.t1.micro', 'smDBInst' => 'db.m1.small', 'medDBInst' => 'db.m1.medium', 'lgDBInst' => 'db.m1.large', 'xlDBInst' => 'db.m1.xlarge'},
       'hiMemDBInstClass'=> {'xlDBInst' => 'db.m2.xlarge', 'xxlDBInst' => 'db.m2.2xlarge', 'xxxxDBInst' => 'db.m2.4xlarge'},
-      'clusterHiMemDB' => {'xxxxxxxxl' => 'db.m2.8xlarge'},
+      'clusterHiMemDB' => {'xxxxxxxxl' => 'db.cr1.8xlarge'},
       'multiAZDBInstClass'=> {'uDBInst' => 'db.t1.micro', 'smDBInst' => 'db.m1.small', 'medDBInst' => 'db.m1.medium', 'lgDBInst' => 'db.m1.large', 'xlDBInst' => 'db.m1.xlarge'},
       'multiAZHiMemInstClass'=> {'xlDBInst' => 'db.m2.xlarge', 'xxlDBInst' => 'db.m2.2xlarge', 'xxxxDBInst' => 'db.m2.4xlarge'},
     }
@@ -91,8 +91,8 @@ module AwsPricing
       'multiAZHiMemInstClass'=> {'xlDBInst' => 'Multi-AZ High-Memory Extra Large', 'xxlDBInst' => 'Multi-AZ High-Memory Double Extra Large', 'xxxxDBInst' => 'Multi-AZ High-Memory Quadruple Extra Large'},
     }
     @@Api_Name_Lookup_Reserved = {
-      'stdDeployRes' => {'u' => 'db.t1.micro', 'micro' => 'db.t1.micro', 'sm' => 'db.m1.small', 'med' => 'db.m1.medium', 'lg' => 'db.m1.large', 'xl' => 'db.m1.xlarge', 'xlHiMem' => 'db.m2.xlarge', 'xxlHiMem' => 'db.m2.2xlarge', 'xxxxlHiMem' => 'db.m2.4xlarge', 'xxxxxxxxl' => 'db.m2.8xlarge'},
-      'multiAZdeployRes' => {'u' => 'db.t1.micro', 'micro' => 'db.t1.micro', 'sm' => 'db.m1.small', 'med' => 'db.m1.medium', 'lg' => 'db.m1.large', 'xl' => 'db.m1.xlarge', 'xlHiMem' => 'db.m2.xlarge', 'xxlHiMem' => 'db.m2.2xlarge', 'xxxxlHiMem' => 'db.m2.4xlarge', 'xxxxxxxxl' => 'db.m2.8xlarge'},
+      'stdDeployRes' => {'u' => 'db.t1.micro', 'micro' => 'db.t1.micro', 'sm' => 'db.m1.small', 'med' => 'db.m1.medium', 'lg' => 'db.m1.large', 'xl' => 'db.m1.xlarge', 'xlHiMem' => 'db.m2.xlarge', 'xxlHiMem' => 'db.m2.2xlarge', 'xxxxlHiMem' => 'db.m2.4xlarge', 'xxxxxxxxl' => 'db.cr1.8xlarge'},
+      'multiAZdeployRes' => {'u' => 'db.t1.micro', 'micro' => 'db.t1.micro', 'sm' => 'db.m1.small', 'med' => 'db.m1.medium', 'lg' => 'db.m1.large', 'xl' => 'db.m1.xlarge', 'xlHiMem' => 'db.m2.xlarge', 'xxlHiMem' => 'db.m2.2xlarge', 'xxxxlHiMem' => 'db.m2.4xlarge', 'xxxxxxxxl' => 'db.cr1.8xlarge'},
     }
     @@Name_Lookup_Reserved = {
       'stdDeployRes' => {'u' => 'Standard Micro', 'micro' => 'Standard Micro', 'sm' => 'Standard Small', 'med' => 'Standard Medium', 'lg' => 'Standard Large', 'xl' => 'Standard Extra Large', 'xlHiMem' => 'Standard Extra Large High-Memory', 'xxlHiMem' => 'Standard Double Extra Large High-Memory', 'xxxxlHiMem' => 'Standard Quadruple Extra Large High-Memory', 'xxxxxxxxl' => 'Standard Eight Extra Large'}  ,
