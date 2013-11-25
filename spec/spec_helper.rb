@@ -1,1 +1,1 @@
-Dir[Rails.root.join('spec/support/**/*.rb')].each {|f| require f}
+Dir.glob('spec/support/**/*.rb').sort.each {|f| require f}

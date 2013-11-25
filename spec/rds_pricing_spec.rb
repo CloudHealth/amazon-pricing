@@ -1,5 +1,6 @@
 require 'amazon-pricing'
 require File.join('amazon-pricing', 'database-type')
+require 'spec_helper'
 
 describe AwsPricing::RdsPriceList do
   before(:all) do
