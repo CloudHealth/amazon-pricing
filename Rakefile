@@ -28,7 +28,7 @@ task :install => :gem do
 end
 
 task :test do
-  ruby "test/test-ec2-instance-types.rb"
+  ruby 'test/ec2_instance_types_test.rb'
 end
 
 desc "Prints current EC2 pricing in CSV format"
