@@ -1,4 +1,5 @@
 require 'amazon-pricing'
+require 'spec_helper'
 
 describe AwsPricing::PriceList do
 
