@@ -3,6 +3,7 @@ Amazon Web Services Pricing Ruby Gem
 
 [![](https://api.tddium.com:443/cloudhealthtech/amazon-pricing/badges/48071.png?badge_token=26071a8988b20f68cb9723defd7012fc33a180bc)](https://api.tddium.com:443/cloudhealthtech/amazon-pricing/suites/48071)
 [![Gem Version](https://badge.fury.io/rb/amazon-pricing.png)](http://badge.fury.io/rb/amazon-pricing)
+[![Code Climate](https://codeclimate.com/github/CloudHealth/amazon-pricing.png)](https://codeclimate.com/github/CloudHealth/amazon-pricing)
 
 About amazon-pricing
 --------------------
