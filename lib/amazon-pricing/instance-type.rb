@@ -82,6 +82,15 @@ module AwsPricing
       cat.get_breakeven_month(type_of_instance, term) unless cat.nil?
     end
 
+    def self.service_type(category)
+      if category == "os"
+        type = "ec2"
+      elsif category == "db"
+        type = "rds"
+      end
+      type
+    end
+
     protected
 
     def coerce_price(price)

@@ -30,6 +30,26 @@ module AwsPricing
 		'sqlserver_ee_byol'=> 'Microsoft SQL Server Enterprise Edition (BYOL)'	
 	  }
 
+	@@ProductDescription = {
+        'mysql'            => 'mysql_standard',
+        'mysql_multiaz'    => 'mysql_multiaz',        
+        'postgres'         => 'postgresql_standard',
+        'postgres_multiaz' => 'postgresql_multiaz',
+        'oracle-se1(li)'           => 'oracle_se1_standard',
+        'oracle-se1(byol)'         => 'oracle_se1_byol',
+        'oracle-se1(li)_multiaz'   => 'oracle_se1_multiaz',
+        'oracle-se1(byol)_multiaz' => 'oracle_se1_byol_multiaz',
+        'oracle-se(byol)'          => 'oracle_se_byol',
+        'oracle-ee(byol)'          => 'oracle_ee_byol',
+        'oracle-se(byol)_multiaz'  => 'oracle_se_byol_multiaz',
+        'oracle-ee(byol)_multiaz'  => 'oracle_ee_byol_multiaz',
+        'sqlserver-ee(byol)' => 'sqlserver_ee_byol',
+        'sqlserver-ex(li)'   => 'sqlserver_ex',
+        'sqlserver-se(byol)' => 'sqlserver_se_byol',
+        'sqlserver-se(li)'   => 'sqlserver_se_standard',
+        'sqlserver-web(li)'  => 'sqlserver_web',
+      }
+
 	  @@DB_Deploy_Types = {
 	  	:mysql=>[:standard, :multiaz],
 	  	:postgresql=>[:standard, :multiaz],
@@ -45,15 +65,24 @@ module AwsPricing
   	end
 
   	def self.get_database_name
-  		[:mysql, :postgresql, :oracle_se1, :oracle_se, :oracle_ee, :sqlserver_ex, :sqlserver_web, :sqlserver_se, :sqlserver_ee]
+  	  [:mysql, :postgresql, :oracle_se1, :oracle_se, :oracle_ee, :sqlserver_ex, :sqlserver_web, :sqlserver_se, :sqlserver_ee]
   	end
 
   	def self.get_available_types(db)
-  		@@DB_Deploy_Types[db]	
+  	  @@DB_Deploy_Types[db]	
   	end
 
+  	def self.db_mapping(product, is_multi_az)
+      if is_multi_az
+        display_name(@@ProductDescription["#{product}_multiaz"])  
+      else
+        display_name(@@ProductDescription["#{product}"])
+	  end
+    end
+
   	def display_name
-		self.class.display_name(name)
+	  self.class.display_name(name)
 	end
+	
   end
 end
