@@ -83,12 +83,12 @@ module AwsPricing
     end
 
     def self.service_type(category)
-      if category == "os"
-        type = "ec2"
-      elsif category == "db"
-        type = "rds"
+      case category
+        when 'os'; 'ec2'
+        when 'db'; 'rds'
+        else
+          ''
       end
-      type
     end
 
     protected
