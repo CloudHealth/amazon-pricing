@@ -127,6 +127,7 @@ module AwsPricing
       'db.m2.xlarge' => 17100, 'db.m2.2xlarge' => 34000, 'db.m2.4xlarge' => 68000, 'db.cr1.8xlarge' => 244000,
       'db.t1.micro' => 613,
       'c3.large' => 3750, 'c3.xlarge' => 7000, 'c3.2xlarge' => 15000, 'c3.4xlarge' => 30000, 'c3.8xlarge' => 60000, 
+      'i2.large' => 15000, 'i2.xlarge' => 30500, 'i2.2xlarge' => 61000, 'i2.4xlarge' => 122000, 'i2.8xlarge' => 244000,
     }
     @@Disk_Lookup = {
       'm1.small' => 160, 'm1.medium' => 410, 'm1.large' =>850, 'm1.xlarge' => 1690,
@@ -145,6 +146,7 @@ module AwsPricing
       'db.m2.xlarge' => 420, 'db.m2.2xlarge' => 850, 'db.m2.4xlarge' => 1690, 'db.cr1.8xlarge' => 1690,
       'db.t1.micro' => 160,
       'c3.large' => 32, 'c3.xlarge' => 80, 'c3.2xlarge' => 160, 'c3.4xlarge' => 320, 'c3.8xlarge' => 640, 
+      'i2.large' => 360, 'i2.xlarge' => 720, 'i2.2xlarge' => 1440, 'i2.4xlarge' => 2880, 'i2.8xlarge' => 5760,
     }
     @@Platform_Lookup = {
       'm1.small' => 32, 'm1.medium' => 32, 'm1.large' => 64, 'm1.xlarge' => 64,
@@ -163,10 +165,11 @@ module AwsPricing
       'db.m2.xlarge' => 64, 'db.m2.2xlarge' => 64, 'db.m2.4xlarge' => 64, 'db.cr1.8xlarge' => 64,
       'db.t1.micro' => 64,
       'c3.large' => 64, 'c3.xlarge' => 64, 'c3.2xlarge' => 64, 'c3.4xlarge' => 64, 'c3.8xlarge' => 64, 
+      'i2.large' => 64, 'i2.xlarge' => 64, 'i2.2xlarge' => 64, 'i2.4xlarge' => 64, 'i2.8xlarge' => 64,
     }
     @@Compute_Units_Lookup = {
       'm1.small' => 1, 'm1.medium' => 2, 'm1.large' => 4, 'm1.xlarge' => 8,
-      'm2.xlarge' => 6, 'm2.2xlarge' => 13, 'm2.4xlarge' => 26,
+      'm2.xlarge' => 6.5, 'm2.2xlarge' => 13, 'm2.4xlarge' => 26,
       'm3.xlarge' => 13, 'm3.2xlarge' => 26,
       'c1.medium' => 5, 'c1.xlarge' => 20,
       'hi1.4xlarge' => 35,
@@ -181,6 +184,8 @@ module AwsPricing
       'db.m2.xlarge' => 6.5, 'db.m2.2xlarge' => 13, 'db.m2.4xlarge' => 26, 'db.cr1.8xlarge' => 88,
       'db.t1.micro' => 1,
       'c3.large' => 7, 'c3.xlarge' => 14, 'c3.2xlarge' => 28, 'c3.4xlarge' => 55, 'c3.8xlarge' => 108, 
+      # Since I2 is not released, the cpmpute units are not yet published, so this is estimate
+      'i2.large' => 6.5, 'i2.xlarge' => 13, 'i2.2xlarge' => 26, 'i2.4xlarge' => 52, 'i2.8xlarge' => 104,
     }
     @@Virtual_Cores_Lookup = {
       'm1.small' => 1, 'm1.medium' => 1, 'm1.large' => 2, 'm1.xlarge' => 4,
@@ -199,6 +204,7 @@ module AwsPricing
       'db.m2.xlarge' => 2, 'db.m2.2xlarge' => 4, 'db.m2.4xlarge' => 8, 'db.cr1.8xlarge' => 16,
       'db.t1.micro' => 0,
       'c3.large' => 2, 'c3.xlarge' => 4, 'c3.2xlarge' => 8, 'c3.4xlarge' => 16, 'c3.8xlarge' => 32, 
+      'i2.large' => 2, 'i2.xlarge' => 4, 'i2.2xlarge' => 8, 'i2.4xlarge' => 16, 'i2.8xlarge' => 32,
     }
     @@Disk_Type_Lookup = {
       'm1.small' => :ephemeral, 'm1.medium' => :ephemeral, 'm1.large' => :ephemeral, 'm1.xlarge' => :ephemeral,
@@ -217,6 +223,7 @@ module AwsPricing
       'db.m2.xlarge' => :ephemeral, 'db.m2.2xlarge' => :ephemeral, 'db.m2.4xlarge' => :ephemeral, 'db.cr1.8xlarge' => :ephemeral,
       'db.t1.micro' => :ebs,
       'c3.large' => :ssd, 'c3.xlarge' => :ssd, 'c3.2xlarge' => :ssd, 'c3.4xlarge' => :ssd, 'c3.8xlarge' => :ssd, 
+      'i2.large' => :ssd, 'i2.xlarge' => :ssd, 'i2.2xlarge' => :ssd, 'i2.4xlarge' => :ssd, 'i2.8xlarge' => :ssd,
     }
   end
 
