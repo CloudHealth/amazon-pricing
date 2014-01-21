@@ -21,7 +21,7 @@ module AwsPricing
   class InstanceType
     attr_accessor :name, :api_name, :memory_in_mb, :platform, :compute_units, :virtual_cores, :disk_type, :disk_in_gb
     
-    def initialize(region, api_name, name)
+    def initialize(region, api_name, name, json)
       @category_types = {}
 
       @region = region
@@ -113,13 +113,12 @@ module AwsPricing
     @@Memory_Lookup = {
       'm1.small' => 1700, 'm1.medium' => 3750, 'm1.large' => 7500, 'm1.xlarge' => 15000,
       'm2.xlarge' => 17100, 'm2.2xlarge' => 34200, 'm2.4xlarge' => 68400,
-      'm3.xlarge' => 15000, 'm3.2xlarge' => 30000,
+      'm3.medium' => 3750, 'm3.large' => 7500, 'm3.xlarge' => 15000, 'm3.2xlarge' => 30000,
       'c1.medium' => 1700, 'c1.xlarge' => 7000,
       'hi1.4xlarge' => 60500,
       'cg1.4xlarge' => 22000,
       'cc1.4xlarge' => 23000, 'cc2.8xlarge' => 60500,
       't1.micro' => 1700,
-      'm3.xlarge' => 15000, 'm3.xlarge' => 30000,
       'cr1.8xlarge' => 244000,
       'hs1.8xlarge' => 117000,
       'g2.2xlarge' => 15000,      
@@ -132,13 +131,12 @@ module AwsPricing
     @@Disk_Lookup = {
       'm1.small' => 160, 'm1.medium' => 410, 'm1.large' =>850, 'm1.xlarge' => 1690,
       'm2.xlarge' => 420, 'm2.2xlarge' => 850, 'm2.4xlarge' => 1690,
-      'm3.xlarge' => 0, 'm3.2xlarge' => 0,
+      'm3.medium' => 4, 'm3.large' => 32, 'm3.xlarge' => 80, 'm3.2xlarge' => 160,
       'c1.medium' => 350, 'c1.xlarge' => 1690,
       'hi1.4xlarge' => 2048,
       'cg1.4xlarge' => 1690,
       'cc1.4xlarge' => 1690, 'cc2.8xlarge' => 3370,
       't1.micro' => 160,
-      'm3.xlarge' => 0, 'm3.xlarge' => 0,
       'cr1.8xlarge' => 240,
       'hs1.8xlarge' => 48000,
       'g2.2xlarge' => 60,      
@@ -151,13 +149,12 @@ module AwsPricing
     @@Platform_Lookup = {
       'm1.small' => 32, 'm1.medium' => 32, 'm1.large' => 64, 'm1.xlarge' => 64,
       'm2.xlarge' => 64, 'm2.2xlarge' => 64, 'm2.4xlarge' => 64,
-      'm3.xlarge' => 64, 'm3.2xlarge' => 64,
+      'm3.medium' => 64, 'm3.large' => 64, 'm3.xlarge' => 64, 'm3.2xlarge' => 64,
       'c1.medium' => 32, 'c1.xlarge' => 64,
       'hi1.4xlarge' => 64,
       'cg1.4xlarge' => 64,
       'cc1.4xlarge' => 64, 'cc2.8xlarge' => 64,
       't1.micro' => 32,
-      'm3.xlarge' => 64, 'm3.xlarge' => 64,
       'cr1.8xlarge' => 64,
       'hs1.8xlarge' => 64,
       'g2.2xlarge' => 64,      
@@ -170,7 +167,7 @@ module AwsPricing
     @@Compute_Units_Lookup = {
       'm1.small' => 1, 'm1.medium' => 2, 'm1.large' => 4, 'm1.xlarge' => 8,
       'm2.xlarge' => 6.5, 'm2.2xlarge' => 13, 'm2.4xlarge' => 26,
-      'm3.xlarge' => 13, 'm3.2xlarge' => 26,
+      'm3.medium' => 3, 'm3.large' => 6.5, 'm3.xlarge' => 13, 'm3.2xlarge' => 26,
       'c1.medium' => 5, 'c1.xlarge' => 20,
       'hi1.4xlarge' => 35,
       'cg1.4xlarge' => 34,
@@ -190,7 +187,7 @@ module AwsPricing
     @@Virtual_Cores_Lookup = {
       'm1.small' => 1, 'm1.medium' => 1, 'm1.large' => 2, 'm1.xlarge' => 4,
       'm2.xlarge' => 2, 'm2.2xlarge' => 4, 'm2.4xlarge' => 8,
-      'm3.xlarge' => 4, 'm3.2xlarge' => 8,
+      'm3.medium' => 1, 'm3.large' => 2, 'm3.xlarge' => 4, 'm3.2xlarge' => 8,
       'c1.medium' => 2, 'c1.xlarge' => 8,
       'hi1.4xlarge' => 16,
       'cg1.4xlarge' => 8,
@@ -209,7 +206,7 @@ module AwsPricing
     @@Disk_Type_Lookup = {
       'm1.small' => :ephemeral, 'm1.medium' => :ephemeral, 'm1.large' => :ephemeral, 'm1.xlarge' => :ephemeral,
       'm2.xlarge' => :ephemeral, 'm2.2xlarge' => :ephemeral, 'm2.4xlarge' => :ephemeral,
-      'm3.xlarge' => :ephemeral, 'm3.2xlarge' => :ephemeral,
+      'm3.medium' => :ssd, 'm3.large' => :ssd, 'm3.xlarge' => :ssd, 'm3.2xlarge' => :ssd,
       'c1.medium' => :ephemeral, 'c1.xlarge' => :ephemeral,
       'hi1.4xlarge' => :ssd,
       'cg1.4xlarge' => :ephemeral,
