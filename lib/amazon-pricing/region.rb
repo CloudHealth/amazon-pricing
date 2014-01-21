@@ -49,7 +49,7 @@ module AwsPricing
     def add_or_update_ec2_instance_type(api_name, name, operating_system, type_of_instance, json)
       current = get_ec2_instance_type(api_name)
       if current.nil?
-        current = Ec2InstanceType.new(self, api_name, name)
+        current = Ec2InstanceType.new(self, api_name, name, json)
         @ec2_instance_types[api_name] = current
       end
       current.update_pricing(operating_system, type_of_instance, json)
@@ -59,7 +59,7 @@ module AwsPricing
     def add_or_update_rds_instance_type(api_name, name, db_type, type_of_instance, json, is_multi_az, is_byol)
       current = get_rds_instance_type(api_name)
       if current.nil?
-        current = RdsInstanceType.new(self, api_name, name)
+        current = RdsInstanceType.new(self, api_name, name, json)
         @rds_instance_types[api_name] = current
       end
       current.update_pricing(db_type, type_of_instance, json, is_multi_az, is_byol)
