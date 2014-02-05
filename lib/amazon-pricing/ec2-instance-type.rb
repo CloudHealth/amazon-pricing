@@ -69,7 +69,7 @@ module AwsPricing
       'c1.medium' => 'High-CPU Medium', 'c1.xlarge' => 'High-CPU Extra Large',
       'hi1.4xlarge' => 'High I/O Quadruple Extra Large',
       'cg1.4xlarge' => 'Cluster GPU Quadruple Extra Large',
-      'cc1.4xlarge' => 'Cluster Compute Quadruple Extra Large', 'cc2.8xlarge' => 'Cluster Compute Eight Extra Large',
+      'cc2.8xlarge' => 'Cluster Compute Eight Extra Large',
       't1.micro' => 'Micro',
       'cr1.8xlarge' => 'High-Memory Cluster Eight Extra Large',
       'hs1.8xlarge' => 'High-Storage Eight Extra Large',
