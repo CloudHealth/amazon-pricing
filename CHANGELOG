@@ -1,3 +1,6 @@
+= Version 0.1.21
+  * Fix postgresql reference (@lardcanoe)
+
 = Version 0.1.7
   * Refactored model to simplify access (one instance type for all usages), 
   introduced operating system pricing to suppport RHEL, SLES, etc...

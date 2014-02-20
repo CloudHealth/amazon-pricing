@@ -35,6 +35,8 @@ module AwsPricing
       'mysql_multiaz'            => 'mysql_multiaz',
       'postgres'                 => 'postgresql_standard',
       'postgres_multiaz'         => 'postgresql_multiaz',
+      'postgresql'               => 'postgresql_standard',
+      'postgresql_multiaz'       => 'postgresql_multiaz',
       'oracle-se1(li)'           => 'oracle_se1_standard',
       'oracle-se1(byol)'         => 'oracle_se1_byol',
       'oracle-se1(li)_multiaz'   => 'oracle_se1_multiaz',
