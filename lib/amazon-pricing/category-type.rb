@@ -143,6 +143,8 @@ module AwsPricing
 
       on_demand = 0
       reserved = prepay(type_of_instance, term)
+      return nil if reserved.nil?
+
       for i in 1..36 do
         on_demand +=  ondemand_pph * 24 * 30.4 
         reserved += reserved_pph * 24 * 30.4 
