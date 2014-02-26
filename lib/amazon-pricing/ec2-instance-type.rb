@@ -61,21 +61,5 @@ module AwsPricing
       [api_name, name]
     end
 
-
-    @@Name_Lookup = {
-      'm1.small' => 'Standard Small', 'm1.medium' => 'Standard Medium', 'm1.large' => 'Standard Large', 'm1.xlarge' => 'Standard Extra Large',
-      'm2.xlarge' => 'Hi-Memory Extra Large', 'm2.2xlarge' => 'Hi-Memory Double Extra Large', 'm2.4xlarge' => 'Hi-Memory Quadruple Extra Large',
-      'm3.medium' => 'M3 Medium Instance', 'm3.large'=>'M3 Large Instance', 'm3.xlarge' => 'M3 Extra Large Instance', 'm3.2xlarge' => 'M3 Double Extra Large Instance',
-      'c1.medium' => 'High-CPU Medium', 'c1.xlarge' => 'High-CPU Extra Large',
-      'hi1.4xlarge' => 'High I/O Quadruple Extra Large',
-      'cg1.4xlarge' => 'Cluster GPU Quadruple Extra Large',
-      'cc1.4xlarge' => 'Cluster Compute Quadruple Extra Large', 'cc2.8xlarge' => 'Cluster Compute Eight Extra Large',
-      't1.micro' => 'Micro',
-      'cr1.8xlarge' => 'High-Memory Cluster Eight Extra Large',
-      'hs1.8xlarge' => 'High-Storage Eight Extra Large',
-      'g2.2xlarge' => 'Cluster GPU Double Extra Large',
-      'c3.large' => 'High-Compute Large', 'c3.xlarge' => 'High-Compute Extra Large', 'c3.2xlarge' => 'High-Compute Double Extra Large', 'c3.4xlarge' => 'High-Compute Quadruple Extra Large', 'c3.8xlarge' => 'High-Compute Eight Extra Large',
-      'i2.xlarge' => 'High I/O Extra Large', 'i2.2xlarge' => 'High I/O Double Extra Large', 'i2.4xlarge' => 'High I/O Quadruple Extra Large', 'i2.8xlarge' => 'High I/O Eight Extra Large'
-    }    
    end
 end

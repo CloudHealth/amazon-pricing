@@ -1,6 +1,26 @@
 require 'amazon-pricing/instance-type'
 module AwsPricing
   class RdsInstanceType < InstanceType
+
+    def initialize(region, api_name, name, json)
+      @category_types = {}
+
+      @region = region
+      @name = name
+      @api_name = api_name
+
+      # Let's look up using the standard name but need to remove leading "db." to do so
+      api_name_for_lookup = api_name.sub("db.", "")
+
+      @memory_in_mb = @@Memory_Lookup[api_name_for_lookup]
+      @disk_in_gb = @@Disk_Lookup[api_name_for_lookup]
+      @platform = @@Platform_Lookup[api_name_for_lookup]
+      @compute_units = @@Compute_Units_Lookup[api_name_for_lookup]
+      @virtual_cores = @@Virtual_Cores_Lookup[api_name_for_lookup]
+      @disk_type = @@Disk_Type_Lookup[api_name_for_lookup]
+    end
+
+
     # database_type = :mysql, :oracle, :sqlserver
     # type_of_instance = :ondemand, :light, :medium, :heavy
 
@@ -56,47 +76,39 @@ module AwsPricing
     protected 
 
     # Returns [api_name, name]
-    def self.get_name(instance_type, size, is_reserved = false)
-      lookup = @@Api_Name_Lookup
-      lookup = @@Api_Name_Lookup_Reserved if is_reserved
+    # e.g. memDBCurrentGen, db.m3.medium
+    def self.get_name(instance_type, api_name, is_reserved = false)
 
-      # Let's handle new instances more gracefully
-      unless lookup.has_key? instance_type
-        raise UnknownTypeError, "Unknown instance type #{instance_type}", caller
-      else
-        api_name = lookup[instance_type][size]
+      # Note: These api names are specific to RDS, not sure why Amazon has given them different API names (note: they have leading "db.")
+      #'cr1.8xl' => 'High-Memory Cluster Eight Extra Large',
+      #'micro' => 'Micro',
+      #'sm' => 'Standard Small',
+      #'xxlHiMem' => 'Hi-Memory Double Extra Large'
+      if ["db.cr1.8xl", "db.micro", "db.sm", "db.xxlHiMem", "sm", "micro", "xxlHiMem"].include? api_name
+        case api_name
+        when "db.cr1.8xl"
+          api_name = "db.cr1.8xlarge"
+        when "db.xxlHiMem", "xxlHiMem"
+          api_name = "db.m2.2xlarge"
+        when "db.micro", "micro"
+          api_name = "db.t1.micro"
+        when "db.sm", "sm"
+          api_name = "db.m1.small"
+        end
       end
 
-      lookup = @@Name_Lookup
-      lookup = @@Name_Lookup_Reserved if is_reserved
-      name = lookup[instance_type][size]
+      # Let's look up using the standard name but need to remove leading "db." to do so
+      api_name_for_lookup = api_name.sub("db.", "")
+
+      # Let's handle new instances more gracefully
+      unless @@Name_Lookup.has_key? api_name_for_lookup
+        raise UnknownTypeError, "Unknown instance type #{instance_type} #{api_name}", caller
+      end
+
+      name = @@Name_Lookup[api_name_for_lookup]
 
       [api_name, name]
     end
-
-    @@Api_Name_Lookup = {
-      'udbInstClass' => {'uDBInst'=>'db.t1.micro'},
-      'dbInstClass'=> {'uDBInst' => 'db.t1.micro', 'smDBInst' => 'db.m1.small', 'medDBInst' => 'db.m1.medium', 'lgDBInst' => 'db.m1.large', 'xlDBInst' => 'db.m1.xlarge'},
-      'hiMemDBInstClass'=> {'xlDBInst' => 'db.m2.xlarge', 'xxlDBInst' => 'db.m2.2xlarge', 'xxxxDBInst' => 'db.m2.4xlarge'},
-      'clusterHiMemDB' => {'xxxxxxxxl' => 'db.cr1.8xlarge'},
-      'multiAZDBInstClass'=> {'uDBInst' => 'db.t1.micro', 'smDBInst' => 'db.m1.small', 'medDBInst' => 'db.m1.medium', 'lgDBInst' => 'db.m1.large', 'xlDBInst' => 'db.m1.xlarge'},
-      'multiAZHiMemInstClass'=> {'xlDBInst' => 'db.m2.xlarge', 'xxlDBInst' => 'db.m2.2xlarge', 'xxxxDBInst' => 'db.m2.4xlarge'},
-    }
-    @@Name_Lookup = {
-      'udbInstClass' => {'uDBInst'=>'Standard Micro'},
-      'dbInstClass'=> {'uDBInst' => 'Standard Micro', 'smDBInst' => 'Standard Small', 'medDBInst' => 'Standard Medium', 'lgDBInst' => 'Standard Large', 'xlDBInst' => 'Standard Extra Large'},
-      'hiMemDBInstClass'=> {'xlDBInst' => 'Standard High-Memory Extra Large', 'xxlDBInst' => 'Standard High-Memory Double Extra Large', 'xxxxDBInst' => 'Standard High-Memory Quadruple Extra Large'},
-      'clusterHiMemDB' => {'xxxxxxxxl' => 'Standard High-Memory Cluster Eight Extra Large'},
-      'multiAZDBInstClass'=> {'uDBInst' => 'Multi-AZ Micro', 'smDBInst' => 'Multi-AZ Small', 'medDBInst' => 'Multi-AZ Medium', 'lgDBInst' => 'Multi-AZ Large', 'xlDBInst' => 'Multi-AZ Extra Large'},
-      'multiAZHiMemInstClass'=> {'xlDBInst' => 'Multi-AZ High-Memory Extra Large', 'xxlDBInst' => 'Multi-AZ High-Memory Double Extra Large', 'xxxxDBInst' => 'Multi-AZ High-Memory Quadruple Extra Large'},
-    }
-    @@Api_Name_Lookup_Reserved = {
-      'stdDeployRes' => {'u' => 'db.t1.micro', 'micro' => 'db.t1.micro', 'sm' => 'db.m1.small', 'med' => 'db.m1.medium', 'lg' => 'db.m1.large', 'xl' => 'db.m1.xlarge', 'xlHiMem' => 'db.m2.xlarge', 'xxlHiMem' => 'db.m2.2xlarge', 'xxxxlHiMem' => 'db.m2.4xlarge', 'xxxxxxxxl' => 'db.cr1.8xlarge'},
-      'multiAZdeployRes' => {'u' => 'db.t1.micro', 'micro' => 'db.t1.micro', 'sm' => 'db.m1.small', 'med' => 'db.m1.medium', 'lg' => 'db.m1.large', 'xl' => 'db.m1.xlarge', 'xlHiMem' => 'db.m2.xlarge', 'xxlHiMem' => 'db.m2.2xlarge', 'xxxxlHiMem' => 'db.m2.4xlarge', 'xxxxxxxxl' => 'db.cr1.8xlarge'},
-    }
-    @@Name_Lookup_Reserved = {
-      'stdDeployRes' => {'u' => 'Standard Micro', 'micro' => 'Standard Micro', 'sm' => 'Standard Small', 'med' => 'Standard Medium', 'lg' => 'Standard Large', 'xl' => 'Standard Extra Large', 'xlHiMem' => 'Standard Extra Large High-Memory', 'xxlHiMem' => 'Standard Double Extra Large High-Memory', 'xxxxlHiMem' => 'Standard Quadruple Extra Large High-Memory', 'xxxxxxxxl' => 'Standard Eight Extra Large'}  ,
-      'multiAZdeployRes' => {'u' => 'Multi-AZ Micro', 'micro' => 'Multi-AZ Micro', 'sm' => 'Multi-AZ Small', 'med' => 'Multi-AZ Medium', 'lg' => 'Multi-AZ Large', 'xl' => 'Multi-AZ Extra Large', 'xlHiMem' => 'Multi-AZ Extra Large High-Memory', 'xxlHiMem' => 'Multi-AZ Double Extra Large High-Memory', 'xxxxlHiMem' => 'Multi-AZ Quadruple Extra Large High-Memory', 'xxxxxxxxl' => 'Multi-AZ Eight Extra Large'},
-    }
    end
+
 end
