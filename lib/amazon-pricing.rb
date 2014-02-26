@@ -40,6 +40,10 @@ module AwsPricing
       page = Net::HTTP.get_response(uri)
       # Now that AWS switched from json to jsonp, remove first/last lines
       body = page.body.gsub("callback(", "").reverse.sub(")", "").reverse
+      if body.split("\n").last == ";"
+        # Now remove one more line (rds is returning ";", ec2 empty line)
+        body = body.reverse.sub(";", "").reverse
+      end
 
       #body = page.body.split("\n")[1..-2].join("\n")
       JSON.parse(body)
