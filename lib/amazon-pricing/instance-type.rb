@@ -28,12 +28,14 @@ module AwsPricing
       @name = name
       @api_name = api_name
 
-      @memory_in_mb = @@Memory_Lookup[@api_name]
       @disk_in_gb = @@Disk_Lookup[@api_name]
       @platform = @@Platform_Lookup[@api_name]
-      @compute_units = @@Compute_Units_Lookup[@api_name]
-      @virtual_cores = @@Virtual_Cores_Lookup[@api_name]
       @disk_type = @@Disk_Type_Lookup[@api_name]
+      # The pricing API provides these consistently now for EC2
+      # e.g. http://aws-assets-pricing-prod.s3.amazonaws.com/pricing/ec2/linux-od.js
+      @memory_in_mb = json["memoryGiB"].to_i * 1000
+      @compute_units = json["ECU"].to_i
+      @virtual_cores = json["vCPU"].to_i
     end
 
     # Keep this in for backwards compatibility within current major version of gem
@@ -125,24 +127,6 @@ module AwsPricing
       'c3.large' => 'High-Compute Large', 'c3.xlarge' => 'High-Compute Extra Large', 'c3.2xlarge' => 'High-Compute Double Extra Large', 'c3.4xlarge' => 'High-Compute Quadruple Extra Large', 'c3.8xlarge' => 'High-Compute Eight Extra Large',
       'i2.xlarge' => 'High I/O Extra Large', 'i2.2xlarge' => 'High I/O Double Extra Large', 'i2.4xlarge' => 'High I/O Quadruple Extra Large', 'i2.8xlarge' => 'High I/O Eight Extra Large',
     } 
-    @@Memory_Lookup = {
-      'm1.small' => 1700, 'm1.medium' => 3750, 'm1.large' => 7500, 'm1.xlarge' => 15000,
-      'm2.xlarge' => 17100, 'm2.2xlarge' => 34200, 'm2.4xlarge' => 68400,
-      'm3.medium' => 3750, 'm3.large' => 7500, 'm3.xlarge' => 15000, 'm3.2xlarge' => 30000,
-      'c1.medium' => 1700, 'c1.xlarge' => 7000,
-      'hi1.4xlarge' => 60500,
-      'cg1.4xlarge' => 22000,
-      'cc1.4xlarge' => 23000, 'cc2.8xlarge' => 60500,
-      't1.micro' => 1700,
-      'cr1.8xlarge' => 244000,
-      'hs1.8xlarge' => 117000,
-      'g2.2xlarge' => 15000,      
-      'db.m1.small' => 1700, 'db.m1.medium' => 3750, 'db.m1.large' => 7500, 'db.m1.xlarge' => 15000,
-      'db.m2.xlarge' => 17100, 'db.m2.2xlarge' => 34000, 'db.m2.4xlarge' => 68000, 'db.cr1.8xlarge' => 244000,
-      'db.t1.micro' => 613,
-      'c3.large' => 3750, 'c3.xlarge' => 7000, 'c3.2xlarge' => 15000, 'c3.4xlarge' => 30000, 'c3.8xlarge' => 60000, 
-      'i2.large' => 15000, 'i2.xlarge' => 30500, 'i2.2xlarge' => 61000, 'i2.4xlarge' => 122000, 'i2.8xlarge' => 244000,
-    }
     @@Disk_Lookup = {
       'm1.small' => 160, 'm1.medium' => 410, 'm1.large' =>850, 'm1.xlarge' => 1690,
       'm2.xlarge' => 420, 'm2.2xlarge' => 850, 'm2.4xlarge' => 1690,
@@ -178,45 +162,6 @@ module AwsPricing
       'db.t1.micro' => 64,
       'c3.large' => 64, 'c3.xlarge' => 64, 'c3.2xlarge' => 64, 'c3.4xlarge' => 64, 'c3.8xlarge' => 64, 
       'i2.large' => 64, 'i2.xlarge' => 64, 'i2.2xlarge' => 64, 'i2.4xlarge' => 64, 'i2.8xlarge' => 64,
-    }
-    @@Compute_Units_Lookup = {
-      'm1.small' => 1, 'm1.medium' => 2, 'm1.large' => 4, 'm1.xlarge' => 8,
-      'm2.xlarge' => 6.5, 'm2.2xlarge' => 13, 'm2.4xlarge' => 26,
-      'm3.medium' => 3, 'm3.large' => 6.5, 'm3.xlarge' => 13, 'm3.2xlarge' => 26,
-      'c1.medium' => 5, 'c1.xlarge' => 20,
-      'hi1.4xlarge' => 35,
-      'cg1.4xlarge' => 34,
-      'cc1.4xlarge' => 34, 'cc2.8xlarge' => 88,
-      't1.micro' => 2,
-      'cr1.8xlarge' => 88,
-      'hs1.8xlarge' => 35,
-      'g2.2xlarge' => 26,
-      'unknown' => 0,      
-      'db.m1.small' => 1, 'db.m1.medium' => 2, 'db.m1.large' => 4, 'db.m1.xlarge' => 8,
-      'db.m2.xlarge' => 6.5, 'db.m2.2xlarge' => 13, 'db.m2.4xlarge' => 26, 'db.cr1.8xlarge' => 88,
-      'db.t1.micro' => 1,
-      'c3.large' => 7, 'c3.xlarge' => 14, 'c3.2xlarge' => 28, 'c3.4xlarge' => 55, 'c3.8xlarge' => 108, 
-      # Since I2 is not released, the cpmpute units are not yet published, so this is estimate
-      'i2.large' => 6.5, 'i2.xlarge' => 13, 'i2.2xlarge' => 26, 'i2.4xlarge' => 52, 'i2.8xlarge' => 104,
-    }
-    @@Virtual_Cores_Lookup = {
-      'm1.small' => 1, 'm1.medium' => 1, 'm1.large' => 2, 'm1.xlarge' => 4,
-      'm2.xlarge' => 2, 'm2.2xlarge' => 4, 'm2.4xlarge' => 8,
-      'm3.medium' => 1, 'm3.large' => 2, 'm3.xlarge' => 4, 'm3.2xlarge' => 8,
-      'c1.medium' => 2, 'c1.xlarge' => 8,
-      'hi1.4xlarge' => 16,
-      'cg1.4xlarge' => 8,
-      'cc1.4xlarge' => 8, 'cc2.8xlarge' => 16,
-      't1.micro' => 0,
-      'cr1.8xlarge' => 16,
-      'hs1.8xlarge' => 16,
-      'g2.2xlarge' => 8,
-      'unknown' => 0,      
-      'db.m1.small' => 1, 'db.m1.medium' => 1, 'db.m1.large' => 2, 'db.m1.xlarge' => 4,
-      'db.m2.xlarge' => 2, 'db.m2.2xlarge' => 4, 'db.m2.4xlarge' => 8, 'db.cr1.8xlarge' => 16,
-      'db.t1.micro' => 0,
-      'c3.large' => 2, 'c3.xlarge' => 4, 'c3.2xlarge' => 8, 'c3.4xlarge' => 16, 'c3.8xlarge' => 32, 
-      'i2.large' => 2, 'i2.xlarge' => 4, 'i2.2xlarge' => 8, 'i2.4xlarge' => 16, 'i2.8xlarge' => 32,
     }
     @@Disk_Type_Lookup = {
       'm1.small' => :ephemeral, 'm1.medium' => :ephemeral, 'm1.large' => :ephemeral, 'm1.xlarge' => :ephemeral,
