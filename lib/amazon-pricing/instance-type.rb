@@ -28,14 +28,12 @@ module AwsPricing
       @name = name
       @api_name = api_name
 
-      @disk_in_gb = @@Disk_Lookup[@api_name]
-      @platform = @@Platform_Lookup[@api_name]
-      @disk_type = @@Disk_Type_Lookup[@api_name]
-      # The pricing API provides these consistently now for EC2
-      # e.g. http://aws-assets-pricing-prod.s3.amazonaws.com/pricing/ec2/linux-od.js
-      @memory_in_mb = json["memoryGiB"].to_i * 1000
-      @compute_units = json["ECU"].to_i
-      @virtual_cores = json["vCPU"].to_i
+      @disk_in_gb = InstanceType.get_disk(api_name)
+      @platform = InstanceType.get_platform(api_name)
+      @disk_type = InstanceType.get_disk_type(api_name)
+      @memory_in_mb = InstanceType.get_memory(api_name)
+      @compute_units = InstanceType.get_compute_units(api_name)
+      @virtual_cores = InstanceType.get_virtual_cores(api_name)
     end
 
     # Keep this in for backwards compatibility within current major version of gem
@@ -93,7 +91,54 @@ module AwsPricing
       end
     end
 
+    def self.populate_lookups
+      return unless @@Memory_Lookup.empty? && @@Compute_Units_Lookup.empty? && @@Virtual_Cores_Lookup.empty?
+
+      res = AwsPricing::PriceList.fetch_url("http://aws-assets-pricing-prod.s3.amazonaws.com/pricing/ec2/linux-od.js")
+      res['config']['regions'].each do |reg|
+        reg['instanceTypes'].each do |type|
+          items = type['sizes']
+          items = [type] if items.nil?
+          items.each do |size|
+            begin
+              api_name = size["size"]
+              @@Memory_Lookup[api_name] = size["memoryGiB"].to_f * 1000
+              @@Compute_Units_Lookup[api_name] = size["ECU"].to_i 
+              @@Virtual_Cores_Lookup[api_name] = size["vCPU"].to_i 
+            rescue UnknownTypeError
+              $stderr.puts "WARNING: encountered #{$!.message}"
+            end
+          end
+        end
+      end
+
+    end
+
     protected
+
+    def self.get_disk(api_name)
+      @@Disk_Lookup[api_name]
+    end
+
+    def self.get_platform(api_name)
+      @@Platform_Lookup[api_name]
+    end
+
+    def self.get_disk_type(api_name)
+      @@Disk_Type_Lookup[api_name]
+    end
+
+    def self.get_memory(api_name)
+      @@Memory_Lookup[api_name]
+    end
+
+    def self.get_compute_units(api_name)
+      @@Compute_Units_Lookup[api_name]
+    end
+
+    def self.get_virtual_cores(api_name)
+      @@Virtual_Cores_Lookup[api_name]
+    end
 
     def coerce_price(price)
       return nil if price.nil? || price == "N/A"
@@ -182,6 +227,14 @@ module AwsPricing
       'c3.large' => :ssd, 'c3.xlarge' => :ssd, 'c3.2xlarge' => :ssd, 'c3.4xlarge' => :ssd, 'c3.8xlarge' => :ssd, 
       'i2.large' => :ssd, 'i2.xlarge' => :ssd, 'i2.2xlarge' => :ssd, 'i2.4xlarge' => :ssd, 'i2.8xlarge' => :ssd,
     }
+
+    # Due to fact AWS pricing API only reports these for EC2, we will fetch from EC2 and keep around for lookup
+    # e.g. EC2 = http://aws-assets-pricing-prod.s3.amazonaws.com/pricing/ec2/linux-od.js
+    # e.g. RDS = http://aws-assets-pricing-prod.s3.amazonaws.com/pricing/rds/mysql/pricing-standard-deployments.js
+    @@Memory_Lookup = {}
+    @@Compute_Units_Lookup = {}
+    @@Virtual_Cores_Lookup = {}
+
   end
 
 end
