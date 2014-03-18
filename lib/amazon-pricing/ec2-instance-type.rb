@@ -52,7 +52,7 @@ module AwsPricing
     # Returns [api_name, name]
     def self.get_name(instance_type, api_name, is_reserved = false)
       # Let's handle new instances more gracefully
-      unless @@Memory_Lookup.has_key? api_name
+      unless @@Name_Lookup.has_key? api_name
         raise UnknownTypeError, "Unknown instance type #{instance_type} #{api_name}", caller
       end
 

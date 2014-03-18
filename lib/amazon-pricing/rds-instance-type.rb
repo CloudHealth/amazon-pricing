@@ -12,12 +12,12 @@ module AwsPricing
       # Let's look up using the standard name but need to remove leading "db." to do so
       api_name_for_lookup = api_name.sub("db.", "")
 
-      @memory_in_mb = @@Memory_Lookup[api_name_for_lookup]
-      @disk_in_gb = @@Disk_Lookup[api_name_for_lookup]
-      @platform = @@Platform_Lookup[api_name_for_lookup]
-      @compute_units = @@Compute_Units_Lookup[api_name_for_lookup]
-      @virtual_cores = @@Virtual_Cores_Lookup[api_name_for_lookup]
-      @disk_type = @@Disk_Type_Lookup[api_name_for_lookup]
+      @disk_in_gb = InstanceType.get_disk(api_name_for_lookup)
+      @platform = InstanceType.get_platform(api_name_for_lookup)
+      @disk_type = InstanceType.get_disk_type(api_name_for_lookup)
+      @memory_in_mb = InstanceType.get_memory(api_name_for_lookup)
+      @compute_units = InstanceType.get_compute_units(api_name_for_lookup)
+      @virtual_cores = InstanceType.get_virtual_cores(api_name_for_lookup)
     end
 
 
@@ -109,6 +109,7 @@ module AwsPricing
 
       [api_name, name]
     end
+
    end
 
 end

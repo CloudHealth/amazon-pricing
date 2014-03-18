@@ -35,7 +35,7 @@ module AwsPricing
       region.get_instance_type(api_name)
     end
 
-    def fetch_url(url)
+    def self.fetch_url(url)
       uri = URI.parse(url)
       page = Net::HTTP.get_response(uri)
       # Now that AWS switched from json to jsonp, remove first/last lines
@@ -88,6 +88,7 @@ module AwsPricing
     
     def initialize
       @_regions = {}
+      InstanceType.populate_lookups
       get_ec2_on_demand_instance_pricing
       get_ec2_reserved_instance_pricing
       fetch_ec2_ebs_pricing
@@ -115,7 +116,7 @@ module AwsPricing
     # Retrieves the EC2 on-demand instance pricing.
     # type_of_instance = :ondemand, :light, :medium, :heavy
     def fetch_ec2_instance_pricing(url, type_of_instance, operating_system)
-      res = fetch_url(url)
+      res = PriceList.fetch_url(url)
       res['config']['regions'].each do |reg|
         region_name = reg['region']
         region = find_or_create_region(region_name)
@@ -139,7 +140,7 @@ module AwsPricing
     end
 
     def fetch_ec2_ebs_pricing
-      res = fetch_url(EC2_BASE_URL + "pricing-ebs.js")
+      res = PriceList.fetch_url(EC2_BASE_URL + "pricing-ebs.js")
       res["config"]["regions"].each do |ebs_types|
         region = get_region(ebs_types["region"])
         region.ebs_price = EbsPrice.new(region, ebs_types)
@@ -152,8 +153,9 @@ module AwsPricing
     
     def initialize
       @_regions = {}
-       get_rds_on_demand_instance_pricing
-       get_rds_reserved_instance_pricing
+      InstanceType.populate_lookups
+      get_rds_on_demand_instance_pricing
+      get_rds_reserved_instance_pricing
     end
 
     protected
@@ -231,7 +233,7 @@ module AwsPricing
     end
 
     def fetch_on_demand_rds_instance_pricing(url, type_of_rds_instance, db_type, is_byol)
-      res = fetch_url(url)
+      res = PriceList.fetch_url(url)
       res['config']['regions'].each do |reg|
         region_name = reg['region']
         region = find_or_create_region(region_name)
@@ -257,7 +259,7 @@ module AwsPricing
     end
 
     def fetch_reserved_rds_instance_pricing(url, type_of_rds_instance, db_type, is_byol)
-      res = fetch_url(url)
+      res = PriceList.fetch_url(url)
       res['config']['regions'].each do |reg|
         region_name = reg['region']
         region = find_or_create_region(region_name)
