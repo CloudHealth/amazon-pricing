@@ -43,10 +43,18 @@ module AwsPricing
       if body.split("\n").last == ";"
         # Now remove one more line (rds is returning ";", ec2 empty line)
         body = body.reverse.sub(";", "").reverse
+      elsif body[-1] == ";"
+        body.chop!
       end
 
-      #body = page.body.split("\n")[1..-2].join("\n")
-      JSON.parse(body)
+      begin
+        JSON.parse(body)
+      rescue JSON::ParserError
+        # Handle "json" with keys that are not quoted
+        # When we get {foo: "1"} instead of {"foo": "1"}
+        # http://stackoverflow.com/questions/2060356/parsing-json-without-quoted-keys
+        JSON.parse(body.gsub(/(\w+)\s*:/, '"\1":'))
+      end
     end
 
     protected

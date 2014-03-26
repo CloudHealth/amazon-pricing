@@ -1,3 +1,6 @@
+= Version 0.1.25
+  * Handle JSON::ParserError for RDS json doc (@lardcanoe)
+
 = Version 0.1.21
   * Fix postgresql reference (@lardcanoe)
 
