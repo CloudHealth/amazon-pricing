@@ -70,7 +70,7 @@ class TestEc2InstanceTypes < Test::Unit::TestCase
     region = @@ec2_pricing.get_region('us-east')
     instance = region.get_ec2_instance_type('m1.large')
     bem = instance.get_breakeven_month(:linux, :heavy, :year1)
-    assert bem == 6
+    assert bem == 8
   end
 
   def test_memory
@@ -88,8 +88,8 @@ class TestEc2InstanceTypes < Test::Unit::TestCase
 
   def test_ebs
     region = @@ec2_pricing.get_region('us-east')
-    assert region.ebs_price.standard_per_gb == 0.10
-    assert region.ebs_price.standard_per_million_io == 0.10
+    assert region.ebs_price.standard_per_gb == 0.05
+    assert region.ebs_price.standard_per_million_io == 0.05
     assert region.ebs_price.preferred_per_gb == 0.125
     assert region.ebs_price.preferred_per_iops == 0.10
     assert region.ebs_price.s3_snaps_per_gb == 0.095
