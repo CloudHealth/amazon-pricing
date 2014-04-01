@@ -74,8 +74,9 @@ module AwsPricing
       region
     end
 
-    EC2_BASE_URL = "http://aws-assets-pricing-prod.s3.amazonaws.com/pricing/ec2/"
-    RDS_BASE_URL = "http://aws-assets-pricing-prod.s3.amazonaws.com/pricing/rds/"
+    EC2_BASE_URL = "http://a0.awsstatic.com/pricing/1/ec2/"
+    EBS_BASE_URL = "http://a0.awsstatic.com/pricing/1/ebs/"
+    RDS_BASE_URL = "http://a0.awsstatic.com/pricing/1/rds/"
 
     # Lookup allows us to map to AWS API region names
     @@Region_Lookup = {
@@ -109,14 +110,14 @@ module AwsPricing
 
     def get_ec2_on_demand_instance_pricing
       @@OS_TYPES.each do |os|
-        fetch_ec2_instance_pricing(EC2_BASE_URL + "#{os}-od.js", :ondemand, os)
+        fetch_ec2_instance_pricing(EC2_BASE_URL + "#{os}-od.min.js", :ondemand, os)
       end
     end
 
     def get_ec2_reserved_instance_pricing
       @@OS_TYPES.each do |os|
         @@RES_TYPES.each do |res_type|
-          fetch_ec2_instance_pricing(EC2_BASE_URL + "#{os}-ri-#{res_type}.js", res_type, os)
+          fetch_ec2_instance_pricing(EC2_BASE_URL + "#{os}-ri-#{res_type}.min.js", res_type, os)
         end
       end
     end
@@ -148,7 +149,7 @@ module AwsPricing
     end
 
     def fetch_ec2_ebs_pricing
-      res = PriceList.fetch_url(EC2_BASE_URL + "pricing-ebs.js")
+      res = PriceList.fetch_url(EBS_BASE_URL + "pricing-ebs.min.js")
       res["config"]["regions"].each do |ebs_types|
         region = get_region(ebs_types["region"])
         region.ebs_price = EbsPrice.new(region, ebs_types)
@@ -204,9 +205,9 @@ module AwsPricing
             is_byol = is_byol? dp_type
 
             if [:mysql, :postgresql, :oracle].include? db
-              fetch_on_demand_rds_instance_pricing(RDS_BASE_URL+"#{db}/pricing-#{dp_type}-deployments.js",:ondemand, db_type, is_byol)
+              fetch_on_demand_rds_instance_pricing(RDS_BASE_URL+"#{db}/pricing-#{dp_type}-deployments.min.js",:ondemand, db_type, is_byol)
             elsif db == :sqlserver
-              fetch_on_demand_rds_instance_pricing(RDS_BASE_URL+"#{db}/sqlserver-#{dp_type}-ondemand.js",:ondemand, db_type, is_byol)
+              fetch_on_demand_rds_instance_pricing(RDS_BASE_URL+"#{db}/sqlserver-#{dp_type}-ondemand.min.js",:ondemand, db_type, is_byol)
             end
           end
         }
@@ -218,9 +219,9 @@ module AwsPricing
         if [:mysql, :postgresql].include? db
           @@RES_TYPES.each do |res_type|
             if db == :postgresql and res_type == :heavy
-              fetch_reserved_rds_instance_pricing(RDS_BASE_URL+"#{db}/pricing-#{res_type}-utilization-reserved-instances.js", res_type, db, false)
+              fetch_reserved_rds_instance_pricing(RDS_BASE_URL+"#{db}/pricing-#{res_type}-utilization-reserved-instances.min.js", res_type, db, false)
             elsif db == :mysql
-              fetch_reserved_rds_instance_pricing(RDS_BASE_URL+"#{db}/pricing-#{res_type}-utilization-reserved-instances.js", res_type, db, false)
+              fetch_reserved_rds_instance_pricing(RDS_BASE_URL+"#{db}/pricing-#{res_type}-utilization-reserved-instances.min.js", res_type, db, false)
             end            
           end
         else
@@ -229,9 +230,9 @@ module AwsPricing
               db_instance.each do |dp_type|
                 is_byol = is_byol? dp_type
                 if db == :oracle
-                  fetch_reserved_rds_instance_pricing(RDS_BASE_URL+"#{db}/pricing-#{dp_type}-#{res_type}-utilization-reserved-instances.js", res_type, db_type, is_byol) 
+                  fetch_reserved_rds_instance_pricing(RDS_BASE_URL+"#{db}/pricing-#{dp_type}-#{res_type}-utilization-reserved-instances.min.js", res_type, db_type, is_byol) 
                 elsif db == :sqlserver
-                  fetch_reserved_rds_instance_pricing(RDS_BASE_URL+"#{db}/sqlserver-#{dp_type}-#{res_type}-ri.js", res_type, db_type, is_byol)
+                  fetch_reserved_rds_instance_pricing(RDS_BASE_URL+"#{db}/sqlserver-#{dp_type}-#{res_type}-ri.min.js", res_type, db_type, is_byol)
                 end
               end    
             end            
@@ -250,7 +251,7 @@ module AwsPricing
             begin
               #
               # this is special case URL, it is oracle - multiAZ type of deployment but it doesn't have mutliAZ attributes in json.
-              if url == "http://aws.amazon.com/rds/pricing/oracle/pricing-li-multiAZ-deployments.js"
+              if url == "http://aws.amazon.com/rds/pricing/oracle/pricing-li-multiAZ-deployments.min.js"
                 is_multi_az = true
               else
                 is_multi_az = is_multi_az? type["name"]
