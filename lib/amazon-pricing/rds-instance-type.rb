@@ -78,6 +78,9 @@ module AwsPricing
     # Returns [api_name, name]
     # e.g. memDBCurrentGen, db.m3.medium
     def self.get_name(instance_type, api_name, is_reserved = false)
+      # Temporary hack: Amazon has released r3 instances but pricing has api_name with asterisk (e.g. "r3.large *")
+      api_name.sub!(" *", "")
+
 
       # Note: These api names are specific to RDS, not sure why Amazon has given them different API names (note: they have leading "db.")
       #'cr1.8xl' => 'High-Memory Cluster Eight Extra Large',
