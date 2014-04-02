@@ -53,6 +53,12 @@ module AwsPricing
         db.set_price_per_hour(type_of_instance, nil, price)
       else
         json['valueColumns'].each do |val|
+          # As of 2014-04-02 we see entries w/o pricing, e.g. sqlserver_web heavy 1 year reservation = {"prices"=>{"USD"=>{}}, "name"=>"yrTerm1"}
+          if val['prices']['USD'].empty?
+            #puts "The following instance type does not have pricing: #{@region.name} : #{@api_name} : #{database_type} : #{type_of_instance} : #{val['name']} : #{is_multi_az} : #{is_byol}"
+            next
+          end
+
           price = coerce_price(val['prices']['USD'])
 
           case val["name"]
