@@ -51,6 +51,9 @@ module AwsPricing
     protected
     # Returns [api_name, name]
     def self.get_name(instance_type, api_name, is_reserved = false)
+      # Temporary hack: Amazon has released r3 instances but pricing has api_name with asterisk (e.g. "r3.large *")
+      api_name.sub!(" *", "")
+
       # Let's handle new instances more gracefully
       unless @@Name_Lookup.has_key? api_name
         raise UnknownTypeError, "Unknown instance type #{instance_type} #{api_name}", caller

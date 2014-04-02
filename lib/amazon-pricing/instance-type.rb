@@ -171,8 +171,7 @@ module AwsPricing
       'g2.2xlarge' => 'Cluster GPU Double Extra Large',
       'c3.large' => 'High-Compute Large', 'c3.xlarge' => 'High-Compute Extra Large', 'c3.2xlarge' => 'High-Compute Double Extra Large', 'c3.4xlarge' => 'High-Compute Quadruple Extra Large', 'c3.8xlarge' => 'High-Compute Eight Extra Large',
       'i2.xlarge' => 'High I/O Extra Large', 'i2.2xlarge' => 'High I/O Double Extra Large', 'i2.4xlarge' => 'High I/O Quadruple Extra Large', 'i2.8xlarge' => 'High I/O Eight Extra Large',
-      # Remove asterisk when this is released instance type
-      #'r3.large *' => 'Memory Optimized Large', 'r3.xlarge *' => 'Memory Optimized Extra Large', 'r3.2xlarge *' => 'Memory Optimized Double Extra Large', 'r3.4xlarge *' => 'Memory Optimized Quadruple Extra Large', 'r3.8xlarge *' => 'Memory Optimized Eight Extra Large',
+      'r3.large' => 'Memory Optimized Large', 'r3.xlarge' => 'Memory Optimized Extra Large', 'r3.2xlarge' => 'Memory Optimized Double Extra Large', 'r3.4xlarge' => 'Memory Optimized Quadruple Extra Large', 'r3.8xlarge' => 'Memory Optimized Eight Extra Large',
     } 
     @@Disk_Lookup = {
       'm1.small' => 160, 'm1.medium' => 410, 'm1.large' =>850, 'm1.xlarge' => 1690,
@@ -191,8 +190,7 @@ module AwsPricing
       'db.t1.micro' => 160,
       'c3.large' => 32, 'c3.xlarge' => 80, 'c3.2xlarge' => 160, 'c3.4xlarge' => 320, 'c3.8xlarge' => 640, 
       'i2.large' => 360, 'i2.xlarge' => 720, 'i2.2xlarge' => 1440, 'i2.4xlarge' => 2880, 'i2.8xlarge' => 5760,
-      # Remove asterisk when this is released instance type
-      #'r3.large *' => 0, 'r3.xlarge *' => 0, 'r3.2xlarge *' => 0, 'r3.4xlarge *' => 0, 'r3.8xlarge *' => 0,
+      'r3.large' => 32, 'r3.xlarge' => 80, 'r3.2xlarge' => 160, 'r3.4xlarge' => 320, 'r3.8xlarge' => 640,
     }
     @@Platform_Lookup = {
       'm1.small' => 32, 'm1.medium' => 32, 'm1.large' => 64, 'm1.xlarge' => 64,
@@ -211,8 +209,7 @@ module AwsPricing
       'db.t1.micro' => 64,
       'c3.large' => 64, 'c3.xlarge' => 64, 'c3.2xlarge' => 64, 'c3.4xlarge' => 64, 'c3.8xlarge' => 64, 
       'i2.large' => 64, 'i2.xlarge' => 64, 'i2.2xlarge' => 64, 'i2.4xlarge' => 64, 'i2.8xlarge' => 64,
-      # Remove asterisk when this is released instance type
-      #'r3.large *' => 64, 'r3.xlarge *' => 64, 'r3.2xlarge *' => 64, 'r3.4xlarge *' => 64, 'r3.8xlarge *' => 64,
+      'r3.large' => 64, 'r3.xlarge' => 64, 'r3.2xlarge' => 64, 'r3.4xlarge' => 64, 'r3.8xlarge' => 64,
     }
     @@Disk_Type_Lookup = {
       'm1.small' => :ephemeral, 'm1.medium' => :ephemeral, 'm1.large' => :ephemeral, 'm1.xlarge' => :ephemeral,
