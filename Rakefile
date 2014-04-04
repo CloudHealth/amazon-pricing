@@ -31,6 +31,37 @@ task :test do
   ruby 'test/ec2_instance_types_test.rb'
 end
 
+desc "Prints current GovCloud EC2 pricing in CSV format"
+task :print_govcloud_ec2_price_list do
+  require 'amazon-pricing'
+  pricing = AwsPricing::GovCloudEc2PriceList.new
+  line = "Region,Instance Type,API Name,Memory (MB),Disk (GB),Compute Units,Virtual Cores,Disk Type,OD Linux PPH,OD Windows PPH,OD RHEL PPH,OD SLES PPH,OD MsWinSQL PPH,OD MsWinSQLWeb PPH,"
+  [:year1, :year3].each do |term|
+    [:light, :medium, :heavy].each do |res_type|
+      [:linux, :mswin, :rhel, :sles, :mswinSQL, :mswinSQLWeb].each do |os|
+        line += "#{term} #{res_type} #{os} Prepay,#{term} #{res_type} #{os} PPH,"
+      end
+    end
+  end
+  puts line.chop
+  pricing.regions.each do |region|
+    region.ec2_instance_types.each do |t|
+      line = "#{region.name},#{t.name},#{t.api_name},#{t.memory_in_mb},#{t.disk_in_gb},#{t.compute_units},#{t.virtual_cores},#{t.disk_type},"
+      [:linux, :mswin, :rhel, :sles, :mswinSQL, :mswinSQLWeb].each do |os|
+        line += "#{t.price_per_hour(os, :ondemand)},"
+      end
+      [:year1, :year3].each do |term|
+        [:light, :medium, :heavy].each do |res_type|
+          [:linux, :mswin, :rhel, :sles, :mswinSQL, :mswinSQLWeb].each do |os|
+            line += "#{t.prepay(os, res_type, term)},#{t.price_per_hour(os, res_type, term)},"
+          end
+        end
+      end
+      puts line.chop
+    end
+  end
+end
+
 desc "Prints current EC2 pricing in CSV format"
 task :print_ec2_price_list do
   require 'amazon-pricing'

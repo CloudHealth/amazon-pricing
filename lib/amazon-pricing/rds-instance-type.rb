@@ -2,7 +2,7 @@ require 'amazon-pricing/instance-type'
 module AwsPricing
   class RdsInstanceType < InstanceType
 
-    def initialize(region, api_name, name, json)
+    def initialize(region, api_name, name)
       @category_types = {}
 
       @region = region

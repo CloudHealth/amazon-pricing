@@ -43,9 +43,24 @@ module AwsPricing
       end
     end
 
+    def update_pricing2(operating_system, type_of_instance, ondemand_pph = nil, year1_prepay = nil, year3_prepay = nil, year1_pph = nil, year3_pph = nil)
+
+      os = get_category_type(operating_system)
+      if os.nil?
+        os = OperatingSystem.new(self, operating_system)
+        @category_types[operating_system] = os
+      end
+
+      os.set_price_per_hour(type_of_instance, nil, coerce_price(ondemand_pph)) unless ondemand_pph.nil?
+      os.set_prepay(type_of_instance, :year1, coerce_price(year1_prepay)) unless year1_prepay.nil?
+      os.set_prepay(type_of_instance, :year3, coerce_price(year3_prepay)) unless year3_prepay.nil?
+      os.set_price_per_hour(type_of_instance, :year1, coerce_price(year1_pph)) unless year1_pph.nil?
+      os.set_price_per_hour(type_of_instance, :year3, coerce_price(year3_pph)) unless year3_pph.nil?
+    end
+
     # Maintained for backward compatibility reasons
     def operating_systems
-      category_types
+      @category_types
     end
 
     protected

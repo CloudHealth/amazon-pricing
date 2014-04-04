@@ -1,5 +1,6 @@
 require 'json'
 require 'net/http'
+require 'mechanize'
 
 Dir[File.join(File.dirname(__FILE__), 'amazon-pricing/*.rb')].sort.each { |lib| require lib }
 
@@ -18,7 +19,7 @@ module AwsPricing
   # Upon instantiating a PriceList object, all the corresponding pricing
   # information will be retrieved from Amazon via currently undocumented
   # json APIs.
-    class PriceList
+  class PriceList
     attr_accessor :regions
 
     def get_region(name)
@@ -93,6 +94,109 @@ module AwsPricing
   end
 
 
+  class GovCloudEc2PriceList < PriceList
+    GOV_CLOUD_URL = "http://aws.amazon.com/govcloud-us/pricing/ec2/"
+
+    def initialize
+      @_regions = {}
+      @_regions["us-gov-west"] = Region.new("us-gov-west")
+      InstanceType.populate_lookups
+      get_ec2_instance_pricing
+    end
+
+    protected
+
+    def get_ec2_instance_pricing
+
+      client = Mechanize.new
+      page = client.get(GOV_CLOUD_URL)
+      tables = page.search("//div[@class='aws-table section']")
+
+      create_ondemand_instances(get_rows(tables[0]))
+      create_ondemand_instances(get_rows(tables[1]))
+      
+      for i in 2..7
+        create_reserved_instances(get_rows(tables[i]), :light)
+      end
+      for i in 8..13
+        create_reserved_instances(get_rows(tables[i]), :medium)
+      end
+      for i in 14..19
+        create_reserved_instances(get_rows(tables[i]), :heavy)
+      end
+
+    end
+
+    # e.g. [["Prices / Hour", "Amazon Linux", "RHEL", "SLES"], ["m1.small", "$0.053", "$0.083", "$0.083"]]
+    def create_ondemand_instances(rows)
+      header = rows[0]
+      @_regions.values.each do |region|
+
+        rows.slice(1, rows.size).each do |row|
+          api_name = row[0]
+          instance_type = region.get_instance_type(api_name)
+          if instance_type.nil?
+            api_name, name = Ec2InstanceType.get_name(nil, row[0], false)
+            instance_type = region.add_or_update_ec2_instance_type(api_name, name)
+          end
+          instance_type.update_pricing2(get_os(header[1]), :ondemand, row[1])
+          instance_type.update_pricing2(get_os(header[2]), :ondemand, row[2])
+          instance_type.update_pricing2(get_os(header[3]), :ondemand, row[3])
+        end
+      end
+    end
+
+    # e.g. [["RHEL", "1 yr Term Upfront", "1 yr TermHourly", "3 yr TermUpfront", "3 yr Term Hourly"], ["m1.small", "$68.00", "$0.099", "$105.00", "$0.098"]]
+    def create_reserved_instances(rows, res_type)
+      header = rows[0]
+      operating_system = get_os(header[0])
+      @_regions.values.each do |region|
+
+        rows.slice(1, rows.size).each do |row|
+          api_name = row[0]
+          instance_type = region.get_instance_type(api_name)
+          if instance_type.nil?
+            api_name, name = Ec2InstanceType.get_name(nil, row[0], true)
+            instance_type = region.add_or_update_ec2_instance_type(api_name, name)
+          end
+         instance_type.update_pricing2(operating_system, res_type, nil, row[1], row[2], row[3], row[4])
+        end
+      end
+    end
+
+    def get_os(val)
+      case val
+      when "Amazon Linux"
+        :linux
+      when "RHEL"
+        :rhel
+      when "SLES"
+        :sles
+      when "Windows"
+        :mswin
+      when "Windows SQL Server Web", "Windows SQL Server Web Edition"
+        :mswinSQL
+      when "Windows SQL Server Standard", "Windows SQL Server Standard Edition"
+        :mswinSQLWeb
+      else
+        raise "Unable to identify operating system '#{val}'"
+      end
+    end
+
+    def get_rows(html_table)
+      rows = []
+      html_table.search(".//tr").each do |tr|
+        row = []
+        tr.search(".//td").each do |td|
+         row << td.inner_text.strip.sub("\n", " ").sub("  ", " ")
+        end
+        next if row.size == 1
+        rows << row unless row.empty?
+      end
+      rows
+    end  
+  end
+
   class Ec2PriceList < PriceList
     
     def initialize
@@ -139,7 +243,8 @@ module AwsPricing
             begin
               api_name, name = Ec2InstanceType.get_name(type["type"], size["size"], type_of_instance != :ondemand)
               
-              region.add_or_update_ec2_instance_type(api_name, name, operating_system, type_of_instance, size)
+              instance_type = region.add_or_update_ec2_instance_type(api_name, name)
+              instance_type.update_pricing(operating_system, type_of_instance, size)
             rescue UnknownTypeError
               $stderr.puts "WARNING: encountered #{$!.message}"
             end
@@ -258,7 +363,8 @@ module AwsPricing
               end              
               api_name, name = RdsInstanceType.get_name(type["name"], tier["name"], type_of_rds_instance != :ondemand)
               
-              region.add_or_update_rds_instance_type(api_name, name, db_type, type_of_rds_instance, tier, is_multi_az, is_byol)
+              instance_type = region.add_or_update_rds_instance_type(api_name, name)
+              instance_type.update_pricing(db_type, type_of_rds_instance, tier, is_multi_az, is_byol)
             rescue UnknownTypeError
               $stderr.puts "WARNING: encountered #{$!.message}"
             end
@@ -278,7 +384,8 @@ module AwsPricing
                 is_multi_az = is_multi_az? type["type"]
                 api_name, name = RdsInstanceType.get_name(type["type"], tier["size"], true)
                 
-                region.add_or_update_rds_instance_type(api_name, name, db_type, type_of_rds_instance, tier, is_multi_az, is_byol)
+                instance_type = region.add_or_update_rds_instance_type(api_name, name)
+                instance_type.update_pricing(db_type, type_of_rds_instance, tier, is_multi_az, is_byol)
             rescue UnknownTypeError
               $stderr.puts "WARNING: encountered #{$!.message}"
             end
