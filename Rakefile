@@ -31,13 +31,6 @@ task :test do
   ruby 'test/ec2_instance_types_test.rb'
 end
 
-desc "Prints current GovCloud EC2 pricing in CSV format"
-task :print_govcloud_ec2_price_list do
-  require 'amazon-pricing'
-  pricing = AwsPricing::GovCloudEc2PriceList.new
-  print_ec2_table(pricing)
-end
-
 desc "Prints current EC2 pricing in CSV format"
 task :print_ec2_price_list do
   require 'amazon-pricing'
@@ -45,77 +38,25 @@ task :print_ec2_price_list do
   print_ec2_table(pricing)
 end
 
-
 desc "Prints current RDS pricing in CSV format"
 task :print_rds_price_list do
   require 'amazon-pricing'
   pricing = AwsPricing::RdsPriceList.new
-  
-  line = "Region,Instance Type,API Name,Memory (MB),Disk (GB),Compute Units,Virtual Cores,Disk Type,"
-  
-  AwsPricing::DatabaseType.get_database_name.each do |db|
-    unless AwsPricing::DatabaseType.get_available_types(db).nil?
-      AwsPricing::DatabaseType.get_available_types(db).each do |deploy_type|
-        line += "OD "+ AwsPricing::DatabaseType.display_name("#{db}_#{deploy_type}") +" PPH,"
-      end
-    else
-      line += "OD "+ AwsPricing::DatabaseType.display_name(db.to_s) +" PPH,"
-    end      
-  end
+  print_rds_table(pricing) 
+end
 
-  [:year1, :year3].each do |term|
-   [:light, :medium, :heavy].each do |res_type|
-       AwsPricing::DatabaseType.get_database_name.each do |db|
-          unless AwsPricing::DatabaseType.get_available_types(db).nil?
-            AwsPricing::DatabaseType.get_available_types(db).each do |deploy_type|
-              line += "#{term} #{res_type} "+ AwsPricing::DatabaseType.display_name("#{db}_#{deploy_type}") +" Prepay,#{term} #{res_type} "+ AwsPricing::DatabaseType.display_name("#{db}_#{deploy_type}") +" PPH,"
-            end
-          else
-            line += "#{term} #{res_type} "+ AwsPricing::DatabaseType.display_name(db.to_s) +" Prepay,#{term} #{res_type} "+ AwsPricing::DatabaseType.display_name(db.to_s) +" PPH,"
-          end
-       end
-   end
-  end
+desc "Prints current GovCloud EC2 pricing in CSV format"
+task :print_govcloud_ec2_price_list do
+  require 'amazon-pricing'
+  pricing = AwsPricing::GovCloudEc2PriceList.new
+  print_ec2_table(pricing)
+end
 
- 
- puts line.chop
-
- pricing.regions.each do |region|
-   region.rds_instance_types.each do |t|
-     line = "#{region.name},#{t.name},#{t.api_name},#{t.memory_in_mb},#{t.disk_in_gb},#{t.compute_units},#{t.virtual_cores},#{t.disk_type},"
-     AwsPricing::DatabaseType.get_database_name.each do |db|
-       unless AwsPricing::DatabaseType.get_available_types(db).nil?
-          AwsPricing::DatabaseType.get_available_types(db).each do |deploy_type|
-            if deploy_type == :byol_multiaz
-              line += "#{t.price_per_hour(db, :ondemand, nil, true, true)},"
-            else
-              line += "#{t.price_per_hour(db, :ondemand, nil, deploy_type == :multiaz, deploy_type == :byol)},"
-            end  
-          end
-       else
-          line += "#{t.price_per_hour(db, :ondemand, nil)},"
-       end
-     end
-     [:year1, :year3].each do |term|
-       [:light, :medium, :heavy].each do |res_type|
-         AwsPricing::DatabaseType.get_database_name.each do |db|
-            unless AwsPricing::DatabaseType.get_available_types(db).nil?
-              AwsPricing::DatabaseType.get_available_types(db).each do |deploy_type|
-                if deploy_type == :byol_multiaz
-                  line += "#{t.prepay(db, res_type, term, true, true)},#{t.price_per_hour(db, res_type, term, true, true)},"
-                else  
-                  line += "#{t.prepay(db, res_type, term, deploy_type == :multiaz, deploy_type == :byol)},#{t.price_per_hour(db, res_type, term, deploy_type == :multiaz, deploy_type == :byol)},"
-                end  
-              end
-            else
-              line += "#{t.prepay(db, res_type, term)},#{t.price_per_hour(db, res_type, term)},"
-            end
-         end
-       end
-     end
-     puts line.chop
-   end
- end
+desc "Prints current GovCloud RDS pricing in CSV format"
+task :print_govcloud_rds_price_list do
+  require 'amazon-pricing'
+  pricing = AwsPricing::GovCloudRdsPriceList.new
+  print_rds_table(pricing)
 end
 
 task :default => [:test]
@@ -150,3 +91,70 @@ def print_ec2_table(pricing)
   end
 end
 
+def print_rds_table(pricing)
+  line = "Region,Instance Type,API Name,Memory (MB),Disk (GB),Compute Units,Virtual Cores,Disk Type,"
+
+  AwsPricing::DatabaseType.get_database_name.each do |db|
+    unless AwsPricing::DatabaseType.get_available_types(db).nil?
+      AwsPricing::DatabaseType.get_available_types(db).each do |deploy_type|
+        line += "OD "+ AwsPricing::DatabaseType.display_name("#{db}_#{deploy_type}") +" PPH,"
+      end
+    else
+      line += "OD "+ AwsPricing::DatabaseType.display_name(db.to_s) +" PPH,"
+    end      
+  end
+
+  [:year1, :year3].each do |term|
+   [:light, :medium, :heavy].each do |res_type|
+       AwsPricing::DatabaseType.get_database_name.each do |db|
+          unless AwsPricing::DatabaseType.get_available_types(db).nil?
+            AwsPricing::DatabaseType.get_available_types(db).each do |deploy_type|
+              line += "#{term} #{res_type} "+ AwsPricing::DatabaseType.display_name("#{db}_#{deploy_type}") +" Prepay,#{term} #{res_type} "+ AwsPricing::DatabaseType.display_name("#{db}_#{deploy_type}") +" PPH,"
+            end
+          else
+            line += "#{term} #{res_type} "+ AwsPricing::DatabaseType.display_name(db.to_s) +" Prepay,#{term} #{res_type} "+ AwsPricing::DatabaseType.display_name(db.to_s) +" PPH,"
+          end
+       end
+   end
+  end
+
+
+  puts line.chop
+
+  pricing.regions.each do |region|
+   region.rds_instance_types.each do |t|
+     line = "#{region.name},#{t.name},#{t.api_name},#{t.memory_in_mb},#{t.disk_in_gb},#{t.compute_units},#{t.virtual_cores},#{t.disk_type},"
+     AwsPricing::DatabaseType.get_database_name.each do |db|
+       unless AwsPricing::DatabaseType.get_available_types(db).nil?
+          AwsPricing::DatabaseType.get_available_types(db).each do |deploy_type|
+            if deploy_type == :byol_multiaz
+              line += "#{t.price_per_hour(db, :ondemand, nil, true, true)},"
+            else
+              line += "#{t.price_per_hour(db, :ondemand, nil, deploy_type == :multiaz, deploy_type == :byol)},"
+            end  
+          end
+       else
+          line += "#{t.price_per_hour(db, :ondemand, nil)},"
+       end
+     end
+     [:year1, :year3].each do |term|
+       [:light, :medium, :heavy].each do |res_type|
+         AwsPricing::DatabaseType.get_database_name.each do |db|
+            unless AwsPricing::DatabaseType.get_available_types(db).nil?
+              AwsPricing::DatabaseType.get_available_types(db).each do |deploy_type|
+                if deploy_type == :byol_multiaz
+                  line += "#{t.prepay(db, res_type, term, true, true)},#{t.price_per_hour(db, res_type, term, true, true)},"
+                else  
+                  line += "#{t.prepay(db, res_type, term, deploy_type == :multiaz, deploy_type == :byol)},#{t.price_per_hour(db, res_type, term, deploy_type == :multiaz, deploy_type == :byol)},"
+                end  
+              end
+            else
+              line += "#{t.prepay(db, res_type, term)},#{t.price_per_hour(db, res_type, term)},"
+            end
+         end
+       end
+     end
+     puts line.chop
+   end
+  end
+end

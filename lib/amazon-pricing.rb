@@ -197,6 +197,91 @@ module AwsPricing
     end  
   end
 
+
+  class GovCloudRdsPriceList < PriceList
+    GOV_CLOUD_URL = "http://aws.amazon.com/govcloud-us/pricing/rds/"
+
+    def initialize
+      @_regions = {}
+      @_regions["us-gov-west"] = Region.new("us-gov-west")
+      InstanceType.populate_lookups
+      get_rds_instance_pricing
+    end
+
+    protected
+    #@@DB_TYPE = [:mysql, :postgresql, :oracle, :sqlserver]
+    #@@RES_TYPES = [:light, :medium, :heavy]
+   
+    def get_rds_instance_pricing
+
+      client = Mechanize.new
+      page = client.get(GOV_CLOUD_URL)
+      tables = page.search("//div[@class='aws-table section']")
+
+      create_ondemand_instances(:mysql, :ondemand, false, false, get_rows(tables[0]))
+      create_ondemand_instances(:mysql, :ondemand, true, false, get_rows(tables[1]))
+      # Mysql
+      no_multi_az_rows, multi_az_rows =  get_reserved_rows(get_rows(tables[2]))
+      create_reserved_instances(:mysql, :light, false, false, no_multi_az_rows)
+      create_reserved_instances(:mysql, :light, true, false, multi_az_rows)
+      # Oracle
+    end
+
+    # e.g. [["General Purpose - Previous Generation", "Price Per Hour"], ["m1.small", "$0.090"], ["m1.medium", "$0.185"]]
+    def create_ondemand_instances(db_type, res_type, is_multi_az, is_byol, rows)
+      @_regions.values.each do |region|
+        # Skip header row
+        rows.slice(1, rows.size).each do |row|
+          api_name = row[0]
+          instance_type = region.get_instance_type(api_name)
+          if instance_type.nil?
+            api_name, name = RdsInstanceType.get_name(nil, row[0], false)
+            instance_type = region.add_or_update_rds_instance_type(api_name, name)
+          end
+          instance_type.update_pricing2(db_type, res_type, is_multi_az, is_byol, row[1])
+        end
+      end
+    end
+
+    # e.g. [[" ", "1 yr Term", "3 yr Term"], [" ", "Upfront", "Hourly", "Upfront", "Hourly"], ["m1.small", "$159", "$0.035", "$249", "$0.033"]]
+    def create_reserved_instances(db_type, res_type, is_multi_az, is_byol, rows)
+      @_regions.values.each do |region|
+        rows.each do |row|
+          api_name = row[0]
+          instance_type = region.get_instance_type(api_name)
+          if instance_type.nil?
+            api_name, name = RdsInstanceType.get_name(nil, row[0], true)
+            instance_type = region.add_or_update_rds_instance_type(api_name, name)
+          end
+         instance_type.update_pricing2(db_type, res_type, is_multi_az, is_byol, nil, row[1], row[2], row[3], row[4])
+        end
+      end
+    end
+
+    def get_reserved_rows(rows)
+      # Skip 2 header rows
+      new_rows = rows.slice(2, rows.size)
+      no_multi_az_rows = new_rows.slice(0, new_rows.size / 2)
+      multi_az_rows = new_rows.slice(0, new_rows.size / 2)
+      [no_multi_az_rows, multi_az_rows]
+    end
+
+    def get_rows(html_table)
+      rows = []
+      html_table.search(".//tr").each do |tr|
+        row = []
+        tr.search(".//td").each do |td|
+         row << td.inner_text.strip.sub("\n", " ").sub("  ", " ")
+        end
+        next if row.size == 1
+        rows << row unless row.empty?
+      end
+      rows
+    end  
+  end
+
+
+
   class Ec2PriceList < PriceList
     
     def initialize

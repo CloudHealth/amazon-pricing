@@ -79,6 +79,31 @@ module AwsPricing
       end
     end
 
+    def update_pricing2(database_type, type_of_instance, is_multi_az, is_byol, ondemand_pph = nil, year1_prepay = nil, year3_prepay = nil, year1_pph = nil, year3_pph = nil)
+      db = get_category_type(database_type, is_multi_az, is_byol)
+      if db.nil?
+        db = DatabaseType.new(self, database_type)        
+        
+        if is_multi_az == true and is_byol == true
+          @category_types["#{database_type}_byol_multiaz"] = db
+        elsif is_multi_az == true and is_byol == false
+          @category_types["#{database_type}_multiaz"] = db
+        elsif is_multi_az == false and is_byol == true
+          @category_types["#{database_type}_byol"] = db
+        else
+          @category_types[database_type] = db
+        end    
+
+      end
+
+      db.set_price_per_hour(type_of_instance, nil, coerce_price(ondemand_pph)) unless ondemand_pph.nil?
+      db.set_prepay(type_of_instance, :year1, coerce_price(year1_prepay)) unless year1_prepay.nil?
+      db.set_prepay(type_of_instance, :year3, coerce_price(year3_prepay)) unless year3_prepay.nil?
+      db.set_price_per_hour(type_of_instance, :year1, coerce_price(year1_pph)) unless year1_pph.nil?
+      db.set_price_per_hour(type_of_instance, :year3, coerce_price(year3_pph)) unless year3_pph.nil?
+    end
+
+
     protected 
 
     # Returns [api_name, name]
