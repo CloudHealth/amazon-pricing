@@ -134,7 +134,7 @@ module AwsPricing
 
         rows.slice(1, rows.size).each do |row|
           api_name = row[0]
-          instance_type = region.get_instance_type(api_name)
+          instance_type = region.get_ec2_instance_type(api_name)
           if instance_type.nil?
             api_name, name = Ec2InstanceType.get_name(nil, row[0], false)
             instance_type = region.add_or_update_ec2_instance_type(api_name, name)
@@ -224,7 +224,16 @@ module AwsPricing
       no_multi_az_rows, multi_az_rows =  get_reserved_rows(get_rows(tables[2]))
       create_reserved_instances(:mysql, :light, false, false, no_multi_az_rows)
       create_reserved_instances(:mysql, :light, true, false, multi_az_rows)
+      no_multi_az_rows, multi_az_rows =  get_reserved_rows(get_rows(tables[3]))
+      create_reserved_instances(:mysql, :medium, false, false, no_multi_az_rows)
+      create_reserved_instances(:mysql, :medium, true, false, multi_az_rows)
+      no_multi_az_rows, multi_az_rows =  get_reserved_rows(get_rows(tables[4]))
+      create_reserved_instances(:mysql, :heavy, false, false, no_multi_az_rows)
+      create_reserved_instances(:mysql, :heavy, true, false, multi_az_rows)
       # Oracle
+      #no_multi_az_rows, multi_az_rows =  get_reserved_rows(get_rows(tables[7]))
+      #create_reserved_instances(:oracle_se1, :ondemand, false, false, no_multi_az_rows)
+      #create_reserved_instances(:oracle_se1, :ondemand, true, false, multi_az_rows)
     end
 
     # e.g. [["General Purpose - Previous Generation", "Price Per Hour"], ["m1.small", "$0.090"], ["m1.medium", "$0.185"]]
@@ -233,7 +242,7 @@ module AwsPricing
         # Skip header row
         rows.slice(1, rows.size).each do |row|
           api_name = row[0]
-          instance_type = region.get_instance_type(api_name)
+          instance_type = region.get_rds_instance_type(api_name)
           if instance_type.nil?
             api_name, name = RdsInstanceType.get_name(nil, row[0], false)
             instance_type = region.add_or_update_rds_instance_type(api_name, name)
@@ -248,12 +257,12 @@ module AwsPricing
       @_regions.values.each do |region|
         rows.each do |row|
           api_name = row[0]
-          instance_type = region.get_instance_type(api_name)
+          instance_type = region.get_rds_instance_type(api_name)
           if instance_type.nil?
             api_name, name = RdsInstanceType.get_name(nil, row[0], true)
             instance_type = region.add_or_update_rds_instance_type(api_name, name)
           end
-         instance_type.update_pricing2(db_type, res_type, is_multi_az, is_byol, nil, row[1], row[2], row[3], row[4])
+         instance_type.update_pricing2(db_type, res_type, is_multi_az, is_byol, nil, row[1], row[3], row[2], row[4])
         end
       end
     end
@@ -262,7 +271,7 @@ module AwsPricing
       # Skip 2 header rows
       new_rows = rows.slice(2, rows.size)
       no_multi_az_rows = new_rows.slice(0, new_rows.size / 2)
-      multi_az_rows = new_rows.slice(0, new_rows.size / 2)
+      multi_az_rows = new_rows.slice(new_rows.size / 2, new_rows.size / 2)
       [no_multi_az_rows, multi_az_rows]
     end
 
@@ -273,7 +282,8 @@ module AwsPricing
         tr.search(".//td").each do |td|
          row << td.inner_text.strip.sub("\n", " ").sub("  ", " ")
         end
-        next if row.size == 1
+        # Various <tR> elements contain labels which have only 1 <td> - except heavy multi-az ;)
+        next if row.size == 1 || row[0].include?("Multi-AZ Deployment")
         rows << row unless row.empty?
       end
       rows
