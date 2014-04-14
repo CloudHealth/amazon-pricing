@@ -21,7 +21,7 @@ module AwsPricing
   class InstanceType
     attr_accessor :name, :api_name, :memory_in_mb, :platform, :compute_units, :virtual_cores, :disk_type, :disk_in_gb
     
-    def initialize(region, api_name, name, json)
+    def initialize(region, api_name, name)
       @category_types = {}
 
       @region = region
@@ -58,7 +58,7 @@ module AwsPricing
         db = @category_types["#{name}_byol"]
       else
         db = @category_types[name]
-      end      
+      end
     end
 
     # type_of_instance = :ondemand, :light, :medium, :heavy
@@ -141,8 +141,8 @@ module AwsPricing
     end
 
     def coerce_price(price)
-      return nil if price.nil? || price == "N/A"
-      price.gsub(",","").to_f
+      return nil if price.nil? || price.upcase == "N/A"
+      price.gsub(",","").gsub("$", "").to_f
     end
 
     def self.get_values(json, category_type)

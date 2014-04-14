@@ -6,8 +6,8 @@ $: << File.expand_path(File.dirname(__FILE__), 'lib')
 require File.join('amazon-pricing','version')
 
 Rake::TestTask.new(:test) do |test|
-  test.libs << 'lib' << 'test'
-  test.pattern = 'test/**/test_*.rb'
+  test.libs << 'test'
+  test.pattern = 'test/*_test.rb'
   test.verbose = true
 end
 
@@ -27,14 +27,39 @@ task :install => :gem do
   sh "sudo gem install amazon-pricing-#{AwsPricing::VERSION}.gem --no-rdoc --no-ri"
 end
 
-task :test do
-  ruby 'test/ec2_instance_types_test.rb'
-end
-
 desc "Prints current EC2 pricing in CSV format"
 task :print_ec2_price_list do
   require 'amazon-pricing'
   pricing = AwsPricing::Ec2PriceList.new
+  print_ec2_table(pricing)
+end
+
+desc "Prints current RDS pricing in CSV format"
+task :print_rds_price_list do
+  require 'amazon-pricing'
+  pricing = AwsPricing::RdsPriceList.new
+  print_rds_table(pricing) 
+end
+
+desc "Prints current GovCloud EC2 pricing in CSV format"
+task :print_govcloud_ec2_price_list do
+  require 'amazon-pricing'
+  pricing = AwsPricing::GovCloudEc2PriceList.new
+  print_ec2_table(pricing)
+end
+
+desc "Prints current GovCloud RDS pricing in CSV format"
+task :print_govcloud_rds_price_list do
+  require 'amazon-pricing'
+  pricing = AwsPricing::GovCloudRdsPriceList.new
+  print_rds_table(pricing)
+end
+
+task :default => [:test]
+
+#########################################
+
+def print_ec2_table(pricing)
   line = "Region,Instance Type,API Name,Memory (MB),Disk (GB),Compute Units,Virtual Cores,Disk Type,OD Linux PPH,OD Windows PPH,OD RHEL PPH,OD SLES PPH,OD MsWinSQL PPH,OD MsWinSQLWeb PPH,"
   [:year1, :year3].each do |term|
     [:light, :medium, :heavy].each do |res_type|
@@ -62,14 +87,9 @@ task :print_ec2_price_list do
   end
 end
 
-
-desc "Prints current RDS pricing in CSV format"
-task :print_rds_price_list do
-  require 'amazon-pricing'
-  pricing = AwsPricing::RdsPriceList.new
-  
+def print_rds_table(pricing)
   line = "Region,Instance Type,API Name,Memory (MB),Disk (GB),Compute Units,Virtual Cores,Disk Type,"
-  
+
   AwsPricing::DatabaseType.get_database_name.each do |db|
     unless AwsPricing::DatabaseType.get_available_types(db).nil?
       AwsPricing::DatabaseType.get_available_types(db).each do |deploy_type|
@@ -94,10 +114,10 @@ task :print_rds_price_list do
    end
   end
 
- 
- puts line.chop
 
- pricing.regions.each do |region|
+  puts line.chop
+
+  pricing.regions.each do |region|
    region.rds_instance_types.each do |t|
      line = "#{region.name},#{t.name},#{t.api_name},#{t.memory_in_mb},#{t.disk_in_gb},#{t.compute_units},#{t.virtual_cores},#{t.disk_type},"
      AwsPricing::DatabaseType.get_database_name.each do |db|
@@ -132,7 +152,5 @@ task :print_rds_price_list do
      end
      puts line.chop
    end
- end
+  end
 end
-
-task :default => [:test]
