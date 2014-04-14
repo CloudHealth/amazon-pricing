@@ -10,10 +10,14 @@
 module AwsPricing
 
   class EbsPrice
-    attr_reader :standard_per_gb, :standard_per_million_io,
+    attr_accessor :region, :standard_per_gb, :standard_per_million_io,
       :preferred_per_gb, :preferred_per_iops, :s3_snaps_per_gb
 
-    def initialize(region, json)
+    def initialize(region)
+      @region = region
+    end
+
+    def update_from_json(json)
       json["types"].each do |t|
         case t["name"]
         when "ebsVols"
