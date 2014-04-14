@@ -40,4 +40,13 @@ class TestGovCloud < Test::Unit::TestCase
     assert instance.virtual_cores == 2
   end
 
+  def test_ebs
+    region = @@ec2_pricing.get_region('us-gov-west')
+    assert region.ebs_price.standard_per_gb == 0.065
+    assert region.ebs_price.standard_per_million_io == 0.065
+    assert region.ebs_price.preferred_per_gb == 0.15
+    assert region.ebs_price.preferred_per_iops == 0.12
+    assert region.ebs_price.s3_snaps_per_gb == 0.125
+  end
+
 end

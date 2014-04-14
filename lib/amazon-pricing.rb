@@ -96,12 +96,14 @@ module AwsPricing
 
   class GovCloudEc2PriceList < PriceList
     GOV_CLOUD_URL = "http://aws.amazon.com/govcloud-us/pricing/ec2/"
+    GOV_CLOUD_EBS_URL = "http://aws.amazon.com/govcloud-us/pricing/ebs/"
 
     def initialize
       @_regions = {}
       @_regions["us-gov-west"] = Region.new("us-gov-west")
       InstanceType.populate_lookups
       get_ec2_instance_pricing
+      fetch_ec2_ebs_pricing
     end
 
     protected
@@ -162,6 +164,27 @@ module AwsPricing
          instance_type.update_pricing2(operating_system, res_type, nil, row[1], row[2], row[3], row[4])
         end
       end
+    end
+
+    def fetch_ec2_ebs_pricing
+      client = Mechanize.new
+      page = client.get(GOV_CLOUD_EBS_URL)
+      ebs_costs = page.search("//div[@class='text section']//li")
+      @_regions.values.each do |region|
+        region.ebs_price = EbsPrice.new(region)
+        region.ebs_price.standard_per_gb = get_ebs_price(ebs_costs[0])
+        region.ebs_price.standard_per_million_io = get_ebs_price(ebs_costs[1])
+        region.ebs_price.preferred_per_gb = get_ebs_price(ebs_costs[2])
+        region.ebs_price.preferred_per_iops = get_ebs_price(ebs_costs[3])
+        region.ebs_price.s3_snaps_per_gb = get_ebs_price(ebs_costs[4])
+      end
+
+    end
+
+    # e.g. $0.065 per GB-Month of provisioned storage
+    def get_ebs_price(xml_element)
+      tokens = xml_element.text.split(" ")
+      tokens[0].gsub("$", "").to_f
     end
 
     def get_os(val)
@@ -352,7 +375,8 @@ module AwsPricing
       res = PriceList.fetch_url(EBS_BASE_URL + "pricing-ebs.min.js")
       res["config"]["regions"].each do |ebs_types|
         region = get_region(ebs_types["region"])
-        region.ebs_price = EbsPrice.new(region, ebs_types)
+        region.ebs_price = EbsPrice.new(region)
+        region.ebs_price.update_from_json(ebs_types)
       end
     end
 
