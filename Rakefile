@@ -6,8 +6,8 @@ $: << File.expand_path(File.dirname(__FILE__), 'lib')
 require File.join('amazon-pricing','version')
 
 Rake::TestTask.new(:test) do |test|
-  test.libs << 'lib' << 'test'
-  test.pattern = 'test/**/test_*.rb'
+  test.libs << 'test'
+  test.pattern = 'test/*_test.rb'
   test.verbose = true
 end
 
@@ -25,10 +25,6 @@ end
 desc "Installs the gem"
 task :install => :gem do
   sh "sudo gem install amazon-pricing-#{AwsPricing::VERSION}.gem --no-rdoc --no-ri"
-end
-
-task :test do
-  ruby 'test/ec2_instance_types_test.rb'
 end
 
 desc "Prints current EC2 pricing in CSV format"
