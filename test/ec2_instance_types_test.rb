@@ -22,11 +22,6 @@ class TestEc2InstanceTypes < Test::Unit::TestCase
     end
   end
 
-  def test_cc8xlarge_issue
-    obj = @@ec2_pricing.get_instance_type('us-east', 'cc2.8xlarge')
-    assert obj.api_name == 'cc2.8xlarge'
-  end
-
   def test_name_lookup
     @@ec2_pricing.regions.each do |region|
       assert_not_nil region.name
@@ -49,7 +44,7 @@ class TestEc2InstanceTypes < Test::Unit::TestCase
   def test_available
     # Validate instance types in specific regions are available
     region = @@ec2_pricing.get_region('us-east')
-    assert region.instance_type_available?('m1.large')
+    assert region.instance_type_available?('m3.large')
   end
 
   def test_fetch_all_breakeven_months
@@ -68,7 +63,7 @@ class TestEc2InstanceTypes < Test::Unit::TestCase
 
   def test_breakeven_month
     region = @@ec2_pricing.get_region('us-east')
-    instance = region.get_ec2_instance_type('m1.large')
+    instance = region.get_ec2_instance_type('m3.large')
     bem = instance.get_breakeven_month(:linux, :heavy, :year1)
     assert bem == 6
   end
@@ -76,13 +71,13 @@ class TestEc2InstanceTypes < Test::Unit::TestCase
   def test_memory
     # Validate instance types in specific regions are available
     region = @@ec2_pricing.get_region('us-east')
-    instance = region.get_ec2_instance_type('m1.large')
+    instance = region.get_ec2_instance_type('m3.large')
     assert instance.memory_in_mb == 7500
   end
 
   def test_non_standard_region_name
     region = @@ec2_pricing.get_region('eu-west-1')
-    instance = region.get_ec2_instance_type('m1.large')
+    instance = region.get_ec2_instance_type('m3.large')
     assert instance.memory_in_mb == 7500
   end
 
@@ -106,7 +101,7 @@ class TestEc2InstanceTypes < Test::Unit::TestCase
 
   def test_virtual_cores
     region = @@ec2_pricing.get_region('us-east')
-    instance = region.get_ec2_instance_type('m1.large')
+    instance = region.get_ec2_instance_type('m3.large')
     assert instance.virtual_cores == 2
   end
 
