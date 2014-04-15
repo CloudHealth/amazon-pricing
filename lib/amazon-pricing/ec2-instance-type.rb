@@ -1,6 +1,12 @@
 require 'amazon-pricing/instance-type'
 module AwsPricing
   class Ec2InstanceType < InstanceType
+
+    # Returns OperatingSystem pricing
+    # e.g. :linux
+    def get_operating_system(type)
+      get_category_type(type)
+    end
     
     # Returns whether an instance_type is available. 
     # operating_system = :linux, :mswin, :rhel, :sles, :mswinSQL, :mswinSQLWeb
