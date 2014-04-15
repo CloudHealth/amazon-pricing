@@ -30,6 +30,16 @@ module AwsPricing
       @_regions.values
     end
 
+    def get_instance_types
+      instance_types = []
+      @_regions.each do |region|
+        region.ec2_instance_types.each do |instance_type|
+          instance_types << instance_type
+        end
+      end
+      instance_types
+    end
+
     def get_instance_type(region_name, api_name)
       region = get_region(region_name)
       raise "Region #{region_name} not found" if region.nil?
@@ -100,7 +110,7 @@ module AwsPricing
 
     def initialize
       @_regions = {}
-      @_regions["us-gov-west"] = Region.new("us-gov-west")
+      @_regions["us-gov-west-1"] = Region.new("us-gov-west-1")
       InstanceType.populate_lookups
       get_ec2_instance_pricing
       fetch_ec2_ebs_pricing
@@ -113,7 +123,6 @@ module AwsPricing
       client = Mechanize.new
       page = client.get(GOV_CLOUD_URL)
       tables = page.search("//div[@class='aws-table section']")
-
       create_ondemand_instances(get_rows(tables[0]))
       create_ondemand_instances(get_rows(tables[1]))
       
@@ -161,7 +170,7 @@ module AwsPricing
             api_name, name = Ec2InstanceType.get_name(nil, row[0], true)
             instance_type = region.add_or_update_ec2_instance_type(api_name, name)
           end
-         instance_type.update_pricing2(operating_system, res_type, nil, row[1], row[2], row[3], row[4])
+         instance_type.update_pricing2(operating_system, res_type, nil, row[1], row[3], row[2], row[4])
         end
       end
     end
@@ -226,7 +235,7 @@ module AwsPricing
 
     def initialize
       @_regions = {}
-      @_regions["us-gov-west"] = Region.new("us-gov-west")
+      @_regions["us-gov-west-1"] = Region.new("us-gov-west-1")
       InstanceType.populate_lookups
       get_rds_instance_pricing
     end
