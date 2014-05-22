@@ -343,6 +343,10 @@ module AwsPricing
       @@OS_TYPES.each do |os|
         fetch_ec2_instance_pricing(EC2_BASE_URL + "#{os}-od.min.js", :ondemand, os)
       end
+      # Rinse & repeat for legacy instances
+      @@OS_TYPES.each do |os|
+        fetch_ec2_instance_pricing(EC2_BASE_URL + "previous-generation/#{os}-od.min.js", :ondemand, os)
+      end
     end
 
     def get_ec2_reserved_instance_pricing

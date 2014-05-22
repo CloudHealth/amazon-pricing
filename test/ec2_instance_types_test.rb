@@ -105,4 +105,16 @@ class TestEc2InstanceTypes < Test::Unit::TestCase
     assert instance.virtual_cores == 2
   end
 
+  def test_bad_data
+    # Someone at AWS is fat fingering the pricing data and putting the text "os" where there should be the actual operating system (e.g. "linux") - see http://a0.awsstatic.com/pricing/1/ec2/linux-od.min.js
+    @@ec2_pricing.regions.each do |region|
+      region.ec2_instance_types.each do |instance|
+        instance.operating_systems.each do |os|
+          puts os.class.name
+          #assert os.ondemand_price_per_hour.nil? && (!os.light_price_per_hour_1_year.nil? || !os.medium_price_per_hour_1_year.nil? || !os.heavy_price_per_hour_1_year.nil?)
+        end
+      end
+    end
+  end
+
 end
