@@ -28,7 +28,7 @@ module AwsPricing
 
       if type_of_instance == :ondemand
         # e.g. {"size"=>"sm", "valueColumns"=>[{"name"=>"linux", "prices"=>{"USD"=>"0.060"}}]}
-        values = Ec2InstanceType::get_values(json, operating_system)
+        values = Ec2InstanceType::get_values(json, operating_system, true)
         category = operating_system.to_s
         # Someone at AWS is fat fingering the pricing data and putting the text "os" where there should be the actual operating system (e.g. "linux") - see http://a0.awsstatic.com/pricing/1/ec2/linux-od.min.js
         category = "os" if values.has_key?("os")

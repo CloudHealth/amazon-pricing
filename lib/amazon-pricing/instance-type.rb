@@ -145,11 +145,14 @@ module AwsPricing
       price.gsub(",","").gsub("$", "").to_f
     end
 
-    def self.get_values(json, category_type)
+    def self.get_values(json, category_type, override_price = false)
       values = {}
       unless json['valueColumns'].nil?
         json['valueColumns'].each do |val|
           values[val['name']] = val['prices']['USD']
+          # AWS has data entry errors where you go to a windows pricing URL (e.g. http://a0.awsstatic.com/pricing/1/ec2/mswin-od.min.js)
+          # but get a value for on-demand other than mswin
+          values[category_type.to_s] = val['prices']['USD'] if override_price
         end
       else
         values[category_type.to_s] = json['prices']['USD']
