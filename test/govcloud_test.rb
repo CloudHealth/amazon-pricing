@@ -15,11 +15,9 @@ require 'helper'
 require 'test/unit'
 
 class TestGovCloud < Test::Unit::TestCase
-  class << self
-    def startup
-      #This is expensive, so only do once.
+  def setup
+    #This is expensive, so only do once.
       @@ec2_pricing = AwsPricing::GovCloudEc2PriceList.new
-    end
   end
 
   def test_cc8xlarge_issue
@@ -45,7 +43,7 @@ class TestGovCloud < Test::Unit::TestCase
     assert region.ebs_price.standard_per_gb == 0.065
     assert region.ebs_price.standard_per_million_io == 0.065
     assert region.ebs_price.preferred_per_gb == 0.15
-    assert region.ebs_price.preferred_per_iops == 0.12
+    assert region.ebs_price.preferred_per_iops == 0.078
     assert region.ebs_price.s3_snaps_per_gb == 0.125
   end
 
