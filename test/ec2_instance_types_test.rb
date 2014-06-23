@@ -12,14 +12,12 @@
 
 $: << File.expand_path(File.dirname(__FILE__))
 require 'helper'
-require 'test/unit'
+require 'test-unit'
 
 class TestEc2InstanceTypes < Test::Unit::TestCase
-  class << self
-    def startup
-      #This is expensive, so only do once.
-      @@ec2_pricing = AwsPricing::Ec2PriceList.new
-    end
+  def setup
+    #This is expensive, so only do once.
+    @@ec2_pricing ||= AwsPricing::Ec2PriceList.new
   end
 
   def test_name_lookup
@@ -110,7 +108,6 @@ class TestEc2InstanceTypes < Test::Unit::TestCase
     @@ec2_pricing.regions.each do |region|
       region.ec2_instance_types.each do |instance|
         instance.operating_systems.each do |os|
-          puts os.class.name
           #assert os.ondemand_price_per_hour.nil? && (!os.light_price_per_hour_1_year.nil? || !os.medium_price_per_hour_1_year.nil? || !os.heavy_price_per_hour_1_year.nil?)
         end
       end

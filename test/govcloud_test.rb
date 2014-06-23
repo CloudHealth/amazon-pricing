@@ -15,11 +15,9 @@ require 'helper'
 require 'test/unit'
 
 class TestGovCloud < Test::Unit::TestCase
-  class << self
-    def startup
-      #This is expensive, so only do once.
+  def setup
+    #This is expensive, so only do once.
       @@ec2_pricing = AwsPricing::GovCloudEc2PriceList.new
-    end
   end
 
   def test_cc8xlarge_issue
