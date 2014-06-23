@@ -12,7 +12,7 @@ module AwsPricing
   class EbsPrice
     attr_accessor :standard_per_gb, :standard_per_million_io, :s3_snaps_per_gb,
       :preferred_per_gb, :preferred_per_iops,
-      :ssd_per_gb, :ssd_per_iops
+      :ssd_per_gb
 
     def initialize(region)
       #@region = region
@@ -30,7 +30,6 @@ module AwsPricing
           @preferred_per_iops = t["values"].select{|v| v["rate"] == "perPIOPSreq" }.first["prices"].values.first.to_f
         when "Amazon EBS General Purpose (SSD) volumes"
           @ssd_per_gb = t["values"].select{|v| v["rate"] == "perGBmoProvStorage" }.first["prices"].values.first.to_f
-          #@ssd_per_iops = t["values"].select{|v| v["rate"] == "perPIOPSreq" }.first["prices"].values.first.to_f
         when "ebsSnapsToS3"
           @s3_snaps_per_gb = t["values"].select{|v| v["rate"] == "perGBmoDataStored" }.first["prices"].values.first.to_f
         end
