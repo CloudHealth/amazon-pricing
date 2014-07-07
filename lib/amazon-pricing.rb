@@ -182,12 +182,12 @@ module AwsPricing
       ebs_costs = page.search("//div[@class='text section']//li")
       @_regions.values.each do |region|
         region.ebs_price = EbsPrice.new(region)
-        region.ebs_price.preferred_per_gb = get_ebs_price(ebs_costs[2])
-        region.ebs_price.preferred_per_iops = get_ebs_price(ebs_costs[3])
-        region.ebs_price.standard_per_gb = get_ebs_price(ebs_costs[4])
-        region.ebs_price.standard_per_million_io = get_ebs_price(ebs_costs[5])
+        region.ebs_price.preferred_per_gb = get_ebs_price(ebs_costs[1])
+        region.ebs_price.preferred_per_iops = get_ebs_price(ebs_costs[2])
+        region.ebs_price.standard_per_gb = get_ebs_price(ebs_costs[3])
+        region.ebs_price.standard_per_million_io = get_ebs_price(ebs_costs[4])
         region.ebs_price.ssd_per_gb = nil
-        region.ebs_price.s3_snaps_per_gb = get_ebs_price(ebs_costs[6])
+        region.ebs_price.s3_snaps_per_gb = get_ebs_price(ebs_costs[5])
       end
 
     end
