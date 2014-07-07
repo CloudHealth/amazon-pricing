@@ -92,8 +92,7 @@ module AwsPricing
     end
 
     def self.populate_lookups
-      return unless @@Memory_Lookup.empty? && @@Compute_Units_Lookup.empty? && @@Virtual_Cores_Lookup.empty?
-
+      # We use Linux on-demand to populate the lookup tables with the basic lookup information
       res = AwsPricing::PriceList.fetch_url("http://aws-assets-pricing-prod.s3.amazonaws.com/pricing/ec2/linux-od.js")
       res['config']['regions'].each do |reg|
         reg['instanceTypes'].each do |type|
@@ -175,6 +174,7 @@ module AwsPricing
       'c3.large' => 'High-Compute Large', 'c3.xlarge' => 'High-Compute Extra Large', 'c3.2xlarge' => 'High-Compute Double Extra Large', 'c3.4xlarge' => 'High-Compute Quadruple Extra Large', 'c3.8xlarge' => 'High-Compute Eight Extra Large',
       'i2.xlarge' => 'High I/O Extra Large', 'i2.2xlarge' => 'High I/O Double Extra Large', 'i2.4xlarge' => 'High I/O Quadruple Extra Large', 'i2.8xlarge' => 'High I/O Eight Extra Large',
       'r3.large' => 'Memory Optimized Large', 'r3.xlarge' => 'Memory Optimized Extra Large', 'r3.2xlarge' => 'Memory Optimized Double Extra Large', 'r3.4xlarge' => 'Memory Optimized Quadruple Extra Large', 'r3.8xlarge' => 'Memory Optimized Eight Extra Large',
+      't2.micro' => 'Burstable Performance Instance Micro', 't2.small' => 'Burstable Performance Instance Small', 't2.medium' => 'Burstable Performance Instance Medium',
     } 
     @@Disk_Lookup = {
       'm1.small' => 160, 'm1.medium' => 410, 'm1.large' =>850, 'm1.xlarge' => 1690,
@@ -194,6 +194,7 @@ module AwsPricing
       'c3.large' => 32, 'c3.xlarge' => 80, 'c3.2xlarge' => 160, 'c3.4xlarge' => 320, 'c3.8xlarge' => 640, 
       'i2.large' => 360, 'i2.xlarge' => 720, 'i2.2xlarge' => 1440, 'i2.4xlarge' => 2880, 'i2.8xlarge' => 5760,
       'r3.large' => 32, 'r3.xlarge' => 80, 'r3.2xlarge' => 160, 'r3.4xlarge' => 320, 'r3.8xlarge' => 640,
+      't2.micro' => 0, 't2.small' => 0, 't2.medium' => 0,
     }
     @@Platform_Lookup = {
       'm1.small' => 32, 'm1.medium' => 32, 'm1.large' => 64, 'm1.xlarge' => 64,
@@ -213,6 +214,7 @@ module AwsPricing
       'c3.large' => 64, 'c3.xlarge' => 64, 'c3.2xlarge' => 64, 'c3.4xlarge' => 64, 'c3.8xlarge' => 64, 
       'i2.large' => 64, 'i2.xlarge' => 64, 'i2.2xlarge' => 64, 'i2.4xlarge' => 64, 'i2.8xlarge' => 64,
       'r3.large' => 64, 'r3.xlarge' => 64, 'r3.2xlarge' => 64, 'r3.4xlarge' => 64, 'r3.8xlarge' => 64,
+      't2.micro' => 64, 't2.small' => 64, 't2.medium' => 64,
     }
     @@Disk_Type_Lookup = {
       'm1.small' => :ephemeral, 'm1.medium' => :ephemeral, 'm1.large' => :ephemeral, 'm1.xlarge' => :ephemeral,
@@ -232,16 +234,23 @@ module AwsPricing
       'db.t1.micro' => :ebs,
       'c3.large' => :ssd, 'c3.xlarge' => :ssd, 'c3.2xlarge' => :ssd, 'c3.4xlarge' => :ssd, 'c3.8xlarge' => :ssd, 
       'i2.large' => :ssd, 'i2.xlarge' => :ssd, 'i2.2xlarge' => :ssd, 'i2.4xlarge' => :ssd, 'i2.8xlarge' => :ssd,
-      # Remove asterisk when this is released instance type
-      #'r3.large *' => :ssd, 'r3.xlarge *' => :ssd, 'r3.2xlarge *' => :ssd, 'r3.4xlarge *' => :ssd, 'r3.8xlarge *' => :ssd,
+      'r3.large' => :ssd, 'r3.xlarge' => :ssd, 'r3.2xlarge' => :ssd, 'r3.4xlarge' => :ssd, 'r3.8xlarge' => :ssd,
+      't2.micro' => :ebs, 't2.small' => :ebs, 't2.medium' => :ebs,
+    }
+    # Sigh... AWS does not always provide memory info (e.g. t2, r3)
+    @@Memory_Lookup = {
+      'r3.large' => 15250, 'r3.xlarge' => 30500, 'r3.2xlarge' => 61000, 'r3.4xlarge' => 122000, 'r3.8xlarge' => 244000,
+      't2.micro' => 1000, 't2.small' => 2000, 't2.medium' => 4000,
+    }
+    @@Virtual_Cores_Lookup = {
+      'r3.large' => 2, 'r3.xlarge' => 4, 'r3.2xlarge' => 8, 'r3.4xlarge' => 16, 'r3.8xlarge' => 32,
+      't2.micro' => 1, 't2.small' => 1, 't2.medium' => 2,
     }
 
     # Due to fact AWS pricing API only reports these for EC2, we will fetch from EC2 and keep around for lookup
     # e.g. EC2 = http://aws-assets-pricing-prod.s3.amazonaws.com/pricing/ec2/linux-od.js
     # e.g. RDS = http://aws-assets-pricing-prod.s3.amazonaws.com/pricing/rds/mysql/pricing-standard-deployments.js
-    @@Memory_Lookup = {}
     @@Compute_Units_Lookup = {}
-    @@Virtual_Cores_Lookup = {}
 
   end
 
