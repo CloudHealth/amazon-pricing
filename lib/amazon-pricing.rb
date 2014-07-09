@@ -355,6 +355,13 @@ module AwsPricing
       @@OS_TYPES.each do |os|
         @@RES_TYPES.each do |res_type|
           fetch_ec2_instance_pricing(EC2_BASE_URL + "#{os}-ri-#{res_type}.min.js", res_type, os)
+          # Rinse & repeat for legacy instances (note: amazon changed URLs for legacy reserved instances)
+          os_rewrite = os
+          os_rewrite = "redhatlinux" if os == :rhel
+          os_rewrite = "suselinux" if os == :sles
+          os_rewrite = "mswinsqlstd" if os == :mswinSQL
+          os_rewrite = "mswinsqlweb" if os == :mswinSQLWeb
+          fetch_ec2_instance_pricing(EC2_BASE_URL + "previous-generation/#{res_type}_#{os_rewrite}.min.js", res_type, os)
         end
       end
     end
