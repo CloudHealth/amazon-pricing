@@ -84,7 +84,7 @@ class TestEc2InstanceTypes < Test::Unit::TestCase
     assert region.ebs_price.standard_per_gb == 0.05
     assert region.ebs_price.standard_per_million_io == 0.05
     assert region.ebs_price.preferred_per_gb == 0.125
-    assert region.ebs_price.preferred_per_iops == 0.10
+    assert region.ebs_price.preferred_per_iops == 0.065
     assert region.ebs_price.s3_snaps_per_gb == 0.095
   end
 
