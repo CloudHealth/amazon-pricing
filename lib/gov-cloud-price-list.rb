@@ -80,8 +80,12 @@ module AwsPricing
     def create_ondemand_instances(db_type, res_type, is_multi_az, is_byol, rows)
       @_regions.values.each do |region|
         # Skip header row
-        rows.slice(1, rows.size).each do |row|
+        rows.each do |row|
           api_name = row[0]
+          unless api_name.include?("db.")
+            $stderr.puts "Skipping row containing non-db type: #{api_name}"
+            next
+          end
           instance_type = region.get_rds_instance_type(api_name)
           if instance_type.nil?
             api_name, name = RdsInstanceType.get_name(nil, row[0], false)
