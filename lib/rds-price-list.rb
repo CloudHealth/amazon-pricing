@@ -28,7 +28,7 @@ module AwsPricing
 
     
     def is_multi_az?(type)
-      return true if type.match("multiAZ")
+      return true if type.upcase.match("MULTI-AZ")
       false
     end
 
@@ -44,11 +44,12 @@ module AwsPricing
             #
             # to find out the byol type
             is_byol = is_byol? dp_type
+            is_multi_az = dp_type.upcase.include?("MULTIAZ")
 
             if [:mysql, :postgresql, :oracle].include? db
-              fetch_on_demand_rds_instance_pricing(RDS_BASE_URL+"#{db}/pricing-#{dp_type}-deployments.min.js",:ondemand, db_type, is_byol)
+              fetch_on_demand_rds_instance_pricing(RDS_BASE_URL+"#{db}/pricing-#{dp_type}-deployments.min.js",:ondemand, db_type, is_byol, is_multi_az)
             elsif db == :sqlserver
-              fetch_on_demand_rds_instance_pricing(RDS_BASE_URL+"#{db}/sqlserver-#{dp_type}-ondemand.min.js",:ondemand, db_type, is_byol)
+              fetch_on_demand_rds_instance_pricing(RDS_BASE_URL+"#{db}/sqlserver-#{dp_type}-ondemand.min.js",:ondemand, db_type, is_byol, is_multi_az)
             end
           end
         }
@@ -82,7 +83,7 @@ module AwsPricing
       end
     end
 
-    def fetch_on_demand_rds_instance_pricing(url, type_of_rds_instance, db_type, is_byol)
+    def fetch_on_demand_rds_instance_pricing(url, type_of_rds_instance, db_type, is_byol, is_multi_az = false)
       res = PriceList.fetch_url(url)
       res['config']['regions'].each do |reg|
         region_name = reg['region']
@@ -92,11 +93,11 @@ module AwsPricing
             begin
               #
               # this is special case URL, it is oracle - multiAZ type of deployment but it doesn't have mutliAZ attributes in json.
-              if url == "http://aws.amazon.com/rds/pricing/oracle/pricing-li-multiAZ-deployments.min.js"
-                is_multi_az = true
-              else
-                is_multi_az = is_multi_az? type["name"]
-              end              
+              #if url == "http://aws.amazon.com/rds/pricing/oracle/pricing-li-multiAZ-deployments.min.js"
+              #  is_multi_az = true
+              #else
+              #  is_multi_az = is_multi_az? type["name"]
+              #end              
               api_name, name = RdsInstanceType.get_name(type["name"], tier["name"], type_of_rds_instance != :ondemand)
               
               instance_type = region.add_or_update_rds_instance_type(api_name, name)
