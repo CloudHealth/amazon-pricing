@@ -34,7 +34,7 @@ module AwsPricing
       db = get_category_type(database_type, is_multi_az, is_byol)
       if db.nil?
         db = DatabaseType.new(self, database_type)        
-        
+
         if is_multi_az == true and is_byol == true
           @category_types["#{database_type}_byol_multiaz"] = db
         elsif is_multi_az == true and is_byol == false
@@ -52,6 +52,13 @@ module AwsPricing
         price = coerce_price(values[database_type.to_s])
         db.set_price_per_hour(type_of_instance, nil, price)
       else
+        # Amazon has another data error where they are still exposing reserved instance types when they do not actually exist (e.g. SQL Server t1.micro). 
+        # Just warn and continue.
+        if db.ondemand_price_per_hour.nil?
+          $stderr.puts "WARNING: Skipping RDS instance type #{api_name}:#{database_type}:#{type_of_instance}:#{is_multi_az}:#{is_byol} due to lack of on-demand pricing"
+          return
+        end
+
         json['valueColumns'].each do |val|
           # As of 2014-04-02 we see entries w/o pricing, e.g. sqlserver_web heavy 1 year reservation = {"prices"=>{"USD"=>{}}, "name"=>"yrTerm1"}
           if val['prices']['USD'].empty?
