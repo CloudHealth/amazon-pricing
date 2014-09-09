@@ -19,23 +19,25 @@ module AwsPricing
       client = Mechanize.new
       page = client.get(GOV_CLOUD_URL)
       tables = page.search("//div[@class='aws-table ']")
-      create_ondemand_instances(get_rows(tables[0]))
-      create_ondemand_instances(get_rows(tables[1]))
+      for i in 0..3
+        create_ondemand_instances(tables[i])
+      end
       
-      for i in 2..7
-        create_reserved_instances(get_rows(tables[i]), :light)
+      for i in 4..9
+        create_reserved_instances(tables[i], :light)
       end
-      for i in 8..13
-        create_reserved_instances(get_rows(tables[i]), :medium)
+      for i in 9..22
+        create_reserved_instances(tables[i], :medium)
       end
-      for i in 14..19
-        create_reserved_instances(get_rows(tables[i]), :heavy)
+      for i in 23..33
+        create_reserved_instances(tables[i], :heavy)
       end
 
     end
 
     # e.g. [["Prices / Hour", "Amazon Linux", "RHEL", "SLES"], ["m1.small", "$0.053", "$0.083", "$0.083"]]
-    def create_ondemand_instances(rows)
+    def create_ondemand_instances(table)
+      rows = get_rows(table)
       header = rows[0]
       @_regions.values.each do |region|
 
@@ -54,16 +56,17 @@ module AwsPricing
     end
 
     # e.g. [["RHEL", "1 yr Term Upfront", "1 yr TermHourly", "3 yr TermUpfront", "3 yr Term Hourly"], ["m1.small", "$68.00", "$0.099", "$105.00", "$0.098"]]
-    def create_reserved_instances(rows, res_type)
-      header = rows[0]
-      operating_system = get_os(header[0])
+    def create_reserved_instances(table, res_type)
+      rows = get_rows(table)
+      operating_system = get_os(table.search(".//td/p").last.inner_text.strip)  # Wow...
+
       @_regions.values.each do |region|
 
         rows.slice(1, rows.size).each do |row|
           api_name = row[0]
           instance_type = region.get_instance_type(api_name)
           if instance_type.nil?
-            api_name, name = Ec2InstanceType.get_name(nil, row[0], true)
+            api_name, name = Ec2InstanceType.get_name(nil, api_name, true)
             instance_type = region.add_or_update_ec2_instance_type(api_name, name)
           end
          instance_type.update_pricing2(operating_system, res_type, nil, row[1], row[3], row[2], row[4])
