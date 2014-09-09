@@ -151,6 +151,6 @@ module AwsPricing
       [api_name, name]
     end
 
-   end
+  end
 
 end

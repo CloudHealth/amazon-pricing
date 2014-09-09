@@ -51,6 +51,14 @@ module AwsPricing
             elsif db == :sqlserver
               fetch_on_demand_rds_instance_pricing(RDS_BASE_URL+"#{db}/sqlserver-#{dp_type}-ondemand.min.js",:ondemand, db_type, is_byol, is_multi_az)
             end
+
+            # Now repeat for legacy instances
+            if [:mysql, :postgresql, :oracle].include? db
+              fetch_on_demand_rds_instance_pricing(RDS_BASE_URL+"#{db}/previous-generation/pricing-#{dp_type}-deployments.min.js",:ondemand, db_type, is_byol, is_multi_az)
+            elsif db == :sqlserver
+              fetch_on_demand_rds_instance_pricing(RDS_BASE_URL+"#{db}/previous-generation/sqlserver-#{dp_type}-ondemand.min.js",:ondemand, db_type, is_byol, is_multi_az)
+            end
+
           end
         }
       end
@@ -65,6 +73,13 @@ module AwsPricing
             elsif db == :mysql
               fetch_reserved_rds_instance_pricing(RDS_BASE_URL+"#{db}/pricing-#{res_type}-utilization-reserved-instances.min.js", res_type, db, false)
             end            
+
+            # Now repeat for legacy instances
+            if db == :postgresql and res_type == :heavy
+              fetch_reserved_rds_instance_pricing(RDS_BASE_URL+"#{db}/previous-generation/pricing-#{res_type}-utilization-reserved-instances.min.js", res_type, db, false)
+            elsif db == :mysql
+              fetch_reserved_rds_instance_pricing(RDS_BASE_URL+"#{db}/previous-generation/pricing-#{res_type}-utilization-reserved-instances.min.js", res_type, db, false)
+            end            
           end
         else
           @@RESERVED_DB_DEPLOY_TYPE[db].each {|db_type, db_instance|
@@ -76,6 +91,14 @@ module AwsPricing
                 elsif db == :sqlserver
                   fetch_reserved_rds_instance_pricing(RDS_BASE_URL+"#{db}/sqlserver-#{dp_type}-#{res_type}-ri.min.js", res_type, db_type, is_byol)
                 end
+
+                # Now repeat for legacy instances
+                if db == :oracle
+                  fetch_reserved_rds_instance_pricing(RDS_BASE_URL+"#{db}/previous-generation/pricing-#{dp_type}-#{res_type}-utilization-reserved-instances.min.js", res_type, db_type, is_byol) 
+                elsif db == :sqlserver
+                  fetch_reserved_rds_instance_pricing(RDS_BASE_URL+"#{db}/previous-generation/sqlserver-#{dp_type}-#{res_type}-ri.min.js", res_type, db_type, is_byol)
+                end
+
               end    
             end            
           }
