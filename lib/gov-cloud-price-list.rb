@@ -106,9 +106,9 @@ module AwsPricing
         :sles
       when "Windows"
         :mswin
-      when "Windows SQL Server Web", "Windows SQL Server Web Edition"
+      when "Windows SQL Server Web", "Windows SQL Server Web Edition", "Windows SQL Server\n Web Edition"
         :mswinSQL
-      when "Windows SQL Server Standard", "Windows SQL Server Standard Edition"
+      when "Windows SQL Server Standard", "Windows SQL Server Standard Edition", "Windows SQL Server\n Standard Edition"
         :mswinSQLWeb
       else
         raise "Unable to identify operating system '#{val}'"
