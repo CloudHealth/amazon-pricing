@@ -2,7 +2,7 @@ module AwsPricing
   class RdsPriceList < PriceList
     
     def initialize
-      @_regions = {}
+      super
       InstanceType.populate_lookups
       get_rds_on_demand_instance_pricing
       get_rds_reserved_instance_pricing
@@ -110,7 +110,7 @@ module AwsPricing
       res = PriceList.fetch_url(url)
       res['config']['regions'].each do |reg|
         region_name = reg['region']
-        region = find_or_create_region(region_name)
+        region = get_region(region_name)
         reg['types'].each do |type|
           type['tiers'].each do |tier|
             begin
@@ -137,7 +137,7 @@ module AwsPricing
       res = PriceList.fetch_url(url)
       res['config']['regions'].each do |reg|
         region_name = reg['region']
-        region = find_or_create_region(region_name)
+        region = get_region(region_name)
         reg['instanceTypes'].each do |type|
           type['tiers'].each do |tier|
             begin

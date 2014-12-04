@@ -5,8 +5,7 @@ module AwsPricing
     GOV_CLOUD_EBS_URL = "http://aws.amazon.com/govcloud-us/pricing/ebs/"
 
     def initialize
-      @_regions = {}
-      @_regions["us-gov-west-1"] = Region.new("us-gov-west-1")
+      super(true)
       InstanceType.populate_lookups
       get_ec2_instance_pricing
       fetch_ec2_ebs_pricing
@@ -24,13 +23,13 @@ module AwsPricing
       end
       
       for i in 4..9
-        create_reserved_instances(tables[i], :light)
+        #create_reserved_instances(tables[i], :light)
       end
       for i in 9..22
-        create_reserved_instances(tables[i], :medium)
+        #create_reserved_instances(tables[i], :medium)
       end
       for i in 23..33
-        create_reserved_instances(tables[i], :heavy)
+        #create_reserved_instances(tables[i], :heavy)
       end
 
     end

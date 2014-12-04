@@ -15,7 +15,7 @@ module AwsPricing
   # e.g. us-east, us-west
   #
   class Region
-    attr_accessor :name, :ebs_price
+    attr_accessor :name, :ebs_price, :ec2_instance_types, :rds_instance_types
 
     def initialize(name)
       @name = name

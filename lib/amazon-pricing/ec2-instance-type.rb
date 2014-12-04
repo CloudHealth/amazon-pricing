@@ -18,6 +18,29 @@ module AwsPricing
     end
 
     # operating_system = :linux, :mswin, :rhel, :sles, :mswinSQL, :mswinSQLWeb
+    # type_of_instance = :ondemand, :light, :medium, :heavy, :allupfront, partialupfront, :noupfront
+    # term = nil (on demand), yrTerm1, yrTerm3
+    def update_pricing_new(operating_system, type_of_instance, price, term = nil, is_prepay = false)
+      os = get_category_type(operating_system)
+      if os.nil?
+        os = OperatingSystem.new(self, operating_system)
+        @category_types[operating_system] = os
+      end
+
+      if type_of_instance == :ondemand
+        os.set_price_per_hour(type_of_instance, nil, price)
+      else
+        years = :year1 if term == "yrTerm1"
+        years = :year3 if term == "yrTerm3"
+        if is_prepay
+          os.set_prepay(type_of_instance, years, price)
+        else
+          os.set_price_per_hour(type_of_instance, years, price)
+        end
+      end
+    end
+
+    # operating_system = :linux, :mswin, :rhel, :sles, :mswinSQL, :mswinSQLWeb
     # type_of_instance = :ondemand, :light, :medium, :heavy
     def update_pricing(operating_system, type_of_instance, json)
       os = get_category_type(operating_system)
