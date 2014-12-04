@@ -13,8 +13,10 @@ module AwsPricing
     attr_accessor :instance_type, :name, 
       :ondemand_price_per_hour, :light_price_per_hour_1_year, :medium_price_per_hour_1_year, :heavy_price_per_hour_1_year,
       :light_price_per_hour_3_year, :medium_price_per_hour_3_year, :heavy_price_per_hour_3_year,
-      :light_prepay_1_year, :light_prepay_3_year, :medium_prepay_1_year, :medium_prepay_3_year, :heavy_prepay_1_year, :heavy_prepay_3_year
-
+      :light_prepay_1_year, :light_prepay_3_year, :medium_prepay_1_year, :medium_prepay_3_year, :heavy_prepay_1_year, :heavy_prepay_3_year,
+      :allupfront_price_per_hour_1_year, :allupfront_prepay_1_year, :allupfront_price_per_hour_3_year, :allupfront_prepay_3_year,
+      :partialupfront_price_per_hour_1_year, :partialupfront_prepay_1_year, :partialupfront_price_per_hour_3_year, :partialupfront_prepay_3_year,
+      :noupfront_price_per_hour_1_year, :noupfront_prepay_1_year, :noupfront_price_per_hour_3_year, :noupfront_prepay_3_year
 
     def initialize(instance_type=nil, name=nil)
       @instance_type = instance_type
@@ -51,11 +53,29 @@ module AwsPricing
         elsif term == :year3
           @heavy_prepay_3_year
         end
+      when :allupfront
+        if term == :year1
+          @allupfront_prepay_1_year
+        elsif term == :year3
+          @allupfront_prepay_3_year
+        end
+      when :partialupfront
+        if term == :year1
+          @partialupfront_prepay_1_year
+        elsif term == :year3
+          @partialupfront_prepay_3_year
+        end
+      when :noupfront
+        if term == :year1
+          @noupfront_prepay_1_year
+        elsif term == :year3
+          @noupfront_prepay_3_year
+        end
       end
     end
 
     # type_of_instance = :ondemand, :light, :medium, :heavy
-    # term = :year_1, :year_3, nil
+    # term = :year1, :year3, nil
     def set_prepay(type_of_instance, term, price)
       case type_of_instance
       when :light
@@ -76,11 +96,31 @@ module AwsPricing
         elsif term == :year3
           @heavy_prepay_3_year = price
         end
+      when :allupfront
+        if term == :year1
+          @allupfront_prepay_1_year = price
+        elsif term == :year3
+          @allupfront_prepay_3_year = price
+        end
+      when :partialupfront
+        if term == :year1
+          @partialupfront_prepay_1_year = price
+        elsif term == :year3
+          @partialupfront_prepay_3_year = price
+        end
+      when :noupfront
+        if term == :year1
+          @noupfront_prepay_1_year = price
+        elsif term == :year3
+          @noupfront_prepay_3_year = price
+        end
+      else
+        raise "Unable to set prepay for #{type_of_instance} : #{term} to #{price}"
       end
     end
 
     # type_of_instance = :ondemand, :light, :medium, :heavy
-    # term = :year_1, :year_3, nil
+    # term = :year1, :year3, nil
     def price_per_hour(type_of_instance = :ondemand, term = nil)
       case type_of_instance
       when :ondemand
@@ -102,6 +142,24 @@ module AwsPricing
           @heavy_price_per_hour_1_year
         elsif term == :year3
           @heavy_price_per_hour_3_year
+        end
+      when :allupfront
+        if term == :year1
+          @allupfront_price_per_hour_1_year
+        elsif term == :year3
+          @allupfront_price_per_hour_3_year
+        end
+      when :partialupfront
+        if term == :year1
+          @partialupfront_price_per_hour_1_year
+        elsif term == :year3
+          @partialupfront_price_per_hour_3_year
+        end
+      when :noupfront
+        if term == :year1
+          @noupfront_price_per_hour_1_year
+        elsif term == :year3
+          @noupfront_price_per_hour_3_year
         end
       end
     end
@@ -129,6 +187,24 @@ module AwsPricing
           @heavy_price_per_hour_1_year = price_per_hour
         elsif term == :year3
           @heavy_price_per_hour_3_year = price_per_hour
+        end
+      when :allupfront
+        if term == :year1
+          @allupfront_price_per_hour_1_year = price_per_hour
+        elsif term == :year3
+          @allupfront_price_per_hour_3_year = price_per_hour
+        end
+      when :partialupfront
+        if term == :year1
+          @partialupfront_price_per_hour_1_year = price_per_hour
+        elsif term == :year3
+          @partialupfront_price_per_hour_3_year = price_per_hour
+        end
+      when :noupfront
+        if term == :year1
+          @noupfront_price_per_hour_1_year = price_per_hour
+        elsif term == :year3
+          @noupfront_price_per_hour_3_year = price_per_hour
         end
       end
     end

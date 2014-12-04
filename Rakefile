@@ -62,7 +62,7 @@ task :default => [:test]
 def print_ec2_table(pricing)
   line = "Region,Instance Type,API Name,Memory (MB),Disk (GB),Compute Units,Virtual Cores,Disk Type,OD Linux PPH,OD Windows PPH,OD RHEL PPH,OD SLES PPH,OD MsWinSQL PPH,OD MsWinSQLWeb PPH,"
   [:year1, :year3].each do |term|
-    [:light, :medium, :heavy].each do |res_type|
+    [:light, :medium, :heavy, :allupfront, :partialupfront, :noupfront].each do |res_type|
       [:linux, :mswin, :rhel, :sles, :mswinSQL, :mswinSQLWeb].each do |os|
         line += "#{term} #{res_type} #{os} Prepay,#{term} #{res_type} #{os} PPH,"
       end
@@ -76,7 +76,7 @@ def print_ec2_table(pricing)
         line += "#{t.price_per_hour(os, :ondemand)},"
       end
       [:year1, :year3].each do |term|
-        [:light, :medium, :heavy].each do |res_type|
+        [:light, :medium, :heavy, :allupfront, :partialupfront, :noupfront].each do |res_type|
           [:linux, :mswin, :rhel, :sles, :mswinSQL, :mswinSQLWeb].each do |os|
             line += "#{t.prepay(os, res_type, term)},#{t.price_per_hour(os, res_type, term)},"
           end

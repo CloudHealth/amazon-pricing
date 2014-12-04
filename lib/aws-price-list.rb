@@ -16,8 +16,27 @@ module AwsPricing
   class PriceList
     attr_accessor :regions
 
+    def initialize(is_govcloud = false)
+      @_regions = {}
+
+      # Creating regions upfront since different json files all use different naming conventions. No more ad-hoc creation.
+      if is_govcloud
+        regions = ["us-gov-west-1"]
+      else
+        # AWS added some but not all of teh data for us-gov-west-1. Not sure why they have not completed it. If they do not deprecate the screen scraping.
+        regions = ["eu-west-1", "sa-east-1", "us-east-1", "ap-northeast-1", "us-west-2", "us-west-1", "ap-southeast-1", "ap-southeast-2", "eu-central-1"]
+      end
+
+      regions.each do |name|
+        @_regions[name] = Region.new(name)
+      end
+    end
+
+    # EBS now reports regions correctly but all else still has the old format - so we need to handle both
+    # region mapping and non-mapping
     def get_region(name)
-      @_regions[@@Region_Lookup[name] || name]
+      #@_regions[@@Region_Lookup[name] || name]
+      @_regions[convert_region(name)]
     end
 
     def regions
@@ -66,34 +85,44 @@ module AwsPricing
 
     attr_accessor :_regions
 
-    def add_region(region)
-      @_regions[region.name] = region
-    end
+    #def add_region(region)
+    #  @_regions[region.name] = region
+    #end
 
-    def find_or_create_region(name)
-      region = get_region(name)
-      if region.nil?
-        region = Region.new(name)
-        add_region(region)
-      end
-      region
-    end
+    #def find_or_create_region(name)
+    #  region = get_region(name)
+    #  if region.nil?
+    #    # We must use standard names
+    #    region = Region.new(name)
+    #    add_region(region)
+    #  end
+    #  region
+    #end
 
     EC2_BASE_URL = "http://a0.awsstatic.com/pricing/1/ec2/"
     EBS_BASE_URL = "http://a0.awsstatic.com/pricing/1/ebs/"
     RDS_BASE_URL = "http://a0.awsstatic.com/pricing/1/rds/"
 
-    # Lookup allows us to map to AWS API region names
-    @@Region_Lookup = {
-      'us-east-1' => 'us-east',
-      'us-west-1' => 'us-west',
-      'us-west-2' => 'us-west-2',
-      'eu-west-1' => 'eu-ireland',
-      'ap-southeast-1' => 'apac-sin',
-      'ap-southeast-2' => 'apac-syd',
-      'ap-northeast-1' => 'apac-tokyo',
-      'sa-east-1' => 'sa-east-1'
-    }
+    def convert_region(name)
+      case name
+      when "us-east"
+        "us-east-1"
+      when "us-west"
+        "us-west-1"
+      when "eu-ireland"
+        "eu-west-1"
+      when "apac-sin"
+        "ap-southeast-1"
+      when "apac-syd"
+        "ap-southeast-2"
+      when "apac-tokyo"
+        "ap-northeast-1"
+      when "eu-frankfurt"
+        "eu-central-1"
+      else
+        name
+      end
+    end
 
   end
 
