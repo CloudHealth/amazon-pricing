@@ -93,24 +93,26 @@ module AwsPricing
 
     def self.populate_lookups
       # We use Linux on-demand to populate the lookup tables with the basic lookup information
-      res = AwsPricing::PriceList.fetch_url("http://aws-assets-pricing-prod.s3.amazonaws.com/pricing/ec2/linux-od.js")
-      res['config']['regions'].each do |reg|
-        reg['instanceTypes'].each do |type|
-          items = type['sizes']
-          items = [type] if items.nil?
-          items.each do |size|
-            begin
-              api_name = size["size"]
-              @@Memory_Lookup[api_name] = size["memoryGiB"].to_f * 1000
-              @@Compute_Units_Lookup[api_name] = size["ECU"].to_i 
-              @@Virtual_Cores_Lookup[api_name] = size["vCPU"].to_i 
-            rescue UnknownTypeError
-              $stderr.puts "WARNING: encountered #{$!.message}"
+      ["http://a0.awsstatic.com/pricing/1/ec2/linux-od.min.js", "http://a0.awsstatic.com/pricing/1/ec2/previous-generation/linux-od.min.js"].each do |url|
+        res = AwsPricing::PriceList.fetch_url(url)
+
+        res['config']['regions'].each do |reg|
+          reg['instanceTypes'].each do |type|
+            items = type['sizes']
+            items = [type] if items.nil?
+            items.each do |size|
+              begin
+                api_name = size["size"]
+                @@Memory_Lookup[api_name] = size["memoryGiB"].to_f * 1000
+                @@Compute_Units_Lookup[api_name] = size["ECU"].to_i 
+                @@Virtual_Cores_Lookup[api_name] = size["vCPU"].to_i 
+              rescue UnknownTypeError
+                $stderr.puts "WARNING: encountered #{$!.message}"
+              end
             end
           end
         end
       end
-
     end
 
     protected

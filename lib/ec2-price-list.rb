@@ -83,6 +83,10 @@ module AwsPricing
       res['config']['regions'].each do |reg|
         region_name = reg['region']
         region = get_region(region_name)
+        if region.nil?
+          $stderr.puts "WARNING: unable to find region #{region_name}"
+          next
+        end
         # e.g. type = {"type"=>"hiCPUODI", "sizes"=>[{"size"=>"med", "valueColumns"=>[{"name"=>"mswinSQL", "prices"=>{"USD"=>"N/A"}}]}, {"size"=>"xl", "valueColumns"=>[{"name"=>"mswinSQL", "prices"=>{"USD"=>"2.427"}}]}]}
         reg['instanceTypes'].each do |type|
           # e.g. size = {"size"=>"xl", "valueColumns"=>[{"name"=>"mswinSQL", "prices"=>{"USD"=>"2.427"}}]}
@@ -108,6 +112,10 @@ module AwsPricing
       res['config']['regions'].each do |reg|
         region_name = reg['region']
         region = get_region(region_name)
+        if region.nil?
+          $stderr.puts "WARNING: unable to find region #{region_name}"
+          next
+        end
         reg['instanceTypes'].each do |type|
           api_name = type["type"]
           instance_type = region.get_instance_type(api_name)

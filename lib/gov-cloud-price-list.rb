@@ -23,12 +23,15 @@ module AwsPricing
       end
       
       for i in 4..9
+        # GovCloud no longer supports reservation types
         #create_reserved_instances(tables[i], :light)
       end
       for i in 9..22
+        # GovCloud no longer supports reservation types
         #create_reserved_instances(tables[i], :medium)
       end
       for i in 23..33
+        # GovCloud no longer supports reservation types
         #create_reserved_instances(tables[i], :heavy)
       end
 
@@ -105,7 +108,7 @@ module AwsPricing
         :sles
       when "Windows"
         :mswin
-      when "Windows SQL Server Web", "Windows SQL Server Web Edition", "Windows SQL Server\n Web Edition"
+      when "Windows SQL Server Web", "Windows SQL Server Web Edition", "Windows SQL Server\n Web Edition", "Server Web"
         :mswinSQL
       when "Windows SQL Server Standard", "Windows SQL Server Standard Edition", "Windows SQL Server\n Standard Edition"
         :mswinSQLWeb

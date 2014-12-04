@@ -23,7 +23,8 @@ module AwsPricing
       if is_govcloud
         regions = ["us-gov-west-1"]
       else
-        regions = ["eu-west-1", "sa-east-1", "us-east-1", "ap-northeast-1", "us-west-2", "us-west-1", "ap-southeast-1", "ap-southeast-2", "eu-central-1", "us-gov-west-1"]
+        # AWS added some but not all of teh data for us-gov-west-1. Not sure why they have not completed it. If they do not deprecate the screen scraping.
+        regions = ["eu-west-1", "sa-east-1", "us-east-1", "ap-northeast-1", "us-west-2", "us-west-1", "ap-southeast-1", "ap-southeast-2", "eu-central-1"]
       end
 
       regions.each do |name|
