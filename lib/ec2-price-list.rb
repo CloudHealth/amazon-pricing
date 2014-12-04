@@ -145,7 +145,6 @@ module AwsPricing
       res = PriceList.fetch_url(EBS_BASE_URL + "pricing-ebs.min.js")
       res["config"]["regions"].each do |ebs_types|
         region = get_region(ebs_types["region"])
-puts ebs_types["region"]
         region.ebs_price = EbsPrice.new(region)
         region.ebs_price.update_from_json(ebs_types)
       end
