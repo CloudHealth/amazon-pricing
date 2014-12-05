@@ -138,9 +138,11 @@ module AwsPricing
               duration = term["term"]
               prices = option["valueColumns"]
               upfront = prices.select{|i| i["name"] == "upfront"}.first
-              instance_type.update_pricing_new(operating_system, reservation_type, upfront["prices"]["USD"].to_f, duration, true) unless upfront.nil?
+              price = upfront["prices"]["USD"]
+              instance_type.update_pricing_new(operating_system, reservation_type, price.to_f, duration, true) unless reservation_type == :noupfront || price == "N/A"
               hourly = prices.select{|i| i["name"] == "monthlyStar"}.first
-              instance_type.update_pricing_new(operating_system, reservation_type, hourly["prices"]["USD"].to_f, duration, false)
+              price = hourly["prices"]["USD"]
+              instance_type.update_pricing_new(operating_system, reservation_type, price.to_f * 12 / 365 / 24, duration, false) unless reservation_type == :allupfront || price == "N/A"
             end
           end
 

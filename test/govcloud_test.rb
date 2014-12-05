@@ -47,14 +47,4 @@ class TestGovCloud < Test::Unit::TestCase
     assert region.ebs_price.s3_snaps_per_gb == 0.125
   end
 
-  # Defect found in which ordering of price per hour and upfront get reversed
-  def test_ri_pricing
-    region = @@ec2_pricing.get_region('us-gov-west-1')
-    instance = region.get_ec2_instance_type('m3.large')
-    os = instance.get_operating_system(:linux)
-    assert os.ondemand_price_per_hour == 0.168
-    assert os.light_prepay_1_year == 300.0
-    assert os.light_price_per_hour_1_year == 0.167
-  end
-
 end
