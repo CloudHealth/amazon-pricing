@@ -103,6 +103,22 @@ class TestEc2InstanceTypes < Test::Unit::TestCase
     assert instance.virtual_cores == 2
   end
 
+  def test_new_reservation_types
+    region = @@ec2_pricing.get_region('us-east')
+    instance = region.get_ec2_instance_type('c3.large')
+    os = instance.get_operating_system(:linux)
+    assert os.ondemand_price_per_hour == 0.105
+    assert os.partialupfront_prepay_1_year == 326
+    assert os.allupfront_prepay_1_year == 542
+    assert os.partialupfront_prepay_3_year == 508
+    assert os.allupfront_prepay_3_year == 1020
+    assert os.noupfront_effective_rate_1_year.round(4) == 0.0730
+    assert os.partialupfront_effective_rate_1_year.round(4) == 0.0632
+    assert os.allupfront_effective_rate_1_year.round(4) == 0.0619
+    assert os.partialupfront_effective_rate_3_year.round(4) == 0.0413
+    assert os.allupfront_effective_rate_3_year.round(4) == 0.0388
+  end
+
   def test_bad_data
     # Someone at AWS is fat fingering the pricing data and putting the text "os" where there should be the actual operating system (e.g. "linux") - see http://a0.awsstatic.com/pricing/1/ec2/linux-od.min.js
     @@ec2_pricing.regions.each do |region|
