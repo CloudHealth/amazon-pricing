@@ -19,23 +19,23 @@ module AwsPricing
       :noupfront_price_per_hour_1_year, :noupfront_price_per_hour_3_year
 
     def allupfront_effective_rate_1_year
-      allupfront_prepay_1_year / 365 / 24
+      (allupfront_prepay_1_year / 365 / 24).round(4)
     end
 
     def allupfront_effective_rate_3_year
-      allupfront_prepay_3_year / 3 / 365 / 24
+      (allupfront_prepay_3_year / 3 / 365 / 24).round(4)
     end
 
     def partialupfront_effective_rate_1_year
-      partialupfront_prepay_1_year / 365 / 24 + partialupfront_price_per_hour_1_year
+      (partialupfront_prepay_1_year / 365 / 24 + partialupfront_price_per_hour_1_year).round(4)
     end
 
     def partialupfront_effective_rate_3_year
-      partialupfront_prepay_3_year / 3 / 365 / 24 + partialupfront_price_per_hour_3_year
+      (partialupfront_prepay_3_year / 3 / 365 / 24 + partialupfront_price_per_hour_3_year).round(4)
     end
 
     def noupfront_effective_rate_1_year
-      noupfront_price_per_hour_1_year
+      (noupfront_price_per_hour_1_year).round(4)
     end
 
     def initialize(instance_type=nil, name=nil)

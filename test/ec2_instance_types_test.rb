@@ -112,11 +112,11 @@ class TestEc2InstanceTypes < Test::Unit::TestCase
     assert os.allupfront_prepay_1_year == 542
     assert os.partialupfront_prepay_3_year == 508
     assert os.allupfront_prepay_3_year == 1020
-    assert os.noupfront_effective_rate_1_year.round(4) == 0.0730
-    assert os.partialupfront_effective_rate_1_year.round(4) == 0.0632
-    assert os.allupfront_effective_rate_1_year.round(4) == 0.0619
-    assert os.partialupfront_effective_rate_3_year.round(4) == 0.0413
-    assert os.allupfront_effective_rate_3_year.round(4) == 0.0388
+    assert os.noupfront_effective_rate_1_year == 0.0730
+    assert os.partialupfront_effective_rate_1_year == 0.0632
+    assert os.allupfront_effective_rate_1_year == 0.0619
+    assert os.partialupfront_effective_rate_3_year == 0.0413
+    assert os.allupfront_effective_rate_3_year == 0.0388
   end
 
   def test_bad_data
