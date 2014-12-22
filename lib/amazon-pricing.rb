@@ -7,7 +7,6 @@ Dir[File.join(File.dirname(__FILE__), 'amazon-pricing/*.rb')].sort.each { |lib| 
 
 require 'aws-price-list'
 require 'ec2-price-list'
-require 'gov-cloud-price-list'
 require 'rds-price-list'
 
 require 'logger'

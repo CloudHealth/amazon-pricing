@@ -16,16 +16,11 @@ module AwsPricing
   class PriceList
     attr_accessor :regions
 
-    def initialize(is_govcloud = false)
+    def initialize()
       @_regions = {}
 
       # Creating regions upfront since different json files all use different naming conventions. No more ad-hoc creation.
-      if is_govcloud
-        regions = ["us-gov-west-1"]
-      else
-        # AWS added some but not all of teh data for us-gov-west-1. Not sure why they have not completed it. If they do not deprecate the screen scraping.
-        regions = ["eu-west-1", "sa-east-1", "us-east-1", "ap-northeast-1", "us-west-2", "us-west-1", "ap-southeast-1", "ap-southeast-2", "eu-central-1"]
-      end
+      regions = ["eu-west-1", "sa-east-1", "us-east-1", "ap-northeast-1", "us-west-2", "us-west-1", "ap-southeast-1", "ap-southeast-2", "eu-central-1", "us-gov-west-1"]
 
       regions.each do |name|
         @_regions[name] = Region.new(name)

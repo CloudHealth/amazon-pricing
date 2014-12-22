@@ -44,22 +44,22 @@ end
 desc "Prints current GovCloud EC2 pricing in CSV format"
 task :print_govcloud_ec2_price_list do
   require 'amazon-pricing'
-  pricing = AwsPricing::GovCloudEc2PriceList.new
-  print_ec2_table(pricing)
+  pricing = AwsPricing::Ec2PriceList.new
+  print_ec2_table(pricing, "us-gov-west-1")
 end
 
 desc "Prints current GovCloud RDS pricing in CSV format"
 task :print_govcloud_rds_price_list do
   require 'amazon-pricing'
-  pricing = AwsPricing::GovCloudRdsPriceList.new
-  print_rds_table(pricing)
+  pricing = AwsPricing::Ec2PriceList.new
+  print_rds_table(pricing, "us-gov-west-1")
 end
 
 task :default => [:test]
 
 #########################################
 
-def print_ec2_table(pricing)
+def print_ec2_table(pricing, target_region = nil)
   line = "Region,Instance Type,API Name,Memory (MB),Disk (GB),Compute Units,Virtual Cores,Disk Type,OD Linux PPH,OD Windows PPH,OD RHEL PPH,OD SLES PPH,OD MsWinSQL PPH,OD MsWinSQLWeb PPH,"
   [:year1, :year3].each do |term|
     [:light, :medium, :heavy, :allupfront, :partialupfront, :noupfront].each do |res_type|
@@ -70,6 +70,7 @@ def print_ec2_table(pricing)
   end
   puts line.chop
   pricing.regions.each do |region|
+    next if region.name != target_region if target_region
     region.ec2_instance_types.each do |t|
       line = "#{region.name},#{t.name},#{t.api_name},#{t.memory_in_mb},#{t.disk_in_gb},#{t.compute_units},#{t.virtual_cores},#{t.disk_type},"
       [:linux, :mswin, :rhel, :sles, :mswinSQL, :mswinSQLWeb].each do |os|
@@ -87,7 +88,7 @@ def print_ec2_table(pricing)
   end
 end
 
-def print_rds_table(pricing)
+def print_rds_table(pricing, target_region = nil)
   line = "Region,Instance Type,API Name,Memory (MB),Disk (GB),Compute Units,Virtual Cores,Disk Type,"
 
   AwsPricing::DatabaseType.get_database_name.each do |db|
@@ -118,10 +119,11 @@ def print_rds_table(pricing)
   puts line.chop
 
   pricing.regions.each do |region|
-   region.rds_instance_types.each do |t|
-     line = "#{region.name},#{t.name},#{t.api_name},#{t.memory_in_mb},#{t.disk_in_gb},#{t.compute_units},#{t.virtual_cores},#{t.disk_type},"
-     AwsPricing::DatabaseType.get_database_name.each do |db|
-       unless AwsPricing::DatabaseType.get_available_types(db).nil?
+    next if region.name != target_region if target_region
+    region.rds_instance_types.each do |t|
+      line = "#{region.name},#{t.name},#{t.api_name},#{t.memory_in_mb},#{t.disk_in_gb},#{t.compute_units},#{t.virtual_cores},#{t.disk_type},"
+      AwsPricing::DatabaseType.get_database_name.each do |db|
+        unless AwsPricing::DatabaseType.get_available_types(db).nil?
           AwsPricing::DatabaseType.get_available_types(db).each do |deploy_type|
             if deploy_type == :byol_multiaz
               line += "#{t.price_per_hour(db, :ondemand, nil, true, true)},"
@@ -129,11 +131,11 @@ def print_rds_table(pricing)
               line += "#{t.price_per_hour(db, :ondemand, nil, deploy_type == :multiaz, deploy_type == :byol)},"
             end  
           end
-       else
+        else
           line += "#{t.price_per_hour(db, :ondemand, nil)},"
-       end
-     end
-     [:year1, :year3].each do |term|
+        end
+      end
+      [:year1, :year3].each do |term|
        [:light, :medium, :heavy].each do |res_type|
          AwsPricing::DatabaseType.get_database_name.each do |db|
             unless AwsPricing::DatabaseType.get_available_types(db).nil?
@@ -147,10 +149,10 @@ def print_rds_table(pricing)
             else
               line += "#{t.prepay(db, res_type, term)},#{t.price_per_hour(db, res_type, term)},"
             end
-         end
-       end
-     end
-     puts line.chop
-   end
+          end
+        end
+      end
+      puts line.chop
+    end
   end
 end
