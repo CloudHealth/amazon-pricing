@@ -146,4 +146,49 @@ class TestEc2InstanceTypes < Test::Unit::TestCase
     end
   end
 
+  def test_govcloud_cc8xlarge_issue
+    obj = @@ec2_pricing.get_instance_type('us-gov-west-1', 'm3.large')
+    assert obj.api_name == 'm3.large'
+  end
+
+  def test_govcloud_memory
+    # Validate instance types in specific regions are available
+    region = @@ec2_pricing.get_region('us-gov-west-1')
+    instance = region.get_ec2_instance_type('m3.large')
+    assert instance.memory_in_mb == 7500
+  end
+
+  def test_govcloud_virtual_cores
+    region = @@ec2_pricing.get_region('us-gov-west-1')
+    instance = region.get_ec2_instance_type('m3.large')
+    assert instance.virtual_cores == 2
+  end
+
+  def test_govcloud_ebs
+    region = @@ec2_pricing.get_region('us-gov-west-1')
+    assert region.ebs_price.standard_per_gb == 0.065
+    assert region.ebs_price.standard_per_million_io == 0.065
+    assert region.ebs_price.preferred_per_gb == 0.15
+    assert region.ebs_price.preferred_per_iops == 0.078
+    assert region.ebs_price.s3_snaps_per_gb == 0.125
+  end
+
+  def test_govcloud_new_reservation_types
+    region = @@ec2_pricing.get_region('us-gov-west-1')
+    instance = region.get_ec2_instance_type('r3.large')
+    os = instance.get_operating_system(:linux)
+    assert os.ondemand_price_per_hour == 0.210
+    assert os.partialupfront_prepay_1_year == 649
+    assert os.allupfront_prepay_1_year == 976
+    assert os.partialupfront_prepay_3_year == 1239
+    assert os.allupfront_prepay_3_year == 1935
+    assert os.noupfront_effective_rate_1_year == 0.1320
+    assert os.partialupfront_effective_rate_1_year == 0.1131
+    assert os.allupfront_effective_rate_1_year == 0.1114
+    assert os.partialupfront_effective_rate_3_year == 0.0781
+    assert os.allupfront_effective_rate_3_year == 0.0736
+  end
+
+
+
 end
