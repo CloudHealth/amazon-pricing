@@ -1,0 +1,8 @@
+.bundle
+vendor/
+bin/
+.rakeTasks
+.ruby*
+amazon-pricing*.gem
+.coveralls.yml
+coverage/*

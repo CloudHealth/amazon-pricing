@@ -7,6 +7,9 @@
 # License::   Distributes under the same terms as Ruby
 # Home::      http://github.com/CloudHealth/amazon-pricing
 #++
+
+require 'amazon-pricing/definitions/category-type'
+
 module AwsPricing
   class DatabaseType < CategoryType
 
@@ -26,7 +29,9 @@ module AwsPricing
       'sqlserver_ex'            => 'Microsoft SQL Server Express Edition',
       'sqlserver_web'           => 'Microsoft SQL Server Web Edition',
       'sqlserver_se_standard'   => 'Microsoft SQL Server Standard Edition',
+      'sqlserver_se_multiaz'    => 'Microsoft SQL Server Standard Edition (Multi-AZ)',
       'sqlserver_se_byol'       => 'Microsoft SQL Server Standard Edition (BYOL)',
+      'sqlserver_se_byol_multiaz' => 'Microsoft SQL Server Standard Edition (BYOL Multi-AZ)',
       'sqlserver_ee_byol'       => 'Microsoft SQL Server Enterprise Edition (BYOL)'
     }
 
@@ -48,7 +53,9 @@ module AwsPricing
       'sqlserver-ee(byol)'       => 'sqlserver_ee_byol',
       'sqlserver-ex(li)'         => 'sqlserver_ex',
       'sqlserver-se(byol)'       => 'sqlserver_se_byol',
+      'sqlserver-se(byol)_multiaz' => 'sqlserver_se_byol_multiaz',
       'sqlserver-se(li)'         => 'sqlserver_se_standard',
+      'sqlserver-se(li)_multiaz' => 'sqlserver_se_multiaz',
       'sqlserver-web(li)'        => 'sqlserver_web',
     }
 
@@ -58,7 +65,7 @@ module AwsPricing
 	  	:oracle_se1   => [:standard, :multiaz, :byol, :byol_multiaz],
 	  	:oracle_se    => [:byol, :byol_multiaz],
 	  	:oracle_ee    => [:byol, :byol_multiaz],
-	  	:sqlserver_se => [:standard, :byol],
+	  	:sqlserver_se => [:standard, :multiaz, :byol, :byol_multiaz],
 	  	:sqlserver_ee => [:byol]
 	  }
 

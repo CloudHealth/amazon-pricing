@@ -7,6 +7,9 @@
 # License::   Distributes under the same terms as Ruby
 # Home::      http://github.com/CloudHealth/amazon-pricing
 #++
+
+require 'amazon-pricing/definitions/category-type'
+
 module AwsPricing
   class OperatingSystem < CategoryType
   end
