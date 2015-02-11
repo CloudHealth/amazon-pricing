@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    amazon-pricing (0.1.56)
+    amazon-pricing (0.1.57)
       mechanize (~> 2.7.3)
 
 GEM

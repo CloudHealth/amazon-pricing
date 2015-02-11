@@ -56,7 +56,7 @@ module AwsPricing
         # Amazon has another data error where they are still exposing reserved instance types when they do not actually exist (e.g. SQL Server t1.micro). 
         # Just warn and continue.
         if db.ondemand_price_per_hour.nil?
-          #$stderr.puts "WARNING: Skipping RDS instance type #{api_name}:#{database_type}:#{type_of_instance}:#{is_multi_az}:#{is_byol} due to lack of on-demand pricing"
+          $stderr.puts "WARNING: Skipping RDS instance type #{api_name}:#{database_type}:#{type_of_instance}:#{is_multi_az}:#{is_byol} due to lack of on-demand pricing"
           return
         end
 

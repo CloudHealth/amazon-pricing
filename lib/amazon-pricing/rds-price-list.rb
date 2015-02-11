@@ -14,19 +14,26 @@ module AwsPricing
     @@RES_TYPES = [:light, :medium, :heavy]
     
     @@OD_DB_DEPLOY_TYPE = {
-                           :mysql=> {:mysql=>["standard","multiAZ"]},
-                           :postgresql=> {:postgresql=>["standard","multiAZ"]},
-                           :oracle=> {:oracle_se1=>["li-standard","li-multiAZ","byol-standard","byol-multiAZ"], :oracle_se=>["byol-standard","byol-multiAZ"], :oracle_ee=>["byol-standard","byol-multiAZ"]},
-                           :sqlserver=> {:sqlserver_ex=>["li-ex"], :sqlserver_web=>["li-web"], :sqlserver_se=>["li-se", "byol"], :sqlserver_ee=>["byol"]}
-                        }
-
+      :mysql => {:mysql=>["standard","multiAZ"]},
+      :postgresql => {:postgresql=>["standard","multiAZ"]},
+      :oracle => {
+        :oracle_se1=>["li-standard","li-multiAZ","byol-standard","byol-multiAZ"],
+        :oracle_se=>["byol-standard","byol-multiAZ"],
+        :oracle_ee=>["byol-standard","byol-multiAZ"]
+      },
+      :sqlserver => {
+        :sqlserver_ex=>["li-ex"],
+        :sqlserver_web=>["li-web"],
+        :sqlserver_se=>["li-se", "li-se-multiAZ", "byol", "byol-multiAZ"],
+        :sqlserver_ee=>["byol"]
+      }
+    }
 
     @@RESERVED_DB_DEPLOY_TYPE = {
-                           :oracle=> {:oracle_se1=>["li","byol"], :oracle_se=>["byol"], :oracle_ee=>["byol"]},
-                           :sqlserver=> {:sqlserver_ex=>["li-ex"], :sqlserver_web=>["li-web"], :sqlserver_se=>["li-se","byol"], :sqlserver_ee=>["byol"]}
-                          }
+      :oracle=> {:oracle_se1=>["li","byol"], :oracle_se=>["byol"], :oracle_ee=>["byol"]},
+      :sqlserver=> {:sqlserver_ex=>["li-ex"], :sqlserver_web=>["li-web"], :sqlserver_se=>["li-se","byol"], :sqlserver_ee=>["byol"]}
+    }
 
-    
     def is_multi_az?(type)
       return true if type.upcase.match("MULTI-AZ")
       false
@@ -45,18 +52,27 @@ module AwsPricing
             # to find out the byol type
             is_byol = is_byol? dp_type
             is_multi_az = dp_type.upcase.include?("MULTIAZ")
+            dp_type = dp_type.gsub('-multiAZ', '') if db == :sqlserver
 
             if [:mysql, :postgresql, :oracle].include? db
               fetch_on_demand_rds_instance_pricing(RDS_BASE_URL+"#{db}/pricing-#{dp_type}-deployments.min.js",:ondemand, db_type, is_byol, is_multi_az)
             elsif db == :sqlserver
-              fetch_on_demand_rds_instance_pricing(RDS_BASE_URL+"#{db}/sqlserver-#{dp_type}-ondemand.min.js",:ondemand, db_type, is_byol, is_multi_az)
+              if is_multi_az
+                fetch_on_demand_rds_instance_pricing(RDS_BASE_URL+"#{db}/sqlserver-#{dp_type}-ondemand-maz.min.js",:ondemand, db_type, is_byol, is_multi_az)
+              else
+                fetch_on_demand_rds_instance_pricing(RDS_BASE_URL+"#{db}/sqlserver-#{dp_type}-ondemand.min.js",:ondemand, db_type, is_byol, is_multi_az)
+              end
             end
 
             # Now repeat for legacy instances
             if [:mysql, :postgresql, :oracle].include? db
               fetch_on_demand_rds_instance_pricing(RDS_BASE_URL+"#{db}/previous-generation/pricing-#{dp_type}-deployments.min.js",:ondemand, db_type, is_byol, is_multi_az)
             elsif db == :sqlserver
-              fetch_on_demand_rds_instance_pricing(RDS_BASE_URL+"#{db}/previous-generation/sqlserver-#{dp_type}-ondemand.min.js",:ondemand, db_type, is_byol, is_multi_az)
+              if is_multi_az
+                fetch_on_demand_rds_instance_pricing(RDS_BASE_URL+"#{db}/previous-generation/sqlserver-#{dp_type}-ondemand-maz.min.js",:ondemand, db_type, is_byol, is_multi_az)
+              else
+                fetch_on_demand_rds_instance_pricing(RDS_BASE_URL+"#{db}/previous-generation/sqlserver-#{dp_type}-ondemand.min.js",:ondemand, db_type, is_byol, is_multi_az)
+              end
             end
 
           end
@@ -152,6 +168,9 @@ module AwsPricing
           end
         end
       end
+    rescue => ex
+      $sterr.puts "Failed to fetch: #{url}"
+      raise
     end                              
   end
 end

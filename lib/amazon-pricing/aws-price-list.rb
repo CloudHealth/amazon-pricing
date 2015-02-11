@@ -74,6 +74,9 @@ module AwsPricing
         # http://stackoverflow.com/questions/2060356/parsing-json-without-quoted-keys
         JSON.parse(body.gsub(/(\w+)\s*:/, '"\1":'))
       end
+    rescue
+      $stderr.puts "Failed to parse: #{url}"
+      raise
     end
 
     protected
