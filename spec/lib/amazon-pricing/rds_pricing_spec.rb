@@ -1,5 +1,3 @@
-require 'amazon-pricing'
-require File.join('amazon-pricing', 'database-type')
 require 'spec_helper'
 
 describe AwsPricing::RdsPriceList do
@@ -10,7 +8,7 @@ describe AwsPricing::RdsPriceList do
   end
 
   describe 'new' do
-    it 'RdsPriceList.new should return the valid response' do
+    it 'RdsPriceList.new should return the valid response', broken: true do
       @pricing.regions.each do |region|
         # response should have valid region
         expect(@region_name).to include(region.name)

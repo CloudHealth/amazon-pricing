@@ -1,4 +1,5 @@
-require 'amazon-pricing/instance-type'
+require 'amazon-pricing/definitions/instance-type'
+
 module AwsPricing
   class Ec2InstanceType < InstanceType
 

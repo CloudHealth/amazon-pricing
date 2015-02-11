@@ -1,15 +1,10 @@
-
 require 'json'
 require 'net/http'
 require 'mechanize'
 
-Dir[File.join(File.dirname(__FILE__), 'amazon-pricing/*.rb')].sort.each { |lib| require lib }
+Dir[File.join(File.dirname(__FILE__), 'amazon-pricing/definitions/*.rb')].sort.each { |lib| require lib }
 
-require 'aws-price-list'
-require 'ec2-price-list'
-require 'rds-price-list'
-require 'dynamo-db-price-list'
-
-require 'logger'
-logger = Logger.new(STDERR)
-logger.level = Logger::WARN
+require 'amazon-pricing/aws-price-list'
+require 'amazon-pricing/ec2-price-list'
+require 'amazon-pricing/rds-price-list'
+require 'amazon-pricing/dynamo-db-price-list'
