@@ -35,6 +35,8 @@ module AwsPricing
       'sqlserver_ee_byol'       => 'Microsoft SQL Server Enterprise Edition (BYOL)'
     }
 
+    @@Display_Name_To_Qualified_Database_Name = @@Database_Name_Lookup.invert
+
     @@ProductDescription = {
       'mysql'                    => 'mysql_standard',
       'mysql_multiaz'            => 'mysql_multiaz',
@@ -87,6 +89,29 @@ module AwsPricing
       else
         display_name(@@ProductDescription["#{product}"])
 	    end
+    end
+
+    def self.display_name_to_qualified_database_name(display_name)
+      database_name = @@Display_Name_To_Qualified_Database_Name[display_name]
+      if database_name.nil?
+        raise "Unknown display_name '#{display_name}'.  Valid names are #{@@Display_Name_To_Qualified_Database_Name.keys.join(', ')}"
+      end
+      database_name
+    end
+
+    def self.display_name_to_database_name(display_name)
+      database_name = self.display_name_to_qualified_database_name(display_name)
+      database_name.gsub('_standard', '').gsub('_multiaz', '').gsub('_byol', '')
+    end
+
+    def self.display_name_is_multi_az?(display_name)
+      database_name = self.display_name_to_qualified_database_name(display_name)
+      database_name.include? 'multiaz'
+    end
+
+    def self.display_name_is_byol?(display_name)
+      database_name = self.display_name_to_qualified_database_name(display_name)
+      database_name.include? 'byol'
     end
 
   	def display_name
