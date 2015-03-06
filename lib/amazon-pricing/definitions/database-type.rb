@@ -35,6 +35,8 @@ module AwsPricing
       'sqlserver_ee_byol'       => 'Microsoft SQL Server Enterprise Edition (BYOL)'
     }
 
+    @@Display_Name_To_Qualified_Database_Name = @@Database_Name_Lookup.invert
+
     @@ProductDescription = {
       'mysql'                    => 'mysql_standard',
       'mysql_multiaz'            => 'mysql_multiaz',
@@ -59,38 +61,53 @@ module AwsPricing
       'sqlserver-web(li)'        => 'sqlserver_web',
     }
 
-	  @@DB_Deploy_Types = {
-	  	:mysql        => [:standard, :multiaz],
-	  	:postgresql   => [:standard, :multiaz],
-	  	:oracle_se1   => [:standard, :multiaz, :byol, :byol_multiaz],
-	  	:oracle_se    => [:byol, :byol_multiaz],
-	  	:oracle_ee    => [:byol, :byol_multiaz],
+    @@DB_Deploy_Types = {
+      :mysql        => [:standard, :multiaz],
+      :postgresql   => [:standard, :multiaz],
+      :oracle_se1   => [:standard, :multiaz, :byol, :byol_multiaz],
+      :oracle_se    => [:byol, :byol_multiaz],
+      :oracle_ee    => [:byol, :byol_multiaz],
 	  	:sqlserver_se => [:standard, :multiaz, :byol, :byol_multiaz],
-	  	:sqlserver_ee => [:byol]
-	  }
+      :sqlserver_ee => [:byol]
+    }
 
-  	def self.display_name(name)
-	    @@Database_Name_Lookup[name]
-  	end
-
-  	def self.get_database_name
-  	  [:mysql, :postgresql, :oracle_se1, :oracle_se, :oracle_ee, :sqlserver_ex, :sqlserver_web, :sqlserver_se, :sqlserver_ee]
-  	end
-
-  	def self.get_available_types(db)
-  	  @@DB_Deploy_Types[db]	
-  	end
-
-  	def self.db_mapping(product, is_multi_az)
-      if is_multi_az
-        display_name(@@ProductDescription["#{product}_multiaz"])  
-      else
-        display_name(@@ProductDescription["#{product}"])
-	    end
+    def self.display_name(name)
+      @@Database_Name_Lookup[name]
     end
 
-  	def display_name
-	    self.class.display_name(name)
-	  end
+    def self.get_database_name
+      [:mysql, :postgresql, :oracle_se1, :oracle_se, :oracle_ee, :sqlserver_ex, :sqlserver_web, :sqlserver_se, :sqlserver_ee]
+    end
+
+    def self.get_available_types(db)
+      @@DB_Deploy_Types[db]
+    end
+
+    def self.db_mapping(product, is_multi_az)
+      if is_multi_az
+        display_name(@@ProductDescription["#{product}_multiaz"])
+      else
+        display_name(@@ProductDescription["#{product}"])
+      end
+    end
+
+    def self.display_name_to_database_name(display_name)
+      database_name = @@Display_Name_To_Qualified_Database_Name[display_name]
+      database_name.gsub('_standard', '').gsub('_multiaz', '').gsub('_byol', '')
+    end
+
+    def self.display_name_to_multi_az(display_name)
+      database_name = @@Display_Name_To_Qualified_Database_Name[display_name]
+      database_name.include? 'multiaz'
+    end
+
+    def self.display_name_to_byol(display_name)
+      database_name = @@Display_Name_To_Qualified_Database_Name[display_name]
+      database_name.include? 'byol'
+    end
+
+    def display_name
+      self.class.display_name(name)
+    end
   end
 end
