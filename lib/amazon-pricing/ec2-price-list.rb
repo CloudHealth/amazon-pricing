@@ -54,34 +54,6 @@ module AwsPricing
         url = "#{EC2_BASE_URL}previous-generation/ri-v2/#{target}-shared.min.js"
         fetch_ec2_instance_pricing_ri_v2(url, operating_system)
       end
-
-    end
-
-    # Retrieves the EC2 on-demand instance pricing.
-    # type_of_instance = :ondemand, :light, :medium, :heavy
-    def fetch_ec2_instance_pricing(url, type_of_instance, operating_system)
-      res = PriceList.fetch_url(url)
-      res['config']['regions'].each do |reg|
-        region_name = reg['region']
-        region = get_region(region_name)
-        # e.g. type = {"type"=>"hiCPUODI", "sizes"=>[{"size"=>"med", "valueColumns"=>[{"name"=>"mswinSQL", "prices"=>{"USD"=>"N/A"}}]}, {"size"=>"xl", "valueColumns"=>[{"name"=>"mswinSQL", "prices"=>{"USD"=>"2.427"}}]}]}
-        reg['instanceTypes'].each do |type|
-          # e.g. size = {"size"=>"xl", "valueColumns"=>[{"name"=>"mswinSQL", "prices"=>{"USD"=>"2.427"}}]}
-          # Amazon now can return array or hash here (hash = only 1 item)
-          items = type['sizes']
-          items = [type] if items.nil?
-          items.each do |size|
-            begin
-              api_name, name = Ec2InstanceType.get_name(type["type"], size["size"], type_of_instance != :ondemand)
-              
-              instance_type = region.add_or_update_ec2_instance_type(api_name, name)
-              instance_type.update_pricing(operating_system, type_of_instance, size)
-            rescue UnknownTypeError
-              $stderr.puts "WARNING: encountered #{$!.message}"
-            end
-          end
-        end
-      end
     end
 
     # Retrieves the EC2 on-demand instance pricing.
@@ -92,7 +64,7 @@ module AwsPricing
         region_name = reg['region']
         region = get_region(region_name)
         if region.nil?
-          $stderr.puts "WARNING: unable to find region #{region_name}"
+          $stderr.puts "[fetch_ec2_instance_pricing] WARNING: unable to find region #{region_name}"
           next
         end
         # e.g. type = {"type"=>"hiCPUODI", "sizes"=>[{"size"=>"med", "valueColumns"=>[{"name"=>"mswinSQL", "prices"=>{"USD"=>"N/A"}}]}, {"size"=>"xl", "valueColumns"=>[{"name"=>"mswinSQL", "prices"=>{"USD"=>"2.427"}}]}]}
@@ -107,7 +79,7 @@ module AwsPricing
               instance_type = region.add_or_update_ec2_instance_type(api_name, name)
               instance_type.update_pricing(operating_system, type_of_instance, size)
             rescue UnknownTypeError
-              $stderr.puts "WARNING: encountered #{$!.message}"
+              $stderr.puts "[fetch_ec2_instance_pricing] WARNING: encountered #{$!.message}"
             end
           end
         end
@@ -121,14 +93,14 @@ module AwsPricing
         region_name = reg['region']
         region = get_region(region_name)
         if region.nil?
-          $stderr.puts "WARNING: unable to find region #{region_name}"
+          $stderr.puts "[fetch_ec2_instance_pricing_ri_v2] WARNING: unable to find region #{region_name}"
           next
         end
         reg['instanceTypes'].each do |type|
           api_name = type["type"]
           instance_type = region.get_instance_type(api_name)
           if instance_type.nil?
-            $stderr.puts "WARNING: new reserved instances not found for #{api_name} in #{region_name}"
+            $stderr.puts "[fetch_ec2_instance_pricing_ri_v2] WARNING: new reserved instances not found for #{api_name} in #{region_name}"
             next
           end
 
