@@ -142,7 +142,7 @@ module AwsPricing
               instance_type = region.add_or_update_rds_instance_type(api_name, name)
               instance_type.update_pricing(db_type, type_of_rds_instance, tier, is_multi_az, is_byol)
             rescue UnknownTypeError
-              $stderr.puts "WARNING: encountered #{$!.message}"
+              $stderr.puts "[fetch_on_demand_rds_instance_pricing] WARNING: encountered #{$!.message}"
             end
           end
         end                        
@@ -163,7 +163,7 @@ module AwsPricing
                 instance_type = region.add_or_update_rds_instance_type(api_name, name)
                 instance_type.update_pricing(db_type, type_of_rds_instance, tier, is_multi_az, is_byol)
             rescue UnknownTypeError
-              $stderr.puts "WARNING: encountered #{$!.message}"
+              $stderr.puts "[fetch_reserved_rds_instance_pricing] WARNING: encountered #{$!.message}"
             end
           end
         end
