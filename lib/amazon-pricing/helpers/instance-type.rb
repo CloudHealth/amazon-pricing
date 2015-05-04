@@ -47,7 +47,7 @@ module AwsPricing
         },
         'GPUInstances' => {
             'CurrentGen' => {
-                'G2'  => ['g2.2xlarge']
+                'G2'  => ['g2.2xlarge', 'g2.8xlarge']
             },
             'PreviousGen' => {
                 'CG1' => ['cg1.4xlarge']
