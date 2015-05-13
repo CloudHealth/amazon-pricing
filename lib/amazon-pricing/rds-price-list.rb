@@ -25,7 +25,7 @@ module AwsPricing
         :sqlserver_ex=>["li-ex"],
         :sqlserver_web=>["li-web"],
         :sqlserver_se=>["li-se", "li-se-multiAZ", "byol", "byol-multiAZ"],
-        :sqlserver_ee=>["byol"]
+        :sqlserver_ee=>["byol", "byol-multiAZ"]
       }
     }
 
