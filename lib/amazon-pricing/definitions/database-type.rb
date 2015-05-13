@@ -32,7 +32,8 @@ module AwsPricing
       'sqlserver_se_multiaz'    => 'Microsoft SQL Server Standard Edition (Multi-AZ)',
       'sqlserver_se_byol'       => 'Microsoft SQL Server Standard Edition (BYOL)',
       'sqlserver_se_byol_multiaz' => 'Microsoft SQL Server Standard Edition (BYOL Multi-AZ)',
-      'sqlserver_ee_byol'       => 'Microsoft SQL Server Enterprise Edition (BYOL)'
+      'sqlserver_ee_byol'         => 'Microsoft SQL Server Enterprise Edition (BYOL)',
+      'sqlserver_ee_byol_multiaz' => 'Microsoft SQL Server Enterprise Edition (BYOL Multi-AZ)',
     }
 
     @@Display_Name_To_Qualified_Database_Name = @@Database_Name_Lookup.invert
@@ -53,6 +54,7 @@ module AwsPricing
       'oracle-se(byol)_multiaz'  => 'oracle_se_byol_multiaz',
       'oracle-ee(byol)_multiaz'  => 'oracle_ee_byol_multiaz',
       'sqlserver-ee(byol)'       => 'sqlserver_ee_byol',
+      'sqlserver-ee(byol)_multiaz' => 'sqlserver_ee_byol_multiaz',
       'sqlserver-ex(li)'         => 'sqlserver_ex',
       'sqlserver-se(byol)'       => 'sqlserver_se_byol',
       'sqlserver-se(byol)_multiaz' => 'sqlserver_se_byol_multiaz',
@@ -68,7 +70,7 @@ module AwsPricing
 	  	:oracle_se    => [:byol, :byol_multiaz],
 	  	:oracle_ee    => [:byol, :byol_multiaz],
 	  	:sqlserver_se => [:standard, :multiaz, :byol, :byol_multiaz],
-	  	:sqlserver_ee => [:byol]
+	  	:sqlserver_ee => [:byol, :byol_multiaz]
 	  }
 
   	def self.display_name(name)
