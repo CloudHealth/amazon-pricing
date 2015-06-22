@@ -63,7 +63,7 @@ class TestEc2InstanceTypes < Test::Unit::TestCase
     region = @@ec2_pricing.get_region('us-east')
     instance = region.get_ec2_instance_type('m3.large')
     bem = instance.get_breakeven_month(:linux, :heavy, :year1)
-    assert bem == 6
+    assert bem == 7
   end
 
   def test_memory

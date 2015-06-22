@@ -5,7 +5,8 @@ module AwsPricing
       @@INSTANCE_TYPES_BY_CLASSIFICATION = {
         'GeneralPurpose' => {
             'CurrentGen' => {
-                'M3' => ['m3.medium', 'm3.large', 'm3.xlarge', 'm3.2xlarge']
+                'M3' => ['m3.medium', 'm3.large', 'm3.xlarge', 'm3.2xlarge'],
+                'M4' => ['m4.large', 'm4.xlarge', 'm4.2xlarge', 'm4.4xlarge', 'm4.10xlarge']
             },
             'PreviousGen' => {
                 'M1' => ['m1.small', 'm1.medium', 'm1.large', 'm1.xlarge']
@@ -13,7 +14,7 @@ module AwsPricing
         },
         'BurstableInstances' => {
             'CurrentGen' => {
-                'T2' => ['t2.micro', 't2.small', 't2.medium']
+                'T2' => ['t2.micro', 't2.small', 't2.medium', 't2.large']
             }
         },
         'ComputeOptimized' => {
