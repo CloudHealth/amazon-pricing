@@ -5,6 +5,7 @@ module AwsPricing
       super
       InstanceType.populate_lookups
       get_rds_on_demand_instance_pricing
+      get_rds_reserved_instance_pricing2
       get_rds_reserved_instance_pricing
     end
 
@@ -32,6 +33,13 @@ module AwsPricing
     @@RESERVED_DB_DEPLOY_TYPE = {
       :oracle=> {:oracle_se1=>["li","byol"], :oracle_se=>["byol"], :oracle_ee=>["byol"]},
       :sqlserver=> {:sqlserver_ex=>["li-ex"], :sqlserver_web=>["li-web"], :sqlserver_se=>["li-se","byol"], :sqlserver_ee=>["byol"]}
+    }
+
+    @@RESERVED_DB_DEPLOY_TYPE2 = {
+        :mysql => ["standard", "multiAZ"],
+        :postgresql => ["standard", "multiAZ"],
+        :oracle => ["se1-license-included-standard", "se1-license-included-multiAZ", "se-byol-standard", "se-byol-multiAZ"],
+        :sqlserver=> ["se-byol-standard", "se-byol-multiAZ"]
     }
 
     def is_multi_az?(type)
@@ -79,6 +87,57 @@ module AwsPricing
         }
       end
     end
+
+    def get_rds_reserved_instance_pricing2
+      @@DB_TYPE.each do |db|
+        @@RESERVED_DB_DEPLOY_TYPE2[db].each do |deploy_type|
+          is_byol = is_byol? deploy_type
+          is_multi_az = deploy_type.upcase.include?("MULTIAZ")
+          db_name = db == :sqlserver ? 'sql-server' : db
+          fetch_reserved_rds_instance_pricing2(RDS_BASE_URL+"reserved-instances/#{db_name}-#{deploy_type}.min.js", db, is_multi_az, is_byol)
+        end
+      end
+    end
+
+    def fetch_reserved_rds_instance_pricing2(url, db, is_multi_az, is_byol)
+      res = PriceList.fetch_url(url)
+      res['config']['regions'].each do |reg|
+        region_name = reg['region']
+        region = get_region(region_name)
+        if region.nil?
+          $stderr.puts "[fetch_reserved_rds_instance_pricing2] WARNING: unable to find region #{region_name}"
+          next
+        end
+        reg['instanceTypes'].each do |type|
+          api_name = type["type"]
+          instance_type = region.get_rds_instance_type(api_name)
+          if instance_type.nil?
+            $stderr.puts "[fetch_reserved_rds_instance_pricing2] WARNING: new reserved instances not found for #{api_name} in #{region_name}"
+            next
+          end
+
+          type["terms"].each do |term|
+            term["purchaseOptions"].each do |option|
+              case option["purchaseOption"]
+                when "noUpfront"
+                  reservation_type = :noupfront
+                when "allUpfront"
+                  reservation_type = :allupfront
+                when "partialUpfront"
+                  reservation_type = :partialupfront
+              end
+
+              duration = term["term"]
+              prices = option["valueColumns"]
+              instance_type.update_pricing_new(db, reservation_type, prices, duration, is_multi_az, is_byol)
+            end
+          end
+
+        end
+      end
+    end
+
+
 
     def get_rds_reserved_instance_pricing
        @@DB_TYPE.each do |db|
