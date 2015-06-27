@@ -36,10 +36,11 @@ module AwsPricing
     }
 
     @@RESERVED_DB_DEPLOY_TYPE2 = {
-        :mysql => ["standard", "multiAZ"],
-        :postgresql => ["standard", "multiAZ"],
-        :oracle => ["se1-license-included-standard", "se1-license-included-multiAZ", "se-byol-standard", "se-byol-multiAZ"],
-        :sqlserver=> ["se-byol-standard", "se-byol-multiAZ"]
+        :mysql => {:mysql=>["standard","multiAZ"]},
+        :postgresql => {:postgresql=>["standard","multiAZ"]},
+        :oracle => {:oracle_se1=>["license-included-standard", "license-included-multiAZ"],
+                    :oracle_se=>["byol-standard", "byol-multiAZ"]},
+        :sqlserver=> {:sqlserver_se=>["byol-standard", "byol-multiAZ"]}
     }
 
     def is_multi_az?(type)
@@ -89,12 +90,14 @@ module AwsPricing
     end
 
     def get_rds_reserved_instance_pricing2
-      @@DB_TYPE.each do |db|
-        @@RESERVED_DB_DEPLOY_TYPE2[db].each do |deploy_type|
-          is_byol = is_byol? deploy_type
-          is_multi_az = deploy_type.upcase.include?("MULTIAZ")
-          db_name = db == :sqlserver ? 'sql-server' : db
-          fetch_reserved_rds_instance_pricing2(RDS_BASE_URL+"reserved-instances/#{db_name}-#{deploy_type}.min.js", db, is_multi_az, is_byol)
+      @@DB_TYPE.each do |db_name|
+        @@RESERVED_DB_DEPLOY_TYPE2[db_name].each do |db, deploy_types|
+          deploy_types.each do |deploy_type|
+            is_byol = is_byol? deploy_type
+            is_multi_az = deploy_type.upcase.include?("MULTIAZ")
+            db_str = db == :sqlserver_se ? 'sql-server-se' : db.to_s.gsub(/_/, '-')
+            fetch_reserved_rds_instance_pricing2(RDS_BASE_URL+"reserved-instances/#{db_str}-#{deploy_type}.min.js", db, is_multi_az, is_byol)
+          end
         end
       end
     end
@@ -136,8 +139,6 @@ module AwsPricing
         end
       end
     end
-
-
 
     def get_rds_reserved_instance_pricing
        @@DB_TYPE.each do |db|
