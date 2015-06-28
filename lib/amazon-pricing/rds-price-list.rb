@@ -43,6 +43,14 @@ module AwsPricing
         :sqlserver=> {:sqlserver_se=>["byol-standard", "byol-multiAZ"]}
     }
 
+    @@RESERVED_DB_WITH_SAME_PRICING2 = {
+        :mysql => [:mysql],
+        :postgresql => [:postgresql],
+        :oracle_se1 => [:oracle_se1],
+        :oracle_se => [:oracle_se, :oracle_se1, :oracle_ee],
+        :sqlserver_se => [:sqlserver_se, :sqlserver_ee]
+    }
+
     def is_multi_az?(type)
       return true if type.upcase.match("MULTI-AZ")
       false
@@ -96,13 +104,14 @@ module AwsPricing
             is_byol = is_byol? deploy_type
             is_multi_az = deploy_type.upcase.include?("MULTIAZ")
             db_str = db == :sqlserver_se ? 'sql-server-se' : db.to_s.gsub(/_/, '-')
-            fetch_reserved_rds_instance_pricing2(RDS_BASE_URL+"reserved-instances/#{db_str}-#{deploy_type}.min.js", db, is_multi_az, is_byol)
+            dbs_with_same_pricing = @@RESERVED_DB_WITH_SAME_PRICING2[db]
+            fetch_reserved_rds_instance_pricing2(RDS_BASE_URL+"reserved-instances/#{db_str}-#{deploy_type}.min.js", dbs_with_same_pricing, is_multi_az, is_byol)
           end
         end
       end
     end
 
-    def fetch_reserved_rds_instance_pricing2(url, db, is_multi_az, is_byol)
+    def fetch_reserved_rds_instance_pricing2(url, dbs, is_multi_az, is_byol)
       res = PriceList.fetch_url(url)
       res['config']['regions'].each do |reg|
         region_name = reg['region']
@@ -132,7 +141,9 @@ module AwsPricing
 
               duration = term["term"]
               prices = option["valueColumns"]
-              instance_type.update_pricing_new(db, reservation_type, prices, duration, is_multi_az, is_byol)
+              dbs.each do |db|
+                instance_type.update_pricing_new(db, reservation_type, prices, duration, is_multi_az, is_byol)
+              end
             end
           end
 
