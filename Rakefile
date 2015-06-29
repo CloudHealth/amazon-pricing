@@ -102,7 +102,7 @@ def print_rds_table(pricing, target_region = nil)
   end
 
   [:year1, :year3].each do |term|
-   [:light, :medium, :heavy].each do |res_type|
+   [:light, :medium, :heavy, :allupfront, :partialupfront, :noupfront].each do |res_type|
        AwsPricing::DatabaseType.get_database_name.each do |db|
           unless AwsPricing::DatabaseType.get_available_types(db).nil?
             AwsPricing::DatabaseType.get_available_types(db).each do |deploy_type|
@@ -136,7 +136,7 @@ def print_rds_table(pricing, target_region = nil)
         end
       end
       [:year1, :year3].each do |term|
-       [:light, :medium, :heavy].each do |res_type|
+       [:light, :medium, :heavy, :allupfront, :partialupfront, :noupfront].each do |res_type|
          AwsPricing::DatabaseType.get_database_name.each do |db|
             unless AwsPricing::DatabaseType.get_available_types(db).nil?
               AwsPricing::DatabaseType.get_available_types(db).each do |deploy_type|

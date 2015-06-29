@@ -81,8 +81,43 @@ module AwsPricing
           when "yearTerm1Hourly"
             db.set_price_per_hour(type_of_instance, :year1, price)
           when "yearTerm3Hourly"
-            db.set_price_per_hour(type_of_instance, :year3, price)  
+            db.set_price_per_hour(type_of_instance, :year3, price)
           end
+        end
+      end
+    end
+
+    def update_pricing_new(database_type, type_of_instance, prices, term = nil, is_multi_az, is_byol)
+      db = get_category_type(database_type, is_multi_az, is_byol)
+      if db.nil?
+        db = DatabaseType.new(self, database_type)
+
+        if is_multi_az == true and is_byol == true
+          @category_types["#{database_type}_byol_multiaz"] = db
+        elsif is_multi_az == true and is_byol == false
+          @category_types["#{database_type}_multiaz"] = db
+        elsif is_multi_az == false and is_byol == true
+          @category_types["#{database_type}_byol"] = db
+        else
+          @category_types[database_type] = db
+        end
+
+      end
+
+      terms_to_years = {
+          "yrTerm1" => :year1,
+          "yrTerm3" => :year3
+      }
+      years = terms_to_years[term]
+      prices.each do |price|
+        p = price['prices']['USD']
+        case price['name']
+          when 'upfront'
+            db.set_prepay(type_of_instance, years, p.to_f) unless type_of_instance == :noupfront || p == "N/A"
+          when 'monthlyStar'
+            db.set_price_per_hour(type_of_instance, years, p.to_f * 12 / 365 / 24) unless type_of_instance == :allupfront || p == "N/A"
+          else
+            # Do nothing for other names
         end
       end
     end
