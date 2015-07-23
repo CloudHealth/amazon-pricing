@@ -97,9 +97,10 @@ module AwsPricing
     #  region
     #end
 
-    EC2_BASE_URL = "http://a0.awsstatic.com/pricing/1/ec2/"
-    EBS_BASE_URL = "http://a0.awsstatic.com/pricing/1/ebs/"
-    RDS_BASE_URL = "http://a0.awsstatic.com/pricing/1/rds/"
+    EC2_BASE_URL         = "http://a0.awsstatic.com/pricing/1/ec2/"
+    EBS_BASE_URL         = "http://a0.awsstatic.com/pricing/1/ebs/"
+    RDS_BASE_URL         = "http://a0.awsstatic.com/pricing/1/rds/"
+    ELASTICACHE_BASE_URL = "http://a0.awsstatic.com/pricing/1/elasticache/"
 
     DI_OD_BASE_URL = "http://a0.awsstatic.com/pricing/1/dedicated-instances/"
     RESERVED_DI_BASE_URL = "http://a0.awsstatic.com/pricing/1/ec2/ri-v2/"
