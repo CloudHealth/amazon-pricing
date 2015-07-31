@@ -101,6 +101,10 @@ module AwsPricing
     EBS_BASE_URL = "http://a0.awsstatic.com/pricing/1/ebs/"
     RDS_BASE_URL = "http://a0.awsstatic.com/pricing/1/rds/"
 
+    DI_OD_BASE_URL = "http://a0.awsstatic.com/pricing/1/dedicated-instances/"
+    RESERVED_DI_BASE_URL = "http://a0.awsstatic.com/pricing/1/ec2/ri-v2/"
+    RESERVED_DI_PREV_GEN_BASE_URL = "http://a0.awsstatic.com/pricing/1/ec2/previous-generation/ri-v2/"
+
     def convert_region(name)
       case name
       when "us-east"

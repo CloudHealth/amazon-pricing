@@ -73,7 +73,7 @@ Additional Resources
 Credits
 -------
 
-Thanks for Amazon developers for provided Json APIs to the pricing data (albeit undocumented).
+Thanks for Amazon developers for provided JSON APIs to the pricing data (albeit undocumented).
 
 Contact
 -------
