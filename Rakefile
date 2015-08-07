@@ -41,6 +41,13 @@ task :print_rds_price_list do
   print_rds_table(pricing) 
 end
 
+desc "Prints current ElastiCache pricing to CSV format"
+task :print_elasticache_price_list do
+  require 'amazon-pricing'
+  pricing = AwsPricing::ElastiCachePriceList.new
+  print_elasticache_table(pricing)
+end
+
 desc "Prints current GovCloud EC2 pricing in CSV format"
 task :print_govcloud_ec2_price_list do
   require 'amazon-pricing'
@@ -80,6 +87,35 @@ def print_ec2_table(pricing, target_region = nil)
         [:light, :medium, :heavy, :allupfront, :partialupfront, :noupfront].each do |res_type|
           [:linux, :mswin, :rhel, :sles, :mswinSQL, :mswinSQLWeb].each do |os|
             line += "#{t.prepay(os, res_type, term)},#{t.price_per_hour(os, res_type, term)},"
+          end
+        end
+      end
+      puts line.chop
+    end
+  end
+end
+
+def print_elasticache_table(pricing, target_region = nil)
+  line = "Region,Node Type,API Name,Memmory (MB),Virtual Cores,Disk Type,OD PPH,"
+  [:year1, :year3].each do |term|
+    [:partialupfront].each do |res_type|
+      [:memcached].each do |cache|
+        line += "#{term} #{res_type} #{cache} Prepay,#{term} #{res_type} #{cache} PPH,"
+      end
+    end
+  end
+  puts line.chop
+  pricing.regions.each do |region|
+    next if region.name != target_orgion if target_region
+    region.elasticache_node_types.each do |t|
+      line = "#{region.name},#{t.name},#{t.api_name},#{t.memory_in_mb},#{t.virtual_cores},"
+      [:memcached].each do |cache|
+        line += "#{t.price_per_hour(cache, :ondemand)},"
+      end
+      [:year1, :year3].each do |term|
+        [:partialupfront].each do |res_type|
+          [:memcached].each do |cache|
+            line += "#{t.prepay(cache, res_type, term)},#{t.price_per_hour(cache, res_type, term)},"
           end
         end
       end

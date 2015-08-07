@@ -86,6 +86,7 @@ module AwsPricing
       case category
         when 'os'; 'ec2'
         when 'db'; 'rds'
+        when 'cache'; 'elasticache'
         else
           ''
       end
@@ -253,10 +254,18 @@ module AwsPricing
     }
 
     # NOTE: These are populated by "populate_lookups"
-    #       But... AWS does not always provide memory info (e.g. t2, r3), so those are hardcoded below
+    #       But... AWS does not always provide memory info (e.g. t2, r3, cache.*), so those are hardcoded below
     @@Memory_Lookup = {
+      'cache.r3.large' => 13500, 'cache.r3.xlarge' => 28400, 'cache.r3.2xlarge' => 58200, 'cache.r3.4xlarge' => 118000, 'cache.r3.8xlarge' => 237000,
       'r3.large' => 15250, 'r3.xlarge' => 30500, 'r3.2xlarge' => 61000, 'r3.4xlarge' => 122000, 'r3.8xlarge' => 244000,
+      'cache.m3.medium' => 2780, 'cache.m3.large' => 6050, 'cache.m3.xlarge' => 13300, 'cache.m3.2xlarge' => 27900,
       't2.micro' => 1000, 't2.small' => 2000, 't2.medium' => 4000, 't2.large' => 8000,
+      'cache.t2.micro' => 555, 'cache.t2.small' =>  1550, 'cache.t2.medidium' => 3220,
+      
+      'cache.m1.small' => 1300, 'cache.m1.medium' => 3350, 'cache.m1.large' => 7100, 'cache.m1.xlarge' => 14600,
+      'cache.m2.xlarge' => 16700, 'cache.m2.2xlarge' => 33800, 'cache.m2.4xlarge' => 68000,
+      'cache.c1.xlarge' => 6600,
+      'cache.t1.micro' => 213,
     }
     @@Virtual_Cores_Lookup = {
       'r3.large' => 2, 'r3.xlarge' => 4, 'r3.2xlarge' => 8, 'r3.4xlarge' => 16, 'r3.8xlarge' => 32,
