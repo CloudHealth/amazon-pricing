@@ -28,7 +28,7 @@ module AwsPricing
         :sqlserver_ex=>["li-ex"],
         :sqlserver_web=>["li-web"],
         :sqlserver_se=>["li-se", "li-se-multiAZ", "byol", "byol-multiAZ"],
-        :sqlserver_ee=>["byol", "byol-multiAZ"]
+        :sqlserver_ee=>["byol", "byol-multiAZ", "li-ee", 'li-ee-multiAZ']
       },
       :aurora => { :aurora => ["multiAZ"] },
       :mariadb => { :mariadb => ["standard", "multiAZ"] }
@@ -84,8 +84,7 @@ module AwsPricing
             dp_type = dp_type.gsub('-multiAZ', '') if db == :sqlserver
 
             if [:mysql, :postgresql, :oracle, :aurora, :mariadb].include? db
-              url = RDS_BASE_URL + "#{db}/pricing-#{dp_type}-deployments.min.js"
-              fetch_on_demand_rds_instance_pricing(url, :ondemand, db_type, is_byol, is_multi_az)
+              fetch_on_demand_rds_instance_pricing(RDS_BASE_URL+"#{db}/pricing-#{dp_type}-deployments.min.js",:ondemand, db_type, is_byol, is_multi_az)
             elsif db == :sqlserver
               if is_multi_az
                 fetch_on_demand_rds_instance_pricing(RDS_BASE_URL+"#{db}/sqlserver-#{dp_type}-ondemand-maz.min.js",:ondemand, db_type, is_byol, is_multi_az)
@@ -98,13 +97,13 @@ module AwsPricing
             if [:mysql, :postgresql, :oracle].include? db
               fetch_on_demand_rds_instance_pricing(RDS_BASE_URL+"#{db}/previous-generation/pricing-#{dp_type}-deployments.min.js",:ondemand, db_type, is_byol, is_multi_az)
             elsif db == :sqlserver
+              next if dp_type == 'li-ee' || dp_type == 'li-ee-multiAZ'
               if is_multi_az
                 fetch_on_demand_rds_instance_pricing(RDS_BASE_URL+"#{db}/previous-generation/sqlserver-#{dp_type}-ondemand-maz.min.js",:ondemand, db_type, is_byol, is_multi_az)
               else
                 fetch_on_demand_rds_instance_pricing(RDS_BASE_URL+"#{db}/previous-generation/sqlserver-#{dp_type}-ondemand.min.js",:ondemand, db_type, is_byol, is_multi_az)
               end
             end
-
           end
         }
       end
