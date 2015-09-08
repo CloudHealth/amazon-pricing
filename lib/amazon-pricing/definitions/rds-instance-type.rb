@@ -110,7 +110,7 @@ module AwsPricing
       }
       years = terms_to_years[term]
       prices.each do |price|
-        p = price['prices']['USD']
+        p = coerce_price(price['prices']['USD'])
         case price['name']
           when 'upfront'
             db.set_prepay(type_of_instance, years, p.to_f) unless type_of_instance == :noupfront || p == "N/A"
