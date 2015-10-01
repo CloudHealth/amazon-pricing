@@ -141,22 +141,38 @@ module AwsPricing
         all_instances.select { |family, instances| instances.include?(api_name) }.values.first
       end
 
-      def size_to_nf
-        {
-          'micro'   => 0.5,
-          'small'   => 1,
-          'medium'  => 2,
-          'large'   => 4,
-          'xlarge'  => 8,
-          '2xlarge' => 16,
-          '4xlarge' => 32,
-          '8xlarge' => 64
-        }
-      end
 
       def api_name_to_nf(name)
         size_to_nf[name.split('.').last]
       end
+
+      def next_smaller_type(name)
+        fam,type = name.split('.')
+        nf= size_to_nf[type] / 2.0
+        new_type = NF_TO_SIZE_TABLE[nf] || NF_TO_SIZE_TABLE[nf.to_i] # 2.0 and 2 are no same when used as hash keys.
+        ["#{fam}.#{new_type}" , nf]
+      end
+
+      def size_to_nf
+        SIZE_TO_NF_TABLE
+      end
+
+      def nf_to_size
+        NF_TO_SIZE_TABLE
+      end
+
+      SIZE_TO_NF_TABLE = {
+          "micro"   => 0.5,
+          "small"   => 1,
+          "medium"  => 2,
+          "large"   => 4,
+          "xlarge"  => 8,
+          "2xlarge" => 16,
+          "4xlarge" => 32,
+          "8xlarge" => 64
+      }
+      NF_TO_SIZE_TABLE = SIZE_TO_NF_TABLE.invert
+
     end
   end
 end
