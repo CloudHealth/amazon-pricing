@@ -169,7 +169,8 @@ module AwsPricing
           "xlarge"  => 8,
           "2xlarge" => 16,
           "4xlarge" => 32,
-          "8xlarge" => 64
+          "8xlarge" => 64,
+          "10xlarge" => 80
       }
       NF_TO_SIZE_TABLE = SIZE_TO_NF_TABLE.invert
 
