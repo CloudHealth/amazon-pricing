@@ -34,6 +34,7 @@ module AwsPricing
       'sqlserver_se_byol_multiaz' => 'Microsoft SQL Server Standard Edition (BYOL Multi-AZ)',
       'sqlserver_ee_byol'         => 'Microsoft SQL Server Enterprise Edition (BYOL)',
       'sqlserver_ee_byol_multiaz' => 'Microsoft SQL Server Enterprise Edition (BYOL Multi-AZ)',
+      'aurora_multiaz'          => 'Amazon Aurora (Multi-AZ)',
     }
 
     @@Display_Name_To_Qualified_Database_Name = @@Database_Name_Lookup.invert
@@ -70,7 +71,8 @@ module AwsPricing
 	  	:oracle_se    => [:byol, :byol_multiaz],
 	  	:oracle_ee    => [:byol, :byol_multiaz],
 	  	:sqlserver_se => [:standard, :multiaz, :byol, :byol_multiaz],
-	  	:sqlserver_ee => [:byol, :byol_multiaz]
+	  	:sqlserver_ee => [:byol, :byol_multiaz],
+      :aurora       => [:multiaz]
 	  }
 
   	def self.display_name(name)
@@ -78,16 +80,16 @@ module AwsPricing
   	end
 
   	def self.get_database_name
-  	  [:mysql, :postgresql, :oracle_se1, :oracle_se, :oracle_ee, :sqlserver_ex, :sqlserver_web, :sqlserver_se, :sqlserver_ee]
+  	  [:mysql, :postgresql, :oracle_se1, :oracle_se, :oracle_ee, :sqlserver_ex, :sqlserver_web, :sqlserver_se, :sqlserver_ee, :aurora]
   	end
 
   	def self.get_available_types(db)
-  	  @@DB_Deploy_Types[db]	
+  	  @@DB_Deploy_Types[db]
   	end
 
   	def self.db_mapping(product, is_multi_az)
       if is_multi_az
-        display_name(@@ProductDescription["#{product}_multiaz"])  
+        display_name(@@ProductDescription["#{product}_multiaz"])
       else
         display_name(@@ProductDescription["#{product}"])
 	    end
