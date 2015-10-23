@@ -103,6 +103,8 @@ module AwsPricing
 
     def get_rds_reserved_instance_pricing2
       @@DB_TYPE.each do |db_name|
+        # skip if there is no legacy price data
+        next if db_name == :aurora
         @@RESERVED_DB_DEPLOY_TYPE2[db_name].each do |db, deploy_types|
           deploy_types.each do |deploy_type|
             is_byol = is_byol? deploy_type
