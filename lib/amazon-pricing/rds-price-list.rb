@@ -54,6 +54,8 @@ module AwsPricing
         :sqlserver_se => [:sqlserver_se, :sqlserver_ee]
     }
 
+    @@DB_RI_PRICE_ONLY_FROM_API = [:aurora]
+
     def is_multi_az?(type)
       return true if type.upcase.match("MULTI-AZ")
       false
@@ -102,9 +104,8 @@ module AwsPricing
     end
 
     def get_rds_reserved_instance_pricing2
-      @@DB_TYPE.each do |db_name|
-        # skip if there is no legacy price data
-        next if db_name == :aurora
+      db_types_with_legacy_data = @@DB_TYPE - @@DB_RI_PRICE_ONLY_FROM_API
+      db_types_with_legacy_data.each do |db_name|
         @@RESERVED_DB_DEPLOY_TYPE2[db_name].each do |db, deploy_types|
           deploy_types.each do |deploy_type|
             is_byol = is_byol? deploy_type
