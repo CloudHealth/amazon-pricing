@@ -43,7 +43,8 @@ module AwsPricing
         :postgresql => {:postgresql=>["standard","multiAZ"]},
         :oracle => {:oracle_se1=>["license-included-standard", "license-included-multiAZ"],
                     :oracle_se=>["byol-standard", "byol-multiAZ"]},
-        :sqlserver => {:sqlserver_se=>["byol-standard", "byol-multiAZ"]}
+        :sqlserver => {:sqlserver_se=>["byol-standard", "byol-multiAZ"]},
+        :aurora => {:aurora => ["multiAZ"]}
     }
 
     @@RESERVED_DB_WITH_SAME_PRICING2 = {
@@ -159,7 +160,8 @@ module AwsPricing
     end
 
     def get_rds_reserved_instance_pricing
-       @@DB_TYPE.each do |db|
+      @@DB_TYPE.each do |db|
+        next if @@DB_RI_PRICE_ONLY_FROM_API.include? db
         if [:mysql, :postgresql, :aurora].include? db
           @@RES_TYPES.each do |res_type|
             if db == :postgresql and res_type == :heavy
