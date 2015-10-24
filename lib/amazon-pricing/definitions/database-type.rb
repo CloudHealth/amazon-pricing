@@ -64,16 +64,16 @@ module AwsPricing
       'sqlserver-web(li)'        => 'sqlserver_web',
     }
 
-	  @@DB_Deploy_Types = {
-	  	:mysql        => [:standard, :multiaz],
-	  	:postgresql   => [:standard, :multiaz],
-	  	:oracle_se1   => [:standard, :multiaz, :byol, :byol_multiaz],
-	  	:oracle_se    => [:byol, :byol_multiaz],
-	  	:oracle_ee    => [:byol, :byol_multiaz],
-	  	:sqlserver_se => [:standard, :multiaz, :byol, :byol_multiaz],
-	  	:sqlserver_ee => [:byol, :byol_multiaz],
+    @@DB_Deploy_Types = {
+      :mysql        => [:standard, :multiaz],
+      :postgresql   => [:standard, :multiaz],
+      :oracle_se1   => [:standard, :multiaz, :byol, :byol_multiaz],
+      :oracle_se    => [:byol, :byol_multiaz],
+      :oracle_ee    => [:byol, :byol_multiaz],
+      :sqlserver_se => [:standard, :multiaz, :byol, :byol_multiaz],
+      :sqlserver_ee => [:byol, :byol_multiaz],
       :aurora       => [:multiaz]
-	  }
+    }
 
   	def self.display_name(name)
 	    @@Database_Name_Lookup[name]
