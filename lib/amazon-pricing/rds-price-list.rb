@@ -109,7 +109,6 @@ module AwsPricing
     end
 
     def get_rds_reserved_instance_pricing2
-      # db_types_with_legacy_data = @@DB_TYPE - @@DB_RI_PRICE_ONLY_FROM_API
       @@DB_TYPE.each do |db_name|
         @@RESERVED_DB_DEPLOY_TYPE2[db_name].each do |db, deploy_types|
           deploy_types.each do |deploy_type|
