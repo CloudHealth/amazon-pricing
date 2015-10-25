@@ -35,6 +35,8 @@ module AwsPricing
       'sqlserver_ee_byol'         => 'Microsoft SQL Server Enterprise Edition (BYOL)',
       'sqlserver_ee_byol_multiaz' => 'Microsoft SQL Server Enterprise Edition (BYOL Multi-AZ)',
       'aurora_multiaz'          => 'Amazon Aurora (Multi-AZ)',
+      'mariadb_standard'        => 'MariaDB Standard',
+      'mariadb_multiaz'         => 'MariaDB (Multi-AZ)',
     }
 
     @@Display_Name_To_Qualified_Database_Name = @@Database_Name_Lookup.invert
@@ -72,7 +74,8 @@ module AwsPricing
       :oracle_ee    => [:byol, :byol_multiaz],
       :sqlserver_se => [:standard, :multiaz, :byol, :byol_multiaz],
       :sqlserver_ee => [:byol, :byol_multiaz],
-      :aurora       => [:multiaz]
+      :aurora       => [:multiaz],
+      :mariadb      => [:standard, :multiaz],
     }
 
   	def self.display_name(name)
@@ -80,7 +83,7 @@ module AwsPricing
   	end
 
   	def self.get_database_name
-  	  [:mysql, :postgresql, :oracle_se1, :oracle_se, :oracle_ee, :sqlserver_ex, :sqlserver_web, :sqlserver_se, :sqlserver_ee, :aurora]
+  	  [:mysql, :postgresql, :oracle_se1, :oracle_se, :oracle_ee, :sqlserver_ex, :sqlserver_web, :sqlserver_se, :sqlserver_ee, :aurora, :mariadb]
   	end
 
   	def self.get_available_types(db)
