@@ -20,7 +20,7 @@ module AwsPricing
   #
   class InstanceType
     attr_accessor :name, :api_name, :memory_in_mb, :platform, :compute_units, :virtual_cores, :disk_type, :disk_in_gb
-    
+
     def initialize(region, api_name, name)
       @category_types = {}
 
@@ -65,14 +65,14 @@ module AwsPricing
     # term = :year_1, :year_3, nil
     def price_per_hour(category_type, type_of_instance, term = nil, is_multi_az = false, isByol = false)
       cat = get_category_type(category_type, is_multi_az, isByol)
-      cat.price_per_hour(type_of_instance, term) unless cat.nil?      
+      cat.price_per_hour(type_of_instance, term) unless cat.nil?
     end
 
     # type_of_instance = :ondemand, :light, :medium, :heavy
     # term = :year_1, :year_3, nil
     def prepay(category_type, type_of_instance, term = nil, is_multi_az = false, isByol = false)
       cat = get_category_type(category_type, is_multi_az, isByol)
-      cat.prepay(type_of_instance, term) unless cat.nil?      
+      cat.prepay(type_of_instance, term) unless cat.nil?
     end
 
     # type_of_instance = :ondemand, :light, :medium, :heavy
@@ -105,8 +105,8 @@ module AwsPricing
               begin
                 api_name = size["size"]
                 @@Memory_Lookup[api_name] = size["memoryGiB"].to_f * 1000
-                @@Compute_Units_Lookup[api_name] = size["ECU"].to_i 
-                @@Virtual_Cores_Lookup[api_name] = size["vCPU"].to_i 
+                @@Compute_Units_Lookup[api_name] = size["ECU"].to_i
+                @@Virtual_Cores_Lookup[api_name] = size["vCPU"].to_i
               rescue UnknownTypeError
                 $stderr.puts "[populate_lookups] WARNING: encountered #{$!.message}"
               end
@@ -172,7 +172,7 @@ module AwsPricing
       'cg1.4xlarge' => 'Cluster GPU Quadruple Extra Large',
       'cc1.4xlarge' => 'Cluster Compute Quadruple Extra Large', 'cc2.8xlarge' => 'Cluster Compute Eight Extra Large',
       't1.micro' => 'Micro',
-      'cr1.8xlarge' => 'High-Memory Cluster Eight Extra Large', 
+      'cr1.8xlarge' => 'High-Memory Cluster Eight Extra Large',
       'hs1.8xlarge' => 'High-Storage Eight Extra Large',
       'g2.2xlarge' => 'Cluster GPU Double Extra Large', 'g2.8xlarge' => 'Cluster GPU Eight Extra Large',
       'c3.large' => 'High-Compute Large', 'c3.xlarge' => 'High-Compute Extra Large', 'c3.2xlarge' => 'High-Compute Double Extra Large', 'c3.4xlarge' => 'High-Compute Quadruple Extra Large', 'c3.8xlarge' => 'High-Compute Eight Extra Large',
@@ -181,7 +181,7 @@ module AwsPricing
       'r3.large' => 'Memory Optimized Large', 'r3.xlarge' => 'Memory Optimized Extra Large', 'r3.2xlarge' => 'Memory Optimized Double Extra Large', 'r3.4xlarge' => 'Memory Optimized Quadruple Extra Large', 'r3.8xlarge' => 'Memory Optimized Eight Extra Large',
       't2.micro' => 'Burstable Performance Instance Micro', 't2.small' => 'Burstable Performance Instance Small', 't2.medium' => 'Burstable Performance Instance Medium', 't2.large' => 'Burstable Performance Instance Large',
       'c4.large' => 'Compute Optimized Large', 'c4.xlarge' => 'Compute Optimized Extra Large', 'c4.2xlarge' => 'Compute Optimized Double Extra Large', 'c4.4xlarge' => 'Compute Optimized Quadruple Extra Large', 'c4.8xlarge' => 'Compute Optimized Eight Extra Large',
-    } 
+    }
     @@Disk_Lookup = {
       'm1.small' => 160, 'm1.medium' => 410, 'm1.large' =>850, 'm1.xlarge' => 1690,
       'm2.xlarge' => 420, 'm2.2xlarge' => 850, 'm2.4xlarge' => 1690,
@@ -198,12 +198,12 @@ module AwsPricing
       'db.m1.small' => 160, 'db.m1.medium' => 410, 'db.m1.large' =>850, 'db.m1.xlarge' => 1690,
       'db.m2.xlarge' => 420, 'db.m2.2xlarge' => 850, 'db.m2.4xlarge' => 1690, 'db.cr1.8xlarge' => 1690,
       'db.t1.micro' => 160,
-      'c3.large' => 32, 'c3.xlarge' => 80, 'c3.2xlarge' => 160, 'c3.4xlarge' => 320, 'c3.8xlarge' => 640, 
+      'c3.large' => 32, 'c3.xlarge' => 80, 'c3.2xlarge' => 160, 'c3.4xlarge' => 320, 'c3.8xlarge' => 640,
       'i2.large' => 360, 'i2.xlarge' => 720, 'i2.2xlarge' => 1440, 'i2.4xlarge' => 2880, 'i2.8xlarge' => 5760,
       'd2.xlarge' => 6000, 'd2.2xlarge' => 12000, 'd2.4xlarge' => 24000, 'd2.8xlarge' => 48000,
       'r3.large' => 32, 'r3.xlarge' => 80, 'r3.2xlarge' => 160, 'r3.4xlarge' => 320, 'r3.8xlarge' => 640,
       't2.micro' => 0, 't2.small' => 0, 't2.medium' => 0, 't2.large' => 0,
-      'c4.large' => 0, 'c4.xlarge' => 0, 'c4.2xlarge' => 0, 'c4.4xlarge' => 0, 'c4.8xlarge' => 0, 
+      'c4.large' => 0, 'c4.xlarge' => 0, 'c4.2xlarge' => 0, 'c4.4xlarge' => 0, 'c4.8xlarge' => 0,
     }
     @@Platform_Lookup = {
       'm1.small' => 32, 'm1.medium' => 32, 'm1.large' => 64, 'm1.xlarge' => 64,
@@ -221,12 +221,12 @@ module AwsPricing
       'db.m1.small' => 64, 'db.m1.medium' => 64, 'db.m1.large' => 64, 'db.m1.xlarge' => 64,
       'db.m2.xlarge' => 64, 'db.m2.2xlarge' => 64, 'db.m2.4xlarge' => 64, 'db.cr1.8xlarge' => 64,
       'db.t1.micro' => 64,
-      'c3.large' => 64, 'c3.xlarge' => 64, 'c3.2xlarge' => 64, 'c3.4xlarge' => 64, 'c3.8xlarge' => 64, 
+      'c3.large' => 64, 'c3.xlarge' => 64, 'c3.2xlarge' => 64, 'c3.4xlarge' => 64, 'c3.8xlarge' => 64,
       'i2.large' => 64, 'i2.xlarge' => 64, 'i2.2xlarge' => 64, 'i2.4xlarge' => 64, 'i2.8xlarge' => 64,
       'd2.xlarge' => 64, 'd2.2xlarge' => 64, 'd2.4xlarge' => 64, 'd2.8xlarge' => 64,
       'r3.large' => 64, 'r3.xlarge' => 64, 'r3.2xlarge' => 64, 'r3.4xlarge' => 64, 'r3.8xlarge' => 64,
       't2.micro' => 64, 't2.small' => 64, 't2.medium' => 64, 't2.large' => 64,
-      'c4.large' => 64, 'c4.xlarge' => 64, 'c4.2xlarge' => 64, 'c4.4xlarge' => 64, 'c4.8xlarge' => 64, 
+      'c4.large' => 64, 'c4.xlarge' => 64, 'c4.2xlarge' => 64, 'c4.4xlarge' => 64, 'c4.8xlarge' => 64,
     }
     @@Disk_Type_Lookup = {
       'm1.small' => :ephemeral, 'm1.medium' => :ephemeral, 'm1.large' => :ephemeral, 'm1.xlarge' => :ephemeral,
@@ -241,16 +241,16 @@ module AwsPricing
       'cr1.8xlarge' => :ssd,
       'hs1.8xlarge' => :ephemeral,
       'g2.2xlarge' => :ssd, 'g2.8xlarge' => :ssd,
-      'unknown' => :ephemeral,      
+      'unknown' => :ephemeral,
       'db.m1.small' => :ephemeral, 'db.m1.medium' => :ephemeral, 'db.m1.large' => :ephemeral, 'db.m1.xlarge' => :ephemeral,
       'db.m2.xlarge' => :ephemeral, 'db.m2.2xlarge' => :ephemeral, 'db.m2.4xlarge' => :ephemeral, 'db.cr1.8xlarge' => :ephemeral,
       'db.t1.micro' => :ebs,
-      'c3.large' => :ssd, 'c3.xlarge' => :ssd, 'c3.2xlarge' => :ssd, 'c3.4xlarge' => :ssd, 'c3.8xlarge' => :ssd, 
+      'c3.large' => :ssd, 'c3.xlarge' => :ssd, 'c3.2xlarge' => :ssd, 'c3.4xlarge' => :ssd, 'c3.8xlarge' => :ssd,
       'i2.large' => :ssd, 'i2.xlarge' => :ssd, 'i2.2xlarge' => :ssd, 'i2.4xlarge' => :ssd, 'i2.8xlarge' => :ssd,
       'd2.xlarge' => :ephemeral, 'd2.2xlarge' => :ephemeral, 'd2.4xlarge' => :ephemeral, 'd2.8xlarge' => :ephemeral,
       'r3.large' => :ssd, 'r3.xlarge' => :ssd, 'r3.2xlarge' => :ssd, 'r3.4xlarge' => :ssd, 'r3.8xlarge' => :ssd,
       't2.micro' => :ebs, 't2.small' => :ebs, 't2.medium' => :ebs, 't2.large' => :ebs,
-      'c4.large' => :ebs, 'c4.xlarge' => :ebs, 'c4.2xlarge' => :ebs, 'c4.4xlarge' => :ebs, 'c4.8xlarge' => :ebs, 
+      'c4.large' => :ebs, 'c4.xlarge' => :ebs, 'c4.2xlarge' => :ebs, 'c4.4xlarge' => :ebs, 'c4.8xlarge' => :ebs,
     }
 
     # NOTE: These are populated by "populate_lookups"
@@ -261,7 +261,7 @@ module AwsPricing
       'cache.m3.medium' => 2780, 'cache.m3.large' => 6050, 'cache.m3.xlarge' => 13300, 'cache.m3.2xlarge' => 27900,
       't2.micro' => 1000, 't2.small' => 2000, 't2.medium' => 4000, 't2.large' => 8000,
       'cache.t2.micro' => 555, 'cache.t2.small' =>  1550, 'cache.t2.medidium' => 3220,
-      
+
       'cache.m1.small' => 1300, 'cache.m1.medium' => 3350, 'cache.m1.large' => 7100, 'cache.m1.xlarge' => 14600,
       'cache.m2.xlarge' => 16700, 'cache.m2.2xlarge' => 33800, 'cache.m2.4xlarge' => 68000,
       'cache.c1.xlarge' => 6600,
