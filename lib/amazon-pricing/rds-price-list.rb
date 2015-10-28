@@ -59,7 +59,9 @@ module AwsPricing
         :mariadb => [:mariadb]
     }
 
-    @@DB_RI_PRICE_ONLY_FROM_API = [:aurora, :mariadb]
+    # old RI pricing was broken out by utilization levels: light, medium & heavy.
+    # this data is not available for new offerings
+    @@NO_LEGACY_RI_PRICING_AVAILABLE = [:aurora, :mariadb]
 
     def is_multi_az?(type)
       return true if type.upcase.match("MULTI-AZ")
@@ -164,7 +166,7 @@ module AwsPricing
 
     def get_rds_reserved_instance_pricing
       @@DB_TYPE.each do |db|
-        next if @@DB_RI_PRICE_ONLY_FROM_API.include? db
+        next if @@NO_LEGACY_RI_PRICING_AVAILABLE.include? db
         if [:mysql, :postgresql].include? db
           @@RES_TYPES.each do |res_type|
             if db == :postgresql and res_type == :heavy
