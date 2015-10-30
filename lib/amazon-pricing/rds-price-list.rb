@@ -80,7 +80,9 @@ module AwsPricing
             #
             # to find out the byol type
             is_byol = is_byol? dp_type
-            is_multi_az = dp_type.upcase.include?("MULTIAZ")
+            # We believe Amazon made a mistake by hosting aurora's prices on a url that follows the multi-az pattern.
+            # Therefore we'll construct the URL as multi-az, but still treat the prices as for single-az.
+            is_multi_az = dp_type.upcase.include?("MULTIAZ") && db != :aurora
             dp_type = dp_type.gsub('-multiAZ', '') if db == :sqlserver
 
             if [:mysql, :postgresql, :oracle, :aurora, :mariadb].include? db
@@ -114,7 +116,9 @@ module AwsPricing
         @@RESERVED_DB_DEPLOY_TYPE2[db_name].each do |db, deploy_types|
           deploy_types.each do |deploy_type|
             is_byol = is_byol? deploy_type
-            is_multi_az = deploy_type.upcase.include?("MULTIAZ")
+            # We believe Amazon made a mistake by hosting aurora's prices on a url that follows the multi-az pattern.
+            # Therefore we'll construct the URL as multi-az, but still treat the prices as for single-az.
+            is_multi_az = deploy_type.upcase.include?("MULTIAZ") && db != :aurora
             db_str = db == :sqlserver_se ? 'sql-server-se' : db.to_s.gsub(/_/, '-')
             dbs_with_same_pricing = @@RESERVED_DB_WITH_SAME_PRICING2[db]
             fetch_reserved_rds_instance_pricing2(RDS_BASE_URL+"reserved-instances/#{db_str}-#{deploy_type}.min.js", dbs_with_same_pricing, is_multi_az, is_byol)

@@ -36,8 +36,8 @@ module AwsPricing
       'sqlserver_ee_multiaz'      => 'Microsoft SQL Server Enterprise Edition (Multi-AZ)',
       'sqlserver_ee_byol'         => 'Microsoft SQL Server Enterprise Edition (BYOL)',
       'sqlserver_ee_byol_multiaz' => 'Microsoft SQL Server Enterprise Edition (BYOL Multi-AZ)',
-      'aurora_multiaz'          => 'Amazon Aurora (Multi-AZ)',
-      'mariadb_standard'        => 'MariaDB Standard',
+      'aurora_standard'         => 'Amazon Aurora',
+      'mariadb_standard'        => 'MariaDB',
       'mariadb_multiaz'         => 'MariaDB (Multi-AZ)',
     }
 
@@ -68,6 +68,9 @@ module AwsPricing
       'sqlserver-se(li)'         => 'sqlserver_se_standard',
       'sqlserver-se(li)_multiaz' => 'sqlserver_se_multiaz',
       'sqlserver-web(li)'        => 'sqlserver_web',
+      'aurora'                   => 'aurora_standard',
+      'mariadb'                  => 'mariadb_standard',
+      'mariadb_multiaz'          => 'mariadb_multiaz',
     }
 
     @@DB_Deploy_Types = {
@@ -78,7 +81,7 @@ module AwsPricing
       :oracle_ee    => [:byol, :byol_multiaz],
       :sqlserver_se => [:standard, :multiaz, :byol, :byol_multiaz],
       :sqlserver_ee => [:byol, :byol_multiaz, :standard, :multiaz],
-      :aurora       => [:multiaz],
+      :aurora       => [:standard],
       :mariadb      => [:standard, :multiaz],
     }
 
