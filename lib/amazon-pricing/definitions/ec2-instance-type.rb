@@ -28,15 +28,17 @@ module AwsPricing
         @category_types[operating_system] = os
       end
 
+      p = coerce_price(price)
+
       if type_of_instance == :ondemand
-        os.set_price_per_hour(type_of_instance, nil, price)
+        os.set_price_per_hour(type_of_instance, nil, p)
       else
         years = :year1 if term == "yrTerm1"
         years = :year3 if term == "yrTerm3"
         if is_prepay
-          os.set_prepay(type_of_instance, years, price)
+          os.set_prepay(type_of_instance, years, p)
         else
-          os.set_price_per_hour(type_of_instance, years, price)
+          os.set_price_per_hour(type_of_instance, years, p * 12 / 365 / 24)
         end
       end
     end
