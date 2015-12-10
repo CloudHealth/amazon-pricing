@@ -20,10 +20,6 @@ Installation
 
 This gem follows the standard conventions for installation on any system with Ruby and RubyGems installed and uses Bundler for gem installation and build management.
 
-### Get an AWS account
-
-Before you can make use of this gem you will need an Amazon Web Services account.
-
 ### Install the amazon-pricing gem (Canonical Release)
 
 This is the standard install for stable releases from RubyGems.
