@@ -163,6 +163,8 @@ module AwsPricing
         elsif term == :year3
           @noupfront_price_per_hour_3_year
         end
+      when :allupfront
+        0
       end
     end
 
