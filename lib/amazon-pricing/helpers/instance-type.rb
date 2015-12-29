@@ -162,6 +162,7 @@ module AwsPricing
       end
 
       SIZE_TO_NF_TABLE = {
+          "nano"    => 0.25,
           "micro"   => 0.5,
           "small"   => 1,
           "medium"  => 2,
