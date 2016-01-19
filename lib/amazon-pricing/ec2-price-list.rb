@@ -61,7 +61,12 @@ module AwsPricing
     def fetch_ec2_ebs_pricing
       res = PriceList.fetch_url(EBS_BASE_URL + "pricing-ebs.min.js")
       res["config"]["regions"].each do |ebs_types|
-        region = get_region(ebs_types["region"])
+        region_name = ebs_types["region"]
+        region = get_region(region_name)
+        if region.nil?
+          $stderr.puts "[fetch_ec2_ebs_pricing] WARNING: unable to find region #{region_name}"
+          next
+        end
         region.ebs_price = EbsPrice.new(region)
         region.ebs_price.update_from_json(ebs_types)
       end
