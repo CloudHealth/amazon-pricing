@@ -216,7 +216,7 @@ module AwsPricing
         region_name = reg['region']
         region = get_region(region_name)
         if region.nil?
-          $stderr.puts "[fetch_ec2_instance_pricing] WARNING: unable to find region #{region_name}"
+          $stderr.puts "[fetch_on_demand_rds_instance_pricing] WARNING: unable to find region #{region_name}"
           next
         end
         reg['types'].each do |type|

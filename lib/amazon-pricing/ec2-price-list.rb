@@ -64,7 +64,7 @@ module AwsPricing
         region_name = ebs_types["region"]
         region = get_region(region_name)
         if region.nil?
-          $stderr.puts "[fetch_ec2_instance_pricing] WARNING: unable to find region #{region_name}"
+          $stderr.puts "[fetch_ec2_ebs_pricing] WARNING: unable to find region #{region_name}"
           next
         end
         region.ebs_price = EbsPrice.new(region)
