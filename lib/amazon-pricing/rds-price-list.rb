@@ -215,6 +215,10 @@ module AwsPricing
       res['config']['regions'].each do |reg|
         region_name = reg['region']
         region = get_region(region_name)
+        if region.nil?
+          $stderr.puts "[fetch_ec2_instance_pricing] WARNING: unable to find region #{region_name}"
+          next
+        end
         reg['types'].each do |type|
           type['tiers'].each do |tier|
             begin
