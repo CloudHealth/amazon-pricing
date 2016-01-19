@@ -177,18 +177,15 @@ class TestEc2InstanceTypes < Test::Unit::TestCase
     region = @@ec2_pricing.get_region('us-gov-west-1')
     instance = region.get_ec2_instance_type('r3.large')
     os = instance.get_operating_system(:linux)
-    assert os.ondemand_price_per_hour == 0.210
-    assert os.partialupfront_prepay_1_year == 649
-    assert os.allupfront_prepay_1_year == 976
-    assert os.partialupfront_prepay_3_year == 1239
-    assert os.allupfront_prepay_3_year == 1935
-    assert os.noupfront_effective_rate_1_year == 0.1320
-    assert os.partialupfront_effective_rate_1_year == 0.1131
-    assert os.allupfront_effective_rate_1_year == 0.1114
-    assert os.partialupfront_effective_rate_3_year == 0.0781
-    assert os.allupfront_effective_rate_3_year == 0.0736
+    assert os.ondemand_price_per_hour == 0.2
+    assert os.partialupfront_prepay_1_year == 617
+    assert os.allupfront_prepay_1_year == 927
+    assert os.partialupfront_prepay_3_year == 1177
+    assert os.allupfront_prepay_3_year == 1838
+    assert os.noupfront_effective_rate_1_year == 0.125
+    assert os.partialupfront_effective_rate_1_year == 0.1074
+    assert os.allupfront_effective_rate_1_year == 0.1058
+    assert os.partialupfront_effective_rate_3_year == 0.0738
+    assert os.allupfront_effective_rate_3_year == 0.0699
   end
-
-
-
 end
