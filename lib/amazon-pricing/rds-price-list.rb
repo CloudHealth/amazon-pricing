@@ -63,6 +63,8 @@ module AwsPricing
     # this data is not available for new offerings
     @@NO_LEGACY_RI_PRICING_AVAILABLE = [:aurora, :mariadb]
 
+    GOV_CLOUD_REGIONS = ['us-gov-west-1']
+
     def is_multi_az?(type)
       return true if type.upcase.match("MULTI-AZ")
       false
@@ -109,6 +111,7 @@ module AwsPricing
           end
         }
       end
+      fill_rds_od_price_for_govcloud
     end
 
     def get_rds_reserved_instance_pricing2
@@ -219,6 +222,7 @@ module AwsPricing
           $stderr.puts "[fetch_on_demand_rds_instance_pricing] WARNING: unable to find region #{region_name}"
           next
         end
+        next if GOV_CLOUD_REGIONS.include? region
         reg['types'].each do |type|
           type['tiers'].each do |tier|
             begin
@@ -238,6 +242,18 @@ module AwsPricing
             end
           end
         end
+      end
+    end
+
+    def fill_rds_od_price_for_govcloud
+      ['us-gov-west-1'].each do |region|
+        region = get_region(region)
+        if region.nil?
+          $stderr.puts "[fill_rds_od_price_for_govcloud] WARNING: unable to find region #{region}"
+          next
+        end
+        require 'pry-debugger'
+        binding.pry
       end
     end
 

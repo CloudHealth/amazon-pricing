@@ -31,7 +31,7 @@ module AwsPricing
       db.available?(type_of_instance)
     end
 
-    def update_pricing(database_type, type_of_instance, json, is_multi_az, is_byol)
+    def find_db_or_initialize_by(database_type, is_multi_az, is_byol)
       db = get_category_type(database_type, is_multi_az, is_byol)
       if db.nil?
         db = DatabaseType.new(self, database_type)        
@@ -45,8 +45,17 @@ module AwsPricing
         else
           @category_types[database_type] = db
         end    
-
       end
+      db
+    end
+
+    def update_on_demand_pricing(od_price, database_type, is_multi_az, is_byol)
+      db = find_db_or_initialize_by(database_type, is_multi_az, is_byol)
+      db.set_price_per_hour(:ondemand, nil, od_price)
+    end
+
+    def update_pricing(database_type, type_of_instance, json, is_multi_az, is_byol)
+      db = find_db_or_initialize_by(database_type, is_multi_az, is_byol)
 
       if type_of_instance == :ondemand
         values = RdsInstanceType::get_values(json, database_type)
