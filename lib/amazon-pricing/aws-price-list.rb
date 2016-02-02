@@ -20,7 +20,7 @@ module AwsPricing
       @_regions = {}
 
       # Creating regions upfront since different json files all use different naming conventions. No more ad-hoc creation.
-      regions = ["eu-west-1", "sa-east-1", "us-east-1", "ap-northeast-1", "us-west-2", "us-west-1", "ap-southeast-1", "ap-southeast-2", "eu-central-1", "us-gov-west-1"]
+      regions = ["eu-west-1", "sa-east-1", "us-east-1", "ap-northeast-1", "us-west-2", "us-west-1", "ap-southeast-1", "ap-southeast-2", "eu-central-1", "us-gov-west-1", "ap-northeast-2"]
 
       regions.each do |name|
         @_regions[name] = Region.new(name)
