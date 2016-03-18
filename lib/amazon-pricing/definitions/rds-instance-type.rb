@@ -85,6 +85,10 @@ module AwsPricing
           end
         end
       end
+      # Copy prices from oracle_se to oracle_se2
+      if database_type == :oracle_se && is_byol
+        update_pricing :oracle_se2, type_of_instance, json, is_multi_az, is_byol
+      end
     end
 
     def update_pricing_new(database_type, type_of_instance, prices, term = nil, is_multi_az, is_byol)
@@ -119,6 +123,10 @@ module AwsPricing
           else
             # Do nothing for other names
         end
+      end
+      # Copy prices from oracle_se to oracle_se2
+      if database_type == :oracle_se && is_byol
+        update_pricing_new :oracle_se2, type_of_instance, prices, term, is_multi_az, is_byol
       end
     end
 
