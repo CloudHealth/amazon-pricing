@@ -39,6 +39,11 @@ module AwsPricing
       'aurora_standard'         => 'Amazon Aurora',
       'mariadb_standard'        => 'MariaDB',
       'mariadb_multiaz'         => 'MariaDB (Multi-AZ)',
+
+      # Oracle SE2 BYOL prices are copied from Enterprise BYOL prices and not collected
+      # (so no need to add rds-price-list.rb)
+      'oracle_se2_byol'         => 'Oracle Database Standard Edition Two (BYOL)',
+      'oracle_se2_byol_multiaz' => 'Oracle Database Standard Edition Two (BYOL Multi-AZ)',
     }
 
     @@Display_Name_To_Qualified_Database_Name = @@Database_Name_Lookup.invert
@@ -71,6 +76,11 @@ module AwsPricing
       'aurora'                   => 'aurora_standard',
       'mariadb'                  => 'mariadb_standard',
       'mariadb_multiaz'          => 'mariadb_multiaz',
+
+      # Oracle SE2 BYOL prices are copied from Enterprise BYOL prices and not collected
+      # (so no need to add rds-price-list.rb)
+      'oracle-se2(byol)'         => 'oracle_se2_byol',
+      'oracle-se2(byol)_multiaz' => 'oracle_se2_byol_multiaz',
     }
 
     @@DB_Deploy_Types = {
@@ -83,6 +93,9 @@ module AwsPricing
       :sqlserver_ee => [:byol, :byol_multiaz, :standard, :multiaz],
       :aurora       => [:standard],
       :mariadb      => [:standard, :multiaz],
+
+      # oracle_se2 prices are copied, not collected
+      :oracle_se2   => [:byol, :byol_multiaz],
     }
 
   	def self.display_name(name)
@@ -90,7 +103,10 @@ module AwsPricing
   	end
 
   	def self.get_database_name
-  	  [:mysql, :postgresql, :oracle_se1, :oracle_se, :oracle_ee, :sqlserver_ex, :sqlserver_web, :sqlserver_se, :sqlserver_ee, :aurora, :mariadb]
+      [:mysql, :postgresql, :oracle_se1, :oracle_se, :oracle_ee, :sqlserver_ex, :sqlserver_web,
+        :sqlserver_se, :sqlserver_ee, :aurora, :mariadb,
+        :oracle_se2 # oracle_se2 prices are copied, not collected
+      ]
   	end
 
   	def self.get_available_types(db)
