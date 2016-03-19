@@ -1,7 +1,9 @@
 require 'spec_helper'
 
 describe AwsPricing::ElastiCachePriceList do
-  NEW_REGIONS = ['ap-northeast-2']
+  # When new regions are introduced and elasticache prices are not available
+  # in the new regions yet, add the new regions to NEW_REGIONS.
+  NEW_REGIONS = []
   before(:all) do
     @pricing = AwsPricing::ElastiCachePriceList.new
     @node_types = [:memcached]
@@ -68,7 +70,7 @@ describe AwsPricing::ElastiCachePriceList do
       end
     end
 
-    it "should not yet have valid breakeven months for new region" do
+    it "should not yet have valid breakeven months for new regions" do
       @pricing.regions.each do |region|
         next unless NEW_REGIONS.include?(region.name)
         begin
