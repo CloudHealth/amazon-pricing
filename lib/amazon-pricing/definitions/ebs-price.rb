@@ -32,9 +32,9 @@ module AwsPricing
         when "Amazon EBS General Purpose SSD (gp2) volumes"
           @ssd_per_gb = t["values"].select{|v| v["rate"] == "perGBmoProvStorage" }.first["prices"].values.first.to_f
         when "Amazon EBS Cold HDD (sc1) volumes"
-          @ebs_optimized_hdd_per_gb = t["values"].select{|v| v["rate"] == "perGBmoProvStorage" }.first["prices"].values.first.to_f
+          @ebs_cold_hdd_per_gb = t["values"].select{|v| v["rate"] == "perGBmoProvStorage" }.first["prices"].values.first.to_f
         when "Amazon EBS Throughput Optimized HDD (st1) volumes"
-          @ebs_cold_hdd_per_gb = t["values"].select{|v| v["rate"] == "perGBmoDataStored" }.first["prices"].values.first.to_f
+          @ebs_optimized_hdd_per_gb = t["values"].select{|v| v["rate"] == "perGBmoProvStorage" }.first["prices"].values.first.to_f
         when "ebsSnapsToS3"
           @s3_snaps_per_gb = t["values"].select{|v| v["rate"] == "perGBmoDataStored" }.first["prices"].values.first.to_f
         end
