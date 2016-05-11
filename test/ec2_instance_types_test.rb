@@ -82,8 +82,8 @@ class TestEc2InstanceTypes < Test::Unit::TestCase
   def test_ebs
     region = @@ec2_pricing.get_region('us-east')
     # next two prices are no longer provided by aws (May 09, 2016) so test should fail?
-    assert region.ebs_price.standard_per_gb == 0.05
-    assert region.ebs_price.standard_per_million_io == 0.05
+    #assert region.ebs_price.standard_per_gb == 0.05
+    #assert region.ebs_price.standard_per_million_io == 0.05
     assert region.ebs_price.preferred_per_gb == 0.125
     assert region.ebs_price.preferred_per_iops == 0.065
     assert region.ebs_price.s3_snaps_per_gb == 0.095
@@ -97,8 +97,8 @@ class TestEc2InstanceTypes < Test::Unit::TestCase
     @@ec2_pricing.regions.each do |region|
       # Everyone should have standard pricing
       # next two prices are no longer provided by aws (May 09, 2016) (so test should fail?)
-      assert_not_nil region.ebs_price.standard_per_gb
-      assert_not_nil region.ebs_price.standard_per_million_io
+      #assert_not_nil region.ebs_price.standard_per_gb
+      #assert_not_nil region.ebs_price.standard_per_million_io
       assert_not_nil region.ebs_price.preferred_per_gb
       assert_not_nil region.ebs_price.preferred_per_iops
       assert_not_nil region.ebs_price.ebs_optimized_hhd_per_gb
