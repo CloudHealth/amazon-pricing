@@ -183,7 +183,7 @@ class TestEc2InstanceTypes < Test::Unit::TestCase
     assert region.ebs_price.preferred_per_iops == 0.078
     assert region.ebs_price.s3_snaps_per_gb == 0.125
     # next two prices were added by aws (May 09, 2016)
-    assert region.ebs_price.ebs_optimized_hd_per_gb == 0.054
+    assert region.ebs_price.ebs_optimized_hdd_per_gb == 0.054
     assert region.ebs_price.ebs_cold_hdd_per_dgb == 0.03
 
   end
