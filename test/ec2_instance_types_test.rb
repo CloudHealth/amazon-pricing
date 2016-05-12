@@ -80,7 +80,7 @@ class TestEc2InstanceTypes < Test::Unit::TestCase
   end
 
   def test_ebs
-    region = @@ec2_pricing.get_region('us-east')
+    region = @@ec2_pricing.get_region('us-east-1')
     # next two prices are no longer provided by aws (May 09, 2016)
     assert region.ebs_price.standard_per_gb == 0.05
     assert region.ebs_price.standard_per_million_io == 0.05
