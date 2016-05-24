@@ -45,6 +45,14 @@ class TestEc2InstanceTypes < Test::Unit::TestCase
     assert region.instance_type_available?('m3.large')
   end
 
+  def test_available_x1
+    # Validate instance types in specific regions are available
+    region = @@ec2_pricing.get_region('us-east')
+    assert !region.instance_type_available?('x1.99xlarge')  #bogus x1
+    assert region.instance_type_available?('x1.32xlarge')   #test valid x1 available
+  end
+
+
   def test_fetch_all_breakeven_months
     @@ec2_pricing.regions.each do |region|
       region.ec2_instance_types.each do |instance|
