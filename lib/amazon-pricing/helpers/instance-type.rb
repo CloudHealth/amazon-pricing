@@ -29,7 +29,8 @@ module AwsPricing
         },
         'MemoryOptimized' => {
             'CurrentGen' => {
-                'R3'  => ['r3.large', 'r3.xlarge', 'r3.2xlarge', 'r3.4xlarge', 'r3.8xlarge']
+                'R3'  => ['r3.large', 'r3.xlarge', 'r3.2xlarge', 'r3.4xlarge', 'r3.8xlarge'],
+                'X1'  => ['x1.32xlarge']
             },
             'PreviousGen' => {
                 'M2'  => ['m2.xlarge', 'm2.2xlarge', 'm2.4xlarge'],
@@ -171,7 +172,8 @@ module AwsPricing
           "2xlarge" => 16,
           "4xlarge" => 32,
           "8xlarge" => 64,
-          "10xlarge" => 80
+          "10xlarge" => 80,
+          "32xlarge" => 256
       }
       NF_TO_SIZE_TABLE = SIZE_TO_NF_TABLE.invert
 
