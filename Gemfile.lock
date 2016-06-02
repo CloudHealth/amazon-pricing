@@ -46,5 +46,3 @@ DEPENDENCIES
   rspec (~> 2.11.0)
   test-unit
 
-BUNDLED WITH
-   1.12.5
