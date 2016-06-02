@@ -1,20 +1,26 @@
 PATH
   remote: .
   specs:
-    amazon-pricing (0.1.76)
+    amazon-pricing (0.1.77)
 
 GEM
   remote: https://rubygems.org/
   specs:
-    coderay (1.1.0)
+    coderay (1.1.1)
     diff-lcs (1.1.3)
+    ffi (1.9.10-java)
     method_source (0.8.2)
-    power_assert (0.2.3)
-    pry (0.10.1)
+    power_assert (0.3.0)
+    pry (0.10.3)
       coderay (~> 1.1.0)
       method_source (~> 0.8.1)
       slop (~> 3.4)
-    rake (10.4.2)
+    pry (0.10.3-java)
+      coderay (~> 1.1.0)
+      method_source (~> 0.8.1)
+      slop (~> 3.4)
+      spoon (~> 0.0)
+    rake (11.1.2)
     rspec (2.11.0)
       rspec-core (~> 2.11.0)
       rspec-expectations (~> 2.11.0)
@@ -24,10 +30,13 @@ GEM
       diff-lcs (~> 1.1.3)
     rspec-mocks (2.11.3)
     slop (3.6.0)
-    test-unit (3.0.9)
+    spoon (0.0.4)
+      ffi
+    test-unit (3.1.9)
       power_assert
 
 PLATFORMS
+  java
   ruby
 
 DEPENDENCIES
@@ -36,3 +45,6 @@ DEPENDENCIES
   rake
   rspec (~> 2.11.0)
   test-unit
+
+BUNDLED WITH
+   1.12.5

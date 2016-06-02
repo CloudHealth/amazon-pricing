@@ -41,10 +41,14 @@ module AwsPricing
           next
         end
         reg['instanceTypes'].each do |type|
-          api_name = type["type"]
-          instance_type = region.get_instance_type(api_name)
+          # it's possible we're missing the instance_type (i.e. it wasn't in the base, cf: ec2-di-price-list),
+          # so let's always make it gets added now (instead of simply calling region.get_instance_type(api_name))
+          api_name, name = Ec2InstanceType.get_name("",           #unused
+                                                    type["type"], #api_name
+                                                    false)        #!:ondemand
+          instance_type = region.add_or_update_ec2_instance_type(api_name, name)
           if instance_type.nil?
-            $stderr.puts "[fetch_ec2_instance_pricing_ri_v2] WARNING: new reserved instances not found for #{api_name} in #{region_name}"
+            $stderr.puts "[fetch_ec2_instance_pricing_ri_v2] WARNING: new reserved instances not found for #{api_name} in #{region_name} using #{url}"
             next
           end
 

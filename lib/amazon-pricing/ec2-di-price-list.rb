@@ -6,6 +6,8 @@ module AwsPricing
       super
       InstanceType.populate_lookups
       get_ec2_di_od_pricing
+      # assumption is above/di_od populates all InstanceType's, but it missing entries e.g. x1.32xlarge;
+      # the fix is we now allow fetch_ec2_instance_pricing_ri_v2 to add instance_types
       get_ec2_reserved_di_pricing
     end
 
