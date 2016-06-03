@@ -43,6 +43,7 @@ module AwsPricing
         reg['instanceTypes'].each do |type|
           # it's possible we're missing the instance_type (i.e. it wasn't in the base, cf: ec2-di-price-list),
           # so let's always make it gets added now (instead of simply calling region.get_instance_type(api_name))
+          # we'll need to populate the missing ondemand pricing, later on below
           api_name, name = Ec2InstanceType.get_name("",           #unused
                                                     type["type"], #api_name
                                                     false)        #!:ondemand
@@ -53,6 +54,25 @@ module AwsPricing
           end
 
           type["terms"].each do |term|
+            # handle case of ondemand pricing missing from non-ri case, if so let's try populating it here
+            if not region.instance_type_available?(api_name, :ondemand, operating_system)
+              # nb: we actually don't each-iterate below, and ignore extraneous iterations
+              term["onDemandHourly"].each do |od_option|
+                # handle case of ondemand pricing missing from non-ri case, let's try populating it here
+                # [{purchaseOption:"ODHourly",rate:"perhr",prices:{USD:"13.338"}}],
+                if od_option["purchaseOption"] != "ODHourly" || od_option["rate"] != "perhr"
+                  $stderr.puts "[fetch_ec2_instance_pricing_ri_v2] WARNING unexpected od_option #{od_option}"
+                end
+                price = od_option["prices"]["USD"]
+                instance_type.update_pricing_new(operating_system, :ondemand, price)
+                # prevent iteration, since it doesn't make sense, noting it's (theoretically) possible
+                break
+              end
+              # assert if we're still missing :ondemand, we'll eventually fail in our model
+              if not region.instance_type_available?(api_name, :ondemand, operating_system)
+                raise "new reserved instances missing ondemand for #{api_name} in #{region_name} using #{url}"
+              end
+            end
             term["purchaseOptions"].each do |option|
               case option["purchaseOption"]
                 when "noUpfront"
