@@ -41,38 +41,14 @@ module AwsPricing
           next
         end
         reg['instanceTypes'].each do |type|
-          # it's possible we're missing the instance_type (i.e. it wasn't in the base, cf: ec2-di-price-list),
-          # so let's always make it gets added now (instead of simply calling region.get_instance_type(api_name))
-          # we'll need to populate the missing ondemand pricing, later on below
-          api_name, name = Ec2InstanceType.get_name("",           #unused
-                                                    type["type"], #api_name
-                                                    false)        #!:ondemand
-          instance_type = region.add_or_update_ec2_instance_type(api_name, name)
+          api_name = type["type"]
+          instance_type = ensure_existence_of_instance_type(region, region_name, api_name, operating_system, type)
           if instance_type.nil?
             $stderr.puts "[fetch_ec2_instance_pricing_ri_v2] WARNING: new reserved instances not found for #{api_name} in #{region_name} using #{url}"
             next
           end
 
           type["terms"].each do |term|
-            # handle case of ondemand pricing missing from non-ri case, if so let's try populating it here
-            if not region.instance_type_available?(api_name, :ondemand, operating_system)
-              # nb: we actually don't each-iterate below, and ignore extraneous iterations
-              term["onDemandHourly"].each do |od_option|
-                # handle case of ondemand pricing missing from non-ri case, let's try populating it here
-                # [{purchaseOption:"ODHourly",rate:"perhr",prices:{USD:"13.338"}}],
-                if od_option["purchaseOption"] != "ODHourly" || od_option["rate"] != "perhr"
-                  $stderr.puts "[fetch_ec2_instance_pricing_ri_v2] WARNING unexpected od_option #{od_option}"
-                end
-                price = od_option["prices"]["USD"]
-                instance_type.update_pricing_new(operating_system, :ondemand, price)
-                # prevent iteration, since it doesn't make sense, noting it's (theoretically) possible
-                break
-              end
-              # assert if we're still missing :ondemand, we'll eventually fail in our model
-              if not region.instance_type_available?(api_name, :ondemand, operating_system)
-                raise "new reserved instances missing ondemand for #{api_name} in #{region_name} using #{url}"
-              end
-            end
             term["purchaseOptions"].each do |option|
               case option["purchaseOption"]
                 when "noUpfront"
@@ -93,9 +69,65 @@ module AwsPricing
               instance_type.update_pricing_new(operating_system, reservation_type, price, duration, false) unless reservation_type == :allupfront || price == "N/A"
             end
           end
-
         end
       end
     end
+
+# let's make sure instance_type for this region has been setup correctly
+    def ensure_existence_of_instance_type(region, region_name, api_name, operating_system, type_json)
+      # input:  region
+      #         region_name
+      #         api_name
+      #         operating_system
+      #         json: ri_v2 which describes instance_type (under region)
+      instance_type = find_or_create_instance_type(region, api_name, operating_system)
+      if not instance_type.nil?
+        set_od_price_if_missing(region, region_name, api_name, operating_system, instance_type, type_json)
+      end
+      instance_type
+    end
+
+# see if instance_type is missing; normally fetch_ec2_instance_pricing() adds instance_type and od-pricing;
+# but if there's AWS inconsistency, make sure we add instance_type now.
+    def find_or_create_instance_type(region, api_name, operating_system)
+      if not region.instance_type_available?(api_name, :ondemand, operating_system)
+        api_name, name = Ec2InstanceType.get_name("",       #unused
+                                                  api_name,
+                                                  false)    #!:ondemand
+        instance_type = region.add_or_update_ec2_instance_type(api_name, name)
+      elsif
+        instance_type = region.get_ec2_instance_type(api_name)
+      end
+      instance_type
+    end
+
+# OnDemand pricing might be missing, and it's a prerequisite for it to be there for our model.
+# one reason it's missing, is AWS added a new instance type, and we only find it now in ri
+    def set_od_price_if_missing(region, region_name, api_name, operating_system, instance_type, type_json)
+      type_json["terms"].each do |term|
+        # handle case of ondemand pricing missing;  turns out od-pricing is also in ri-pricing
+        # (assumes od pricing has been set, iff both api_name+os are available)
+        if not region.instance_type_available?(api_name, :ondemand, operating_system)
+          # nb: we actually don't each-iterate below, and ignore extraneous iterations
+          term["onDemandHourly"].each do |od_option|
+            # handle case of ondemand pricing missing from non-ri case, let's try populating it here
+            # [{purchaseOption:"ODHourly",rate:"perhr",prices:{USD:"13.338"}}],
+            if od_option["purchaseOption"] != "ODHourly" || od_option["rate"] != "perhr"
+              $stderr.puts "[set_od_price_if_missing] WARNING unexpected od_option #{od_option}"
+            end
+            price = od_option["prices"]["USD"]
+            instance_type.update_pricing_new(operating_system, :ondemand, price)
+            logger.debug "od pricing update #{api_name} price #{price} for #{region_name}/#{operating_system}"
+            # prevent iteration, since it doesn't make sense, noting it's (theoretically) possible
+            break
+          end
+        end
+      end
+      # assert if we're still missing :ondemand, we'll eventually fail in our model
+      if not region.instance_type_available?(api_name, :ondemand, operating_system)
+        raise "new reserved instances missing ondemand for #{api_name} in #{region_name}/#{operating_system}}"
+      end
+    end
+
   end
 end
