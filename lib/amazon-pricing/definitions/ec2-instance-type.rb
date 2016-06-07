@@ -98,6 +98,24 @@ module AwsPricing
       @category_types
     end
 
+    # aws does not provide any json-sourced network_capacity, so for now we provide this hardcoded lookup
+    # see https://aws.amazon.com/ec2/instance-types/, under 'Instance Types Matrix', under 'Networking Performance'
+    def self.get_network_capacity(api_name)
+      throughput = @Network_Performance[api_name]
+      if not throughput
+        logger.warn "Unknown network throughput for instance type #{api_name}"
+      end
+      throughput
+    end
+    def self.get_network_mbps(throughput)
+      if throughput
+        network_mbps = @Network_Throughput_Bytes_Per_Hour[throughput]
+      else
+        logger.warn "Unknown network throughput #{throughput}"
+      end
+      network_mbps
+    end
+
     protected
     # Returns [api_name, name]
     def self.get_name(instance_type, api_name, is_reserved = false)
@@ -114,5 +132,130 @@ module AwsPricing
       [api_name, name]
     end
 
+    # throughput values for performance ratings
+    # Amazon informally tells customers that they translate as follows:
+    #   Low = 100 Mbps
+    #   Medium = 500 Mbps
+    #   High = 1 Gbps
+    #   10Gig = 10 Gbps (obviously)
+    @Network_Throughput_Bytes_Per_Hour = {
+        :very_low => 50,    # FIXME check this value
+        :low => 100,
+        :low_to_moderate => 250,  # FIXME check this value
+        :moderate => 500,
+        :high => 1000,
+        :ten_gigabit => 10000
+    }
+
+    @Network_Performance = {
+      'c1.medium' => :moderate,
+      'c1.xlarge' => :high,
+      'c3.2xlarge' => :high,
+      'c3.4xlarge' => :high,
+      'c3.8xlarge' => :ten_gigabit,
+      'c3.large' => :moderate,
+      'c3.xlarge' => :moderate,
+      'c4.2xlarge' => :high,
+      'c4.4xlarge' => :high,
+      'c4.8xlarge' => :ten_gigabit,
+      'c4.large' => :moderate,
+      'c4.xlarge' => :high,
+      'cache.c1.xlarge' => :high,
+      'cache.m1.large' => :moderate,
+      'cache.m1.medium' => :moderate,
+      'cache.m1.small' => :low,
+      'cache.m1.xlarge' => :high,
+      'cache.m2.2xlarge' => :moderate,
+      'cache.m2.4xlarge' => :high,
+      'cache.m2.xlarge' => :moderate,
+      'cache.m3.2xlarge' => :high,
+      'cache.m3.large' => :moderate,
+      'cache.m3.medium' => :moderate,
+      'cache.m3.xlarge' => :high,
+      'cache.r3.2xlarge' => :high,
+      'cache.r3.4xlarge' => :high,
+      'cache.r3.8xlarge' => :ten_gigabit,
+      'cache.r3.large' => :moderate,
+      'cache.r3.xlarge' => :moderate,
+      'cache.x1.32xlarge' => :ten_gigabit,
+      'cache.t1.micro' => :very_low,
+      'cache.t2.medium' => :low_to_moderate,
+      'cache.t2.micro' => :low_to_moderate,
+      'cache.t2.small' => :low_to_moderate,
+      'cc1.4xlarge' => :ten_gigabit,
+      'cc2.8xlarge' => :ten_gigabit,
+      'cg1.4xlarge' => :ten_gigabit,
+      'cr1.8xlarge' => :ten_gigabit,
+      'd2.2xlarge' => :high,
+      'd2.4xlarge' => :high,
+      'd2.8xlarge' => :ten_gigabit,
+      'd2.xlarge' => :moderate,
+      'db.cr1.8xlarge' => :ten_gigabit,
+      'db.m1.large' => :moderate,
+      'db.m1.medium' => :moderate,
+      'db.m1.small' => :low,
+      'db.m1.xlarge' => :high,
+      'db.m2.2xlarge' => :moderate,
+      'db.m2.4xlarge' => :high,
+      'db.m2.xlarge' => :moderate,
+      'db.m3.2xlarge' => :high,
+      'db.m3.large' => :moderate,
+      'db.m3.medium' => :moderate,
+      'db.m3.xlarge' => :high,
+      'db.m4.10xlarge' => :ten_gigabit,
+      'db.m4.2xlarge' => :high,
+      'db.m4.4xlarge' => :high,
+      'db.m4.large' => :moderate,
+      'db.m4.xlarge' => :high,
+      'db.r3.2xlarge' => :high,
+      'db.r3.4xlarge' => :high,
+      'db.r3.8xlarge' => :ten_gigabit,
+      'db.r3.large' => :moderate,
+      'db.r3.xlarge' => :moderate,
+      'db.t1.micro' => :very_low,
+      'db.t2.large' => :low_to_moderate,
+      'db.t2.medium' => :low_to_moderate,
+      'db.t2.micro' => :low,
+      'db.t2.small' => :low_to_moderate,
+      'db.x1.32xlarge' => :ten_gigabit,
+      'g2.2xlarge' => :high,
+      'g2.8xlarge' => :ten_gigabit,
+      'hi1.4xlarge' => :ten_gigabit,
+      'hs1.8xlarge' => :ten_gigabit,
+      'i2.2xlarge' => :high,
+      'i2.4xlarge' => :high,
+      'i2.8xlarge' => :ten_gigabit,
+      'i2.xlarge' => :moderate,
+      'm1.large' => :moderate,
+      'm1.medium' => :moderate,
+      'm1.small' => :low,
+      'm1.xlarge' => :high,
+      'm2.2xlarge' => :moderate,
+      'm2.4xlarge' => :high,
+      'm2.xlarge' => :moderate,
+      'm3.2xlarge' => :high,
+      'm3.large' => :moderate,
+      'm3.medium' => :moderate,
+      'm3.xlarge' => :high,
+      'm4.10xlarge' => :ten_gigabit,
+      'm4.2xlarge' => :high,
+      'm4.4xlarge' => :high,
+      'm4.large' => :moderate,
+      'm4.xlarge' => :high,
+      'r3.2xlarge' => :high,
+      'r3.4xlarge' => :high,
+      'r3.8xlarge' => :ten_gigabit,
+      'r3.large' => :moderate,
+      'r3.xlarge' => :moderate,
+      't1.micro' => :very_low,
+      't2.large' => :low_to_moderate,
+      't2.medium' => :low_to_moderate,
+      't2.micro' => :low_to_moderate,
+      't2.nano' => :low,
+      't2.small' => :low_to_moderate,
+      'x1.32xlarge' => :ten_gigabit,
+    }
+
   end
+
 end
