@@ -108,10 +108,9 @@ module AwsPricing
       throughput
     end
     def self.get_network_mbps(throughput)
-      if throughput
-        network_mbps = @Network_Throughput_Bytes_Per_Hour[throughput]
-      else
-        logger.warn "Unknown network throughput #{throughput}"
+      network_mbps = @Network_Throughput_MBits_Per_Second[throughput]
+      if not network_mbps
+        logger.warn "Unknown network throughput for #{throughput}"
       end
       network_mbps
     end
@@ -138,10 +137,10 @@ module AwsPricing
     #   Medium = 500 Mbps
     #   High = 1 Gbps
     #   10Gig = 10 Gbps (obviously)
-    @Network_Throughput_Bytes_Per_Hour = {
-        :very_low => 50,    # FIXME check this value
+    @Network_Throughput_MBits_Per_Second = {
+        :very_low => 50,
         :low => 100,
-        :low_to_moderate => 250,  # FIXME check this value
+        :low_to_moderate => 250,
         :moderate => 500,
         :high => 1000,
         :ten_gigabit => 10000
