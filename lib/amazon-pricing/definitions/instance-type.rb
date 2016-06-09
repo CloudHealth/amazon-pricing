@@ -116,6 +116,14 @@ module AwsPricing
       end
     end
 
+    def self.disk_bytes_per_sec_capacity(api_name)
+      PER_SEC_CAPACITIES[api_name][0] * 1024 * 1024
+    end
+
+    def self.disk_ops_per_sec_capacity(api_name)
+      PER_SEC_CAPACITIES[api_name][1]
+    end
+
     protected
 
     def self.get_disk(api_name)
@@ -280,6 +288,115 @@ module AwsPricing
     # e.g. RDS = http://aws-assets-pricing-prod.s3.amazonaws.com/pricing/rds/mysql/pricing-standard-deployments.js
     @@Compute_Units_Lookup = {}
 
+    private
+
+    # [MB/s capacity, Ops/s capacity]
+    PER_SEC_CAPACITIES = {
+      'c1.medium' => [6000, 300000],
+      'c1.xlarge' => [6000, 300000],
+      'c3.2xlarge' => [8000, 600000],
+      'c3.4xlarge' => [9000, 600000],
+      'c3.8xlarge' => [15000, 600000],
+      'c3.large' => [5000, 600000],
+      'c3.xlarge' => [7000, 600000],
+      # c4.2xlarge is EBS-only
+      # c4.4xlarge is EBS-only
+      # c4.8xlarge is EBS-only
+      # c4.large is EBS-only
+      # c4.xlarge is EBS-only
+      # cache.c1.xlarge is not picked up by CloudWatch
+      # cache.m1.large is not picked up by CloudWatch
+      # cache.m1.medium is not picked up by CloudWatch
+      # cache.m1.small is not picked up by CloudWatch
+      # cache.m1.xlarge is not picked up by CloudWatch
+      # cache.m2.2xlarge is not picked up by CloudWatch
+      # cache.m2.4xlarge is not picked up by CloudWatch
+      # cache.m2.xlarge is not picked up by CloudWatch
+      # cache.m3.2xlarge is not picked up by CloudWatch
+      # cache.m3.large is not picked up by CloudWatch
+      # cache.m3.medium is not picked up by CloudWatch
+      # cache.m3.xlarge is not picked up by CloudWatch
+      # cache.r3.2xlarge is not picked up by CloudWatch
+      # cache.r3.4xlarge is not picked up by CloudWatch
+      # cache.r3.8xlarge is not picked up by CloudWatch
+      # cache.r3.large is not picked up by CloudWatch
+      # cache.r3.xlarge is not picked up by CloudWatch
+      # cache.t1.micro is not picked up by CloudWatch
+      # cache.t2.medium is not picked up by CloudWatch
+      # cache.t2.micro is not picked up by CloudWatch
+      # cache.t2.small is not picked up by CloudWatch
+      # cc1.4xlarge is not picked up by CloudWatch
+      'cc2.8xlarge' => [2500, 50000],
+      # cg1.4xlarge is not picked up by CloudWatch
+      'cr1.8xlarge' => [1500, 2000000],
+      'd2.2xlarge' => [6000, 150000],
+      'd2.4xlarge' => [9000, 170000],
+      'd2.8xlarge' => [12000, 170000],
+      'd2.xlarge' => [4000, 150000],
+      # db.cr1.8xlarge, like all RDS instances, are EBS-only
+      # db.m1.large, like all RDS instances, are EBS-only
+      # db.m1.medium, like all RDS instances, are EBS-only
+      # db.m1.small, like all RDS instances, are EBS-only
+      # db.m1.xlarge, like all RDS instances, are EBS-only
+      # db.m2.2xlarge, like all RDS instances, are EBS-only
+      # db.m2.4xlarge, like all RDS instances, are EBS-only
+      # db.m2.xlarge, like all RDS instances, are EBS-only
+      # db.m3.2xlarge, like all RDS instances, are EBS-only
+      # db.m3.large, like all RDS instances, are EBS-only
+      # db.m3.medium, like all RDS instances, are EBS-only
+      # db.m3.xlarge, like all RDS instances, are EBS-only
+      # db.m4.10xlarge, like all RDS instances, are EBS-only
+      # db.m4.2xlarge, like all RDS instances, are EBS-only
+      # db.m4.4xlarge, like all RDS instances, are EBS-only
+      # db.m4.large, like all RDS instances, are EBS-only
+      # db.m4.xlarge, like all RDS instances, are EBS-only
+      # db.r3.2xlarge, like all RDS instances, are EBS-only
+      # db.r3.4xlarge, like all RDS instances, are EBS-only
+      # db.r3.8xlarge, like all RDS instances, are EBS-only
+      # db.r3.large, like all RDS instances, are EBS-only
+      # db.r3.xlarge, like all RDS instances, are EBS-only
+      # db.t1.micro, like all RDS instances, are EBS-only
+      # db.t2.large, like all RDS instances, are EBS-only
+      # db.t2.medium, like all RDS instances, are EBS-only
+      # db.t2.micro, like all RDS instances, are EBS-only
+      # db.t2.small, like all RDS instances, are EBS-only
+      'g2.2xlarge' => [1000, 12000],
+      'g2.8xlarge' => [2000, 24000],
+      'hi1.4xlarge' => [3000, 85000],
+      'hs1.8xlarge' => [2000, 60000],
+      'i2.2xlarge' => [13000, 500000],
+      'i2.4xlarge' => [18000, 600000],
+      'i2.8xlarge' => [14000, 700000],
+      'i2.xlarge' => [5000, 300000],
+      'm1.large' => [8000, 200000],
+      'm1.medium' => [7000, 200000],
+      'm1.small' => [7000, 200000],
+      'm1.xlarge' => [8000, 200000],
+      'm2.2xlarge' => [3000, 600000],
+      'm2.4xlarge' => [4000, 700000],
+      'm2.xlarge' => [5000, 1050000],
+      'm3.2xlarge' => [6000, 500000],
+      'm3.large' => [4000, 600000],
+      'm3.medium' => [4000, 800000],
+      'm3.xlarge' => [6000, 600000],
+      # m4.10xlarge is EBS-only
+      # m4.2xlarge is EBS-only
+      # m4.4xlarge is EBS-only
+      # m4.large is EBS-only
+      # m4.xlarge is EBS-only
+      'r3.2xlarge' => [35000, 400000],
+      'r3.4xlarge' => [55000, 450000],
+      'r3.8xlarge' => [105000, 500000],
+      'r3.large' => [10000, 200000],
+      'r3.xlarge' => [20000, 300000],
+      # t1.micro is EBS-only
+      # t2.large is EBS-only
+      # t2.medium is EBS-only
+      # t2.micro is EBS-only
+      # t2.nano is EBS-only
+      # t2.small is EBS-only
+      'x1.32xlarge' => [15000, 500000],
+    }
   end
 
 end
