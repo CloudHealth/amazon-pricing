@@ -119,6 +119,8 @@ module AwsPricing
           when 'upfront'
             db.set_prepay(type_of_instance, years, p.to_f) unless type_of_instance == :noupfront || p == "N/A"
           when 'monthlyStar'
+            # note for partialupfront, this purposely differs from AWS' "effective hourly" since we do not
+            # include the amortization of the partialupfront cost into this rate.
             db.set_price_per_hour(type_of_instance, years, p.to_f * 12 / 365 / 24) unless type_of_instance == :allupfront || p == "N/A"
           else
             # Do nothing for other names
