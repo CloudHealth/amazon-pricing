@@ -39,12 +39,18 @@ module AwsPricing
       :sqlserver=> {:sqlserver_ex=>["li-ex"], :sqlserver_web=>["li-web"], :sqlserver_se=>["li-se","byol"], :sqlserver_ee=>["byol"]}
     }
 
+    # the following cli will extract all the URLs referenced on the AWS pricing page that fetch_reserved_rds_instance_pricing2 uses:
+    # curl http://aws.amazon.com/rds/pricing/ 2>/dev/null | grep 'pricing' |grep reserved-instances
     @@RESERVED_DB_DEPLOY_TYPE2 = {
         :mysql => {:mysql=>["standard","multiAZ"]},
         :postgresql => {:postgresql=>["standard","multiAZ"]},
         :oracle => {:oracle_se1=>["license-included-standard", "license-included-multiAZ"],
                     :oracle_se=>["byol-standard", "byol-multiAZ"]},
-        :sqlserver => {:sqlserver_se=>["byol-standard", "byol-multiAZ"]},
+        :sqlserver => {
+            :sqlserver_ex =>["license-included-standard"],
+            :sqlserver_web=>["license-included-standard"],
+            :sqlserver_se =>["byol-standard", "byol-multiAZ", "license-included-standard", "license-included-multiAZ"],
+            :sqlserver_ee =>["byol-standard", "byol-multiAZ", "license-included-standard", "license-included-multiAZ"]},
         :aurora => {:aurora => ["multiAZ"]},
         :mariadb => {:mariadb => ["standard", "multiAZ"]}
     }
@@ -53,8 +59,11 @@ module AwsPricing
         :mysql => [:mysql],
         :postgresql => [:postgresql],
         :oracle_se1 => [:oracle_se1],
-        :oracle_se => [:oracle_se, :oracle_se1, :oracle_ee],
-        :sqlserver_se => [:sqlserver_se, :sqlserver_ee],
+        :oracle_se => [:oracle_se, :oracle_ee],
+        :sqlserver_ex => [:sqlserver_ex],
+        :sqlserver_web=> [:sqlserver_web],
+        :sqlserver_se => [:sqlserver_se],
+        :sqlserver_ee => [:sqlserver_ee],
         :aurora => [:aurora],
         :mariadb => [:mariadb]
     }
@@ -119,7 +128,23 @@ module AwsPricing
             # We believe Amazon made a mistake by hosting aurora's prices on a url that follows the multi-az pattern.
             # Therefore we'll construct the URL as multi-az, but still treat the prices as for single-az.
             is_multi_az = deploy_type.upcase.include?("MULTIAZ") && db != :aurora
-            db_str = db == :sqlserver_se ? 'sql-server-se' : db.to_s.gsub(/_/, '-')
+
+            # map sqlserver to aws strings (notice '-' between sql-server)
+            case db
+              when :sqlserver_se
+                db_str = 'sql-server-se'
+              when :sqlserver_ee
+                db_str = 'sql-server-ee'
+              when :sqlserver_web
+                db_str = 'sql-server-web'
+              when :sqlserver_ex
+                db_str = 'sql-server-express'
+              else
+                db_str = db.to_s.gsub(/_/, '-')
+            end
+
+            # nb: the intersection of @@RESERVED_DB_DEPLOY_TYPE2 and @@RESERVED_DB_WITH_SAME_PRICING2 should
+            #     not overlap, since they have different pricings
             dbs_with_same_pricing = @@RESERVED_DB_WITH_SAME_PRICING2[db]
             fetch_reserved_rds_instance_pricing2(RDS_BASE_URL+"reserved-instances/#{db_str}-#{deploy_type}.min.js", dbs_with_same_pricing, is_multi_az, is_byol)
           end
@@ -128,6 +153,7 @@ module AwsPricing
     end
 
     def fetch_reserved_rds_instance_pricing2(url, dbs, is_multi_az, is_byol)
+      #logger.debug "[#{__method__}] fetched #{url}"
       res = PriceList.fetch_url(url)
       res['config']['regions'].each do |reg|
         region_name = reg['region']
@@ -211,6 +237,7 @@ module AwsPricing
     end
 
     def fetch_on_demand_rds_instance_pricing(url, type_of_rds_instance, db_type, is_byol, is_multi_az = false)
+      #logger.debug "[#{__method__}] fetched #{url}"
       res = PriceList.fetch_url(url)
       res['config']['regions'].each do |reg|
         region_name = reg['region']
@@ -242,6 +269,7 @@ module AwsPricing
     end
 
     def fetch_reserved_rds_instance_pricing(url, type_of_rds_instance, db_type, is_byol)
+      #logger.debug "[#{__method__}] fetched #{url}"
       res = PriceList.fetch_url(url)
       res['config']['regions'].each do |reg|
         region_name = reg['region']
