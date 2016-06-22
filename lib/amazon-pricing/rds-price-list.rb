@@ -42,16 +42,16 @@ module AwsPricing
     # the following cli will extract all the URLs referenced on the AWS pricing page that fetch_reserved_rds_instance_pricing2 uses:
     # curl http://aws.amazon.com/rds/pricing/ 2>/dev/null | grep 'pricing' |grep reserved-instances
     @@RESERVED_DB_DEPLOY_TYPE2 = {
-        :mysql => {:mysql=>["standard","multiAZ"]},
+        :mysql      => {:mysql=>["standard","multiAZ"]},
         :postgresql => {:postgresql=>["standard","multiAZ"]},
-        :oracle => {:oracle_se1=>["license-included-standard", "license-included-multiAZ"],
-                    :oracle_se=>["byol-standard", "byol-multiAZ"]},
+        :oracle => {:oracle_se1=>["byol-standard", "byol-multiAZ", "license-included-standard", "license-included-multiAZ"],
+                    :oracle_se =>["byol-standard", "byol-multiAZ"]},
         :sqlserver => {
             :sqlserver_ex =>["license-included-standard"],
-            :sqlserver_web=>["license-included-standard"],
+            :sqlserver_web=>["license-included-standard", "license-included-multiAZ"],
             :sqlserver_se =>["byol-standard", "byol-multiAZ", "license-included-standard", "license-included-multiAZ"],
             :sqlserver_ee =>["byol-standard", "byol-multiAZ", "license-included-standard", "license-included-multiAZ"]},
-        :aurora => {:aurora => ["multiAZ"]},
+        :aurora => {:aurora   => ["standard", "multiAZ"]},
         :mariadb => {:mariadb => ["standard", "multiAZ"]}
     }
 
