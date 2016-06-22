@@ -116,12 +116,18 @@ module AwsPricing
       end
     end
 
+    # Returns the bytes/s capacity if defined, `nil` otherwise
     def self.disk_bytes_per_sec_capacity(api_name)
-      PER_SEC_CAPACITIES[api_name][0] * 1024 * 1024
+      if PER_SEC_CAPACITIES[api_name]
+        PER_SEC_CAPACITIES[api_name][0] * 1024 * 1024
+      end
     end
 
+    # Returns the ops/s capacity if defined, `nil` otherwise
     def self.disk_ops_per_sec_capacity(api_name)
-      PER_SEC_CAPACITIES[api_name][1]
+      if PER_SEC_CAPACITIES[api_name]
+        PER_SEC_CAPACITIES[api_name][1]
+      end
     end
 
     protected
