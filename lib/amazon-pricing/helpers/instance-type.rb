@@ -139,7 +139,6 @@ module AwsPricing
       end
 
       def family_members(api_name)
-        puts "checking #{api_name}"
         all_instances.select { |family, instances| instances.include?(api_name) }.values.first
       end
 
