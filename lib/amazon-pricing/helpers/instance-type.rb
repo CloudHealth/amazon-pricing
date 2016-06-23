@@ -14,7 +14,7 @@ module AwsPricing
         },
         'BurstableInstances' => {
             'CurrentGen' => {
-                'T2' => ['t2.micro', 't2.small', 't2.medium', 't2.large']
+                'T2' => ['t2.nano', 't2.micro', 't2.small', 't2.medium', 't2.large']
             }
         },
         'ComputeOptimized' => {
@@ -23,7 +23,7 @@ module AwsPricing
                 'C4' => ['c4.large', 'c4.xlarge', 'c4.2xlarge', 'c4.4xlarge', 'c4.8xlarge']
             },
             'PreviousGen' => {
-                'C1' => ['c1.medium', 'c1.xlarge'],
+                'C1' => ['c1.medium', 'c1.xlarge', 'cc1.4xlarge'],
                 'C2' => ['cc2.8xlarge']
             }
         },
