@@ -401,7 +401,7 @@ module AwsPricing
       # t2.micro is EBS-only
       # t2.nano is EBS-only
       # t2.small is EBS-only
-      'x1.32xlarge' => [15000, 500000],
+      'x1.32xlarge' => [940, 105123],
     }
   end
 
