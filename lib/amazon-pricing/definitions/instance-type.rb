@@ -298,13 +298,13 @@ module AwsPricing
 
     # [MB/s capacity, Ops/s capacity]
     PER_SEC_CAPACITIES = {
-      'c1.medium' => [6000, 300000],
-      'c1.xlarge' => [6000, 300000],
-      'c3.2xlarge' => [8000, 600000],
-      'c3.4xlarge' => [9000, 600000],
-      'c3.8xlarge' => [15000, 600000],
-      'c3.large' => [5000, 600000],
-      'c3.xlarge' => [7000, 600000],
+      'c1.medium' => [118, 5471],
+      'c1.xlarge' => [347, 17245],
+      'c3.2xlarge' => [947, 63297],
+      'c3.4xlarge' => [962, 96546],
+      'c3.8xlarge' => [964, 60702],
+      'c3.large' => [917, 77972],
+      'c3.xlarge' => [932, 60632],
       # c4.2xlarge is EBS-only
       # c4.4xlarge is EBS-only
       # c4.8xlarge is EBS-only
@@ -332,13 +332,13 @@ module AwsPricing
       # cache.t2.micro is not picked up by CloudWatch
       # cache.t2.small is not picked up by CloudWatch
       # cc1.4xlarge is not picked up by CloudWatch
-      'cc2.8xlarge' => [2500, 50000],
+      'cc2.8xlarge' => [598, 64607],
       # cg1.4xlarge is not picked up by CloudWatch
-      'cr1.8xlarge' => [1500, 2000000],
-      'd2.2xlarge' => [6000, 150000],
-      'd2.4xlarge' => [9000, 170000],
-      'd2.8xlarge' => [12000, 170000],
-      'd2.xlarge' => [4000, 150000],
+      'cr1.8xlarge' => [525, 53527],
+      'd2.2xlarge' => [928, 119439],
+      'd2.4xlarge' => [2136, 266270],
+      'd2.8xlarge' => [3367, 225539],
+      'd2.xlarge' => [506, 68167],
       # db.cr1.8xlarge, like all RDS instances, are EBS-only
       # db.m1.large, like all RDS instances, are EBS-only
       # db.m1.medium, like all RDS instances, are EBS-only
@@ -366,42 +366,42 @@ module AwsPricing
       # db.t2.medium, like all RDS instances, are EBS-only
       # db.t2.micro, like all RDS instances, are EBS-only
       # db.t2.small, like all RDS instances, are EBS-only
-      'g2.2xlarge' => [1000, 12000],
-      'g2.8xlarge' => [2000, 24000],
-      'hi1.4xlarge' => [3000, 85000],
-      'hs1.8xlarge' => [2000, 60000],
-      'i2.2xlarge' => [13000, 500000],
-      'i2.4xlarge' => [18000, 600000],
-      'i2.8xlarge' => [14000, 700000],
-      'i2.xlarge' => [5000, 300000],
-      'm1.large' => [8000, 200000],
-      'm1.medium' => [7000, 200000],
-      'm1.small' => [7000, 200000],
-      'm1.xlarge' => [8000, 200000],
-      'm2.2xlarge' => [3000, 600000],
-      'm2.4xlarge' => [4000, 700000],
-      'm2.xlarge' => [5000, 1050000],
-      'm3.2xlarge' => [6000, 500000],
-      'm3.large' => [4000, 600000],
-      'm3.medium' => [4000, 800000],
-      'm3.xlarge' => [6000, 600000],
+      'g2.2xlarge' => [534, 42731],
+      'g2.8xlarge' => [1069, 70756],
+      'hi1.4xlarge' => [1824, 50488],
+      'hs1.8xlarge' => [2257, 126081],
+      'i2.2xlarge' => [949, 89028],
+      'i2.4xlarge' => [1890, 172192],
+      'i2.8xlarge' => [3618, 313304],
+      'i2.xlarge' => [480, 45439],
+      'm1.large' => [252, 29830],
+      'm1.medium' => [134, 9855],
+      'm1.small' => [112, 11776],
+      'm1.xlarge' => [436, 34630],
+      'm2.2xlarge' => [100, 9455],
+      'm2.4xlarge' => [198, 17469],
+      'm2.xlarge' => [100, 8855],
+      'm3.2xlarge' => [934, 72169],
+      'm3.large' => [477, 47711],
+      'm3.medium' => [443, 31698],
+      'm3.xlarge' => [898, 71540],
       # m4.10xlarge is EBS-only
       # m4.2xlarge is EBS-only
       # m4.4xlarge is EBS-only
       # m4.large is EBS-only
       # m4.xlarge is EBS-only
-      'r3.2xlarge' => [35000, 400000],
-      'r3.4xlarge' => [55000, 450000],
-      'r3.8xlarge' => [105000, 500000],
-      'r3.large' => [10000, 200000],
-      'r3.xlarge' => [20000, 300000],
+      'r3.2xlarge' => [238, 34564],
+      'r3.4xlarge' => [473, 50525],
+      'r3.8xlarge' => [471, 51666],
+      'r3.large' => [60, 8812],
+      'r3.xlarge' => [119, 17149],
       # t1.micro is EBS-only
       # t2.large is EBS-only
       # t2.medium is EBS-only
       # t2.micro is EBS-only
       # t2.nano is EBS-only
       # t2.small is EBS-only
-      'x1.32xlarge' => [15000, 500000],
+      'x1.32xlarge' => [940, 105123],
     }
   end
 
