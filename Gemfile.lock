@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    amazon-pricing (0.1.84)
+    amazon-pricing (0.1.85)
 
 GEM
   remote: https://rubygems.org/
@@ -28,7 +28,6 @@ PLATFORMS
 
 DEPENDENCIES
   amazon-pricing!
-  pry
   rake
   rspec (~> 2.11.0)
   test-unit

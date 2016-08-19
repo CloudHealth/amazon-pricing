@@ -52,6 +52,8 @@ module AwsPricing
             # License Included Charges supported: Standard Edition One, Standard Edition Two
             # BYOL Charges supported: do not vary by edition for BYOL Amazon RDS pricing.
             :oracle_se =>["byol-standard", "byol-multiAZ"],
+            # oracle_ee is not here (nor collected), see RESERVED_DB_WITH_SAME_PRICING2 below
+            # :oracle_se =>["byol-standard", "byol-multiAZ"],  # again, note only byol (so not needed)
             :oracle_se1=>["license-included-standard", "license-included-multiAZ"],
             :oracle_se2=>["license-included-standard", "license-included-multiAZ"]
         },

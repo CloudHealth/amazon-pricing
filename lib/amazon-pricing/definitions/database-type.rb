@@ -104,7 +104,7 @@ module AwsPricing
   	def self.get_database_name
       [:mysql, :postgresql, :oracle_se1, :oracle_se, :oracle_ee, :sqlserver_ex, :sqlserver_web,
         :sqlserver_se, :sqlserver_ee, :aurora, :mariadb,
-        :oracle_se2 # oracle_se2 now collected (but not byol)
+        :oracle_se2 # oracle_se2 license included prices are collected, and BYOL prices are copied from oracle_se
       ]
   	end
 
