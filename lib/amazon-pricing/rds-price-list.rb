@@ -23,9 +23,12 @@ module AwsPricing
         # AWS: Oracle - Enterprise Edition, Standard Edition Two, Standard Edition, Standard Edition One.
         # License Included Charges supported: Standard Edition One, Standard Edition Two
         # BYOL Charges supported: do not vary by edition for BYOL Amazon RDS pricing.
-        :oracle_se=>["byol-standard","byol-multiAZ"],
-        :oracle_se1=>["li-standard","li-multiAZ"],
-        :oracle_se2=>["li-standard","li-multiAZ"]
+        # NB: since we explicitly copy Oracle BYOL RdsInstanceType.update_pricing_new, repeated BYOL is redundant here;
+        #     only '#{db}' is used to build the URL, so repeated '#{db_type}' is like copying
+        :oracle_se =>["byol-standard", "byol-multiAZ"],
+        #:oracle_ee =>["byol-standard", "byol-multiAZ"],    # byol is same, so copied
+        :oracle_se1=>["li-standard", "li-multiAZ"],         # byol is same, so copied
+        :oracle_se2=>["se2-li-standard", "se2-li-multiAZ"]  # byol is same, so copied
       },
       :sqlserver => {
         :sqlserver_ex=>["li-ex"],
@@ -43,7 +46,8 @@ module AwsPricing
     }
 
     # the following cli will extract all the URLs referenced on the AWS pricing page that fetch_reserved_rds_instance_pricing2 uses:
-    # curl http://aws.amazon.com/rds/pricing/ 2>/dev/null | grep 'pricing' |grep reserved-instances
+    # curl https://aws.amazon.com/rds/pricing/ 2>/dev/null | grep 'model' |grep reserved-instances
+    # NB: the URL is built using '#{db_str}-#{deploy_type}', so repeats for 'db' below are required
     @@RESERVED_DB_DEPLOY_TYPE2 = {
         :mysql => {:mysql=>["standard","multiAZ"]},
         :postgresql => {:postgresql=>["standard","multiAZ"]},
