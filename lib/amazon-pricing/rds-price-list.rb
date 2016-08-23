@@ -20,9 +20,15 @@ module AwsPricing
       :mysql => {:mysql=>["standard","multiAZ"]},
       :postgresql => {:postgresql=>["standard","multiAZ"]},
       :oracle => {
-        :oracle_se1=>["li-standard","li-multiAZ","byol-standard","byol-multiAZ"],
-        :oracle_se=>["byol-standard","byol-multiAZ"],
-        :oracle_ee=>["byol-standard","byol-multiAZ"]
+        # AWS: Oracle - Enterprise Edition, Standard Edition Two, Standard Edition, Standard Edition One.
+        # License Included Charges supported: Standard Edition One, Standard Edition Two
+        # BYOL Charges supported: do not vary by edition for BYOL Amazon RDS pricing.
+        # NB: since we explicitly copy Oracle BYOL RdsInstanceType.update_pricing_new, repeated BYOL is redundant here;
+        #     only '#{db}' is used to build the URL, so repeated '#{db_type}' is like copying
+        :oracle_se =>["byol-standard", "byol-multiAZ"],
+        #:oracle_ee =>["byol-standard", "byol-multiAZ"],    # byol is same, so copied
+        :oracle_se1=>["li-standard", "li-multiAZ"],         # byol is same, so copied
+        :oracle_se2=>["se2-li-standard", "se2-li-multiAZ"]  # byol is same, so copied
       },
       :sqlserver => {
         :sqlserver_ex=>["li-ex"],
@@ -40,24 +46,34 @@ module AwsPricing
     }
 
     # the following cli will extract all the URLs referenced on the AWS pricing page that fetch_reserved_rds_instance_pricing2 uses:
-    # curl http://aws.amazon.com/rds/pricing/ 2>/dev/null | grep 'pricing' |grep reserved-instances
+    # curl https://aws.amazon.com/rds/pricing/ 2>/dev/null | grep 'model' |grep reserved-instances
+    # NB: the URL is built using '#{db_str}-#{deploy_type}', so repeats for 'db' below are required
     @@RESERVED_DB_DEPLOY_TYPE2 = {
         :mysql => {:mysql=>["standard","multiAZ"]},
         :postgresql => {:postgresql=>["standard","multiAZ"]},
-        :oracle => {:oracle_se1=>["license-included-standard", "license-included-multiAZ"],
-                    :oracle_se=>["byol-standard", "byol-multiAZ"]},
+        :oracle => {
+            # AWS: Oracle - Enterprise Edition, Standard Edition Two, Standard Edition, Standard Edition One.
+            # License Included Charges supported: Standard Edition One, Standard Edition Two
+            # BYOL Charges supported: do not vary by edition for BYOL Amazon RDS pricing.
+            :oracle_se =>["byol-standard", "byol-multiAZ"],
+            # oracle_ee is not here (nor collected), see RESERVED_DB_WITH_SAME_PRICING2 below
+            # :oracle_se =>["byol-standard", "byol-multiAZ"],  # again, note only byol (so not needed)
+            :oracle_se1=>["license-included-standard", "license-included-multiAZ"],
+            :oracle_se2=>["license-included-standard", "license-included-multiAZ"]
+        },
         :sqlserver => {
             :sqlserver_ex =>["license-included-standard"],
-            :sqlserver_web=>["license-included-standard"],
+            :sqlserver_web=>["license-included-standard", "license-included-multiAZ"],
             :sqlserver_se =>["byol-standard", "byol-multiAZ", "license-included-standard", "license-included-multiAZ"],
             :sqlserver_ee =>["byol-standard", "byol-multiAZ", "license-included-standard", "license-included-multiAZ"]},
-        :aurora => {:aurora => ["multiAZ"]},
+        :aurora => {:aurora => ["standard", "multiAZ"]},
         :mariadb => {:mariadb => ["standard", "multiAZ"]}
     }
 
     @@RESERVED_DB_WITH_SAME_PRICING2 = {
         :mysql => [:mysql],
         :postgresql => [:postgresql],
+        :oracle_se2 => [:oracle_se2],
         :oracle_se1 => [:oracle_se1],
         :oracle_se => [:oracle_se, :oracle_ee],
         :sqlserver_ex => [:sqlserver_ex],

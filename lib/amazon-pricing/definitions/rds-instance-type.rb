@@ -85,8 +85,10 @@ module AwsPricing
           end
         end
       end
-      # Copy prices from oracle_se to oracle_se2
+      # Copy byol prices from oracle_se to oracle_{ee,se1,se2}
       if database_type == :oracle_se && is_byol
+        update_pricing :oracle_ee,  type_of_instance, json, is_multi_az, is_byol
+        update_pricing :oracle_se1, type_of_instance, json, is_multi_az, is_byol
         update_pricing :oracle_se2, type_of_instance, json, is_multi_az, is_byol
       end
     end
@@ -126,8 +128,10 @@ module AwsPricing
             # Do nothing for other names
         end
       end
-      # Copy prices from oracle_se to oracle_se2
+      # Copy byol prices from oracle_se to oracle_{ee,se1,se2}
       if database_type == :oracle_se && is_byol
+        update_pricing_new :oracle_ee,  type_of_instance, prices, term, is_multi_az, is_byol
+        update_pricing_new :oracle_se1, type_of_instance, prices, term, is_multi_az, is_byol
         update_pricing_new :oracle_se2, type_of_instance, prices, term, is_multi_az, is_byol
       end
     end

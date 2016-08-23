@@ -40,6 +40,8 @@ module AwsPricing
       'mariadb_standard'        => 'MariaDB',
       'mariadb_multiaz'         => 'MariaDB (Multi-AZ)',
 
+      'oracle_se2_standard'     => 'Oracle Database Standard Edition Two',
+      'oracle_se2_multiaz'      => 'Oracle Database Standard Edition Two (Multi-AZ)',
       # Oracle SE2 BYOL prices are copied from Enterprise BYOL prices and not collected
       # (so no need to add rds-price-list.rb)
       'oracle_se2_byol'         => 'Oracle Database Standard Edition Two (BYOL)',
@@ -55,14 +57,18 @@ module AwsPricing
       'postgres_multiaz'         => 'postgresql_multiaz',
       'postgresql'               => 'postgresql_standard',
       'postgresql_multiaz'       => 'postgresql_multiaz',
-      'oracle-se1(li)'           => 'oracle_se1_standard',
-      'oracle-se1(byol)'         => 'oracle_se1_byol',
-      'oracle-se1(li)_multiaz'   => 'oracle_se1_multiaz',
-      'oracle-se1(byol)_multiaz' => 'oracle_se1_byol_multiaz',
       'oracle-se(byol)'          => 'oracle_se_byol',
-      'oracle-ee(byol)'          => 'oracle_ee_byol',
       'oracle-se(byol)_multiaz'  => 'oracle_se_byol_multiaz',
+      'oracle-ee(byol)'          => 'oracle_ee_byol',
       'oracle-ee(byol)_multiaz'  => 'oracle_ee_byol_multiaz',
+      'oracle-se1(li)'           => 'oracle_se1_standard',
+      'oracle-se1(li)_multiaz'   => 'oracle_se1_multiaz',
+      'oracle-se1(byol)'         => 'oracle_se1_byol',
+      'oracle-se1(byol)_multiaz' => 'oracle_se1_byol_multiaz',
+      'oracle-se2(li)'           => 'oracle_se2_standard',
+      'oracle-se2(li)_multiaz'   => 'oracle_se2_multiaz',
+      'oracle-se2(byol)'         => 'oracle_se2_byol',
+      'oracle-se2(byol)_multiaz' => 'oracle_se2_byol_multiaz',
       'sqlserver-ee(byol)'       => 'sqlserver_ee_byol',
       'sqlserver-ee(byol)_multiaz' => 'sqlserver_ee_byol_multiaz',
       'sqlserver-ee(li)'         => 'sqlserver_ee_standard',
@@ -76,26 +82,19 @@ module AwsPricing
       'aurora'                   => 'aurora_standard',
       'mariadb'                  => 'mariadb_standard',
       'mariadb_multiaz'          => 'mariadb_multiaz',
-
-      # Oracle SE2 BYOL prices are copied from Enterprise BYOL prices and not collected
-      # (so no need to add rds-price-list.rb)
-      'oracle-se2(byol)'         => 'oracle_se2_byol',
-      'oracle-se2(byol)_multiaz' => 'oracle_se2_byol_multiaz',
     }
 
     @@DB_Deploy_Types = {
       :mysql        => [:standard, :multiaz],
       :postgresql   => [:standard, :multiaz],
       :oracle_se1   => [:standard, :multiaz, :byol, :byol_multiaz],
+      :oracle_se2   => [:standard, :multiaz, :byol, :byol_multiaz],
       :oracle_se    => [:byol, :byol_multiaz],
       :oracle_ee    => [:byol, :byol_multiaz],
       :sqlserver_se => [:standard, :multiaz, :byol, :byol_multiaz],
       :sqlserver_ee => [:byol, :byol_multiaz, :standard, :multiaz],
       :aurora       => [:standard],
       :mariadb      => [:standard, :multiaz],
-
-      # oracle_se2 prices are copied, not collected
-      :oracle_se2   => [:byol, :byol_multiaz],
     }
 
   	def self.display_name(name)
@@ -105,7 +104,7 @@ module AwsPricing
   	def self.get_database_name
       [:mysql, :postgresql, :oracle_se1, :oracle_se, :oracle_ee, :sqlserver_ex, :sqlserver_web,
         :sqlserver_se, :sqlserver_ee, :aurora, :mariadb,
-        :oracle_se2 # oracle_se2 prices are copied, not collected
+        :oracle_se2 # oracle_se2 license included prices are collected, and BYOL prices are copied from oracle_se
       ]
   	end
 
