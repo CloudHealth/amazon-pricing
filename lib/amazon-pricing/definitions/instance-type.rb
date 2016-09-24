@@ -105,7 +105,7 @@ module AwsPricing
               begin
                 api_name = size["size"]
                 @@Memory_Lookup[api_name] = size["memoryGiB"].to_f * 1000
-                @@Compute_Units_Lookup[api_name] = size["ECU"].to_i
+                @@Compute_Units_Lookup[api_name] = size["ECU"].to_f
                 @@Virtual_Cores_Lookup[api_name] = size["vCPU"].to_i
               rescue UnknownTypeError
                 $stderr.puts "[populate_lookups] WARNING: encountered #{$!.message}"
