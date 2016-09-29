@@ -6,7 +6,7 @@ module AwsPricing
         'GeneralPurpose' => {
             'CurrentGen' => {
                 'M3' => ['m3.medium', 'm3.large', 'm3.xlarge', 'm3.2xlarge'],
-                'M4' => ['m4.large', 'm4.xlarge', 'm4.2xlarge', 'm4.4xlarge', 'm4.10xlarge']
+                'M4' => ['m4.large', 'm4.xlarge', 'm4.2xlarge', 'm4.4xlarge', 'm4.10xlarge', 'm4.16xlarge']
             },
             'PreviousGen' => {
                 'M1' => ['m1.small', 'm1.medium', 'm1.large', 'm1.xlarge']
@@ -173,6 +173,7 @@ module AwsPricing
           "4xlarge" => 32,
           "8xlarge" => 64,
           "10xlarge" => 80,
+          "16xlarge" => 128,
           "32xlarge" => 256
       }
       NF_TO_SIZE_TABLE = SIZE_TO_NF_TABLE.invert
