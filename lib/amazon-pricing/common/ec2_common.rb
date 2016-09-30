@@ -97,7 +97,7 @@ module AwsPricing
                                                     false)    #!:ondemand
           instance_type = region.add_or_update_ec2_instance_type(api_name, name)
         rescue UnknownTypeError
-          logger.warn "[#{__method__}] unknown Ec2InstanceType:#{api_name} ignored"
+          $stderr.puts "[#{__method__}] WARNING: unknown Ec2InstanceType:#{api_name} ignored"
           instance_type = nil
         end
       elsif
