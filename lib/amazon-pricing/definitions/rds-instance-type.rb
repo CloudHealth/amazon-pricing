@@ -70,9 +70,9 @@ module AwsPricing
           price = coerce_price(val['prices']['USD'])
 
           case val["name"]
-          when "yrTerm1"
+          when "yrTerm1", "yrTerm1Standard"
             db.set_prepay(type_of_instance, :year1, price)
-          when "yrTerm3"
+          when "yrTerm3", "yrTerm3Standard"
             db.set_prepay(type_of_instance, :year3, price)
           when "yrTerm1Hourly"
             db.set_price_per_hour(type_of_instance, :year1, price)
@@ -82,6 +82,8 @@ module AwsPricing
             db.set_price_per_hour(type_of_instance, :year1, price)
           when "yearTerm3Hourly"
             db.set_price_per_hour(type_of_instance, :year3, price)
+          else
+            $stderr.puts "[#{__method__}] WARNING: unknown term:#{val["name"]}"
           end
         end
       end
@@ -112,9 +114,15 @@ module AwsPricing
 
       terms_to_years = {
           "yrTerm1" => :year1,
-          "yrTerm3" => :year3
+          "yrTerm3" => :year3,
+          "yrTerm1Standard" => :year1,
+          "yrTerm3Standard" => :year3
       }
       years = terms_to_years[term]
+      if years.nil?
+        $stderr.puts "[#{__method__}] WARNING: unknown term:#{val["name"]}"
+      end
+
       prices.each do |price|
         p = coerce_price(price['prices']['USD'])
         case price['name']

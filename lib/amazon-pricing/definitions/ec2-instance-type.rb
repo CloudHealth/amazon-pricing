@@ -33,8 +33,16 @@ module AwsPricing
       if type_of_instance == :ondemand
         os.set_price_per_hour(type_of_instance, nil, p)
       else
-        years = :year1 if term == "yrTerm1"
-        years = :year3 if term == "yrTerm3"
+        case term
+          when "yrTerm1", "yrTerm1Standard"
+            years = :year1
+          when "yrTerm3", "yrTerm3Standard"
+            years = :year3
+          when "yrTerm3Convertible"
+            # new AWS term as of 09/2016, temporarily ignoring
+          else
+            $stderr.puts "[#{__method__}] WARNING: unknown term:#{term} os:#{operating_system},type:#{type_of_instance},prepay:#{is_prepay}"
+        end
         if is_prepay
           os.set_prepay(type_of_instance, years, p)
         else
@@ -65,14 +73,16 @@ module AwsPricing
           price = coerce_price(val['prices']['USD'])
 
           case val["name"]
-          when "yrTerm1"
+          when "yrTerm1", "yrTerm1Standard"
             os.set_prepay(type_of_instance, :year1, price)
-          when "yrTerm3"
+          when "yrTerm3", "yrTerm3Standard"
             os.set_prepay(type_of_instance, :year3, price)
           when "yrTerm1Hourly"
             os.set_price_per_hour(type_of_instance, :year1, price)
           when "yrTerm3Hourly"
             os.set_price_per_hour(type_of_instance, :year3, price)
+          else
+            $stderr.puts "[#{__method__}] WARNING: unknown term:#{val["name"]}"
           end
         end
       end

@@ -31,6 +31,7 @@ module AwsPricing
     end
 
 # With v2 of RIs they have an entirely new format that needs to be parsed
+    require 'pry'
     def fetch_ec2_instance_pricing_ri_v2(url, operating_system)
       res = PriceList.fetch_url(url)
       res['config']['regions'].each do |reg|
