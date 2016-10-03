@@ -48,8 +48,9 @@ module AwsPricing
             }
         },
         'GPUInstances' => {
-            'CurrentGen' => {
-                'G2'  => ['g2.2xlarge', 'g2.8xlarge']
+            'CurrentGen' => { # G2=GPU Graphics, P2=GPU Computes
+                'G2'  => ['g2.2xlarge', 'g2.8xlarge'],
+                'P2'  => ['p2.xlarge', 'p2.8xlarge', 'p2.16xlarge'],
             },
             'PreviousGen' => {
                 'CG1' => ['cg1.4xlarge']

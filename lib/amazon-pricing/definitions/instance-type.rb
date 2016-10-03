@@ -191,6 +191,7 @@ module AwsPricing
       'cr1.8xlarge' => 'High-Memory Cluster Eight Extra Large',
       'hs1.8xlarge' => 'High-Storage Eight Extra Large',
       'g2.2xlarge' => 'Cluster GPU Double Extra Large', 'g2.8xlarge' => 'Cluster GPU Eight Extra Large',
+      'p2.xlarge' => 'GPU Compute Extra Large', 'p2.8xlarge' => 'GPU Compute Eight Extra Large', 'p2.16xlarge' => 'GPU Compute Hextuple Extra Large',
       'c3.large' => 'High-Compute Large', 'c3.xlarge' => 'High-Compute Extra Large', 'c3.2xlarge' => 'High-Compute Double Extra Large', 'c3.4xlarge' => 'High-Compute Quadruple Extra Large', 'c3.8xlarge' => 'High-Compute Eight Extra Large',
       'i2.xlarge' => 'High I/O Extra Large', 'i2.2xlarge' => 'High I/O Double Extra Large', 'i2.4xlarge' => 'High I/O Quadruple Extra Large', 'i2.8xlarge' => 'High I/O Eight Extra Large',
       'd2.xlarge' => 'Dense Storage Extra Large', 'd2.2xlarge' => 'Dense Storage Double Extra Large', 'd2.4xlarge' => 'Dense Storage Quadruple Extra Large', 'd2.8xlarge' => 'Dense Storage Eight Extra Large',
@@ -222,6 +223,7 @@ module AwsPricing
       't2.nano' => 0, 't2.micro' => 0, 't2.small' => 0, 't2.medium' => 0, 't2.large' => 0,
       'c4.large' => 0, 'c4.xlarge' => 0, 'c4.2xlarge' => 0, 'c4.4xlarge' => 0, 'c4.8xlarge' => 0,
       'x1.32xlarge' => 3840,
+      'p2.xlarge' => 0, 'p2.8xlarge' => 0, 'p2.16xlarge' => 0,
     }
     @@Platform_Lookup = {
       'm1.small' => 32, 'm1.medium' => 32, 'm1.large' => 64, 'm1.xlarge' => 64,
@@ -246,6 +248,7 @@ module AwsPricing
       't2.nano' => 64, 't2.micro' => 64, 't2.small' => 64, 't2.medium' => 64, 't2.large' => 64,
       'c4.large' => 64, 'c4.xlarge' => 64, 'c4.2xlarge' => 64, 'c4.4xlarge' => 64, 'c4.8xlarge' => 64,
       'x1.32xlarge' => 64,
+      'p2.xlarge' => 64, 'p2.8xlarge' => 64, 'p2.16xlarge' => 64,
     }
     @@Disk_Type_Lookup = {
       'm1.small' => :ephemeral, 'm1.medium' => :ephemeral, 'm1.large' => :ephemeral, 'm1.xlarge' => :ephemeral,
@@ -271,6 +274,7 @@ module AwsPricing
       't2.nano' => :ebs, 't2.micro' => :ebs, 't2.small' => :ebs, 't2.medium' => :ebs, 't2.large' => :ebs,
       'c4.large' => :ebs, 'c4.xlarge' => :ebs, 'c4.2xlarge' => :ebs, 'c4.4xlarge' => :ebs, 'c4.8xlarge' => :ebs,
       'x1.32xlarge' => :ssd,
+      'p2.xlarge' => :ebs, 'p2.8xlarge' => :ebs, 'p2.16xlarge' => :ebs,
     }
 
     # NOTE: These are populated by "populate_lookups"
