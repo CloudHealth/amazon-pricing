@@ -90,11 +90,16 @@ module AwsPricing
 # see if instance_type is missing; normally fetch_ec2_instance_pricing() adds instance_type and od-pricing;
 # but if there's AWS inconsistency, make sure we add instance_type now.
     def find_or_create_instance_type(region, api_name, operating_system)
+      instance_type = nil
       if not region.instance_type_available?(api_name, :ondemand, operating_system)
-        api_name, name = Ec2InstanceType.get_name("",       #unused
-                                                  api_name,
-                                                  false)    #!:ondemand
-        instance_type = region.add_or_update_ec2_instance_type(api_name, name)
+        begin
+          api_name, name = Ec2InstanceType.get_name("",       #unused
+                                                    api_name,
+                                                    false)    #!:ondemand
+          instance_type = region.add_or_update_ec2_instance_type(api_name, name)
+        rescue UnknownTypeError
+          $stderr.puts "[#{__method__}] WARNING: unknown Ec2InstanceType:#{api_name} ignored"
+        end
       elsif
         instance_type = region.get_ec2_instance_type(api_name)
       end

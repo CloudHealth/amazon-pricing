@@ -43,14 +43,16 @@ module AwsPricing
           price = coerce_price(val['prices']['USD'])
 
           case val['name']
-          when "yrTerm1"
+          when "yrTerm1", "yrTerm1Standard"
             cache.set_prepay(type_of_instance, :year1, price)
-          when "yrTerm3"
+          when "yrTerm3", "yrTerm3Standard"
             cache.set_prepay(type_of_instance, :year3, price)
           when "yearTerm1Hourly"
             cache.set_price_per_hour(type_of_instance, :year1, price)
           when "yearTerm3Hourly"
             cache.set_price_per_hour(type_of_instance, :year3, price)
+          else
+            $stderr.puts "[#{__method__}] WARNING: unknown term:#{val["name"]}"
           end
         end
       end
