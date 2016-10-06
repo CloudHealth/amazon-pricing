@@ -31,7 +31,6 @@ module AwsPricing
     end
 
 # With v2 of RIs they have an entirely new format that needs to be parsed
-    require 'pry'
     def fetch_ec2_instance_pricing_ri_v2(url, operating_system)
       res = PriceList.fetch_url(url)
       res['config']['regions'].each do |reg|
@@ -91,6 +90,7 @@ module AwsPricing
 # see if instance_type is missing; normally fetch_ec2_instance_pricing() adds instance_type and od-pricing;
 # but if there's AWS inconsistency, make sure we add instance_type now.
     def find_or_create_instance_type(region, api_name, operating_system)
+      instance_type = nil
       if not region.instance_type_available?(api_name, :ondemand, operating_system)
         begin
           api_name, name = Ec2InstanceType.get_name("",       #unused
@@ -99,7 +99,6 @@ module AwsPricing
           instance_type = region.add_or_update_ec2_instance_type(api_name, name)
         rescue UnknownTypeError
           $stderr.puts "[#{__method__}] WARNING: unknown Ec2InstanceType:#{api_name} ignored"
-          instance_type = nil
         end
       elsif
         instance_type = region.get_ec2_instance_type(api_name)
