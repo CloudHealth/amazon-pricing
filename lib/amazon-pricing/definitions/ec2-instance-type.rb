@@ -39,7 +39,7 @@ module AwsPricing
           when "yrTerm3", "yrTerm3Standard"
             years = :year3
           when "yrTerm3Convertible"
-            # new AWS term as of 09/2016, temporarily ignoring
+            years = :year3_convertible
           else
             $stderr.puts "[#{__method__}] WARNING: unknown term:#{term} os:#{operating_system},type:#{type_of_instance},prepay:#{is_prepay}"
         end
