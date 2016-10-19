@@ -49,6 +49,7 @@ class TestEc2InstanceTypes < Test::Unit::TestCase
     # Validate instance types in specific regions are available
     region = @@ec2_pricing.get_region('us-east')
     assert !region.instance_type_available?('x1.99xlarge')  #bogus x1
+    assert region.instance_type_available?('x1.16xlarge')   #test valid x1 available
     assert region.instance_type_available?('x1.32xlarge')   #test valid x1 available
   end
 

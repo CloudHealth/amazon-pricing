@@ -198,6 +198,7 @@ module AwsPricing
       'r3.large' => 'Memory Optimized Large', 'r3.xlarge' => 'Memory Optimized Extra Large', 'r3.2xlarge' => 'Memory Optimized Double Extra Large', 'r3.4xlarge' => 'Memory Optimized Quadruple Extra Large', 'r3.8xlarge' => 'Memory Optimized Eight Extra Large',
       't2.nano' => 'Burstable Performance Instance Nano', 't2.micro' => 'Burstable Performance Instance Micro', 't2.small' => 'Burstable Performance Instance Small', 't2.medium' => 'Burstable Performance Instance Medium', 't2.large' => 'Burstable Performance Instance Large',
       'c4.large' => 'Compute Optimized Large', 'c4.xlarge' => 'Compute Optimized Extra Large', 'c4.2xlarge' => 'Compute Optimized Double Extra Large', 'c4.4xlarge' => 'Compute Optimized Quadruple Extra Large', 'c4.8xlarge' => 'Compute Optimized Eight Extra Large',
+      'x1.16xlarge' => 'Memory Optimized Hextuple Large-scale Enterprise-class',
       'x1.32xlarge' => 'Memory Optimized Large-scale Enterprise-class',
     }
     @@Disk_Lookup = {
@@ -222,7 +223,7 @@ module AwsPricing
       'r3.large' => 32, 'r3.xlarge' => 80, 'r3.2xlarge' => 160, 'r3.4xlarge' => 320, 'r3.8xlarge' => 640,
       't2.nano' => 0, 't2.micro' => 0, 't2.small' => 0, 't2.medium' => 0, 't2.large' => 0,
       'c4.large' => 0, 'c4.xlarge' => 0, 'c4.2xlarge' => 0, 'c4.4xlarge' => 0, 'c4.8xlarge' => 0,
-      'x1.32xlarge' => 3840,
+      'x1.16xlarge' => 3840, 'x1.32xlarge' => 3840,
       'p2.xlarge' => 0, 'p2.8xlarge' => 0, 'p2.16xlarge' => 0,
     }
     @@Platform_Lookup = {
@@ -247,7 +248,7 @@ module AwsPricing
       'r3.large' => 64, 'r3.xlarge' => 64, 'r3.2xlarge' => 64, 'r3.4xlarge' => 64, 'r3.8xlarge' => 64,
       't2.nano' => 64, 't2.micro' => 64, 't2.small' => 64, 't2.medium' => 64, 't2.large' => 64,
       'c4.large' => 64, 'c4.xlarge' => 64, 'c4.2xlarge' => 64, 'c4.4xlarge' => 64, 'c4.8xlarge' => 64,
-      'x1.32xlarge' => 64,
+      'x1.16xlarge' => 64, 'x1.32xlarge' => 64,
       'p2.xlarge' => 64, 'p2.8xlarge' => 64, 'p2.16xlarge' => 64,
     }
     @@Disk_Type_Lookup = {
@@ -273,7 +274,7 @@ module AwsPricing
       'r3.large' => :ssd, 'r3.xlarge' => :ssd, 'r3.2xlarge' => :ssd, 'r3.4xlarge' => :ssd, 'r3.8xlarge' => :ssd,
       't2.nano' => :ebs, 't2.micro' => :ebs, 't2.small' => :ebs, 't2.medium' => :ebs, 't2.large' => :ebs,
       'c4.large' => :ebs, 'c4.xlarge' => :ebs, 'c4.2xlarge' => :ebs, 'c4.4xlarge' => :ebs, 'c4.8xlarge' => :ebs,
-      'x1.32xlarge' => :ssd,
+      'x1.16xlarge' => :ssd, 'x1.32xlarge' => :ssd,
       'p2.xlarge' => :ebs, 'p2.8xlarge' => :ebs, 'p2.16xlarge' => :ebs,
     }
 
@@ -407,6 +408,7 @@ module AwsPricing
       # t2.micro is EBS-only
       # t2.nano is EBS-only
       # t2.small is EBS-only
+      'x1.16xlarge' => [940, 105123],
       'x1.32xlarge' => [940, 105123],
     }
   end
