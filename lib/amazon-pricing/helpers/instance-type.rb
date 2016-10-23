@@ -30,7 +30,7 @@ module AwsPricing
         'MemoryOptimized' => {
             'CurrentGen' => {
                 'R3'  => ['r3.large', 'r3.xlarge', 'r3.2xlarge', 'r3.4xlarge', 'r3.8xlarge'],
-                'X1'  => ['x1.32xlarge']
+                'X1'  => ['x1.16xlarge', 'x1.32xlarge']
             },
             'PreviousGen' => {
                 'M2'  => ['m2.xlarge', 'm2.2xlarge', 'm2.4xlarge'],

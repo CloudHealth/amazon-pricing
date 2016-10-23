@@ -192,6 +192,7 @@ module AwsPricing
       'cache.r3.8xlarge' => :ten_gigabit,
       'cache.r3.large' => :moderate,
       'cache.r3.xlarge' => :moderate,
+      'cache.x1.16xlarge' => :ten_gigabit,
       'cache.x1.32xlarge' => :ten_gigabit,
       'cache.t1.micro' => :very_low,
       'cache.t2.medium' => :low_to_moderate,
@@ -232,6 +233,7 @@ module AwsPricing
       'db.t2.medium' => :low_to_moderate,
       'db.t2.micro' => :low,
       'db.t2.small' => :low_to_moderate,
+      'db.x1.16xlarge' => :ten_gigabit,
       'db.x1.32xlarge' => :ten_gigabit,
       'g2.2xlarge' => :high,
       'g2.8xlarge' => :ten_gigabit,
@@ -272,6 +274,7 @@ module AwsPricing
       't2.micro' => :low_to_moderate,
       't2.nano' => :low,
       't2.small' => :low_to_moderate,
+      'x1.16xlarge' => :ten_gigabit,
       'x1.32xlarge' => :ten_gigabit,
     }
 
