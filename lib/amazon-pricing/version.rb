@@ -8,5 +8,5 @@
 # Home::      http://github.com/CloudHealth/amazon-pricing
 #++
 module AwsPricing
-  VERSION = '0.1.91'
+  VERSION = '0.1.92'
 end
