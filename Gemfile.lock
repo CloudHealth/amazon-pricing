@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    amazon-pricing (0.1.92)
+    amazon-pricing (0.1.93)
 
 GEM
   remote: https://rubygems.org/
