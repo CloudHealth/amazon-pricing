@@ -34,6 +34,20 @@ task :print_ec2_price_list do
   print_ec2_table(pricing)
 end
 
+desc "Prints current EC2 DI pricing in CSV format"
+task :print_ec2_di_price_list do
+  require 'amazon-pricing'
+  pricing = AwsPricing::Ec2DiPriceList.new
+  print_ec2_table(pricing)
+end
+
+desc "Prints current EC2 Designated Host Instance pricing in CSV format"
+task :print_ec2_dhi_price_list do
+  require 'amazon-pricing'
+  pricing = AwsPricing::Ec2DesignatedHostPriceList.new
+  print_ec2_table(pricing)
+end
+
 desc "Prints current RDS pricing in CSV format"
 task :print_rds_price_list do
   require 'amazon-pricing'
