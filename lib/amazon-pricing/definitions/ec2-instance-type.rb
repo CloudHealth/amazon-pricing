@@ -88,6 +88,22 @@ module AwsPricing
       end
     end
 
+    # operating_system = :linux, :mswin, :rhel, :sles, :mswinSQL, :mswinSQLWeb
+    # dhprice is a string representing the price per hour for the Designated Host
+    # capacity is the number of this type of instancess supported on this Designated Host
+    def update_dhi_pricing(operating_system, dhprice, capacity)
+      os = get_category_type(operating_system)
+      if os.nil?
+        os = OperatingSystem.new(self, operating_system)
+        @category_types[operating_system] = os
+      end
+
+      category = operating_system.to_s
+      values = { category => dhprice }
+      price = coerce_price(values[category])
+      os.set_price_per_hour(:ondemand, nil, price/capacity)
+    end
+
     def update_pricing2(operating_system, res_type, ondemand_pph = nil, year1_prepay = nil, year3_prepay = nil, year1_pph = nil, year3_pph = nil)
 
       os = get_category_type(operating_system)
