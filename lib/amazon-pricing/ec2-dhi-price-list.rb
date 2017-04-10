@@ -1,4 +1,3 @@
-require 'pry'
 module AwsPricing
   class Ec2DesignatedHostPriceList < PriceList
     include AwsPricing::Ec2Common
