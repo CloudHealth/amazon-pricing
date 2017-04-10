@@ -1,5 +1,5 @@
 module AwsPricing
-  class Ec2DesignatedHostPriceList < PriceList
+  class Ec2DesignatedHostInstancePriceList < PriceList
     include AwsPricing::Ec2Common
 
     def initialize

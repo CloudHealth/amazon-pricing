@@ -15,13 +15,14 @@ module AwsPricing
   # e.g. us-east, us-west
   #
   class Region
-    attr_accessor :name, :ebs_price, :ec2_instance_types, :rds_instance_types, :elasticache_node_types
+    attr_accessor :name, :ebs_price, :ec2_instance_types, :rds_instance_types, :elasticache_node_types, :ec2_dh_types
 
     def initialize(name)
       @name = name
       @ec2_instance_types     = {}
       @rds_instance_types     = {}
       @elasticache_node_types = {}
+      @ec2_dh_types           = {}
     end
 
     # Maintained for backward compatibility reasons (retrieves EC2 instance type)
@@ -39,6 +40,10 @@ module AwsPricing
 
     def elasticache_node_types
       @elasticache_node_types.values
+    end
+
+    def ec2_dh_types
+      @ec2_dh_types.values
     end
 
     # Returns whether an instance_type is available. 
@@ -78,6 +83,15 @@ module AwsPricing
       current
     end
 
+    def add_or_update_ec2_dh_type(family)
+      current = get_ec2_dh_type(family)
+      if current.nil?
+        current = Ec2DesignatedHostType.new(self, family)
+        @ec2_dh_types[family] = current
+      end
+      current
+    end
+
     # Maintained for backward compatibility reasons (retrieves EC2 instance type)
     def get_instance_type(api_name)
       get_ec2_instance_type(api_name)
@@ -93,6 +107,10 @@ module AwsPricing
 
     def get_elasticache_node_type(api_name)
       @elasticache_node_types[api_name]
+    end
+
+    def get_ec2_dh_type(family)
+      @ec2_dh_types[family]
     end
 
   end
