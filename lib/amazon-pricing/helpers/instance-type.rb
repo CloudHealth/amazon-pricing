@@ -168,16 +168,16 @@ module AwsPricing
       SIZE_TO_NF_TABLE = {
           "nano"    => 0.25,
           "micro"   => 0.5,
-          "small"   => 1,
-          "medium"  => 2,
-          "large"   => 4,
-          "xlarge"  => 8,
-          "2xlarge" => 16,
-          "4xlarge" => 32,
-          "8xlarge" => 64,
-          "10xlarge" => 80,
-          "16xlarge" => 128,
-          "32xlarge" => 256
+          "small"   => 1.0,
+          "medium"  => 2.0,
+          "large"   => 4.0,
+          "xlarge"  => 8.0,
+          "2xlarge" => 16.0,
+          "4xlarge" => 32.0,
+          "8xlarge" => 64.0,
+          "10xlarge" => 80.0,
+          "16xlarge" => 128.0,
+          "32xlarge" => 256.0
       }
       NF_TO_SIZE_TABLE = SIZE_TO_NF_TABLE.invert
 
