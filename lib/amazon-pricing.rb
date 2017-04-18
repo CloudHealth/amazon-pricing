@@ -10,6 +10,7 @@ require 'amazon-pricing/ec2-price-list'
 require 'amazon-pricing/ec2-di-price-list'
 require 'amazon-pricing/ec2-dhi-price-list'
 require 'amazon-pricing/ec2-dh-price-list'
+
 require 'amazon-pricing/rds-price-list'
 require 'amazon-pricing/dynamo-db-price-list'
 require 'amazon-pricing/elasticache-price-list'
