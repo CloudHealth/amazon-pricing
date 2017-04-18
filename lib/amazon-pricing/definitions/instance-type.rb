@@ -38,7 +38,7 @@ module AwsPricing
 
     # Keep this in for backwards compatibility within current major version of gem
     def disk_in_mb
-      @disk_in_gb * 1000
+      @disk_in_gb.nil? ? 0 : @disk_in_gb * 1000
     end
 
     def memory_in_gb
