@@ -52,6 +52,10 @@ module AwsPricing
           tiers.each do |tier|
             begin
               family = tier['name']
+
+              # hack for now until I can get capacity for fpga instances
+              next if family == 'f1'
+
               dhprice = tier['prices']['USD']
               @@CAPACITY_HASH[family].each do |inst_size,capacity|
                 api_name, name = Ec2InstanceType.get_name(family, "#{family}.#{inst_size}", false)
