@@ -157,6 +157,7 @@ module AwsPricing
         :twenty_gigabit => 20000,
     }
 
+    # handy summary here: www.ec2instances.info
     @Network_Performance = {
       'c1.medium' => :moderate,
       'c1.xlarge' => :high,
@@ -235,6 +236,8 @@ module AwsPricing
       'db.t2.small' => :low_to_moderate,
       'db.x1.16xlarge' => :ten_gigabit,
       'db.x1.32xlarge' => :ten_gigabit,
+      'f1.2xlarge' => :high,
+      'f1.16xlarge' => :high,
       'g2.2xlarge' => :high,
       'g2.8xlarge' => :ten_gigabit,
       'hi1.4xlarge' => :ten_gigabit,
