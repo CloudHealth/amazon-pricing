@@ -10,9 +10,8 @@ describe AwsPricing::Ec2DedicatedHostPriceList do
     # Result have valid node name
     region.ec2_dh_types.each do |dh_type|
       expect(dh_type.api_name).to have(2).characters
-      expect(dh_type.category_types).to have_exactly(@pricing.os_types.length).items
-      expect(dh_type.category_types[:linux].name).to eq(:linux)
-      expect(dh_type.category_types[:linux].ondemand_price_per_hour.class).to eq(Float)
+      expect(dh_type.region.ec2_dh_types[0].category_types[:linux].name).to eq(:linux)
+      expect(dh_type.region.ec2_dh_types[0].category_types[:linux].ondemand_price_per_hour.class).to eq(Float)
     end
   end
 

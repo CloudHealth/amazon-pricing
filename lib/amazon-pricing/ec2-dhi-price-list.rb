@@ -40,17 +40,17 @@ module AwsPricing
     def fetch_ec2_dedicated_host_instance_pricing(url, operating_system)
       res = PriceList.fetch_url(url)
       res['config']['regions'].each do |reg|
-        region_name = reg['region']
-        region = get_region(region_name)
-        if region.nil?
-          $stderr.puts "[fetch_ec2_dedicated_host_instance_pricing] WARNING: unable to find region #{region_name}"
-          next
-        end
-        reg['types'].each do |type|
-          type_name = type['name']
-          tiers = type['tiers']
-          tiers.each do |tier|
-            begin
+        begin
+          region_name = reg['region']
+          region = get_region(region_name)
+          if region.nil?
+            $stderr.puts "[fetch_ec2_dedicated_host_instance_pricing] WARNING: unable to find region #{region_name}"
+            next
+          end
+          reg['types'].each do |type|
+            type_name = type['name']
+            tiers = type['tiers']
+            tiers.each do |tier|
               family = tier['name']
 
               # hack for now until I can get capacity for fpga instances
@@ -62,13 +62,25 @@ module AwsPricing
                 instance_type = region.add_or_update_ec2_instance_type(api_name, name)
                 instance_type.update_dhi_pricing(operating_system, dhprice, capacity)
               end
+            end
+          end
+
+          # Once per region (supported or not)... hack i2 data which isn't in pricing JSON
+          @@CAPACITY_HASH['i2'].each do |inst_size,capacity|
+            begin
+              next unless @@I2_HACK_HASH.has_key? region_name
+              api_name, name = Ec2InstanceType.get_name('i2', "i2.#{inst_size}", false)
+              instance_type = region.add_or_update_ec2_instance_type(api_name, name)
+              instance_type.update_dhi_pricing(operating_system, @@I2_HACK_HASH[region_name], capacity)
             rescue UnknownTypeError
               $stderr.puts "[fetch_ec2_dedicated_host_instance_pricing] WARNING: encountered #{$!.message}"
             end
           end
+
+        rescue UnknownTypeError
+          $stderr.puts "[fetch_ec2_dedicated_host_instance_pricing] WARNING: encountered #{$!.message}"
         end
       end
     end
-
   end
 end

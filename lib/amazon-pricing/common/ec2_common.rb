@@ -1,5 +1,23 @@
 module AwsPricing
+
   module Ec2Common
+
+    # From https://pricing.us-east-1.amazonaws.com/offers/v1.0/aws/AmazonEC2/current/index.json
+    @@I2_HACK_HASH = {
+      'us-east-1'      => "7.5020000000",
+      'ap-northeast-1' => "8.8040000000",
+      'ap-southeast-2' => "8.9540000000",
+      'ap-northeast-2' => "8.8040000000",
+      'us-gov-west-1'  => "9.0020000000",
+      'us-west-2'      => "7.5020000000",
+      'ap-south-1'     => "8.5060000000",
+      'us-west-1'      => "8.2520000000",
+      'eu-central-1'   => "8.9120000000",
+      'ap-southeast-1' => "8.9540000000",
+      'us-east-2'      => "7.5020000000",
+      'us-west-1'      => "8.2520000000"
+    }
+
     # Retrieves the EC2 on-demand instance pricing.
     # type_of_instance = :ondemand, :light, :medium, :heavy
     def fetch_ec2_instance_pricing(url, type_of_instance, operating_system)

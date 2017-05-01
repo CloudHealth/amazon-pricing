@@ -24,28 +24,31 @@ module AwsPricing
 
     def fetch_ec2_dedicated_host_pricing(url, operating_system)
       res = PriceList.fetch_url(url)
-      res['config']['regions'].each do |reg|
-        region_name = reg['region']
-        region = get_region(region_name)
-        if region.nil?
-          $stderr.puts "[fetch_ec2_dedicated_host_pricing] WARNING: unable to find region #{region_name}"
-          next
-        end
-        reg['types'].each do |type|
-          type_name = type['name']
-          tiers = type['tiers']
-          tiers.each do |tier|
-            begin
-              family = tier['name']
-              api_name = family
-              dhprice = tier['prices']['USD']
-              dh_type = region.add_or_update_ec2_dh_type(family)
-              dh_type.update_dh_pricing(operating_system, dhprice)
-            rescue UnknownTypeError
-              $stderr.puts "[fetch_ec2_dedicated_host_pricing] WARNING: encountered #{$!.message}"
+      begin
+        res['config']['regions'].each do |reg|
+          region_name = reg['region']
+          region = get_region(region_name)
+          if region.nil?
+            $stderr.puts "[fetch_ec2_dedicated_host_pricing] WARNING: unable to find region #{region_name}"
+            next
+          end
+          reg['types'].each do |type|
+            type_name = type['name']
+            tiers = type['tiers']
+            tiers.each do |tier|
+                family = tier['name']
+                api_name = family
+                dhprice = tier['prices']['USD']
+                dh_type = region.add_or_update_ec2_dh_type(family)
+                dh_type.update_dh_pricing(operating_system, dhprice)
             end
           end
+          # Hack to add i2 for region
+          dh_type = region.add_or_update_ec2_dh_type('i2')
+          dh_type.update_dh_pricing(operating_system, @@I2_HACK_HASH[region_name]) unless @@I2_HACK_HASH[region_name].nil?
         end
+      rescue UnknownTypeError
+        $stderr.puts "[fetch_ec2_dedicated_host_pricing] WARNING: encountered #{$!.message}"
       end
     end
   end

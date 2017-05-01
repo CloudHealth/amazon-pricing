@@ -14,6 +14,10 @@ module AwsPricing
       @category_types
     end
 
+    def region
+      @region
+    end
+
     def update_dh_pricing(operating_system, dhprice)
       os = get_category_type(operating_system)
       if os.nil?
