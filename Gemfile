@@ -4,6 +4,9 @@ gemspec
 
 group :development do
   gem 'pry'
+  if ENV.include? 'USE_PRY_DEBUGGER'
+    gem 'pry-debugger'
+  end
 end
 
 group :test do
