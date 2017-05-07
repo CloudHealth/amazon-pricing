@@ -43,9 +43,6 @@ module AwsPricing
                 dh_type.update_dh_pricing(operating_system, dhprice)
             end
           end
-          # Hack to add i2 for region
-          dh_type = region.add_or_update_ec2_dh_type('i2')
-          dh_type.update_dh_pricing(operating_system, @@I2_HACK_HASH[region_name]) unless @@I2_HACK_HASH[region_name].nil?
         end
       rescue UnknownTypeError
         $stderr.puts "[fetch_ec2_dedicated_host_pricing] WARNING: encountered #{$!.message}"

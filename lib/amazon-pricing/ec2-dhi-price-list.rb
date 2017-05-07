@@ -65,18 +65,6 @@ module AwsPricing
             end
           end
 
-          # Once per region (supported or not)... hack i2 data which isn't in pricing JSON
-          @@CAPACITY_HASH['i2'].each do |inst_size,capacity|
-            begin
-              next unless @@I2_HACK_HASH.has_key? region_name
-              api_name, name = Ec2InstanceType.get_name('i2', "i2.#{inst_size}", false)
-              instance_type = region.add_or_update_ec2_instance_type(api_name, name)
-              instance_type.update_dhi_pricing(operating_system, @@I2_HACK_HASH[region_name], capacity)
-            rescue UnknownTypeError
-              $stderr.puts "[fetch_ec2_dedicated_host_instance_pricing] WARNING: encountered #{$!.message}"
-            end
-          end
-
         rescue UnknownTypeError
           $stderr.puts "[fetch_ec2_dedicated_host_instance_pricing] WARNING: encountered #{$!.message}"
         end
