@@ -1,5 +1,7 @@
 module AwsPricing
+
   module Ec2Common
+
     # Retrieves the EC2 on-demand instance pricing.
     # type_of_instance = :ondemand, :light, :medium, :heavy
     def fetch_ec2_instance_pricing(url, type_of_instance, operating_system)
