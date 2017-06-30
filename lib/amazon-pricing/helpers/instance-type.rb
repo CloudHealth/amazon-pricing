@@ -42,7 +42,7 @@ module AwsPricing
             'CurrentGen' => {
                 'HS1' => ['hs1.8xlarge'],
                 'I2'  => ['i2.xlarge', 'i2.2xlarge', 'i2.4xlarge', 'i2.8xlarge'],
-                'I3'  => ['i3.large', 'i3.xlarge', 'i3.2xlarge', 'i3.4xlarge', 'i4.8xlarge', 'i3.16xlarge'],
+                'I3'  => ['i3.large', 'i3.xlarge', 'i3.2xlarge', 'i3.4xlarge', 'i3.8xlarge', 'i3.16xlarge'],
                 'D2'  => ['d2.xlarge', 'd2.2xlarge', 'd2.4xlarge', 'd2.8xlarge']
             },
             'PreviousGen' => {
