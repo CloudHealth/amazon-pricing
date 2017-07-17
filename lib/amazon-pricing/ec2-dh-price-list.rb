@@ -35,6 +35,7 @@ module AwsPricing
           reg['types'].each do |type|
             type_name = type['name']
             tiers = type['tiers']
+            next if tiers.nil?
             tiers.each do |tier|
                 family = tier['name']
                 api_name = family

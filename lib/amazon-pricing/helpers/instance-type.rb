@@ -50,8 +50,9 @@ module AwsPricing
             }
         },
         'GPUInstances' => {
-            'CurrentGen' => { # G2=GPU Graphics, P2=GPU Computes, F1=FPGA Accelerated
+            'CurrentGen' => { # G2=GPU Graphics, G3=GPU3 Graphics, P2=GPU Computes, F1=FPGA Accelerated
                 'G2'  => ['g2.2xlarge', 'g2.8xlarge'],
+                'G3'  => ['g3.4xlarge', 'g3.8xlarge', 'g3.16xlarge'],
                 'P2'  => ['p2.xlarge', 'p2.8xlarge', 'p2.16xlarge'],
                 'F1'  => ['f1.2xlarge', 'f1.16xlarge'],
             },
