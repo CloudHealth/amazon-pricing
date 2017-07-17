@@ -223,7 +223,7 @@ module AwsPricing
       'cr1.8xlarge' => 240,
       'hs1.8xlarge' => 48000,
       'g2.2xlarge' => 60, 'g2.8xlarge' => 240,
-      'g3.4xlarge' => 0, 'g3.8xlarge' => 0, 'g2.16xlarge' => 0, # g3 are ebs-only
+      'g3.4xlarge' => 0, 'g3.8xlarge' => 0, 'g3.16xlarge' => 0, # g3 are ebs-only
       'db.m1.small' => 160, 'db.m1.medium' => 410, 'db.m1.large' =>850, 'db.m1.xlarge' => 1690,
       'db.m2.xlarge' => 420, 'db.m2.2xlarge' => 850, 'db.m2.4xlarge' => 1690, 'db.cr1.8xlarge' => 1690,
       'db.t1.micro' => 160,
@@ -252,7 +252,7 @@ module AwsPricing
       'cr1.8xlarge' => 64,
       'hs1.8xlarge' => 64,
       'g2.2xlarge' => 64, 'g2.8xlarge' => 64,
-      'g3.4xlarge' => 64, 'g3.8xlarge' => 64, 'g2.16xlarge' => 64,
+      'g3.4xlarge' => 64, 'g3.8xlarge' => 64, 'g3.16xlarge' => 64,
       'db.m1.small' => 64, 'db.m1.medium' => 64, 'db.m1.large' => 64, 'db.m1.xlarge' => 64,
       'db.m2.xlarge' => 64, 'db.m2.2xlarge' => 64, 'db.m2.4xlarge' => 64, 'db.cr1.8xlarge' => 64,
       'db.t1.micro' => 64,
@@ -280,7 +280,7 @@ module AwsPricing
       'cr1.8xlarge' => :ssd,
       'hs1.8xlarge' => :ephemeral,
       'g2.2xlarge' => :ssd, 'g2.8xlarge' => :ssd,
-      'g3.4xlarge' => :ebs, 'g3.8xlarge' => :ebs, 'g2.16xlarge' => :ebs,
+      'g3.4xlarge' => :ebs, 'g3.8xlarge' => :ebs, 'g3.16xlarge' => :ebs,
       'unknown' => :ephemeral,
       'db.m1.small' => :ephemeral, 'db.m1.medium' => :ephemeral, 'db.m1.large' => :ephemeral, 'db.m1.xlarge' => :ephemeral,
       'db.m2.xlarge' => :ephemeral, 'db.m2.2xlarge' => :ephemeral, 'db.m2.4xlarge' => :ephemeral, 'db.cr1.8xlarge' => :ephemeral,
