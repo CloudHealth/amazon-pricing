@@ -191,6 +191,7 @@ module AwsPricing
       'cr1.8xlarge' => 'High-Memory Cluster Eight Extra Large',
       'hs1.8xlarge' => 'High-Storage Eight Extra Large',
       'g2.2xlarge' => 'Cluster GPU Double Extra Large', 'g2.8xlarge' => 'Cluster GPU Eight Extra Large',
+      'g3.4xlarge' => 'Cluster GPU-3 Quadruple Extra Large', 'g3.8xlarge' => 'Cluster GPU-3 Eight Extra Large', 'g3.16xlarge' => 'Cluster GPU-3 Hextuple Extra Large',
       'p2.xlarge' => 'GPU Compute Extra Large', 'p2.8xlarge' => 'GPU Compute Eight Extra Large', 'p2.16xlarge' => 'GPU Compute Hextuple Extra Large',
       'c3.large' => 'High-Compute Large', 'c3.xlarge' => 'High-Compute Extra Large', 'c3.2xlarge' => 'High-Compute Double Extra Large', 'c3.4xlarge' => 'High-Compute Quadruple Extra Large', 'c3.8xlarge' => 'High-Compute Eight Extra Large',
       'i2.xlarge' => 'High I/O Extra Large', 'i2.2xlarge' => 'High I/O Double Extra Large', 'i2.4xlarge' => 'High I/O Quadruple Extra Large', 'i2.8xlarge' => 'High I/O Eight Extra Large',
@@ -222,6 +223,7 @@ module AwsPricing
       'cr1.8xlarge' => 240,
       'hs1.8xlarge' => 48000,
       'g2.2xlarge' => 60, 'g2.8xlarge' => 240,
+      'g3.4xlarge' => 0, 'g3.8xlarge' => 0, 'g3.16xlarge' => 0, # g3 are ebs-only
       'db.m1.small' => 160, 'db.m1.medium' => 410, 'db.m1.large' =>850, 'db.m1.xlarge' => 1690,
       'db.m2.xlarge' => 420, 'db.m2.2xlarge' => 850, 'db.m2.4xlarge' => 1690, 'db.cr1.8xlarge' => 1690,
       'db.t1.micro' => 160,
@@ -250,6 +252,7 @@ module AwsPricing
       'cr1.8xlarge' => 64,
       'hs1.8xlarge' => 64,
       'g2.2xlarge' => 64, 'g2.8xlarge' => 64,
+      'g3.4xlarge' => 64, 'g3.8xlarge' => 64, 'g3.16xlarge' => 64,
       'db.m1.small' => 64, 'db.m1.medium' => 64, 'db.m1.large' => 64, 'db.m1.xlarge' => 64,
       'db.m2.xlarge' => 64, 'db.m2.2xlarge' => 64, 'db.m2.4xlarge' => 64, 'db.cr1.8xlarge' => 64,
       'db.t1.micro' => 64,
@@ -277,6 +280,7 @@ module AwsPricing
       'cr1.8xlarge' => :ssd,
       'hs1.8xlarge' => :ephemeral,
       'g2.2xlarge' => :ssd, 'g2.8xlarge' => :ssd,
+      'g3.4xlarge' => :ebs, 'g3.8xlarge' => :ebs, 'g3.16xlarge' => :ebs,
       'unknown' => :ephemeral,
       'db.m1.small' => :ephemeral, 'db.m1.medium' => :ephemeral, 'db.m1.large' => :ephemeral, 'db.m1.xlarge' => :ephemeral,
       'db.m2.xlarge' => :ephemeral, 'db.m2.2xlarge' => :ephemeral, 'db.m2.4xlarge' => :ephemeral, 'db.cr1.8xlarge' => :ephemeral,
@@ -393,6 +397,9 @@ module AwsPricing
       # db.t2.small, like all RDS instances, are EBS-only
       'g2.2xlarge' => [534, 42731],
       'g2.8xlarge' => [1069, 70756],
+      # g3.4xlarge is EBS-only
+      # g3.8xlarge is EBS-only
+      # g3.16xlarge is EBS-only
       'hi1.4xlarge' => [1824, 50488],
       'hs1.8xlarge' => [2257, 126081],
       'i2.2xlarge' => [949, 89028],

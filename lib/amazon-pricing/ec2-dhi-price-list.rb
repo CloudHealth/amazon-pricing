@@ -21,6 +21,7 @@ module AwsPricing
       'c4' => { "large"=>16, "xlarge"=>8, "2xlarge"=>4, "4xlarge"=>2, "8xlarge"=>1 },
       'p2' => { "xlarge"=>16, "8xlarge"=>2, "16xlarge"=>1 },
       'g2' => { "2xlarge"=>4, "8xlarge"=>1 },
+      'g3' => { "4xlarge"=>4, "8xlarge"=>2, "16xlarge"=>1 },
       'm3' => { "medium"=>32, "large"=>16, "xlarge"=>8, "2xlarge"=>4 },
       'd2' => { "xlarge"=>8, "2xlarge"=>4, "4xlarge"=>2, "8xlarge"=>1 },
       'r4' => { "large"=>32, "xlarge"=>16, "2xlarge"=>8, "4xlarge"=>4, "8xlarge"=>2, "16xlarge"=>1 },
@@ -50,6 +51,7 @@ module AwsPricing
           reg['types'].each do |type|
             type_name = type['name']
             tiers = type['tiers']
+            next if tiers.nil?
             tiers.each do |tier|
               family = tier['name']
 
