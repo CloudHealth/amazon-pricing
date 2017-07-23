@@ -307,6 +307,7 @@ module AwsPricing
       'cache.m3.medium' => 2780, 'cache.m3.large' => 6050, 'cache.m3.xlarge' => 13300, 'cache.m3.2xlarge' => 27900,
       't2.nano' => 500, 't2.micro' => 1000, 't2.small' => 2000, 't2.medium' => 4000, 't2.large' => 8000, 't2.xlarge' => 16000, 't2.2xlarge' => 32000,
       'cache.t2.micro' => 555, 'cache.t2.small' =>  1550, 'cache.t2.medium' => 3220,
+      'cache.m4.large' => 6420, 'cache.m4.xlarge' => 14280, 'cache.m4.2xlarge' => 29700, 'cache.m4.4xlarge' => 60780, 'cache.m4.10xlarge' => 154640,
       'cache.m1.small' => 1300, 'cache.m1.medium' => 3350, 'cache.m1.large' => 7100, 'cache.m1.xlarge' => 14600,
       'cache.m2.xlarge' => 16700, 'cache.m2.2xlarge' => 33800, 'cache.m2.4xlarge' => 68000,
       'cache.c1.xlarge' => 6600,
