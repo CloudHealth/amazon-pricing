@@ -42,7 +42,7 @@ module AwsPricing
     end
 
     def memory_in_gb
-      @memory_in_mb / 1000
+      @memory_in_mb.to_f / 1000
     end
 
     def category_types
