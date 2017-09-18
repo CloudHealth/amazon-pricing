@@ -105,7 +105,8 @@ class TestEc2InstanceTypes < Test::Unit::TestCase
     # next two prices are no longer provided by aws (May 09, 2016)
     assert region.ebs_price.standard_per_gb == 0.05
     assert region.ebs_price.standard_per_million_io == 0.05
-    assert region.ebs_price.preferred_per_gb == 0.125
+    # preferred_per_gb not always provided by aws (2017-09-17)
+    #assert region.ebs_price.preferred_per_gb == 0.125
     assert region.ebs_price.preferred_per_iops == 0.065
     assert region.ebs_price.s3_snaps_per_gb == 0.05
     # next two prices were added by aws (May 09, 2016)
@@ -120,7 +121,8 @@ class TestEc2InstanceTypes < Test::Unit::TestCase
       # next two prices are no longer provided by aws (May 09, 2016) 
       assert_not_nil region.ebs_price.standard_per_gb
       assert_not_nil region.ebs_price.standard_per_million_io
-      assert_not_nil region.ebs_price.preferred_per_gb
+      # preferred_per_gb not always provided by aws (2017-09-17)
+      #assert_not_nil region.ebs_price.preferred_per_gb
       assert_not_nil region.ebs_price.preferred_per_iops
       assert_not_nil region.ebs_price.ebs_optimized_hdd_per_gb
       assert_not_nil region.ebs_price.ebs_cold_hdd_per_gb
@@ -199,8 +201,9 @@ class TestEc2InstanceTypes < Test::Unit::TestCase
     region = @@ec2_pricing.get_region('us-gov-west-1')
     # next two prices are no longer provided by aws (May 09, 2016)
     assert region.ebs_price.standard_per_gb == 0.065
-	assert region.ebs_price.standard_per_million_io == 0.065
-    assert region.ebs_price.preferred_per_gb == 0.15
+	  assert region.ebs_price.standard_per_million_io == 0.065
+    # preferred_per_gb not always provided by aws (2017-09-17)
+    #assert region.ebs_price.preferred_per_gb == 0.15
     assert region.ebs_price.preferred_per_iops == 0.078
     assert region.ebs_price.s3_snaps_per_gb == 0.066
     # next two prices were added by aws (May 09, 2016)
