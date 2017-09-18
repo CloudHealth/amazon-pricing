@@ -29,7 +29,8 @@ module AwsPricing
       'm4' => { "large"=>22, "xlarge"=>11, "2xlarge"=>5, "4xlarge"=>4, "10xlarge"=>1, "16xlarge"=>1 },
       'i2' => { "xlarge"=>8, "2xlarge"=>4, "4xlarge"=>2, "8xlarge"=>1, "16xlarge"=>1 },
       'i3' => { "large"=>32, "xlarge"=>16, "2xlarge"=>8, "4xlarge"=>4, "8xlarge"=>2, "16xlarge"=>1 },
-      'x1' => { "16xlarge"=>2, "32xlarge"=>1 }
+      'x1' => { "16xlarge"=>2, "32xlarge"=>1 },
+      'x1e' => { "32xlarge"=>1 },
     }
 
     def get_ec2_dhi_od_pricing
@@ -57,6 +58,10 @@ module AwsPricing
 
               # hack for now until I can get capacity for fpga instances
               next if family == 'f1'
+              if @@CAPACITY_HASH[family].nil?
+                $stderr.puts "[fetch_ec2_dedicated_host_instance_pricing] WARNING: unable to find CAPACITY_HASH for #{family}"
+                next
+              end
 
               dhprice = tier['prices']['USD']
               @@CAPACITY_HASH[family].each do |inst_size,capacity|

@@ -208,6 +208,7 @@ module AwsPricing
       'c4.large' => 'Compute Optimized Large', 'c4.xlarge' => 'Compute Optimized Extra Large', 'c4.2xlarge' => 'Compute Optimized Double Extra Large', 'c4.4xlarge' => 'Compute Optimized Quadruple Extra Large', 'c4.8xlarge' => 'Compute Optimized Eight Extra Large',
       'x1.16xlarge' => 'Memory Optimized Hextuple Large-scale Enterprise-class',
       'x1.32xlarge' => 'Memory Optimized Large-scale Enterprise-class',
+      'x1e.32xlarge' => 'Memory Optimized Extended Large-scale Enterprise-class',
       'f1.2xlarge' => 'FPGA Hardware Acceleration Double Extra Large', 'f1.16xlarge' => 'FPGA Hardware Acceleration Hextuple Extra Large'
     }
     @@Disk_Lookup = {
@@ -235,7 +236,7 @@ module AwsPricing
       'r4.large' => 0, 'r4.xlarge' => 0, 'r4.2xlarge' => 0, 'r4.4xlarge' => 0, 'r4.8xlarge' => 0, 'r4.16xlarge' => 0,
       't2.nano' => 0, 't2.micro' => 0, 't2.small' => 0, 't2.medium' => 0, 't2.large' => 0, 't2.xlarge' => 0, 't2.2xlarge' => 0,
       'c4.large' => 0, 'c4.xlarge' => 0, 'c4.2xlarge' => 0, 'c4.4xlarge' => 0, 'c4.8xlarge' => 0,
-      'x1.16xlarge' => 3840, 'x1.32xlarge' => 3840,
+      'x1.16xlarge' => 1920, 'x1.32xlarge' => 3840, 'x1e.32xlarge' => 3840,
       'p2.xlarge' => 0, 'p2.8xlarge' => 0, 'p2.16xlarge' => 0,
       'f1.2xlarge' => 470, 'f1.16xlarge' => 3760,
     }
@@ -264,7 +265,7 @@ module AwsPricing
       'r4.large' => 64, 'r4.xlarge' => 64, 'r4.2xlarge' => 64, 'r4.4xlarge' => 64, 'r4.8xlarge' => 64, 'r4.16xlarge' => 64,
       't2.nano' => 64, 't2.micro' => 64, 't2.small' => 64, 't2.medium' => 64, 't2.large' => 64, 't2.xlarge' => 64, 't2.2xlarge' => 64,
       'c4.large' => 64, 'c4.xlarge' => 64, 'c4.2xlarge' => 64, 'c4.4xlarge' => 64, 'c4.8xlarge' => 64,
-      'x1.16xlarge' => 64, 'x1.32xlarge' => 64,
+      'x1.16xlarge' => 64, 'x1.32xlarge' => 64, 'x1e.32xlarge' => 64,
       'p2.xlarge' => 64, 'p2.8xlarge' => 64, 'p2.16xlarge' => 64,
     }
     @@Disk_Type_Lookup = {
@@ -293,7 +294,7 @@ module AwsPricing
       'r4.large' => :ebs, 'r4.xlarge' => :ebs, 'r4.2xlarge' => :ebs, 'r4.4xlarge' => :ebs, 'r4.8xlarge' => :ebs, 'r4.16xlarge' => :ebs,
       't2.nano' => :ebs, 't2.micro' => :ebs, 't2.small' => :ebs, 't2.medium' => :ebs, 't2.large' => :ebs, 't2.xlarge' => :ebs, 't2.2xlarge' => :ebs,
       'c4.large' => :ebs, 'c4.xlarge' => :ebs, 'c4.2xlarge' => :ebs, 'c4.4xlarge' => :ebs, 'c4.8xlarge' => :ebs,
-      'x1.16xlarge' => :ssd, 'x1.32xlarge' => :ssd,
+      'x1.16xlarge' => :ssd, 'x1.32xlarge' => :ssd, 'x1e.32xlarge' => :ssd,
       'p2.xlarge' => :ebs, 'p2.8xlarge' => :ebs, 'p2.16xlarge' => :ebs,
       'f1.2xlarge' => :ssd, 'f1.16xlarge' => :ssd,
     }
@@ -447,8 +448,9 @@ module AwsPricing
       # t2.small is EBS-only
       # t2.xlarge is EBS-only
       # t2.2xlarge is EBS-only
-      'x1.16xlarge' => [940, 105123],
-      'x1.32xlarge' => [940, 105123],
+      'x1.16xlarge' => [7000, 105123],   # dedicated EBS bw 7000 Gbps
+      'x1.32xlarge' => [14000, 210246],  # dedicated EBS bw 14000 Gbps
+      'x1e.32xlarge' => [14000, 210246], # dedicated EBS bw 14000 Gbps
     }
   end
 
