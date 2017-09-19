@@ -311,7 +311,8 @@ module AwsPricing
       't2.xlarge' => :high,   # same as c4.2xlarge, cf:https://aws.amazon.com/blogs/aws/new-t2-xlarge-and-t2-2xlarge-instances/
       't2.2xlarge' => :high,  # same as m4.xlarge,  cf:https://aws.amazon.com/blogs/aws/new-t2-xlarge-and-t2-2xlarge-instances/
       'x1.16xlarge' => :ten_gigabit,
-      'x1.32xlarge' => :ten_gigabit,
+      'x1.32xlarge' => :twenty_gigabit,
+      'x1e.32xlarge' => :twenty_gigabit,
     }
 
   end

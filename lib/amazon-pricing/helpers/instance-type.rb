@@ -31,7 +31,8 @@ module AwsPricing
             'CurrentGen' => {
                 'R3'  => ['r3.large', 'r3.xlarge', 'r3.2xlarge', 'r3.4xlarge', 'r3.8xlarge'],
                 'R4'  => ['r4.large', 'r4.xlarge', 'r4.2xlarge', 'r4.4xlarge', 'r4.8xlarge', 'r4.16xlarge'],
-                'X1'  => ['x1.16xlarge', 'x1.32xlarge']
+                'X1'  => ['x1.16xlarge', 'x1.32xlarge'],
+                'X1E'  => ['x1e.32xlarge'],
             },
             'PreviousGen' => {
                 'M2'  => ['m2.xlarge', 'm2.2xlarge', 'm2.4xlarge'],
