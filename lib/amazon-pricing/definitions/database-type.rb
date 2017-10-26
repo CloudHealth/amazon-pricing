@@ -73,8 +73,8 @@ module AwsPricing
         SQLSERVER_EE_MULTIAZ      => { engine: "sqlserver-ee",  license: "li",   multiaz: true,  sizeflex: false },
         SQLSERVER_EE_BYOL_STANDARD=> { engine: "sqlserver-ee",  license: "byol", multiaz: false, sizeflex: false },
         SQLSERVER_EE_BYOL_MULTIAZ => { engine: "sqlserver-ee",  license: "byol", multiaz: true,  sizeflex: false },
-        AURORA_MYSQL              => { engine: "aurora",        license: "none", multiaz: false, sizeflex: true },      # maybe AZ
-        AURORA_POSTGRESQL         => { engine: "aurora-postgresql", license: "none", multiaz: false, sizeflex: true },  # maybe AZ
+        AURORA_MYSQL              => { engine: "aurora",        license: "none", multiaz: true,  sizeflex: true },
+        AURORA_POSTGRESQL         => { engine: "aurora-postgresql", license: "none", multiaz: true, sizeflex: true },
         MARIADB_STANDARD          => { engine: "mariadb",       license: "none", multiaz: false, sizeflex: true },
         MARIADB_MULTIAZ           => { engine: "mariadb",       license: "none", multiaz: true,  sizeflex: true },
     }.freeze
@@ -230,19 +230,29 @@ module AwsPricing
     end
 
     # example: database_sf?('MySQL Community Edition (Multi-AZ)') returns true
+    # Returns BOOL if database string is RDS SF
+    # params:
+    # - display_name[String]: fully qualified database string
     def self.database_sf?(display_name)
       db = @@DB_ENGINE_MAP[display_name]
       return false unless db            # unknown db is presumed non sf
       db[:sizeflex]
     end
-    # example: operation_sf?('CreateDBInstance:0016') returns true
-    def self.operation_sf?(operation)
-      display_name = @@DB_OPERATION_TO_DESCRIPTION[operation]
+    # example: operation_sf?('CreateDBInstance:0016',true) returns true
+    # Returns BOOL if operation string is RDS SF
+    # params:
+    # - operation_name[String]: fully qualified operation string
+    # - multiaz[bool]: if operation is multi-az (api for consistency purposes)
+    def self.operation_sf?(operation_name,multiaz)
+      display_name = @@DB_OPERATION_TO_DESCRIPTION[operation_name]
       return false unless display_name  # unknown operation is presumed non sf
       self.database_sf?(display_name)
     end
 
     # example: database_multiaz?('MySQL Community Edition (Multi-AZ)') returns true
+    # Returns BOOL if database string is RDS SF
+    # params:
+    # - operation_name[String]: fully qualified operation string
     def self.database_multiaz?(display_name)
       db = @@DB_ENGINE_MAP[display_name]
       return false unless db            # unknown db is presumed non sf
@@ -251,14 +261,27 @@ module AwsPricing
     # self.operation_multiaz? not possible since az not encoded in `operation`
 
     # example: database_nf('MySQL Community Edition (Multi-AZ)') returns 2
+    # Returns INT (nf factor) for given database string
+    # params:
+    # - operation_name[String]: fully qualified operation string
     def self.database_nf(display_name)
       db = @@DB_ENGINE_MAP[display_name]
       return 1 unless db                # unknown db is presumed non sf
       return 2 if db[:sizeflex] && db[:multiaz]
       1
     end
-    # self.operation_nf not possible since az not encoded in `operation`
-
+    # example: database_nf('MySQL Community Edition (Multi-AZ)') returns 2
+    # i.e. inst_nf = RDS_NF[inst_size] * operation_nf(operation_name,multiaz)
+    # Returns INT (nf factor) for given operation string and multiaz
+    # params:
+    # - operation_name[String]: fully qualified operation string
+    # - multiaz[bool]: if operation is multi-az
+    def self.operation_nf(operation_name, multiaz)
+      display_name = @@DB_OPERATION_TO_DESCRIPTION[operation]
+      return 1 unless display_name  # unknown operation is presumed non sf
+      return 2 if multiaz
+      1
+    end
 
     def display_name
 	    self.class.display_name(name)
