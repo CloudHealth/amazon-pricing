@@ -58,9 +58,9 @@ module AwsPricing
         ORACLE_SE2_STANDARD       => { engine: "oracle-se2",    license: "li",   multiaz: false, sizeflex: false },
         ORACLE_SE2_MULTIAZ        => { engine: "oracle-se2",    license: "li",   multiaz: true,  sizeflex: false },
         ORACLE_SE2_BYOL_STANDARD  => { engine: "oracle-se2",    license: "byol", multiaz: false, sizeflex: true },
-        ORACLE_SE1_BYOL_MULTIAZ   => { engine: "oracle-se2",    license: "byol", multiaz: true,  sizeflex: true },
+        ORACLE_SE2_BYOL_MULTIAZ   => { engine: "oracle-se2",    license: "byol", multiaz: true,  sizeflex: true },
         ORACLE_SE_BYOL_STANDARD   => { engine: "oracle-se",     license: "byol", multiaz: false, sizeflex: true },
-        SQLSERVER_SE_MULTIAZ      => { engine: "oracle-se",     license: "byol", multiaz: true,  sizeflex: true },
+        ORACLE_SE_BYOL_MULTIAZ    => { engine: "oracle-se",     license: "byol", multiaz: true,  sizeflex: true },
         ORACLE_EE_BYOL_STANDARD   => { engine: "oracle-ee",     license: "byol", multiaz: false, sizeflex: true },
         ORACLE_EE_BYOL_MULTIAZ    => { engine: "oracle-ee",     license: "byol", multiaz: true,  sizeflex: true },
         SQLSERVER_EX              => { engine: "sqlserver-ex",  license: "li",   multiaz: false, sizeflex: false },
@@ -100,38 +100,39 @@ module AwsPricing
     }.freeze
 
     @@Database_Name_Lookup = {
-      'mysql_standard'          => 'MySQL Community Edition',
-      'mysql_multiaz'           => 'MySQL Community Edition (Multi-AZ)',
-      'postgresql_standard'     => 'PostgreSql Community Edition(Beta)',
-      'postgresql_multiaz'      => 'PostgreSql Community Edition(Beta) (Multi-AZ)',
-      'oracle_se1_standard'     => 'Oracle Database Standard Edition One',
-      'oracle_se1_multiaz'      => 'Oracle Database Standard Edition One (Multi-AZ)',
-      'oracle_se1_byol'         => 'Oracle Database Standard Edition One (BYOL)',
-      'oracle_se1_byol_multiaz' => 'Oracle Database Standard Edition One (BYOL Multi-AZ)',
-      'oracle_se_byol'          => 'Oracle Database Standard Edition (BYOL)',
-      'oracle_se_byol_multiaz'  => 'Oracle Database Standard Edition (BYOL Multi-AZ)',
-      'oracle_ee_byol'          => 'Oracle Database Enterprise Edition (BYOL)',
-      'oracle_ee_byol_multiaz'  => 'Oracle Database Enterprise Edition (BYOL Multi-AZ)',
-      'sqlserver_ex'            => 'Microsoft SQL Server Express Edition',
-      'sqlserver_web'           => 'Microsoft SQL Server Web Edition',
-      'sqlserver_se_standard'   => 'Microsoft SQL Server Standard Edition',
-      'sqlserver_se_multiaz'    => 'Microsoft SQL Server Standard Edition (Multi-AZ)',
-      'sqlserver_se_byol'       => 'Microsoft SQL Server Standard Edition (BYOL)',
-      'sqlserver_se_byol_multiaz' => 'Microsoft SQL Server Standard Edition (BYOL Multi-AZ)',
-      'sqlserver_ee_standard'     => 'Microsoft SQL Server Enterprise Edition',
-      'sqlserver_ee_multiaz'      => 'Microsoft SQL Server Enterprise Edition (Multi-AZ)',
-      'sqlserver_ee_byol'         => 'Microsoft SQL Server Enterprise Edition (BYOL)',
-      'sqlserver_ee_byol_multiaz' => 'Microsoft SQL Server Enterprise Edition (BYOL Multi-AZ)',
-      'aurora_standard'         => 'Amazon Aurora',
-      'mariadb_standard'        => 'MariaDB',
-      'mariadb_multiaz'         => 'MariaDB (Multi-AZ)',
+      'mysql_standard'          => MYSQL_STANDARD,
+      'mysql_multiaz'           => MYSQL_MULTIAZ,
+      'postgresql_standard'     => POSTGRESQL_STANDARD,
+      'postgresql_multiaz'      => POSTGRESQL_MULTIAZ,
+      'oracle_se1_standard'     => ORACLE_SE1_STANDARD,
+      'oracle_se1_multiaz'      => ORACLE_SE1_MULTIAZ,
+      'oracle_se1_byol'         => ORACLE_SE1_BYOL_STANDARD,
+      'oracle_se1_byol_multiaz' => ORACLE_SE1_BYOL_MULTIAZ,
+      'oracle_se_byol'          => ORACLE_SE_BYOL_STANDARD,
+      'oracle_se_byol_multiaz'  => ORACLE_SE_BYOL_MULTIAZ,
+      'oracle_ee_byol'          => ORACLE_EE_BYOL_STANDARD,
+      'oracle_ee_byol_multiaz'  => ORACLE_EE_BYOL_MULTIAZ,
+      'sqlserver_ex'            => SQLSERVER_EX,
+      'sqlserver_web'           => SQLSERVER_WEB,
+      'sqlserver_se_standard'   => SQLSERVER_SE_STANDARD,
+      'sqlserver_se_multiaz'    => SQLSERVER_SE_MULTIAZ,
+      'sqlserver_se_byol'       => SQLSERVER_SE_BYOL_STANDARD,
+      'sqlserver_se_byol_multiaz' => SQLSERVER_SE_BYOL_MULTIAZ,
+      'sqlserver_ee_standard'     => SQLSERVER_EE_STANDARD,
+      'sqlserver_ee_multiaz'      => SQLSERVER_EE_MULTIAZ,
+      'sqlserver_ee_byol'         => SQLSERVER_EE_BYOL_STANDARD,
+      'sqlserver_ee_byol_multiaz' => SQLSERVER_EE_BYOL_MULTIAZ,
+      'aurora_standard'         => AURORA_MYSQL,
+      'aurora_postgresql_standard' => AURORA_POSTGRESQL,
+      'mariadb_standard'        => MARIADB_STANDARD,
+      'mariadb_multiaz'         => MARIADB_MULTIAZ,
 
-      'oracle_se2_standard'     => 'Oracle Database Standard Edition Two',
-      'oracle_se2_multiaz'      => 'Oracle Database Standard Edition Two (Multi-AZ)',
+      'oracle_se2_standard'     => ORACLE_SE2_STANDARD,
+      'oracle_se2_multiaz'      => ORACLE_SE2_MULTIAZ,
       # Oracle SE2 BYOL prices are copied from Enterprise BYOL prices and not collected
       # (so no need to add rds-price-list.rb)
-      'oracle_se2_byol'         => 'Oracle Database Standard Edition Two (BYOL)',
-      'oracle_se2_byol_multiaz' => 'Oracle Database Standard Edition Two (BYOL Multi-AZ)',
+      'oracle_se2_byol'         => ORACLE_SE2_BYOL_STANDARD,
+      'oracle_se2_byol_multiaz' => ORACLE_SE2_BYOL_MULTIAZ,
     }
 
     @@Display_Name_To_Qualified_Database_Name = @@Database_Name_Lookup.invert
@@ -166,6 +167,7 @@ module AwsPricing
       'sqlserver-se(li)_multiaz' => 'sqlserver_se_multiaz',
       'sqlserver-web(li)'        => 'sqlserver_web',
       'aurora'                   => 'aurora_standard',
+      'aurora-postgresql'        => 'aurora_postgresql_standard',
       'mariadb'                  => 'mariadb_standard',
       'mariadb_multiaz'          => 'mariadb_multiaz',
     }
@@ -270,7 +272,7 @@ module AwsPricing
       return 2 if db[:sizeflex] && db[:multiaz]
       1
     end
-    # example: database_nf('MySQL Community Edition (Multi-AZ)') returns 2
+    # example: database_nf('MySQL Community Edition (Multi-AZ)',true) returns 2
     # i.e. inst_nf = RDS_NF[inst_size] * operation_nf(operation_name,multiaz)
     # Returns INT (nf factor) for given operation string and multiaz
     # params:
