@@ -279,9 +279,9 @@ module AwsPricing
     # - operation_name[String]: fully qualified operation string
     # - multiaz[bool]: if operation is multi-az
     def self.operation_nf(operation_name, multiaz)
-      display_name = @@DB_OPERATION_TO_DESCRIPTION[operation]
+      display_name = @@DB_OPERATION_TO_DESCRIPTION[operation_name]
       return 1 unless display_name  # unknown operation is presumed non sf
-      return 2 if multiaz
+      return 2 if self.operation_sf?(operation_name,multiaz) && multiaz
       1
     end
 

@@ -31,6 +31,68 @@ describe AwsPricing::RdsPriceList do
     end
   end
 
+  describe 'rds_sf_database' do
+    it "verifies RDS SF api for database name" do
+      # tests database display_name APIs {database_sf?, database_multiaz?, database_nf},
+      #   and also adds indirect testing of #db_mapping too
+      product_name = 'oracle-se2(byol)'  # known RDS SF multiaz example: 'Oracle Database Standard Edition Two (BYOL Multi-AZ)'
+      multiaz = true
+      display_name = AwsPricing::DatabaseType.db_mapping(product_name, multiaz)
+      puts "rds_sf_database-1: display_name:#{display_name}"
+      #
+      expect(AwsPricing::DatabaseType.database_sf?(display_name)).to be true
+      expect(AwsPricing::DatabaseType.database_multiaz?(display_name)).to be true
+      expect(AwsPricing::DatabaseType.database_nf(display_name)).to eq(2)
+
+      product_name = 'sqlserver-se(byol)'  # known NOT RDS SF example: 'Microsoft SQL Server Standard Edition (BYOL)'
+      multiaz = false
+      display_name = AwsPricing::DatabaseType.db_mapping(product_name, multiaz)
+      puts "rds_sf_database-2: display_name:#{display_name}"
+      #
+      expect(AwsPricing::DatabaseType.database_sf?(display_name)).to be false
+      expect(AwsPricing::DatabaseType.database_multiaz?(display_name)).to be false
+      expect(AwsPricing::DatabaseType.database_nf(display_name)).to eq(1)
+
+      display_name = 'NuoDB'              # unknown db, returns default non RDS SF values
+      #
+      expect(AwsPricing::DatabaseType.database_sf?(display_name)).to be false
+      expect(AwsPricing::DatabaseType.database_multiaz?(display_name)).to be false
+      expect(AwsPricing::DatabaseType.database_nf(display_name)).to eq(1)
+    end
+  end
+
+  describe 'rds_sf_operation' do
+    it "verifies RDS SF api for operation name" do
+      # tests operation name APIs {operation_sf?, operation_nf}
+      operation_name = 'CreateDBInstance:0002'  # known RDS SF: 'MySQL Community Edition (Multi-AZ)'
+      multiaz = true
+      #
+      expect(AwsPricing::DatabaseType.operation_sf?(operation_name, multiaz)).to be true
+      expect(AwsPricing::DatabaseType.operation_nf(operation_name,  multiaz)).to eq(2)
+      multiaz = false
+      expect(AwsPricing::DatabaseType.operation_sf?(operation_name, multiaz)).to be true
+      expect(AwsPricing::DatabaseType.operation_nf(operation_name,  multiaz)).to eq(1)    #multiaz *not* encoded in operation_name
+
+      operation_name = 'CreateDBInstance:0008'  # known non RDS SF: 'Microsoft SQL Server Standard Edition (BYOL)'
+      multiaz = false
+      #
+      expect(AwsPricing::DatabaseType.operation_sf?(operation_name, multiaz)).to be false
+      expect(AwsPricing::DatabaseType.operation_nf(operation_name,  multiaz)).to eq(1)
+      multiaz = true
+      expect(AwsPricing::DatabaseType.operation_sf?(operation_name, multiaz)).to be false
+      expect(AwsPricing::DatabaseType.operation_nf(operation_name,  multiaz)).to eq(1)    #multiaz *not* encoded in operation_name
+
+      operation_name = 'CreateDBInstance:9999'  # unknown operation, returns default non RDS SF values
+      multiaz = false
+      #
+      expect(AwsPricing::DatabaseType.operation_sf?(operation_name, multiaz)).to be false
+      expect(AwsPricing::DatabaseType.operation_nf(operation_name,multiaz)).to eq(1)
+      multiaz = true
+      expect(AwsPricing::DatabaseType.operation_sf?(operation_name, multiaz)).to be false
+      expect(AwsPricing::DatabaseType.operation_nf(operation_name,multiaz)).to eq(1)    #multiaz *not* encoded in operation_name
+    end
+  end
+
   describe 'get_breakeven_months' do 
     it "test_fetch_all_breakeven_months" do
       @pricing.regions.each do |region|
