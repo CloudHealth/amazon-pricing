@@ -246,7 +246,7 @@ module AwsPricing
     # params:
     # - operation_name[String]: fully qualified operation string
     # - multiaz[bool]: if operation is multi-az (api for consistency purposes)
-    def self.operation_sf?(operation_name,multiaz)
+    def self.operation_sf?(operation_name,multiaz=false)
       display_name = @@DB_OPERATION_TO_DESCRIPTION[operation_name]
       return false unless display_name  # unknown operation is presumed non sf
       self.database_sf?(display_name)
