@@ -80,96 +80,96 @@ module AwsPricing
     }.freeze
     # maps Operation to Description
     @@DB_OPERATION_TO_DESCRIPTION = {
-        'CreateDBInstance:0002' => MYSQL_STANDARD,  # MySQL
-        'CreateDBInstance:0003' => ORACLE_SE1_BYOL_STANDARD,  # Oracle SE1 (BYOL)
-        'CreateDBInstance:0004' => ORACLE_SE_BYOL_STANDARD,  # Oracle SE (BYOL)
-        'CreateDBInstance:0005' => ORACLE_EE_BYOL_STANDARD,  # Oracle EE (BYOL)
-        'CreateDBInstance:0006' => ORACLE_SE1_STANDARD, # Oracle SE1 (LI)
-        'CreateDBInstance:0008' => SQLSERVER_SE_BYOL_STANDARD, # SQL Server SE (BYOL)
-        'CreateDBInstance:0009' => SQLSERVER_EE_BYOL_STANDARD, # SQL Server EE (BYOL)
-        'CreateDBInstance:0010' => SQLSERVER_EX, # SQL Server Exp (LI)
-        'CreateDBInstance:0011' => SQLSERVER_WEB, # SQL Server Web (LI)
-        'CreateDBInstance:0012' => SQLSERVER_SE_STANDARD, # SQL Server SE (LI)
-        'CreateDBInstance:0014' => POSTGRESQL_STANDARD,  # PostgreSQL
-        'CreateDBInstance:0015' => SQLSERVER_EE_STANDARD, # SQL Server EE (LI)
-        'CreateDBInstance:0016' => AURORA_MYSQL,  # Aurora MySQL
-        'CreateDBInstance:0018' => MARIADB_STANDARD,  # MariaDB
-        'CreateDBInstance:0019' => ORACLE_SE2_BYOL_STANDARD,  # Oracle SE2 (BYOL)
-        'CreateDBInstance:0020' => ORACLE_SE2_STANDARD, # Oracle SE2 (LI)
-        'CreateDBInstance:0021' => AURORA_POSTGRESQL,  # Aurora PostgreSQL
+        'CreateDBInstance:0002'.freeze => MYSQL_STANDARD,  # MySQL
+        'CreateDBInstance:0003'.freeze => ORACLE_SE1_BYOL_STANDARD,  # Oracle SE1 (BYOL)
+        'CreateDBInstance:0004'.freeze => ORACLE_SE_BYOL_STANDARD,  # Oracle SE (BYOL)
+        'CreateDBInstance:0005'.freeze => ORACLE_EE_BYOL_STANDARD,  # Oracle EE (BYOL)
+        'CreateDBInstance:0006'.freeze => ORACLE_SE1_STANDARD, # Oracle SE1 (LI)
+        'CreateDBInstance:0008'.freeze => SQLSERVER_SE_BYOL_STANDARD, # SQL Server SE (BYOL)
+        'CreateDBInstance:0009'.freeze => SQLSERVER_EE_BYOL_STANDARD, # SQL Server EE (BYOL)
+        'CreateDBInstance:0010'.freeze => SQLSERVER_EX, # SQL Server Exp (LI)
+        'CreateDBInstance:0011'.freeze => SQLSERVER_WEB, # SQL Server Web (LI)
+        'CreateDBInstance:0012'.freeze => SQLSERVER_SE_STANDARD, # SQL Server SE (LI)
+        'CreateDBInstance:0014'.freeze => POSTGRESQL_STANDARD,  # PostgreSQL
+        'CreateDBInstance:0015'.freeze => SQLSERVER_EE_STANDARD, # SQL Server EE (LI)
+        'CreateDBInstance:0016'.freeze => AURORA_MYSQL,  # Aurora MySQL
+        'CreateDBInstance:0018'.freeze => MARIADB_STANDARD,  # MariaDB
+        'CreateDBInstance:0019'.freeze => ORACLE_SE2_BYOL_STANDARD,  # Oracle SE2 (BYOL)
+        'CreateDBInstance:0020'.freeze => ORACLE_SE2_STANDARD, # Oracle SE2 (LI)
+        'CreateDBInstance:0021'.freeze => AURORA_POSTGRESQL,  # Aurora PostgreSQL
     }.freeze
 
     @@Database_Name_Lookup = {
-      'mysql_standard'          => MYSQL_STANDARD,
-      'mysql_multiaz'           => MYSQL_MULTIAZ,
-      'postgresql_standard'     => POSTGRESQL_STANDARD,
-      'postgresql_multiaz'      => POSTGRESQL_MULTIAZ,
-      'oracle_se1_standard'     => ORACLE_SE1_STANDARD,
-      'oracle_se1_multiaz'      => ORACLE_SE1_MULTIAZ,
-      'oracle_se1_byol'         => ORACLE_SE1_BYOL_STANDARD,
-      'oracle_se1_byol_multiaz' => ORACLE_SE1_BYOL_MULTIAZ,
-      'oracle_se_byol'          => ORACLE_SE_BYOL_STANDARD,
-      'oracle_se_byol_multiaz'  => ORACLE_SE_BYOL_MULTIAZ,
-      'oracle_ee_byol'          => ORACLE_EE_BYOL_STANDARD,
-      'oracle_ee_byol_multiaz'  => ORACLE_EE_BYOL_MULTIAZ,
-      'sqlserver_ex'            => SQLSERVER_EX,
-      'sqlserver_web'           => SQLSERVER_WEB,
-      'sqlserver_se_standard'   => SQLSERVER_SE_STANDARD,
-      'sqlserver_se_multiaz'    => SQLSERVER_SE_MULTIAZ,
-      'sqlserver_se_byol'       => SQLSERVER_SE_BYOL_STANDARD,
-      'sqlserver_se_byol_multiaz' => SQLSERVER_SE_BYOL_MULTIAZ,
-      'sqlserver_ee_standard'     => SQLSERVER_EE_STANDARD,
-      'sqlserver_ee_multiaz'      => SQLSERVER_EE_MULTIAZ,
-      'sqlserver_ee_byol'         => SQLSERVER_EE_BYOL_STANDARD,
-      'sqlserver_ee_byol_multiaz' => SQLSERVER_EE_BYOL_MULTIAZ,
-      'aurora_standard'         => AURORA_MYSQL,
-      'aurora_postgresql_standard' => AURORA_POSTGRESQL,
-      'mariadb_standard'        => MARIADB_STANDARD,
-      'mariadb_multiaz'         => MARIADB_MULTIAZ,
+      'mysql_standard'.freeze          => MYSQL_STANDARD,
+      'mysql_multiaz'.freeze           => MYSQL_MULTIAZ,
+      'postgresql_standard'.freeze     => POSTGRESQL_STANDARD,
+      'postgresql_multiaz'.freeze      => POSTGRESQL_MULTIAZ,
+      'oracle_se1_standard'.freeze     => ORACLE_SE1_STANDARD,
+      'oracle_se1_multiaz'.freeze      => ORACLE_SE1_MULTIAZ,
+      'oracle_se1_byol'.freeze         => ORACLE_SE1_BYOL_STANDARD,
+      'oracle_se1_byol_multiaz'.freeze => ORACLE_SE1_BYOL_MULTIAZ,
+      'oracle_se_byol'.freeze          => ORACLE_SE_BYOL_STANDARD,
+      'oracle_se_byol_multiaz'.freeze  => ORACLE_SE_BYOL_MULTIAZ,
+      'oracle_ee_byol'.freeze          => ORACLE_EE_BYOL_STANDARD,
+      'oracle_ee_byol_multiaz'.freeze  => ORACLE_EE_BYOL_MULTIAZ,
+      'sqlserver_ex'.freeze            => SQLSERVER_EX,
+      'sqlserver_web'.freeze           => SQLSERVER_WEB,
+      'sqlserver_se_standard'.freeze   => SQLSERVER_SE_STANDARD,
+      'sqlserver_se_multiaz'.freeze    => SQLSERVER_SE_MULTIAZ,
+      'sqlserver_se_byol'.freeze       => SQLSERVER_SE_BYOL_STANDARD,
+      'sqlserver_se_byol_multiaz'.freeze => SQLSERVER_SE_BYOL_MULTIAZ,
+      'sqlserver_ee_standard'.freeze     => SQLSERVER_EE_STANDARD,
+      'sqlserver_ee_multiaz'.freeze      => SQLSERVER_EE_MULTIAZ,
+      'sqlserver_ee_byol'.freeze         => SQLSERVER_EE_BYOL_STANDARD,
+      'sqlserver_ee_byol_multiaz'.freeze => SQLSERVER_EE_BYOL_MULTIAZ,
+      'aurora_standard'.freeze           => AURORA_MYSQL,
+      'aurora_postgresql_standard'.freeze=> AURORA_POSTGRESQL,
+      'mariadb_standard'.freeze        => MARIADB_STANDARD,
+      'mariadb_multiaz'.freeze         => MARIADB_MULTIAZ,
 
-      'oracle_se2_standard'     => ORACLE_SE2_STANDARD,
-      'oracle_se2_multiaz'      => ORACLE_SE2_MULTIAZ,
+      'oracle_se2_standard'.freeze     => ORACLE_SE2_STANDARD,
+      'oracle_se2_multiaz'.freeze      => ORACLE_SE2_MULTIAZ,
       # Oracle SE2 BYOL prices are copied from Enterprise BYOL prices and not collected
       # (so no need to add rds-price-list.rb)
-      'oracle_se2_byol'         => ORACLE_SE2_BYOL_STANDARD,
-      'oracle_se2_byol_multiaz' => ORACLE_SE2_BYOL_MULTIAZ,
+      'oracle_se2_byol'.freeze         => ORACLE_SE2_BYOL_STANDARD,
+      'oracle_se2_byol_multiaz'.freeze => ORACLE_SE2_BYOL_MULTIAZ,
     }
 
     @@Display_Name_To_Qualified_Database_Name = @@Database_Name_Lookup.invert
 
     @@ProductDescription = {
-      'mysql'                    => 'mysql_standard',
-      'mysql_multiaz'            => 'mysql_multiaz',
-      'postgres'                 => 'postgresql_standard',
-      'postgres_multiaz'         => 'postgresql_multiaz',
-      'postgresql'               => 'postgresql_standard',
-      'postgresql_multiaz'       => 'postgresql_multiaz',
-      'oracle-se(byol)'          => 'oracle_se_byol',
-      'oracle-se(byol)_multiaz'  => 'oracle_se_byol_multiaz',
-      'oracle-ee(byol)'          => 'oracle_ee_byol',
-      'oracle-ee(byol)_multiaz'  => 'oracle_ee_byol_multiaz',
-      'oracle-se1(li)'           => 'oracle_se1_standard',
-      'oracle-se1(li)_multiaz'   => 'oracle_se1_multiaz',
-      'oracle-se1(byol)'         => 'oracle_se1_byol',
-      'oracle-se1(byol)_multiaz' => 'oracle_se1_byol_multiaz',
-      'oracle-se2(li)'           => 'oracle_se2_standard',
-      'oracle-se2(li)_multiaz'   => 'oracle_se2_multiaz',
-      'oracle-se2(byol)'         => 'oracle_se2_byol',
-      'oracle-se2(byol)_multiaz' => 'oracle_se2_byol_multiaz',
-      'sqlserver-ee(byol)'       => 'sqlserver_ee_byol',
-      'sqlserver-ee(byol)_multiaz' => 'sqlserver_ee_byol_multiaz',
-      'sqlserver-ee(li)'         => 'sqlserver_ee_standard',
-      'sqlserver-ee(li)_multiaz' => 'sqlserver_ee_multiaz',
-      'sqlserver-ex(li)'         => 'sqlserver_ex',
-      'sqlserver-se(byol)'       => 'sqlserver_se_byol',
-      'sqlserver-se(byol)_multiaz' => 'sqlserver_se_byol_multiaz',
-      'sqlserver-se(li)'         => 'sqlserver_se_standard',
-      'sqlserver-se(li)_multiaz' => 'sqlserver_se_multiaz',
-      'sqlserver-web(li)'        => 'sqlserver_web',
-      'aurora'                   => 'aurora_standard',
-      'aurora-postgresql'        => 'aurora_postgresql_standard',
-      'mariadb'                  => 'mariadb_standard',
-      'mariadb_multiaz'          => 'mariadb_multiaz',
+      'mysql'.freeze                    => 'mysql_standard'.freeze,
+      'mysql_multiaz'.freeze            => 'mysql_multiaz'.freeze,
+      'postgres'.freeze                 => 'postgresql_standard'.freeze,
+      'postgres_multiaz'.freeze         => 'postgresql_multiaz'.freeze,
+      'postgresql'.freeze               => 'postgresql_standard'.freeze,
+      'postgresql_multiaz'.freeze       => 'postgresql_multiaz'.freeze,
+      'oracle-se(byol)'.freeze          => 'oracle_se_byol'.freeze,
+      'oracle-se(byol)_multiaz'.freeze  => 'oracle_se_byol_multiaz'.freeze,
+      'oracle-ee(byol)'.freeze          => 'oracle_ee_byol'.freeze,
+      'oracle-ee(byol)_multiaz'.freeze  => 'oracle_ee_byol_multiaz'.freeze,
+      'oracle-se1(li)'.freeze           => 'oracle_se1_standard'.freeze,
+      'oracle-se1(li)_multiaz'.freeze   => 'oracle_se1_multiaz'.freeze,
+      'oracle-se1(byol)'.freeze         => 'oracle_se1_byol'.freeze,
+      'oracle-se1(byol)_multiaz'.freeze => 'oracle_se1_byol_multiaz'.freeze,
+      'oracle-se2(li)'.freeze           => 'oracle_se2_standard'.freeze,
+      'oracle-se2(li)_multiaz'.freeze   => 'oracle_se2_multiaz'.freeze,
+      'oracle-se2(byol)'.freeze         => 'oracle_se2_byol'.freeze,
+      'oracle-se2(byol)_multiaz'.freeze => 'oracle_se2_byol_multiaz'.freeze,
+      'sqlserver-ee(byol)'.freeze       => 'sqlserver_ee_byol'.freeze,
+      'sqlserver-ee(byol)_multiaz'.freeze => 'sqlserver_ee_byol_multiaz'.freeze,
+      'sqlserver-ee(li)'.freeze         => 'sqlserver_ee_standard'.freeze,
+      'sqlserver-ee(li)_multiaz'.freeze => 'sqlserver_ee_multiaz'.freeze,
+      'sqlserver-ex(li)'.freeze         => 'sqlserver_ex'.freeze,
+      'sqlserver-se(byol)'.freeze       => 'sqlserver_se_byol'.freeze,
+      'sqlserver-se(byol)_multiaz'.freeze => 'sqlserver_se_byol_multiaz'.freeze,
+      'sqlserver-se(li)'.freeze         => 'sqlserver_se_standard'.freeze,
+      'sqlserver-se(li)_multiaz'.freeze => 'sqlserver_se_multiaz'.freeze,
+      'sqlserver-web(li)'.freeze        => 'sqlserver_web'.freeze,
+      'aurora'.freeze                   => 'aurora_standard'.freeze,
+      'aurora-postgresql'.freeze        => 'aurora_postgresql_standard'.freeze,
+      'mariadb'.freeze                  => 'mariadb_standard'.freeze,
+      'mariadb_multiaz'.freeze          => 'mariadb_multiaz'.freeze,
     }
 
     @@DB_Deploy_Types = {
@@ -181,7 +181,8 @@ module AwsPricing
       :oracle_ee    => [:byol, :byol_multiaz],
       :sqlserver_se => [:standard, :multiaz, :byol, :byol_multiaz],
       :sqlserver_ee => [:byol, :byol_multiaz, :standard, :multiaz],
-      :aurora       => [:standard],
+      :aurora       => [:standard, :multiaz], # checking to see distinguished standard/multiaz
+      :aurora_postgresql => [:standard, :multiaz],
       :mariadb      => [:standard, :multiaz],
     }
 
@@ -191,7 +192,7 @@ module AwsPricing
 
   	def self.get_database_name
       [:mysql, :postgresql, :oracle_se1, :oracle_se, :oracle_ee, :sqlserver_ex, :sqlserver_web,
-        :sqlserver_se, :sqlserver_ee, :aurora, :mariadb,
+        :sqlserver_se, :sqlserver_ee, :aurora, :aurora_postgresql, :mariadb,
         :oracle_se2 # oracle_se2 license included prices are collected, and BYOL prices are copied from oracle_se
       ]
   	end
@@ -270,6 +271,7 @@ module AwsPricing
       db = @@DB_ENGINE_MAP[display_name]
       return 1 unless db                # unknown db is presumed non sf
       return 2 if db[:sizeflex] && db[:multiaz]
+
       1
     end
     # example: database_nf('MySQL Community Edition (Multi-AZ)',true) returns 2
@@ -282,6 +284,7 @@ module AwsPricing
       display_name = @@DB_OPERATION_TO_DESCRIPTION[operation_name]
       return 1 unless display_name  # unknown operation is presumed non sf
       return 2 if self.operation_sf?(operation_name,multiaz) && multiaz
+
       1
     end
 
