@@ -193,6 +193,7 @@ module AwsPricing
       'g2.2xlarge' => 'Cluster GPU Double Extra Large', 'g2.8xlarge' => 'Cluster GPU Eight Extra Large',
       'g3.4xlarge' => 'Cluster GPU-3 Quadruple Extra Large', 'g3.8xlarge' => 'Cluster GPU-3 Eight Extra Large', 'g3.16xlarge' => 'Cluster GPU-3 Hextuple Extra Large',
       'p2.xlarge' => 'GPU Compute Extra Large', 'p2.8xlarge' => 'GPU Compute Eight Extra Large', 'p2.16xlarge' => 'GPU Compute Hextuple Extra Large',
+      'p3.2xlarge' => 'GPU-3 Compute Double Extra Large', 'p3.8xlarge' => 'GPU-3 Compute Eight Extra Large', 'p3.16xlarge' => 'GPU-3 Compute Hextuple Extra Large',
       'c3.large' => 'High-Compute Large', 'c3.xlarge' => 'High-Compute Extra Large', 'c3.2xlarge' => 'High-Compute Double Extra Large', 'c3.4xlarge' => 'High-Compute Quadruple Extra Large', 'c3.8xlarge' => 'High-Compute Eight Extra Large',
       'i2.xlarge' => 'High I/O Extra Large', 'i2.2xlarge' => 'High I/O Double Extra Large', 'i2.4xlarge' => 'High I/O Quadruple Extra Large', 'i2.8xlarge' => 'High I/O Eight Extra Large',
       'i3.large' => 'Storage Optimized High I/O Large',
@@ -237,7 +238,8 @@ module AwsPricing
       't2.nano' => 0, 't2.micro' => 0, 't2.small' => 0, 't2.medium' => 0, 't2.large' => 0, 't2.xlarge' => 0, 't2.2xlarge' => 0,
       'c4.large' => 0, 'c4.xlarge' => 0, 'c4.2xlarge' => 0, 'c4.4xlarge' => 0, 'c4.8xlarge' => 0,
       'x1.16xlarge' => 1920, 'x1.32xlarge' => 3840, 'x1e.32xlarge' => 3840,
-      'p2.xlarge' => 0, 'p2.8xlarge' => 0, 'p2.16xlarge' => 0,
+      'p2.xlarge' => 0, 'p2.8xlarge' => 0, 'p2.16xlarge' => 0,  # ebs-optimized
+      'p3.2xlarge' => 0, 'p3.8xlarge' => 0, 'p3.16xlarge' => 0, # ebs-optimized
       'f1.2xlarge' => 470, 'f1.16xlarge' => 3760,
     }
     @@Platform_Lookup = {
@@ -267,6 +269,7 @@ module AwsPricing
       'c4.large' => 64, 'c4.xlarge' => 64, 'c4.2xlarge' => 64, 'c4.4xlarge' => 64, 'c4.8xlarge' => 64,
       'x1.16xlarge' => 64, 'x1.32xlarge' => 64, 'x1e.32xlarge' => 64,
       'p2.xlarge' => 64, 'p2.8xlarge' => 64, 'p2.16xlarge' => 64,
+      'p3.2xlarge' => 64, 'p3.8xlarge' => 64, 'p3.16xlarge' => 64,
     }
     @@Disk_Type_Lookup = {
       'm1.small' => :ephemeral, 'm1.medium' => :ephemeral, 'm1.large' => :ephemeral, 'm1.xlarge' => :ephemeral,
@@ -296,6 +299,7 @@ module AwsPricing
       'c4.large' => :ebs, 'c4.xlarge' => :ebs, 'c4.2xlarge' => :ebs, 'c4.4xlarge' => :ebs, 'c4.8xlarge' => :ebs,
       'x1.16xlarge' => :ssd, 'x1.32xlarge' => :ssd, 'x1e.32xlarge' => :ssd,
       'p2.xlarge' => :ebs, 'p2.8xlarge' => :ebs, 'p2.16xlarge' => :ebs,
+      'p3.2xlarge' => :ebs, 'p3.8xlarge' => :ebs, 'p3.16xlarge' => :ebs,
       'f1.2xlarge' => :ssd, 'f1.16xlarge' => :ssd,
     }
 
@@ -429,6 +433,8 @@ module AwsPricing
       # m4.4xlarge is EBS-only
       # m4.large is EBS-only
       # m4.xlarge is EBS-only
+      # p2 is EBS-only
+      # p3 is EBS-only
       'r3.2xlarge' => [238, 34564],
       'r3.4xlarge' => [473, 50525],
       'r3.8xlarge' => [471, 51666],
