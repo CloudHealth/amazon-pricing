@@ -251,6 +251,16 @@ module AwsPricing
       return false unless display_name  # unknown operation is presumed non sf
       self.database_sf?(display_name)
     end
+    # example: databases_sf() returns [MYSQL_STANDARD, ... ]
+    # Returns BOOL if operation string is RDS SF
+    # params: none
+    def self.databases_sf
+      dbs = []
+      @@DB_ENGINE_MAP.each do |key,value|
+        dbs << key if value[:sizeflex]
+      end
+      dbs
+    end
 
     # example: database_multiaz?('MySQL Community Edition (Multi-AZ)') returns true
     # Returns BOOL if database string is RDS SF
