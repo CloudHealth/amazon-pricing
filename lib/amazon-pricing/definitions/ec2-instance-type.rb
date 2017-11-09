@@ -171,7 +171,7 @@ module AwsPricing
         :high => 1000,
         :ten_gigabit => 10000,
         :twenty_gigabit => 20000,
-        :twentyfive_gigabit => 25000,
+        :twentyfive_gigabit => 25000, # presumes ENA
     }
 
     # handy summary here: www.ec2instances.info
@@ -188,6 +188,12 @@ module AwsPricing
       'c4.8xlarge' => :ten_gigabit,
       'c4.large' => :moderate,
       'c4.xlarge' => :high,
+      'c5.18xlarge' => :twentyfive_gigabit,
+      'c5.2xlarge' => :ten_gigabit, # upto 10G
+      'c5.4xlarge' => :ten_gigabit, # upto 10G
+      'c5.9xlarge' => :ten_gigabit,
+      'c5.large' => :ten_gigabit,   # upto 10G
+      'c5.xlarge' => :ten_gigabit,  # upto 10G
       'cache.c1.xlarge' => :high,
       'cache.m1.large' => :moderate,
       'cache.m1.medium' => :moderate,

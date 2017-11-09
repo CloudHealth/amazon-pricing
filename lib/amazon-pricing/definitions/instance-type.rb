@@ -206,7 +206,10 @@ module AwsPricing
         'r4.8xlarge' => 'Memory Optimized Eight Extra Large Enterprise', 'r4.16xlarge' => 'Memory Optimized Hextuple Extra Large Enterprise',
       't2.nano' => 'Burstable Performance Instance Nano', 't2.micro' => 'Burstable Performance Instance Micro', 't2.small' => 'Burstable Performance Instance Small', 't2.medium' => 'Burstable Performance Instance Medium', 't2.large' => 'Burstable Performance Instance Large',
         't2.xlarge' => 'Burstable Performance Instance Extra Large', 't2.2xlarge' => 'Burstable Performance Instance Double Extra Large',
-      'c4.large' => 'Compute Optimized Large', 'c4.xlarge' => 'Compute Optimized Extra Large', 'c4.2xlarge' => 'Compute Optimized Double Extra Large', 'c4.4xlarge' => 'Compute Optimized Quadruple Extra Large', 'c4.8xlarge' => 'Compute Optimized Eight Extra Large',
+      'c4.large' => 'Compute Optimized Large', 'c4.xlarge' => 'Compute Optimized Extra Large', 'c4.2xlarge' => 'Compute Optimized Double Extra Large', 'c4.4xlarge' => 'Compute Optimized Quadruple Extra Large',
+        'c4.8xlarge' => 'Compute Optimized Eight Extra Large',
+      'c5.large' => 'Compute Optimized C5 Large', 'c5.xlarge' => 'Compute Optimized C5 Extra Large', 'c5.2xlarge' => 'Compute Optimized C5 Double Extra Large', 'c5.4xlarge' => 'Compute Optimized C5 Quadruple Extra Large',
+        'c5.9xlarge' => 'Compute Optimized C5 Nine Extra Large', 'c5.18xlarge' => 'Compute Optimized C5 Eighteen Extra Large',
       'x1.16xlarge' => 'Memory Optimized Hextuple Large-scale Enterprise-class',
       'x1.32xlarge' => 'Memory Optimized Large-scale Enterprise-class',
       'x1e.32xlarge' => 'Memory Optimized Extended Large-scale Enterprise-class',
@@ -237,6 +240,7 @@ module AwsPricing
       'r4.large' => 0, 'r4.xlarge' => 0, 'r4.2xlarge' => 0, 'r4.4xlarge' => 0, 'r4.8xlarge' => 0, 'r4.16xlarge' => 0,
       't2.nano' => 0, 't2.micro' => 0, 't2.small' => 0, 't2.medium' => 0, 't2.large' => 0, 't2.xlarge' => 0, 't2.2xlarge' => 0,
       'c4.large' => 0, 'c4.xlarge' => 0, 'c4.2xlarge' => 0, 'c4.4xlarge' => 0, 'c4.8xlarge' => 0,
+      'c5.large' => 0, 'c5.xlarge' => 0, 'c5.2xlarge' => 0, 'c5.4xlarge' => 0, 'c5.9xlarge' => 0, 'c5.18xlarge' => 0, # ebs-optimized
       'x1.16xlarge' => 1920, 'x1.32xlarge' => 3840, 'x1e.32xlarge' => 3840,
       'p2.xlarge' => 0, 'p2.8xlarge' => 0, 'p2.16xlarge' => 0,  # ebs-optimized
       'p3.2xlarge' => 0, 'p3.8xlarge' => 0, 'p3.16xlarge' => 0, # ebs-optimized
@@ -267,6 +271,7 @@ module AwsPricing
       'r4.large' => 64, 'r4.xlarge' => 64, 'r4.2xlarge' => 64, 'r4.4xlarge' => 64, 'r4.8xlarge' => 64, 'r4.16xlarge' => 64,
       't2.nano' => 64, 't2.micro' => 64, 't2.small' => 64, 't2.medium' => 64, 't2.large' => 64, 't2.xlarge' => 64, 't2.2xlarge' => 64,
       'c4.large' => 64, 'c4.xlarge' => 64, 'c4.2xlarge' => 64, 'c4.4xlarge' => 64, 'c4.8xlarge' => 64,
+      'c5.large' => 64, 'c5.xlarge' => 64, 'c5.2xlarge' => 64, 'c5.4xlarge' => 64, 'c5.9xlarge' => 64, 'c5.18xlarge' => 64,
       'x1.16xlarge' => 64, 'x1.32xlarge' => 64, 'x1e.32xlarge' => 64,
       'p2.xlarge' => 64, 'p2.8xlarge' => 64, 'p2.16xlarge' => 64,
       'p3.2xlarge' => 64, 'p3.8xlarge' => 64, 'p3.16xlarge' => 64,
@@ -297,6 +302,7 @@ module AwsPricing
       'r4.large' => :ebs, 'r4.xlarge' => :ebs, 'r4.2xlarge' => :ebs, 'r4.4xlarge' => :ebs, 'r4.8xlarge' => :ebs, 'r4.16xlarge' => :ebs,
       't2.nano' => :ebs, 't2.micro' => :ebs, 't2.small' => :ebs, 't2.medium' => :ebs, 't2.large' => :ebs, 't2.xlarge' => :ebs, 't2.2xlarge' => :ebs,
       'c4.large' => :ebs, 'c4.xlarge' => :ebs, 'c4.2xlarge' => :ebs, 'c4.4xlarge' => :ebs, 'c4.8xlarge' => :ebs,
+      'c5.large' => :ebs, 'c5.xlarge' => :ebs, 'c5.2xlarge' => :ebs, 'c5.4xlarge' => :ebs, 'c5.9xlarge' => :ebs, 'c5.18xlarge' => :ebs,
       'x1.16xlarge' => :ssd, 'x1.32xlarge' => :ssd, 'x1e.32xlarge' => :ssd,
       'p2.xlarge' => :ebs, 'p2.8xlarge' => :ebs, 'p2.16xlarge' => :ebs,
       'p3.2xlarge' => :ebs, 'p3.8xlarge' => :ebs, 'p3.16xlarge' => :ebs,
@@ -344,6 +350,12 @@ module AwsPricing
       # c4.8xlarge is EBS-only
       # c4.large is EBS-only
       # c4.xlarge is EBS-only
+      # c5.18xlarge is EBS-only 9 Gbps
+      # c5.2xlarge is EBS-only Up to 2.25 Gbps
+      # c5.4xlarge is EBS-only 2.25 Gbps
+      # c5.9xlarge is EBS-only 4.5 Gbps
+      # c5.large is EBS-only Up to 2.25 Gbps
+      # c5.xlarge is EBS-only Up to 2.25 Gbps
       # cache.c1.xlarge is not picked up by CloudWatch
       # cache.m1.large is not picked up by CloudWatch
       # cache.m1.medium is not picked up by CloudWatch
