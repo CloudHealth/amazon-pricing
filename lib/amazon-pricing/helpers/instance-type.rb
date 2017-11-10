@@ -164,7 +164,7 @@ module AwsPricing
         return nil unless orig_nf
         # paranoia: assumes size_to_nf may not be sorted, which we need to step down
         sorted_size_to_nf = {}
-        size_to_nf.sort_by(&:last).each_with_object({}) do |(size,nf)|
+        size_to_nf.sort_by(&:last).each do |(size,nf)|
           sorted_size_to_nf[size] = nf
         end
         size_keys = sorted_size_to_nf.keys
