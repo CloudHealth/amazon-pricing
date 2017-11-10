@@ -16,9 +16,13 @@ module AwsPricing
       :light_prepay_1_year, :light_prepay_3_year, :medium_prepay_1_year, :medium_prepay_3_year, :heavy_prepay_1_year, :heavy_prepay_3_year,
       :allupfront_prepay_1_year, :allupfront_prepay_3_year,
       :partialupfront_price_per_hour_1_year, :partialupfront_prepay_1_year, :partialupfront_price_per_hour_3_year, :partialupfront_prepay_3_year,
-      :noupfront_price_per_hour_1_year, :noupfront_price_per_hour_3_year, :convertible_allupfront_prepay_3_year,
-      :convertible_partialupfront_price_per_hour_3_year, :convertible_partialupfront_prepay_3_year,
-      :convertible_noupfront_price_per_hour_3_year
+      :noupfront_price_per_hour_1_year, :noupfront_price_per_hour_3_year,
+      :convertible_allupfront_prepay_3_year,
+        :convertible_partialupfront_price_per_hour_3_year, :convertible_partialupfront_prepay_3_year,
+        :convertible_noupfront_price_per_hour_3_year,
+      :convertible_allupfront_prepay_1_year,
+        :convertible_partialupfront_price_per_hour_1_year, :convertible_partialupfront_prepay_1_year,
+        :convertible_noupfront_price_per_hour_1_year
 
     def allupfront_effective_rate_1_year
       (allupfront_prepay_1_year / 365 / 24).round(4)
@@ -78,6 +82,8 @@ module AwsPricing
       when :allupfront
         if term == :year1
           @allupfront_prepay_1_year
+        elsif term == :year1_convertible
+          @convertible_allupfront_prepay_1_year
         elsif term == :year3
           @allupfront_prepay_3_year
         elsif term == :year3_convertible
@@ -86,6 +92,8 @@ module AwsPricing
       when :partialupfront
         if term == :year1
           @partialupfront_prepay_1_year
+        elsif term == :year1_convertible
+          @convertible_partialupfront_prepay_1_year
         elsif term == :year3
           @partialupfront_prepay_3_year
         elsif term == :year3_convertible
@@ -119,6 +127,8 @@ module AwsPricing
       when :allupfront
         if term == :year1
           @allupfront_prepay_1_year = price
+        elsif term == :year1_convertible
+          @convertible_allupfront_prepay_1_year = price
         elsif term == :year3
           @allupfront_prepay_3_year = price
         elsif term == :year3_convertible
@@ -127,6 +137,8 @@ module AwsPricing
       when :partialupfront
         if term == :year1
           @partialupfront_prepay_1_year = price
+        elsif term == :year1_convertible
+          @convertible_partialupfront_prepay_1_year = price
         elsif term == :year3
           @partialupfront_prepay_3_year = price
         elsif term == :year3_convertible
@@ -164,6 +176,8 @@ module AwsPricing
       when :partialupfront
         if term == :year1
           @partialupfront_price_per_hour_1_year
+        elsif term == :year1_convertible
+          @convertible_partialupfront_price_per_hour_1_year
         elsif term == :year3
           @partialupfront_price_per_hour_3_year
         elsif term == :year3_convertible
@@ -172,6 +186,8 @@ module AwsPricing
       when :noupfront
         if term == :year1
           @noupfront_price_per_hour_1_year
+        elsif term == :year1_convertible
+          @convertible_noupfront_price_per_hour_1_year
         elsif term == :year3
           @noupfront_price_per_hour_3_year
         elsif term == :year3_convertible
@@ -209,6 +225,8 @@ module AwsPricing
       when :partialupfront
         if term == :year1
           @partialupfront_price_per_hour_1_year = price_per_hour
+        elsif term == :year1_convertible
+          @convertible_partialupfront_price_per_hour_1_year = price_per_hour
         elsif term == :year3
           @partialupfront_price_per_hour_3_year = price_per_hour
         elsif term == :year3_convertible
@@ -217,6 +235,8 @@ module AwsPricing
       when :noupfront
         if term == :year1
           @noupfront_price_per_hour_1_year = price_per_hour
+        elsif term == :year1_convertible
+          @convertible_noupfront_price_per_hour_1_year = price_per_hour
         elsif term == :year3
           @noupfront_price_per_hour_3_year = price_per_hour
         elsif term == :year3_convertible

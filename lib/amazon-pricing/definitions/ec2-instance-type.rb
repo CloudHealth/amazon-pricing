@@ -36,6 +36,8 @@ module AwsPricing
         case term
           when "yrTerm1", "yrTerm1Standard"
             years = :year1
+          when "yrTerm1Convertible"
+            years = :year1_convertible
           when "yrTerm3", "yrTerm3Standard"
             years = :year3
           when "yrTerm3Convertible"

@@ -8,5 +8,5 @@
 # Home::      http://github.com/CloudHealth/amazon-pricing
 #++
 module AwsPricing
-VERSION = '0.1.101' # [major,minor.fix]: c5 instance type returned
+VERSION = '0.1.102' # [major,minor.fix]: adding convertible 1year prices
 end
