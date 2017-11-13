@@ -20,7 +20,8 @@ module AwsPricing
         'ComputeOptimized' => {
             'CurrentGen' => {
                 'C3' => ['c3.large', 'c3.xlarge', 'c3.2xlarge', 'c3.4xlarge', 'c3.8xlarge'],
-                'C4' => ['c4.large', 'c4.xlarge', 'c4.2xlarge', 'c4.4xlarge', 'c4.8xlarge']
+                'C4' => ['c4.large', 'c4.xlarge', 'c4.2xlarge', 'c4.4xlarge', 'c4.8xlarge'],
+                'C5' => ['c5.large', 'c5.xlarge', 'c5.2xlarge', 'c5.4xlarge', 'c5.9xlarge', 'c5.18xlarge'],
             },
             'PreviousGen' => {
                 'C1' => ['c1.medium', 'c1.xlarge', 'cc1.4xlarge'],
@@ -154,10 +155,23 @@ module AwsPricing
         size_to_nf[name.split('.').last]
       end
 
+      # note: the next smaller type may _not_ be supported for a given family
+      #  so this returns the next logical/possible smaller type, but not necessarily
+      #  the next valid type
       def next_smaller_type(name)
         fam,type = name.split('.')
-        nf= size_to_nf[type] / 2.0
-        new_type = NF_TO_SIZE_TABLE[nf] || NF_TO_SIZE_TABLE[nf.to_i] # 2.0 and 2 are no same when used as hash keys.
+        orig_nf = size_to_nf[type]
+        return nil unless orig_nf
+        # paranoia: assumes size_to_nf may not be sorted, which we need to step down
+        sorted_size_to_nf = {}
+        size_to_nf.sort_by(&:last).each do |(size,nf)|
+          sorted_size_to_nf[size] = nf
+        end
+        size_keys = sorted_size_to_nf.keys
+        idx = size_keys.index(type)
+        idx = idx -1  if (idx > 0)  # don't go smaller, than smallest
+        nf = sorted_size_to_nf[new_type = size_keys.at(idx)]
+
         ["#{fam}.#{new_type}" , nf]
       end
 
@@ -179,9 +193,11 @@ module AwsPricing
           "2xlarge" => 16,
           "4xlarge" => 32,
           "8xlarge" => 64,
+          "9xlarge" => 72,
           "10xlarge" => 80,
           "16xlarge" => 128,
-          "32xlarge" => 256
+          "18xlarge" => 144,
+          "32xlarge" => 256,
       }
       NF_TO_SIZE_TABLE = SIZE_TO_NF_TABLE.invert
 

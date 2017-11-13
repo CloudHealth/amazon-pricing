@@ -60,6 +60,7 @@ module AwsPricing
               # hack for now until I can get capacity for fpga instances
               next if family == 'f1'
               if @@CAPACITY_HASH[family].nil?
+                # 2017-11-08 family == 'c5' not supported for DH
                 $stderr.puts "[fetch_ec2_dedicated_host_instance_pricing] WARNING: unable to find CAPACITY_HASH for #{family}"
                 next
               end
