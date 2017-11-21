@@ -31,7 +31,7 @@ module AwsPricing
       'i2' => { "xlarge"=>8, "2xlarge"=>4, "4xlarge"=>2, "8xlarge"=>1, "16xlarge"=>1 },
       'i3' => { "large"=>32, "xlarge"=>16, "2xlarge"=>8, "4xlarge"=>4, "8xlarge"=>2, "16xlarge"=>1 },
       'x1' => { "16xlarge"=>2, "32xlarge"=>1 },
-      'x1e' => { "32xlarge"=>1 },
+      'x1e' =>{ "xlarge"=>32, "2xlarge"=>16, "4xlarge"=>8, "8xlarge"=>4, "16xlarge"=>2, "32xlarge"=>1 },
     }
 
     def get_ec2_dhi_od_pricing
