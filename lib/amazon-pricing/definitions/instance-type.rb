@@ -210,9 +210,14 @@ module AwsPricing
         'c4.8xlarge' => 'Compute Optimized Eight Extra Large',
       'c5.large' => 'Compute Optimized C5 Large', 'c5.xlarge' => 'Compute Optimized C5 Extra Large', 'c5.2xlarge' => 'Compute Optimized C5 Double Extra Large', 'c5.4xlarge' => 'Compute Optimized C5 Quadruple Extra Large',
         'c5.9xlarge' => 'Compute Optimized C5 Nine Extra Large', 'c5.18xlarge' => 'Compute Optimized C5 Eighteen Extra Large',
-      'x1.16xlarge' => 'Memory Optimized Hextuple Large-scale Enterprise-class',
-      'x1.32xlarge' => 'Memory Optimized Large-scale Enterprise-class',
-      'x1e.32xlarge' => 'Memory Optimized Extended Large-scale Enterprise-class',
+      'x1.16xlarge'   => 'Memory Optimized 16 Extra Large Enterprise-class',
+        'x1.32xlarge' => 'Memory Optimized 32 Extra Large Enterprise-class',
+      'x1e.xlarge'     => 'Memory Optimized Extended Extra Large Enterprise-class',
+        'x1e.2xlarge'  => 'Memory Optimized Extended 2 Extra Large Enterprise-class',
+        'x1e.4xlarge'  => 'Memory Optimized Extended 4 Extra Large Enterprise-class',
+        'x1e.8xlarge'  => 'Memory Optimized Extended 8 Extra Large Enterprise-class',
+        'x1e.16xlarge' => 'Memory Optimized Extended 16 Extra Large Enterprise-class',
+        'x1e.32xlarge' => 'Memory Optimized Extended 32 Extra Large Enterprise-class',
       'f1.2xlarge' => 'FPGA Hardware Acceleration Double Extra Large', 'f1.16xlarge' => 'FPGA Hardware Acceleration Hextuple Extra Large'
     }
     @@Disk_Lookup = {
@@ -241,7 +246,8 @@ module AwsPricing
       't2.nano' => 0, 't2.micro' => 0, 't2.small' => 0, 't2.medium' => 0, 't2.large' => 0, 't2.xlarge' => 0, 't2.2xlarge' => 0,
       'c4.large' => 0, 'c4.xlarge' => 0, 'c4.2xlarge' => 0, 'c4.4xlarge' => 0, 'c4.8xlarge' => 0,
       'c5.large' => 0, 'c5.xlarge' => 0, 'c5.2xlarge' => 0, 'c5.4xlarge' => 0, 'c5.9xlarge' => 0, 'c5.18xlarge' => 0, # ebs-optimized
-      'x1.16xlarge' => 1920, 'x1.32xlarge' => 3840, 'x1e.32xlarge' => 3840,
+      'x1.16xlarge' => 1920, 'x1.32xlarge' => 3840,
+      'x1e.xlarge' => 120, 'x1e.2xlarge' => 240, 'x1e.4xlarge' => 480, 'x1e.8xlarge' => 960, 'x1e.16xlarge' => 1920, 'x1e.32xlarge' => 3840,
       'p2.xlarge' => 0, 'p2.8xlarge' => 0, 'p2.16xlarge' => 0,  # ebs-optimized
       'p3.2xlarge' => 0, 'p3.8xlarge' => 0, 'p3.16xlarge' => 0, # ebs-optimized
       'f1.2xlarge' => 470, 'f1.16xlarge' => 3760,
@@ -272,7 +278,8 @@ module AwsPricing
       't2.nano' => 64, 't2.micro' => 64, 't2.small' => 64, 't2.medium' => 64, 't2.large' => 64, 't2.xlarge' => 64, 't2.2xlarge' => 64,
       'c4.large' => 64, 'c4.xlarge' => 64, 'c4.2xlarge' => 64, 'c4.4xlarge' => 64, 'c4.8xlarge' => 64,
       'c5.large' => 64, 'c5.xlarge' => 64, 'c5.2xlarge' => 64, 'c5.4xlarge' => 64, 'c5.9xlarge' => 64, 'c5.18xlarge' => 64,
-      'x1.16xlarge' => 64, 'x1.32xlarge' => 64, 'x1e.32xlarge' => 64,
+      'x1.16xlarge' => 64, 'x1.32xlarge' => 64,
+      'x1e.xlarge' => 64, 'x1e.2xlarge' => 64, 'x1e.4xlarge' => 64, 'x1e.8xlarge' => 64, 'x1e.16xlarge' => 64, 'x1e.32xlarge' => 64,
       'p2.xlarge' => 64, 'p2.8xlarge' => 64, 'p2.16xlarge' => 64,
       'p3.2xlarge' => 64, 'p3.8xlarge' => 64, 'p3.16xlarge' => 64,
     }
@@ -303,7 +310,8 @@ module AwsPricing
       't2.nano' => :ebs, 't2.micro' => :ebs, 't2.small' => :ebs, 't2.medium' => :ebs, 't2.large' => :ebs, 't2.xlarge' => :ebs, 't2.2xlarge' => :ebs,
       'c4.large' => :ebs, 'c4.xlarge' => :ebs, 'c4.2xlarge' => :ebs, 'c4.4xlarge' => :ebs, 'c4.8xlarge' => :ebs,
       'c5.large' => :ebs, 'c5.xlarge' => :ebs, 'c5.2xlarge' => :ebs, 'c5.4xlarge' => :ebs, 'c5.9xlarge' => :ebs, 'c5.18xlarge' => :ebs,
-      'x1.16xlarge' => :ssd, 'x1.32xlarge' => :ssd, 'x1e.32xlarge' => :ssd,
+      'x1.16xlarge' => :ssd, 'x1.32xlarge' => :ssd,
+      'x1e.xlarge' => :ssd, 'x1e.2xlarge' => :ssd, 'x1e.4xlarge' => :ssd, 'x1e.8xlarge' => :ssd, 'x1e.16xlarge' => :ssd, 'x1e.32xlarge' => :ssd,
       'p2.xlarge' => :ebs, 'p2.8xlarge' => :ebs, 'p2.16xlarge' => :ebs,
       'p3.2xlarge' => :ebs, 'p3.8xlarge' => :ebs, 'p3.16xlarge' => :ebs,
       'f1.2xlarge' => :ssd, 'f1.16xlarge' => :ssd,
@@ -337,25 +345,27 @@ module AwsPricing
     private
 
     # [MB/s capacity, Ops/s capacity]
+    # EBSoptimized published capacities:
+    #  - cf: http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSOptimized.html
+    #  - MB/s (128KB I/O size), IOPS (16KB IO size)
     PER_SEC_CAPACITIES = {
       'c1.medium' => [118, 5471],
-      'c1.xlarge' => [347, 17245],
-      'c3.2xlarge' => [947, 63297],
-      'c3.4xlarge' => [962, 96546],
-      'c3.8xlarge' => [964, 60702],
-      'c3.large' => [917, 77972],
-      'c3.xlarge' => [932, 60632],
-      # c4.2xlarge is EBS-only
-      # c4.4xlarge is EBS-only
-      # c4.8xlarge is EBS-only
-      # c4.large is EBS-only
-      # c4.xlarge is EBS-only
-      # c5.18xlarge is EBS-only 9 Gbps
-      # c5.2xlarge is EBS-only Up to 2.25 Gbps
-      # c5.4xlarge is EBS-only 2.25 Gbps
-      # c5.9xlarge is EBS-only 4.5 Gbps
-      # c5.large is EBS-only Up to 2.25 Gbps
-      # c5.xlarge is EBS-only Up to 2.25 Gbps
+      'c1.xlarge' => [125, 8000],   # EBS
+      'c3.xlarge'  => [ 62,  4000], # EBSOptimized
+      'c3.2xlarge' => [125,  8000], # EBSOptimized
+      'c3.4xlarge' => [250, 16000], # EBSOptimized
+      # 'c3.8xlarge' # does NOT have dedicated EBSOptimized
+      'c4.large'   => [ 62,  4000], # EBSOptimized
+      'c4.xlarge'  => [ 94,  6000], # EBSOptimized
+      'c4.2xlarge' => [125,  8000], # EBSOptimized
+      'c4.4xlarge' => [250, 16000], # EBSOptimized
+      'c4.8xlarge' => [500, 32000], # EBSOptimized
+      'c5.large'    => [ 281, 16000], # EBSOptimized  peak.30min/24hrs, else [ 66, 4000]
+      'c5.xlarge'   => [ 281, 16000], # EBSOptimized  peak.30min/24hrs, else [100, 6000]
+      'c5.2xlarge'  => [ 281, 16000], # EBSOptimized  peak.30min/24hrs, else [141, 8000]
+      'c5.4xlarge'  => [ 281, 16000], # EBSOptimized
+      'c5.9xlarge'  => [ 563, 32000], # EBSOptimized
+      'c5.18xlarge' => [1125, 64000], # EBSOptimized
       # cache.c1.xlarge is not picked up by CloudWatch
       # cache.m1.large is not picked up by CloudWatch
       # cache.m1.medium is not picked up by CloudWatch
@@ -381,10 +391,10 @@ module AwsPricing
       'cc2.8xlarge' => [598, 64607],
       # cg1.4xlarge is not picked up by CloudWatch
       'cr1.8xlarge' => [525, 53527],
-      'd2.2xlarge' => [928, 119439],
-      'd2.4xlarge' => [2136, 266270],
-      'd2.8xlarge' => [3367, 225539],
-      'd2.xlarge' => [506, 68167],
+      'd2.xlarge'  => [ 94,  6000], # EBSOptimized
+      'd2.2xlarge' => [125,  8000], # EBSOptimized
+      'd2.4xlarge' => [250, 16000], # EBSOptimized
+      'd2.8xlarge' => [500, 32000], # EBSOptimized
       # db.cr1.8xlarge, like all RDS instances, are EBS-only
       # db.m1.large, like all RDS instances, are EBS-only
       # db.m1.medium, like all RDS instances, are EBS-only
@@ -412,52 +422,52 @@ module AwsPricing
       # db.t2.medium, like all RDS instances, are EBS-only
       # db.t2.micro, like all RDS instances, are EBS-only
       # db.t2.small, like all RDS instances, are EBS-only
-      'g2.2xlarge' => [534, 42731],
-      'g2.8xlarge' => [1069, 70756],
-      # g3.4xlarge is EBS-only
-      # g3.8xlarge is EBS-only
-      # g3.16xlarge is EBS-only
+      'f1.2xlarge' => [ 212, 12000], # EBSOptimized
+      'f1.16xlarge'=> [1750, 75000], # EBSOptimized
+      'g2.2xlarge' => [125, 8000], # EBSOptimized
+      'g3.4xlarge' => [ 437, 20000], # EBSOptimized
+      'g3,8xlarge' => [ 875, 40000], # EBSOptimized
+      'g3.16xlarge'=> [1750, 80000], # EBSOptimized
       'hi1.4xlarge' => [1824, 50488],
       'hs1.8xlarge' => [2257, 126081],
-      'i2.2xlarge' => [949, 89028],
-      'i2.4xlarge' => [1890, 172192],
-      'i2.8xlarge' => [3618, 313304],
-      'i2.xlarge' => [480, 45439],
-      'i3.16xlarge' => [12890, 3300000],	# NVMe SSD: 3.3M iops @4KB
-      'i3.8xlarge'  => [ 6445, 1650000],
-      'i3.4xlarge'  => [ 3222,  825000],
-      'i3.2xlarge'  => [ 1611,  412500],
-      'i3.xlarge'   => [  805,  206250],
-      'i3.large'    => [  402,  103125],
-      'm1.large' => [252, 29830],
-      'm1.medium' => [134, 9855],
-      'm1.small' => [112, 11776],
-      'm1.xlarge' => [436, 34630],
-      'm2.2xlarge' => [100, 9455],
-      'm2.4xlarge' => [198, 17469],
-      'm2.xlarge' => [100, 8855],
-      'm3.2xlarge' => [934, 72169],
-      'm3.large' => [477, 47711],
-      'm3.medium' => [443, 31698],
-      'm3.xlarge' => [898, 71540],
-      # m4.10xlarge is EBS-only
-      # m4.2xlarge is EBS-only
-      # m4.4xlarge is EBS-only
-      # m4.large is EBS-only
-      # m4.xlarge is EBS-only
-      # p2 is EBS-only
-      # p3 is EBS-only
-      'r3.2xlarge' => [238, 34564],
-      'r3.4xlarge' => [473, 50525],
-      'r3.8xlarge' => [471, 51666],
-      'r3.large' => [60, 8812],
-      'r3.xlarge' => [119, 17149],
-      # r4.16xlarge is EBS-only
-      # r4.2xlarge is EBS-only
-      # r4.4xlarge is EBS-only
-      # r4.8xlarge is EBS-only
-      # r4.large is EBS-only
-      # r4.xlarge is EBS-only
+      'i2.xlarge'  => [ 62,  4000], # EBSOptimized
+      'i2.2xlarge' => [125,  8000], # EBSOptimized
+      'i2.4xlarge' => [250, 16000], # EBSOptimized
+      # 'i2.8xlarge' # does NOT have dedicated EBSOptimized
+      'i3.large'    => [  53,  3000], # EBSOptimized
+      'i3.xlarge'   => [ 106,  6000], # EBSOptimized
+      'i3.2xlarge'  => [ 212, 12000], # EBSOptimized
+      'i3.4xlarge'  => [ 437, 16000], # EBSOptimized
+      'i3.8xlarge'  => [ 875, 32500], # EBSOptimized
+      'i3.16xlarge' => [1750, 65000],	# EBSOptimized
+      'm1.large'  => [ 62, 4000], # EBSOptimized
+      'm1.xlarge' => [125, 8000], # EBSOptimized
+      'm2.2xlarge' => [ 62, 4000], # EBSOptimized
+      'm2.4xlarge' => [125, 8000], # EBSOptimized
+      'm3.xlarge'  => [ 62, 4000], # EBSOptimized
+      'm3.2xlarge' => [125, 8000], # EBSOptimized
+      'm4.large'   => [  56,  3600], # EBSOptimized
+      'm4.xlarge'  => [  94,  6000], # EBSOptimized
+      'm4.2xlarge' => [ 125,  8000], # EBSOptimized
+      'm4.4xlarge' => [ 250, 16000], # EBSOptimized
+      'm4.10xlarge'=> [ 500, 32000], # EBSOptimized
+      'm4.16xlarge'=> [1250, 65000], # EBSOptimized
+      'p2.xlarge'  => [  94,  6000], # EBSOptimized
+      'p2.8xlarge' => [ 625, 32500], # EBSOptimized
+      'p2.16xlarge'=> [1250, 65000], # EBSOptimized
+      'p3.2xlarge' => [ 218, 10000], # EBSOptimized
+      'p3.8xlarge' => [ 875, 40000], # EBSOptimized
+      'p3.16xlarge'=> [1750, 80000], # EBSOptimized
+      'r3.xlarge'  => [ 62,  4000],  # EBSOptimized
+      'r3.2xlarge' => [125,  8000],  # EBSOptimized
+      'r3.4xlarge' => [250, 16000],  # EBSOptimized
+      # 'r3.8xlarge' # does NOT have dedicated EBSOptimized
+      'r4.large'    => [  53, 3000],  # EBSOptimized
+      'r4.xlarge'   => [ 106, 6000],  # EBSOptimized
+      'r4.2xlarge'  => [ 212, 12000], # EBSOptimized
+      'r4.4xlarge'  => [ 437, 18750], # EBSOptimized
+      'r4.8xlarge'  => [ 875, 37500], # EBSOptimized
+      'r4.16xlarge' => [1750, 75000], # EBSOptimized
       # t1.micro is EBS-only
       # t2.large is EBS-only
       # t2.medium is EBS-only
@@ -466,9 +476,14 @@ module AwsPricing
       # t2.small is EBS-only
       # t2.xlarge is EBS-only
       # t2.2xlarge is EBS-only
-      'x1.16xlarge' => [7000, 105123],   # dedicated EBS bw 7000 Gbps
-      'x1.32xlarge' => [14000, 210246],  # dedicated EBS bw 14000 Gbps
-      'x1e.32xlarge' => [14000, 210246], # dedicated EBS bw 14000 Gbps
+      'x1.16xlarge' => [ 875, 40000],  # EBSOptimized
+      'x1.32xlarge' => [1750, 80000],  # EBSOptimized
+      'x1e.xlarge'   => [  62, 3700],  # EBSOptimized
+      'x1e.2xlarge'  => [ 125, 7400],  # EBSOptimized
+      'x1e.4xlarge'  => [ 219, 10000], # EBSOptimized
+      'x1e.8xlarge'  => [ 437, 20000], # EBSOptimized
+      'x1e.16xlarge' => [ 875, 40000], # EBSOptimized
+      'x1e.32xlarge' => [1750, 80000], # EBSOptimized
     }
   end
 

@@ -8,5 +8,5 @@
 # Home::      http://github.com/CloudHealth/amazon-pricing
 #++
 module AwsPricing
-VERSION = '0.1.102' # [major,minor.fix]: adding convertible 1year prices
+VERSION = '0.1.103' # [major,minor.fix]: adding x1e additional sizes 
 end
