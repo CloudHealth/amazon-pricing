@@ -8,5 +8,5 @@
 # Home::      http://github.com/CloudHealth/amazon-pricing
 #++
 module AwsPricing
-VERSION = '0.1.103' # [major,minor.fix]: adding x1e additional sizes 
+VERSION = '0.1.104' # [major,minor.fix]: adding cache.r4
 end

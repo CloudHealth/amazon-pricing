@@ -218,6 +218,12 @@ module AwsPricing
       'cache.r3.8xlarge' => :ten_gigabit,
       'cache.r3.large' => :moderate,
       'cache.r3.xlarge' => :moderate,
+      'cache.r4.16xlarge' => :twentyfive_gigabit,
+      'cache.r4.2xlarge' => :ten_gigabit, # upto 10G
+      'cache.r4.4xlarge' => :ten_gigabit, # upto 10G
+      'cache.r4.8xlarge' => :ten_gigabit,
+      'cache.r4.large' => :ten_gigabit,   # upto 10G
+      'cache.r4.xlarge' => :ten_gigabit,  # upto 10G
       'cache.x1.16xlarge' => :ten_gigabit,
       'cache.x1.32xlarge' => :ten_gigabit,
       'cache.t1.micro' => :very_low,
