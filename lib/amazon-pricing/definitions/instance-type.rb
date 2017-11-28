@@ -330,7 +330,7 @@ module AwsPricing
       'cache.m2.xlarge' => 16700, 'cache.m2.2xlarge' => 33800, 'cache.m2.4xlarge' => 68000,
       'cache.c1.xlarge' => 6600,
       'cache.t1.micro' => 213,
-      'cache.r4.large' => 12300, 'cache.r4.xlarge' => 25050, 'cache.r4.2xlarge' => 50470, 'cache.r4.4xlarge' => 10138,
+      'cache.r4.large' => 12300, 'cache.r4.xlarge' => 25050, 'cache.r4.2xlarge' => 50470, 'cache.r4.4xlarge' => 101380,
          'cache.r4.8xlarge' => 203260, 'cache.r4.16xlarge' => 407000,
     }
     @@Virtual_Cores_Lookup = {
