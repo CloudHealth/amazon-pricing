@@ -130,6 +130,10 @@ module AwsPricing
       end
     end
 
+    def self.get_descriptive_name(api_name)
+      @@Name_Lookup[api_name]
+    end
+
     protected
 
     def self.get_disk(api_name)
