@@ -310,7 +310,7 @@ module AwsPricing
       'm3.large' => :moderate,
       'm3.medium' => :moderate,
       'm3.xlarge' => :high,
-      'm4.16xlarge' => :twenty_gigabit,
+      'm4.16xlarge' => :twentyfive_gigabit,
       'm4.10xlarge' => :ten_gigabit,
       'm4.2xlarge' => :high,
       'm4.4xlarge' => :high,
