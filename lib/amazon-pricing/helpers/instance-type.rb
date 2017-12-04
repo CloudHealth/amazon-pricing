@@ -171,7 +171,7 @@ module AwsPricing
         end
         size_keys = sorted_size_to_nf.keys
         idx = size_keys.index(type)
-        idx = idx -1  if (idx > 0)  # don't go smaller, than smallest
+        idx = idx - 1  if (idx > 0)  # don't go smaller, than smallest
         nf = sorted_size_to_nf[new_type = size_keys.at(idx)]
 
         ["#{fam}.#{new_type}" , nf]
