@@ -6,7 +6,8 @@ module AwsPricing
         'GeneralPurpose' => {
             'CurrentGen' => {
                 'M3' => ['m3.medium', 'm3.large', 'm3.xlarge', 'm3.2xlarge'],
-                'M4' => ['m4.large', 'm4.xlarge', 'm4.2xlarge', 'm4.4xlarge', 'm4.10xlarge', 'm4.16xlarge']
+                'M4' => ['m4.large', 'm4.xlarge', 'm4.2xlarge', 'm4.4xlarge', 'm4.10xlarge', 'm4.16xlarge'],
+                'M5' => ['m5.large', 'm5.xlarge', 'm5.2xlarge', 'm5.4xlarge', 'm5.12xlarge', 'm5.24xlarge']
             },
             'PreviousGen' => {
                 'M1' => ['m1.small', 'm1.medium', 'm1.large', 'm1.xlarge']
@@ -45,7 +46,8 @@ module AwsPricing
                 'HS1' => ['hs1.8xlarge'],
                 'I2'  => ['i2.xlarge', 'i2.2xlarge', 'i2.4xlarge', 'i2.8xlarge'],
                 'I3'  => ['i3.large', 'i3.xlarge', 'i3.2xlarge', 'i3.4xlarge', 'i3.8xlarge', 'i3.16xlarge'],
-                'D2'  => ['d2.xlarge', 'd2.2xlarge', 'd2.4xlarge', 'd2.8xlarge']
+                'D2'  => ['d2.xlarge', 'd2.2xlarge', 'd2.4xlarge', 'd2.8xlarge'],
+                'H1'  => ['h1.2xlarge', 'h1.4xlarge', 'h1.8xlarge', 'h1.16xlarge'],
             },
             'PreviousGen' => {
                 'HI1' => ['hi1.4xlarge']
@@ -169,7 +171,7 @@ module AwsPricing
         end
         size_keys = sorted_size_to_nf.keys
         idx = size_keys.index(type)
-        idx = idx -1  if (idx > 0)  # don't go smaller, than smallest
+        idx = idx - 1  if (idx > 0)  # don't go smaller, than smallest
         nf = sorted_size_to_nf[new_type = size_keys.at(idx)]
 
         ["#{fam}.#{new_type}" , nf]
@@ -195,8 +197,10 @@ module AwsPricing
           "8xlarge" => 64,
           "9xlarge" => 72,
           "10xlarge" => 80,
+          "12xlarge" => 96,
           "16xlarge" => 128,
           "18xlarge" => 144,
+          "24xlarge" => 192,
           "32xlarge" => 256,
       }
       NF_TO_SIZE_TABLE = SIZE_TO_NF_TABLE.invert

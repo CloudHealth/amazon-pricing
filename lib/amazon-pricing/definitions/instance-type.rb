@@ -183,6 +183,9 @@ module AwsPricing
       'm4.large' => 'M4 Large Instance', 'm4.xlarge' => 'M4 Extra Large Instance', 'm4.2xlarge' => 'M4 Double Extra Large Instance',
       'm4.4xlarge' => 'M4 Quadruple Extra Large Instance', 'm4.10xlarge' => 'M4 Decuple Extra Large Instance',
       'm4.16xlarge' => 'M4 Hextuple Extra Large Instance',
+      'm5.large' => 'M5 Large Instance', 'm5.xlarge' => 'M5 Extra Large Instance', 'm5.2xlarge' => 'M5 Double Extra Large Instance',
+      'm5.4xlarge' => 'M5 Quadruple Extra Large Instance', 'm5.12xlarge' => 'M5 12XL Instance',
+      'm5.24xlarge' => 'M5 24XL Instance',
       'c1.medium' => 'High-CPU Medium', 'c1.xlarge' => 'High-CPU Extra Large',
       'hi1.4xlarge' => 'High I/O Quadruple Extra Large',
       'cg1.4xlarge' => 'Cluster GPU Quadruple Extra Large',
@@ -201,6 +204,7 @@ module AwsPricing
       'i3.4xlarge' => 'Storage Optimized High I/O Quadruple Extra Large', 'i3.8xlarge' => 'Storage Optimized High I/O Extra Large',
       'i3.16xlarge' => 'Storage Optimized High I/O Hextuple Extra Large',
       'd2.xlarge' => 'Dense Storage Extra Large', 'd2.2xlarge' => 'Dense Storage Double Extra Large', 'd2.4xlarge' => 'Dense Storage Quadruple Extra Large', 'd2.8xlarge' => 'Dense Storage Eight Extra Large',
+      'h1.2xlarge' => 'Dense Storage H1 Double Extra Large', 'h1.4xlarge' => 'Dense Storage H1 Quadruple Extra Large', 'h1.8xlarge' => 'Dense Storage H1 Eight Extra Large', 'h1.16xlarge' => 'Dense Storage H1 Hextuple Extra Large',
       'r3.large' => 'Memory Optimized Large', 'r3.xlarge' => 'Memory Optimized Extra Large', 'r3.2xlarge' => 'Memory Optimized Double Extra Large', 'r3.4xlarge' => 'Memory Optimized Quadruple Extra Large', 'r3.8xlarge' => 'Memory Optimized Eight Extra Large',
       'r4.large' => 'Memory Optimized Large Enterprise', 'r4.xlarge' => 'Memory Optimized Extra Large Enterprise', 'r4.2xlarge' => 'Memory Optimized Double Extra Large Enterprise', 'r4.4xlarge' => 'Memory Optimized Quadruple Extra Large Enterprise',
         'r4.8xlarge' => 'Memory Optimized Eight Extra Large Enterprise', 'r4.16xlarge' => 'Memory Optimized Hextuple Extra Large Enterprise',
@@ -225,6 +229,7 @@ module AwsPricing
       'm2.xlarge' => 420, 'm2.2xlarge' => 850, 'm2.4xlarge' => 1690,
       'm3.medium' => 4, 'm3.large' => 32, 'm3.xlarge' => 80, 'm3.2xlarge' => 160,
       'm4.large' => 0, 'm4.xlarge' => 0, 'm4.2xlarge' => 0, 'm4.4xlarge' => 0, 'm4.10xlarge' => 0, 'm4.16xlarge' => 0,
+      'm5.large' => 0, 'm5.xlarge' => 0, 'm5.2xlarge' => 0, 'm5.4xlarge' => 0, 'm5.12xlarge' => 0, 'm5.24xlarge' => 0,
       'c1.medium' => 350, 'c1.xlarge' => 1690,
       'hi1.4xlarge' => 2048,
       'cg1.4xlarge' => 1690,
@@ -241,6 +246,7 @@ module AwsPricing
       'i2.xlarge' => 800, 'i2.2xlarge' => 1600, 'i2.4xlarge' => 3200, 'i2.8xlarge' => 6400,
       'i3.large' => 475, 'i3.xlarge' => 950, 'i3.2xlarge' => 1900, 'i3.4xlarge' => 3800, 'i3.8xlarge' => 7600, 'i3.16xlarge' => 15200,
       'd2.xlarge' => 6000, 'd2.2xlarge' => 12000, 'd2.4xlarge' => 24000, 'd2.8xlarge' => 48000,
+      'h1.2xlarge' => 2000, 'h1.4xlarge' => 4000, 'h1.8xlarge' => 8000, 'h1.16xlarge' => 16000,
       'r3.large' => 32, 'r3.xlarge' => 80, 'r3.2xlarge' => 160, 'r3.4xlarge' => 320, 'r3.8xlarge' => 640,
       'r4.large' => 0, 'r4.xlarge' => 0, 'r4.2xlarge' => 0, 'r4.4xlarge' => 0, 'r4.8xlarge' => 0, 'r4.16xlarge' => 0,
       't2.nano' => 0, 't2.micro' => 0, 't2.small' => 0, 't2.medium' => 0, 't2.large' => 0, 't2.xlarge' => 0, 't2.2xlarge' => 0,
@@ -257,6 +263,7 @@ module AwsPricing
       'm2.xlarge' => 64, 'm2.2xlarge' => 64, 'm2.4xlarge' => 64,
       'm3.medium' => 64, 'm3.large' => 64, 'm3.xlarge' => 64, 'm3.2xlarge' => 64,
       'm4.large' => 64, 'm4.xlarge' => 64, 'm4.2xlarge' => 64, 'm4.4xlarge' => 64, 'm4.10xlarge' => 64, 'm4.16xlarge' => 64,
+      'm5.large' => 64, 'm5.xlarge' => 64, 'm5.2xlarge' => 64, 'm5.4xlarge' => 64, 'm5.12xlarge' => 64, 'm4.24xlarge' => 64,
       'c1.medium' => 32, 'c1.xlarge' => 64,
       'hi1.4xlarge' => 64,
       'cg1.4xlarge' => 64,
@@ -273,6 +280,7 @@ module AwsPricing
       'i2.large' => 64, 'i2.xlarge' => 64, 'i2.2xlarge' => 64, 'i2.4xlarge' => 64, 'i2.8xlarge' => 64,
       'i3.large' => 64, 'i3.xlarge' => 64, 'i3.2xlarge' => 64, 'i3.4xlarge' => 64, 'i3.8xlarge' => 64, 'i3.16xlarge' => 64,
       'd2.xlarge' => 64, 'd2.2xlarge' => 64, 'd2.4xlarge' => 64, 'd2.8xlarge' => 64,
+      'h1.2xlarge' => 64, 'h1.4xlarge' => 64, 'h1.8xlarge' => 64, 'h1.16xlarge' => 64,
       'r3.large' => 64, 'r3.xlarge' => 64, 'r3.2xlarge' => 64, 'r3.4xlarge' => 64, 'r3.8xlarge' => 64,
       'r4.large' => 64, 'r4.xlarge' => 64, 'r4.2xlarge' => 64, 'r4.4xlarge' => 64, 'r4.8xlarge' => 64, 'r4.16xlarge' => 64,
       't2.nano' => 64, 't2.micro' => 64, 't2.small' => 64, 't2.medium' => 64, 't2.large' => 64, 't2.xlarge' => 64, 't2.2xlarge' => 64,
@@ -288,6 +296,7 @@ module AwsPricing
       'm2.xlarge' => :ephemeral, 'm2.2xlarge' => :ephemeral, 'm2.4xlarge' => :ephemeral,
       'm3.medium' => :ssd, 'm3.large' => :ssd, 'm3.xlarge' => :ssd, 'm3.2xlarge' => :ssd,
       'm4.large' => :ebs, 'm4.xlarge' => :ebs, 'm4.2xlarge' => :ebs, 'm4.4xlarge' => :ebs, 'm4.10xlarge' => :ebs, 'm4.16xlarge' => :ebs,
+      'm5.large' => :ebs, 'm5.xlarge' => :ebs, 'm5.2xlarge' => :ebs, 'm5.4xlarge' => :ebs, 'm5.12xlarge' => :ebs, 'm5.24xlarge' => :ebs,
       'c1.medium' => :ephemeral, 'c1.xlarge' => :ephemeral,
       'hi1.4xlarge' => :ssd,
       'cg1.4xlarge' => :ephemeral,
@@ -305,6 +314,7 @@ module AwsPricing
       'i2.large' => :ssd, 'i2.xlarge' => :ssd, 'i2.2xlarge' => :ssd, 'i2.4xlarge' => :ssd, 'i2.8xlarge' => :ssd,
       'i3.large' => :ssd, 'i3.xlarge' => :ssd, 'i3.2xlarge' => :ssd, 'i3.4xlarge' => :ssd, 'i3.8xlarge' => :ssd, 'i3.16xlarge' => :ssd,
       'd2.xlarge' => :ephemeral, 'd2.2xlarge' => :ephemeral, 'd2.4xlarge' => :ephemeral, 'd2.8xlarge' => :ephemeral,
+      'h1.2xlarge' => :ephemeral, 'h1.4xlarge' => :ephemeral, 'h1.8xlarge' => :ephemeral, 'h1.16xlarge' => :ephemeral,
       'r3.large' => :ssd, 'r3.xlarge' => :ssd, 'r3.2xlarge' => :ssd, 'r3.4xlarge' => :ssd, 'r3.8xlarge' => :ssd,
       'r4.large' => :ebs, 'r4.xlarge' => :ebs, 'r4.2xlarge' => :ebs, 'r4.4xlarge' => :ebs, 'r4.8xlarge' => :ebs, 'r4.16xlarge' => :ebs,
       't2.nano' => :ebs, 't2.micro' => :ebs, 't2.small' => :ebs, 't2.medium' => :ebs, 't2.large' => :ebs, 't2.xlarge' => :ebs, 't2.2xlarge' => :ebs,
@@ -430,6 +440,10 @@ module AwsPricing
       'g3.4xlarge' => [ 437, 20000], # EBSOptimized
       'g3,8xlarge' => [ 875, 40000], # EBSOptimized
       'g3.16xlarge'=> [1750, 80000], # EBSOptimized
+      'h1.2xlarge'  => [ 218, 12000], # EBSOptimized
+      'h1.4xlarge'  => [ 437, 20000], # EBSOptimized
+      'h1.8xlarge'  => [ 875, 40000], # EBSOptimized
+      'h1.16xlarge' => [1750, 80000], # EBSOptimized
       'hi1.4xlarge' => [1824, 50488],
       'hs1.8xlarge' => [2257, 126081],
       'i2.xlarge'  => [ 62,  4000], # EBSOptimized
@@ -454,6 +468,12 @@ module AwsPricing
       'm4.4xlarge' => [ 250, 16000], # EBSOptimized
       'm4.10xlarge'=> [ 500, 32000], # EBSOptimized
       'm4.16xlarge'=> [1250, 65000], # EBSOptimized
+      'm5.large'   => [ 265, 16000], # EBSOptimized  peak.30min/24hrs, else [ 60, 3600]
+      'm5.xlarge'  => [ 265, 16000], # EBSOptimized  peak.30min/24hrs, else [100, 6000]
+      'm5.2xlarge' => [ 265, 16000], # EBSOptimized  peak.30min/24hrs, else [146, 8333]
+      'm5.4xlarge' => [ 265, 16000], # EBSOptimized
+      'm5.12xlarge'=> [ 625, 32500], # EBSOptimized
+      'm5.24xlarge'=> [1250, 65000], # EBSOptimized
       'p2.xlarge'  => [  94,  6000], # EBSOptimized
       'p2.8xlarge' => [ 625, 32500], # EBSOptimized
       'p2.16xlarge'=> [1250, 65000], # EBSOptimized

@@ -274,6 +274,10 @@ module AwsPricing
       'g3.4xlarge' => :twenty_gigabit,
       'g3.8xlarge' => :twenty_gigabit,
       'g3.16xlarge' => :twenty_gigabit,
+      'h1.2xlarge' => :ten_gigabit, # upto 10G
+      'h1.4xlarge' => :ten_gigabit, # upto 10G
+      'h1.8xlarge' => :ten_gigabit,
+      'h1.16xlarge' => :twentyfive_gigabit,
       'hi1.4xlarge' => :ten_gigabit,
       'hs1.8xlarge' => :ten_gigabit,
       'i2.2xlarge' => :high,
@@ -303,6 +307,12 @@ module AwsPricing
       'm4.4xlarge' => :high,
       'm4.large' => :moderate,
       'm4.xlarge' => :high,
+      'm5.large' => :ten_gigabit,   # upto 10G
+      'm5.xlarge' => :ten_gigabit,  # upto 10G
+      'm5.2xlarge' => :ten_gigabit, # upto 10G
+      'm5.4xlarge' => :ten_gigabit, # upto 10G
+      'm5.12xlarge' => :ten_gigabit,
+      'm5.24xlarge' => :ten_gigabit,
       'p2.xlarge' =>   :high,
       'p2.8xlarge' =>  :ten_gigabit,
       'p2.16xlarge' => :twenty_gigabit,
