@@ -58,19 +58,15 @@ module AwsPricing
 
     def self.fetch_url(url)
       # AWS appears to have started throttling URL accesses, so we now have to retry
-      retry_count = 1
-      while retry_count <= RETRY_LIMIT do
-        begin
-          $stdout.puts "[#{__method__}] url:#{url}"
-          uri = URI.parse(url)
-          page = Net::HTTP.get_response(uri)
-          break
-        rescue StandardError => e  #Exception => e
-          $stderr.puts "Exception:#{e} retry-#{retry_count} Failed to fetch: #{url}"
-          sleep 5 # appears to get past throttling
-          retry_count += 1
-          raise e if (retry_count >= RETRY_LIMIT)
-        end
+      begin
+        retry_count ||= 0
+        #$stdout.puts "[#{__method__}] url:#{url}"
+        uri = URI.parse(url)
+        page = Net::HTTP.get_response(uri)
+      rescue StandardError => e  #Exception => e
+        $stderr.puts "Exception:#{e} retry-#{retry_count} Failed to fetch: #{url}"
+        sleep 5 # appears to get past (AWS) throttling
+        retry if (retry_count += 1) <= RETRY_LIMIT
       end
 
       # Now that AWS switched from json to jsonp, remove first/last lines
@@ -90,7 +86,7 @@ module AwsPricing
         # http://stackoverflow.com/questions/2060356/parsing-json-without-quoted-keys
         JSON.parse(body.gsub(/(\w+)\s*:/, '"\1":'))
       end
-    rescue StandardError => e  #Exception => e
+    rescue Exception => e
       $stderr.puts "Exception:#{e} Failed to parse: #{url} #{e.backtrace}"
       raise e
     end
