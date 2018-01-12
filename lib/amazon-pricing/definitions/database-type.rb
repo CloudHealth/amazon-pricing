@@ -232,6 +232,23 @@ module AwsPricing
       database_name.include? 'byol'
     end
 
+    # example: database_sf_from_engine_name?('mysql', false, false) returns true
+    # Returns BOOL if database is RDS SF
+    # params:
+    # - engine_name[String]: product description database name string
+    # - is_byol[Bool]: true if the database is using a BYOL license
+    # - is_multi_az[Bool]: true is the deployment type is Multi-AZ
+    def self.database_sf_from_engine_name?(engine_name, is_byol, is_multi_az)
+      engine_name_sym = engine_name.gsub('-', '_').to_sym
+      if @@DB_Deploy_Types[engine_name_sym] && @@DB_Deploy_Types[engine_name_sym].include?(:byol)
+        product_name = is_byol ? "#{engine_name}(byol)" : "#{engine_name}(li)"
+      else
+        product_name = engine_name
+      end
+
+      product_name += "_multiaz" if is_multi_az
+      database_sf?(display_name(@@ProductDescription[product_name]))
+    end
     # example: database_sf?('MySQL Community Edition (Multi-AZ)') returns true
     # Returns BOOL if database string is RDS SF
     # params:

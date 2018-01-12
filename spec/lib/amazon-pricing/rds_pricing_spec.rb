@@ -41,6 +41,7 @@ describe AwsPricing::RdsPriceList do
       puts "rds_sf_database-1: display_name:#{display_name}"
       #
       expect(AwsPricing::DatabaseType.database_sf?(display_name)).to be true
+      expect(AwsPricing::DatabaseType.database_sf_from_engine_name?('oracle-se2', true, multiaz)).to be true
       expect(AwsPricing::DatabaseType.database_multiaz?(display_name)).to be true
       expect(AwsPricing::DatabaseType.database_nf(display_name)).to eq(2)
 
@@ -50,12 +51,24 @@ describe AwsPricing::RdsPriceList do
       puts "rds_sf_database-2: display_name:#{display_name}"
       #
       expect(AwsPricing::DatabaseType.database_sf?(display_name)).to be false
+      expect(AwsPricing::DatabaseType.database_sf_from_engine_name?('sqlserver-se', true, multiaz)).to be false
+      expect(AwsPricing::DatabaseType.database_multiaz?(display_name)).to be false
+      expect(AwsPricing::DatabaseType.database_nf(display_name)).to eq(1)
+
+      product_name = 'sqlserver-se(li)'  # known NOT RDS SF example: 'Microsoft SQL Server Standard Edition'
+      multiaz = false
+      display_name = AwsPricing::DatabaseType.db_mapping(product_name, multiaz)
+      puts "rds_sf_database-2: display_name:#{display_name}"
+      #
+      expect(AwsPricing::DatabaseType.database_sf?(display_name)).to be false
+      expect(AwsPricing::DatabaseType.database_sf_from_engine_name?('sqlserver-se', false, multiaz)).to be false
       expect(AwsPricing::DatabaseType.database_multiaz?(display_name)).to be false
       expect(AwsPricing::DatabaseType.database_nf(display_name)).to eq(1)
 
       display_name = 'NuoDB'              # unknown db, returns default non RDS SF values
       #
       expect(AwsPricing::DatabaseType.database_sf?(display_name)).to be false
+      expect(AwsPricing::DatabaseType.database_sf_from_engine_name?('NuoDB', false, false)).to be false
       expect(AwsPricing::DatabaseType.database_multiaz?(display_name)).to be false
       expect(AwsPricing::DatabaseType.database_nf(display_name)).to eq(1)
     end
@@ -93,7 +106,7 @@ describe AwsPricing::RdsPriceList do
     end
   end
 
-  describe 'get_breakeven_months' do 
+  describe 'get_breakeven_months' do
     it "test_fetch_all_breakeven_months" do
       @pricing.regions.each do |region|
         region.rds_instance_types.each do |instance|
@@ -112,15 +125,15 @@ describe AwsPricing::RdsPriceList do
                       if deploy_type == :byol_multiaz
                         next if not instance.available?(db, res_type, true, true)
                         instance.get_breakeven_month(db, res_type, term, true, true).should_not be_nil
-                      else 
+                      else
                         next if not instance.available?(db, res_type, deploy_type == :multiaz, deploy_type == :byol)
                         instance.get_breakeven_month(db, res_type, term, deploy_type == :multiaz, deploy_type == :byol).should_not be_nil
-                      end  
+                      end
                     end
-                  end                      
+                  end
                end
              end
-          end          
+          end
         end
       end
     end
