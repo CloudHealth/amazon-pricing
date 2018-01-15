@@ -246,8 +246,7 @@ module AwsPricing
         product_name = engine_name
       end
 
-      product_name += "_multiaz" if is_multi_az
-      database_sf?(display_name(@@ProductDescription[product_name]))
+      database_sf?(db_mapping(product_name, is_multi_az))
     end
     # example: database_sf?('MySQL Community Edition (Multi-AZ)') returns true
     # Returns BOOL if database string is RDS SF
