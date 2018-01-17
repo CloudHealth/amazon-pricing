@@ -41,7 +41,8 @@ describe AwsPricing::RdsPriceList do
       puts "rds_sf_database-1: display_name:#{display_name}"
       #
       expect(AwsPricing::DatabaseType.database_sf?(display_name)).to be true
-      expect(AwsPricing::DatabaseType.database_sf_from_engine_name?('oracle-se2', true, multiaz)).to be true
+      expect(AwsPricing::DatabaseType.database_sf_from_product_name?(product_name)).to be true
+      expect(AwsPricing::DatabaseType.database_sf_from_engine_name_and_license_type?('oracle-se2', true)).to be true
       expect(AwsPricing::DatabaseType.database_multiaz?(display_name)).to be true
       expect(AwsPricing::DatabaseType.database_nf(display_name)).to eq(2)
 
@@ -51,7 +52,8 @@ describe AwsPricing::RdsPriceList do
       puts "rds_sf_database-2: display_name:#{display_name}"
       #
       expect(AwsPricing::DatabaseType.database_sf?(display_name)).to be false
-      expect(AwsPricing::DatabaseType.database_sf_from_engine_name?('sqlserver-se', true, multiaz)).to be false
+      expect(AwsPricing::DatabaseType.database_sf_from_product_name?(product_name)).to be false
+      expect(AwsPricing::DatabaseType.database_sf_from_engine_name_and_license_type?('sqlserver-se', true)).to be false
       expect(AwsPricing::DatabaseType.database_multiaz?(display_name)).to be false
       expect(AwsPricing::DatabaseType.database_nf(display_name)).to eq(1)
 
@@ -61,16 +63,74 @@ describe AwsPricing::RdsPriceList do
       puts "rds_sf_database-2: display_name:#{display_name}"
       #
       expect(AwsPricing::DatabaseType.database_sf?(display_name)).to be false
-      expect(AwsPricing::DatabaseType.database_sf_from_engine_name?('sqlserver-se', false, multiaz)).to be false
+      expect(AwsPricing::DatabaseType.database_sf_from_product_name?(product_name)).to be false
+      expect(AwsPricing::DatabaseType.database_sf_from_engine_name_and_license_type?('sqlserver-se', false)).to be false
       expect(AwsPricing::DatabaseType.database_multiaz?(display_name)).to be false
       expect(AwsPricing::DatabaseType.database_nf(display_name)).to eq(1)
 
       display_name = 'NuoDB'              # unknown db, returns default non RDS SF values
       #
       expect(AwsPricing::DatabaseType.database_sf?(display_name)).to be false
-      expect(AwsPricing::DatabaseType.database_sf_from_engine_name?('NuoDB', false, false)).to be false
+      expect(AwsPricing::DatabaseType.database_sf_from_product_name?(product_name)).to be false
+      expect(AwsPricing::DatabaseType.database_sf_from_engine_name_and_license_type?('NuoDB', false)).to be false
       expect(AwsPricing::DatabaseType.database_multiaz?(display_name)).to be false
       expect(AwsPricing::DatabaseType.database_nf(display_name)).to eq(1)
+    end
+
+    it 'verifies RDS SF api for product name' do
+      product_name_to_size_flex_map = {
+        'mysql'              => true,
+        'postgres'           => true,
+        'postgresql'         => true,
+        'oracle-se1(li)'     => false,
+        'oracle-se1(byol)'   => true,
+        'oracle-se2(li)'     => false,
+        'oracle-se2(byol)'   => true,
+        'oracle-se(byol)'    => true,
+        'oracle-ee(byol)'    => true,
+        'sqlserver-ex(li)'   => false,
+        'sqlserver-web(li)'  => false,
+        'sqlserver-se(li)'   => false,
+        'sqlserver-se(byol)' => false,
+        'sqlserver-ee(li)'   => false,
+        'sqlserver-ee(byol)' => false,
+        'aurora'             => true,
+        'aurora-postgresql'  => true,
+        'mariadb'            => true
+      }
+
+      product_name_to_size_flex_map.each do |product_name, expected_value|
+        expect(AwsPricing::DatabaseType.database_sf_from_product_name?(product_name)).to be expected_value
+      end
+    end
+
+    it 'verifies RDS SF api for engine name and license type' do
+      engine_name_and_license_type_to_size_flex_map = {
+        ['mysql', false]             => true,
+        ['postgres', false]          => true,
+        ['postgresql', false]        => true,
+        ['oracle-se1', false]        => false,
+        ['oracle-se1', true]         => true,
+        ['oracle-se2', false]        => false,
+        ['oracle-se2', true]         => true,
+        ['oracle-se', true]          => true,
+        ['oracle-ee', true]          => true,
+        ['sqlserver-ex', false]      => false,
+        ['sqlserver-web', false]     => false,
+        ['sqlserver-se', false]      => false,
+        ['sqlserver-se', true]       => false,
+        ['sqlserver-ee', false]      => false,
+        ['sqlserver-ee', true]       => false,
+        ['aurora', false]            => true,
+        ['aurora-postgresql', false] => true,
+        ['mariadb', false]           => true
+      }
+
+      engine_name_and_license_type_to_size_flex_map.each do |engine_and_license, expected_value|
+        engine = engine_and_license.first
+        license = engine_and_license.last
+        expect(AwsPricing::DatabaseType.database_sf_from_engine_name_and_license_type?(engine, license)).to be expected_value
+      end
     end
   end
 
