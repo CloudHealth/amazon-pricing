@@ -8,5 +8,5 @@
 # Home::      http://github.com/CloudHealth/amazon-pricing
 #++
 module AwsPricing
-VERSION = '0.1.106' # [major,minor.fix]: adding eu-west-3
+VERSION = '0.1.107' # [major,minor.fix]: adding more methods for rds sf
 end
