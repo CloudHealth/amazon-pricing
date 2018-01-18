@@ -232,6 +232,28 @@ module AwsPricing
       database_name.include? 'byol'
     end
 
+    # example: database_sf_from_engine_name_and_license_type?('mysql', false) returns true
+    # Returns BOOL if database is RDS SF
+    # params:
+    # - engine_name[String]: product description database name string
+    # - is_byol[Bool]: true if the database is using a BYOL license
+    def self.database_sf_from_engine_name_and_license_type?(engine_name, is_byol)
+      engine_name_sym = engine_name.gsub('-', '_').to_sym
+      if @@DB_Deploy_Types[engine_name_sym] && @@DB_Deploy_Types[engine_name_sym].include?(:byol)
+        product_name = is_byol ? "#{engine_name}(byol)" : "#{engine_name}(li)"
+      else
+        product_name = engine_name
+      end
+      database_sf_from_product_name?(product_name)
+    end
+    # example: database_sf_from_product_name?('oracle-ee(byol)') returns true
+    # Returns BOOL if database is RDS SF
+    # params:
+    # - product_name[String]: product description database name string including license type
+    def self.database_sf_from_product_name?(product_name)
+      # Just look up by single-az because deployment type doesn't affect size-flex eligibility
+      database_sf?(db_mapping(product_name, false))
+    end
     # example: database_sf?('MySQL Community Edition (Multi-AZ)') returns true
     # Returns BOOL if database string is RDS SF
     # params:
