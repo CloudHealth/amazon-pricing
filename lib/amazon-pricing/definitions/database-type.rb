@@ -202,6 +202,7 @@ module AwsPricing
   	end
 
   	def self.db_mapping(product, is_multi_az)
+      product = product.gsub(/\s+/,"")  # remove extraneous spaces, e.g. sometimes AWS adds a SP before '(byol)'
       if is_multi_az
         display_name(@@ProductDescription["#{product}_multiaz"])
       else
