@@ -14,7 +14,7 @@ module AwsPricing
     protected
 
     @@OS_TYPES = [:linux, :mswin, :rhel, :sles, :mswinSQL, :mswinSQLWeb]
-    @@NEW_OS_TYPES = [:mswinSQLEnterprise]
+    @@NEW_OS_TYPES = [:mswinSQLEnterprise, :linuxSQL, :linuxSQLWeb, :linuxSQLEnterprise]
     @@LEGACY_RES_TYPES = [:light, :medium, :heavy]
 
     def get_ec2_on_demand_instance_pricing
@@ -44,7 +44,10 @@ module AwsPricing
 
     def get_ec2_reserved_instance_pricing
       # I give up on finding a pattern so just iterating over known URLs
-      page_targets = {"linux-unix" => :linux, "red-hat-enterprise-linux" => :rhel, "suse-linux" => :sles, "windows" => :mswin, "windows-with-sql-server-standard" => :mswinSQL, "windows-with-sql-server-web" => :mswinSQLWeb, "windows-with-sql-server-enterprise" => :mswinSQLEnterprise}
+      page_targets = {"linux-unix" => :linux, "red-hat-enterprise-linux" => :rhel, "suse-linux" => :sles, "windows" => :mswin, 
+        "windows-with-sql-server-standard" => :mswinSQL, "windows-with-sql-server-web" => :mswinSQLWeb, "windows-with-sql-server-enterprise" => :mswinSQLEnterprise,
+        "linux-with-sql-server-standard" => :linuxSQL, "linux-with-sql-server-web" => :linuxSQLWeb, "linux-with-sql-server-enterprise" => :linuxSQLEnterprise,
+      }
       page_targets.each_pair do |target, operating_system|
         url = "#{EC2_BASE_URL}ri-v2/#{target}-shared.min.js"
         fetch_ec2_instance_pricing_ri_v2(url, operating_system)
