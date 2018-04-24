@@ -8,5 +8,5 @@
 # Home::      http://github.com/CloudHealth/amazon-pricing
 #++
 module AwsPricing
-VERSION = '0.1.109' # [major,minor.fix]: adding more methods for rds sf
+VERSION = '0.1.110' # [major,minor.fix]: adding linux-sql support
 end
