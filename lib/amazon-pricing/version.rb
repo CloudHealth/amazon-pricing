@@ -8,5 +8,5 @@
 # Home::      http://github.com/CloudHealth/amazon-pricing
 #++
 module AwsPricing
-VERSION = '0.1.110' # [major,minor.fix]: adding linux-sql support
+VERSION = '0.1.111' # [major,minor.fix]: adding c5d
 end

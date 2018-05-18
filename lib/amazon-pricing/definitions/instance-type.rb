@@ -218,6 +218,8 @@ module AwsPricing
         'c4.8xlarge' => 'Compute Optimized Eight Extra Large',
       'c5.large' => 'Compute Optimized C5 Large', 'c5.xlarge' => 'Compute Optimized C5 Extra Large', 'c5.2xlarge' => 'Compute Optimized C5 Double Extra Large', 'c5.4xlarge' => 'Compute Optimized C5 Quadruple Extra Large',
         'c5.9xlarge' => 'Compute Optimized C5 Nine Extra Large', 'c5.18xlarge' => 'Compute Optimized C5 Eighteen Extra Large',
+      'c5d.large' => 'Compute Optimized C5d Large', 'c5d.xlarge' => 'Compute Optimized C5d Extra Large', 'c5d.2xlarge' => 'Compute Optimized C5d Double Extra Large', 'c5d.4xlarge' => 'Compute Optimized C5d Quadruple Extra Large',
+        'c5d.9xlarge' => 'Compute Optimized C5d Nine Extra Large', 'c5d.18xlarge' => 'Compute Optimized C5d Eighteen Extra Large',
       'x1.16xlarge'   => 'Memory Optimized 16 Extra Large Enterprise-class',
         'x1.32xlarge' => 'Memory Optimized 32 Extra Large Enterprise-class',
       'x1e.xlarge'     => 'Memory Optimized Extended Extra Large Enterprise-class',
@@ -256,6 +258,7 @@ module AwsPricing
       't2.nano' => 0, 't2.micro' => 0, 't2.small' => 0, 't2.medium' => 0, 't2.large' => 0, 't2.xlarge' => 0, 't2.2xlarge' => 0,
       'c4.large' => 0, 'c4.xlarge' => 0, 'c4.2xlarge' => 0, 'c4.4xlarge' => 0, 'c4.8xlarge' => 0,
       'c5.large' => 0, 'c5.xlarge' => 0, 'c5.2xlarge' => 0, 'c5.4xlarge' => 0, 'c5.9xlarge' => 0, 'c5.18xlarge' => 0, # ebs-optimized
+      'c5d.large' => 50, 'c5d.xlarge' => 100, 'c5d.2xlarge' => 225, 'c5d.4xlarge' => 450, 'c5d.9xlarge' => 900, 'c5d.18xlarge' => 1800, # NVMe
       'x1.16xlarge' => 1920, 'x1.32xlarge' => 3840,
       'x1e.xlarge' => 120, 'x1e.2xlarge' => 240, 'x1e.4xlarge' => 480, 'x1e.8xlarge' => 960, 'x1e.16xlarge' => 1920, 'x1e.32xlarge' => 3840,
       'p2.xlarge' => 0, 'p2.8xlarge' => 0, 'p2.16xlarge' => 0,  # ebs-optimized
@@ -290,6 +293,7 @@ module AwsPricing
       't2.nano' => 64, 't2.micro' => 64, 't2.small' => 64, 't2.medium' => 64, 't2.large' => 64, 't2.xlarge' => 64, 't2.2xlarge' => 64,
       'c4.large' => 64, 'c4.xlarge' => 64, 'c4.2xlarge' => 64, 'c4.4xlarge' => 64, 'c4.8xlarge' => 64,
       'c5.large' => 64, 'c5.xlarge' => 64, 'c5.2xlarge' => 64, 'c5.4xlarge' => 64, 'c5.9xlarge' => 64, 'c5.18xlarge' => 64,
+      'c5d.large' => 64, 'c5d.xlarge' => 64, 'c5d.2xlarge' => 64, 'c5d.4xlarge' => 64, 'c5d.9xlarge' => 64, 'c5d.18xlarge' => 64,
       'x1.16xlarge' => 64, 'x1.32xlarge' => 64,
       'x1e.xlarge' => 64, 'x1e.2xlarge' => 64, 'x1e.4xlarge' => 64, 'x1e.8xlarge' => 64, 'x1e.16xlarge' => 64, 'x1e.32xlarge' => 64,
       'p2.xlarge' => 64, 'p2.8xlarge' => 64, 'p2.16xlarge' => 64,
@@ -324,6 +328,7 @@ module AwsPricing
       't2.nano' => :ebs, 't2.micro' => :ebs, 't2.small' => :ebs, 't2.medium' => :ebs, 't2.large' => :ebs, 't2.xlarge' => :ebs, 't2.2xlarge' => :ebs,
       'c4.large' => :ebs, 'c4.xlarge' => :ebs, 'c4.2xlarge' => :ebs, 'c4.4xlarge' => :ebs, 'c4.8xlarge' => :ebs,
       'c5.large' => :ebs, 'c5.xlarge' => :ebs, 'c5.2xlarge' => :ebs, 'c5.4xlarge' => :ebs, 'c5.9xlarge' => :ebs, 'c5.18xlarge' => :ebs,
+      'c5d.large' => :ssd, 'c5d.xlarge' => :ssd, 'c5d.2xlarge' => :ssd, 'c5d.4xlarge' => :ssd, 'c5d.9xlarge' => :ssd, 'c5d.18xlarge' => :ssd,
       'x1.16xlarge' => :ssd, 'x1.32xlarge' => :ssd,
       'x1e.xlarge' => :ssd, 'x1e.2xlarge' => :ssd, 'x1e.4xlarge' => :ssd, 'x1e.8xlarge' => :ssd, 'x1e.16xlarge' => :ssd, 'x1e.32xlarge' => :ssd,
       'p2.xlarge' => :ebs, 'p2.8xlarge' => :ebs, 'p2.16xlarge' => :ebs,
@@ -382,6 +387,12 @@ module AwsPricing
       'c5.4xlarge'  => [ 281, 16000], # EBSOptimized
       'c5.9xlarge'  => [ 563, 32000], # EBSOptimized
       'c5.18xlarge' => [1125, 64000], # EBSOptimized
+      'c5d.large'    => [2250, 16000], # NVMe
+      'c5d.xlarge'   => [2250, 16000], # NVMe
+      'c5d.2xlarge'  => [2250, 16000], # NVMe
+      'c5d.4xlarge'  => [2250, 16000], # NVMe
+      'c5d.9xlarge'  => [4500, 32000], # NVMe
+      'c5d.18xlarge' => [9000, 64000], # NVMe
       # cache.c1.xlarge is not picked up by CloudWatch
       # cache.m1.large is not picked up by CloudWatch
       # cache.m1.medium is not picked up by CloudWatch
