@@ -23,6 +23,7 @@ module AwsPricing
                 'C3' => ['c3.large', 'c3.xlarge', 'c3.2xlarge', 'c3.4xlarge', 'c3.8xlarge'],
                 'C4' => ['c4.large', 'c4.xlarge', 'c4.2xlarge', 'c4.4xlarge', 'c4.8xlarge'],
                 'C5' => ['c5.large', 'c5.xlarge', 'c5.2xlarge', 'c5.4xlarge', 'c5.9xlarge', 'c5.18xlarge'],
+                'C5D' => ['c5d.large', 'c5d.xlarge', 'c5d.2xlarge', 'c5d.4xlarge', 'c5d.9xlarge', 'c5d.18xlarge'],
             },
             'PreviousGen' => {
                 'C1' => ['c1.medium', 'c1.xlarge', 'cc1.4xlarge'],

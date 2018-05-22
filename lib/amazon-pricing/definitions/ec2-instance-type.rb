@@ -196,6 +196,12 @@ module AwsPricing
       'c5.9xlarge' => :ten_gigabit,
       'c5.large' => :ten_gigabit,   # upto 10G
       'c5.xlarge' => :ten_gigabit,  # upto 10G
+      'c5d.18xlarge' => :twentyfive_gigabit,
+      'c5d.2xlarge' => :ten_gigabit, # upto 10G
+      'c5d.4xlarge' => :ten_gigabit, # upto 10G
+      'c5d.9xlarge' => :ten_gigabit,
+      'c5d.large' => :ten_gigabit,   # upto 10G
+      'c5d.xlarge' => :ten_gigabit,  # upto 10G
       'cache.c1.xlarge' => :high,
       'cache.m1.large' => :moderate,
       'cache.m1.medium' => :moderate,
