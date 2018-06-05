@@ -304,6 +304,7 @@ module AwsPricing
       'i3.4xlarge' => :ten_gigabit,
       'i3.8xlarge' => :ten_gigabit,
       'i3.large' => :ten_gigabit,
+      'i3.metal' => :twentyfive_gigabit,
       'i3.xlarge' => :ten_gigabit,
       'm1.large' => :moderate,
       'm1.medium' => :moderate,

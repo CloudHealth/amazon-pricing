@@ -2,6 +2,8 @@ module AwsPricing
   module Helper
     module InstanceType
 
+      METAL = 'metal'.freeze
+      # the following family sizes should be kept in size order, see #api_name_to_nf below
       @@INSTANCE_TYPES_BY_CLASSIFICATION = {
         'GeneralPurpose' => {
             'CurrentGen' => {
@@ -46,7 +48,7 @@ module AwsPricing
             'CurrentGen' => {
                 'HS1' => ['hs1.8xlarge'],
                 'I2'  => ['i2.xlarge', 'i2.2xlarge', 'i2.4xlarge', 'i2.8xlarge'],
-                'I3'  => ['i3.large', 'i3.xlarge', 'i3.2xlarge', 'i3.4xlarge', 'i3.8xlarge', 'i3.16xlarge'],
+                'I3'  => ['i3.large', 'i3.xlarge', 'i3.2xlarge', 'i3.4xlarge', 'i3.8xlarge', 'i3.16xlarge', 'i3.metal'],
                 'D2'  => ['d2.xlarge', 'd2.2xlarge', 'd2.4xlarge', 'd2.8xlarge'],
                 'H1'  => ['h1.2xlarge', 'h1.4xlarge', 'h1.8xlarge', 'h1.16xlarge'],
             },
@@ -155,7 +157,17 @@ module AwsPricing
 
 
       def api_name_to_nf(name)
-        size_to_nf[name.split('.').last]
+        type = name.split('.').last
+        if (type == METAL)
+          # try to get largest size supported for family: presumes METAL is *not* in size_to_nf hash
+          # assumes family_members are sorted by size
+          sizes = family_members(name)
+          type = sizes[-1].split('.').last        # 'metal' defaults to largest size
+          if sizes[-1].split('.').last == METAL
+            type = sizes[-2].split('.').last      # 'metal' already largest, so 2nd largest      
+          end
+        end
+        size_to_nf[type]
       end
 
       # note: the next smaller type may _not_ be supported for a given family
@@ -186,6 +198,7 @@ module AwsPricing
         NF_TO_SIZE_TABLE
       end
 
+      # NB: 'metal' is not in this table (since it's family specific), see #api_name_to_nf
       SIZE_TO_NF_TABLE = {
           "nano"    => 0.25,
           "micro"   => 0.5,
@@ -200,6 +213,7 @@ module AwsPricing
           "10xlarge" => 80,
           "12xlarge" => 96,
           "16xlarge" => 128,
+          "metal"    => 128, # temporary (for _direct_ users of this hash), as only applies to i3.metal
           "18xlarge" => 144,
           "24xlarge" => 192,
           "32xlarge" => 256,
