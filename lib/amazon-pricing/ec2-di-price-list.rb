@@ -20,7 +20,10 @@ module AwsPricing
         ['mswin', 'windows'],
         ['mswinSQL', 'windows-with-sql-server-standard'],
         ['mswinSQLWeb', 'windows-with-sql-server-web'],
-        ['mswinSQLEnterprise', 'windows-with-sql-server-enterprise']
+        ['mswinSQLEnterprise', 'windows-with-sql-server-enterprise'],
+        ['linuxSQL', 'linux-with-sql-server-standard'],
+        ['linuxSQLWeb', 'linux-with-sql-server-web'],
+        ['linuxSQLEnterprise', 'linux-with-sql-server-enterprise']
     ]
 
     OS_INDEX = 0
