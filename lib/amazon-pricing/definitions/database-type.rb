@@ -44,6 +44,8 @@ module AwsPricing
     AURORA_POSTGRESQL         = 'Amazon Aurora PostgreSQL'.freeze   # multiaz not distinguished
     MARIADB_STANDARD          = 'MariaDB'.freeze
     MARIADB_MULTIAZ           = 'MariaDB (Multi-AZ)'.freeze
+    NEPTUNE_STANDARD          = 'Amazon Neptune'.freeze
+    NEPTUNE_MULTIAZ           = 'Amazon Neptune (Multi-AZ)'.freeze
 
     # maps RDS description to [ engine, license, multiaz, sizeflex ]
     @@DB_ENGINE_MAP = {
@@ -76,7 +78,9 @@ module AwsPricing
         AURORA_MYSQL              => { engine: "aurora",        license: "none", multiaz: true,  sizeflex: true },
         AURORA_POSTGRESQL         => { engine: "aurora-postgresql", license: "none", multiaz: true, sizeflex: true },
         MARIADB_STANDARD          => { engine: "mariadb",       license: "none", multiaz: false, sizeflex: true },
-        MARIADB_MULTIAZ           => { engine: "mariadb",       license: "none", multiaz: true,  sizeflex: true },
+        # Neptune isn't SF, since it doesn't support RI's (yet)
+        NEPTUNE_STANDARD          => { engine: "neptune",       license: "none", multiaz: false, sizeflex: false },
+        NEPTUNE_MULTIAZ           => { engine: "neptune",       license: "none", multiaz: true,  sizeflex: false },
     }.freeze
     # maps Operation to Description
     @@DB_OPERATION_TO_DESCRIPTION = {
@@ -97,6 +101,7 @@ module AwsPricing
         'CreateDBInstance:0019'.freeze => ORACLE_SE2_BYOL_STANDARD,  # Oracle SE2 (BYOL)
         'CreateDBInstance:0020'.freeze => ORACLE_SE2_STANDARD, # Oracle SE2 (LI)
         'CreateDBInstance:0021'.freeze => AURORA_POSTGRESQL,  # Aurora PostgreSQL
+        'CreateDBInstance:0022'.freeze => NEPTUNE_STANDARD,  # Neptune
     }.freeze
 
     @@Database_Name_Lookup = {
@@ -126,6 +131,8 @@ module AwsPricing
       'aurora_postgresql_standard'.freeze=> AURORA_POSTGRESQL,
       'mariadb_standard'.freeze        => MARIADB_STANDARD,
       'mariadb_multiaz'.freeze         => MARIADB_MULTIAZ,
+      'neptune_standard'.freeze        => NEPTUNE_STANDARD,
+      'neptune_multiaz'.freeze         => NEPTUNE_MULTIAZ,
 
       'oracle_se2_standard'.freeze     => ORACLE_SE2_STANDARD,
       'oracle_se2_multiaz'.freeze      => ORACLE_SE2_MULTIAZ,
@@ -170,6 +177,8 @@ module AwsPricing
       'aurora-postgresql'.freeze        => 'aurora_postgresql_standard'.freeze,
       'mariadb'.freeze                  => 'mariadb_standard'.freeze,
       'mariadb_multiaz'.freeze          => 'mariadb_multiaz'.freeze,
+      'neptune'.freeze                  => 'neptune_standard'.freeze,
+      'neptune_multiaz'.freeze          => 'neptune_multiaz'.freeze,
     }
 
     @@DB_Deploy_Types = {
@@ -184,6 +193,7 @@ module AwsPricing
       :aurora       => [:standard, :multiaz], # checking to see distinguished standard/multiaz
       :aurora_postgresql => [:standard, :multiaz],
       :mariadb      => [:standard, :multiaz],
+      :neptune      => [:standard, :multiaz],
     }
 
   	def self.display_name(name)
@@ -192,7 +202,7 @@ module AwsPricing
 
   	def self.get_database_name
       [:mysql, :postgresql, :oracle_se1, :oracle_se, :oracle_ee, :sqlserver_ex, :sqlserver_web,
-        :sqlserver_se, :sqlserver_ee, :aurora, :aurora_postgresql, :mariadb,
+        :sqlserver_se, :sqlserver_ee, :aurora, :aurora_postgresql, :mariadb, :neptune,
         :oracle_se2 # oracle_se2 license included prices are collected, and BYOL prices are copied from oracle_se
       ]
   	end
