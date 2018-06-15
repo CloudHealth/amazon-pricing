@@ -8,5 +8,5 @@
 # Home::      http://github.com/CloudHealth/amazon-pricing
 #++
 module AwsPricing
-VERSION = '0.1.112' # [major,minor.fix]: adding i3.metal, and linuxsql dedicated variants
+VERSION = '0.1.113' # [major,minor.fix]: adding m5d
 end

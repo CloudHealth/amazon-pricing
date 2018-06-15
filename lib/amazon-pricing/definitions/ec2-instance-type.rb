@@ -329,6 +329,12 @@ module AwsPricing
       'm5.4xlarge' => :ten_gigabit, # upto 10G
       'm5.12xlarge' => :ten_gigabit,
       'm5.24xlarge' => :ten_gigabit,
+      'm5d.large' => :ten_gigabit,   # upto 10G
+      'm5d.xlarge' => :ten_gigabit,  # upto 10G
+      'm5d.2xlarge' => :ten_gigabit, # upto 10G
+      'm5d.4xlarge' => :ten_gigabit, # upto 10G
+      'm5d.12xlarge' => :ten_gigabit,
+      'm5d.24xlarge' => :twentyfive_gigabit,
       'p2.xlarge' =>   :high,
       'p2.8xlarge' =>  :ten_gigabit,
       'p2.16xlarge' => :twenty_gigabit,

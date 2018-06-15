@@ -190,6 +190,9 @@ module AwsPricing
       'm5.large' => 'M5 Large Instance', 'm5.xlarge' => 'M5 Extra Large Instance', 'm5.2xlarge' => 'M5 Double Extra Large Instance',
       'm5.4xlarge' => 'M5 Quadruple Extra Large Instance', 'm5.12xlarge' => 'M5 12XL Instance',
       'm5.24xlarge' => 'M5 24XL Instance',
+      'm5d.large' => 'M5d Large Instance', 'm5d.xlarge' => 'M5d Extra Large Instance', 'm5d.2xlarge' => 'M5d Double Extra Large Instance',
+      'm5d.4xlarge' => 'M5d Quadruple Extra Large Instance', 'm5d.12xlarge' => 'M5d 12XL Instance',
+      'm5d.24xlarge' => 'M5d 24XL Instance',
       'c1.medium' => 'High-CPU Medium', 'c1.xlarge' => 'High-CPU Extra Large',
       'hi1.4xlarge' => 'High I/O Quadruple Extra Large',
       'cg1.4xlarge' => 'Cluster GPU Quadruple Extra Large',
@@ -237,6 +240,7 @@ module AwsPricing
       'm3.medium' => 4, 'm3.large' => 32, 'm3.xlarge' => 80, 'm3.2xlarge' => 160,
       'm4.large' => 0, 'm4.xlarge' => 0, 'm4.2xlarge' => 0, 'm4.4xlarge' => 0, 'm4.10xlarge' => 0, 'm4.16xlarge' => 0,
       'm5.large' => 0, 'm5.xlarge' => 0, 'm5.2xlarge' => 0, 'm5.4xlarge' => 0, 'm5.12xlarge' => 0, 'm5.24xlarge' => 0,
+      'm5d.large' => 0, 'm5d.xlarge' => 0, 'm5d.2xlarge' => 0, 'm5d.4xlarge' => 0, 'm5d.12xlarge' => 0, 'm5d.24xlarge' => 0,
       'c1.medium' => 350, 'c1.xlarge' => 1690,
       'hi1.4xlarge' => 2048,
       'cg1.4xlarge' => 1690,
@@ -271,7 +275,8 @@ module AwsPricing
       'm2.xlarge' => 64, 'm2.2xlarge' => 64, 'm2.4xlarge' => 64,
       'm3.medium' => 64, 'm3.large' => 64, 'm3.xlarge' => 64, 'm3.2xlarge' => 64,
       'm4.large' => 64, 'm4.xlarge' => 64, 'm4.2xlarge' => 64, 'm4.4xlarge' => 64, 'm4.10xlarge' => 64, 'm4.16xlarge' => 64,
-      'm5.large' => 64, 'm5.xlarge' => 64, 'm5.2xlarge' => 64, 'm5.4xlarge' => 64, 'm5.12xlarge' => 64, 'm4.24xlarge' => 64,
+      'm5.large' => 64, 'm5.xlarge' => 64, 'm5.2xlarge' => 64, 'm5.4xlarge' => 64, 'm5.12xlarge' => 64, 'm5.24xlarge' => 64,
+      'm5d.large' => 64, 'm5d.xlarge' => 64, 'm5d.2xlarge' => 64, 'm5d.4xlarge' => 64, 'm5d.12xlarge' => 64, 'm5d.24xlarge' => 64,
       'c1.medium' => 32, 'c1.xlarge' => 64,
       'hi1.4xlarge' => 64,
       'cg1.4xlarge' => 64,
@@ -306,6 +311,7 @@ module AwsPricing
       'm3.medium' => :ssd, 'm3.large' => :ssd, 'm3.xlarge' => :ssd, 'm3.2xlarge' => :ssd,
       'm4.large' => :ebs, 'm4.xlarge' => :ebs, 'm4.2xlarge' => :ebs, 'm4.4xlarge' => :ebs, 'm4.10xlarge' => :ebs, 'm4.16xlarge' => :ebs,
       'm5.large' => :ebs, 'm5.xlarge' => :ebs, 'm5.2xlarge' => :ebs, 'm5.4xlarge' => :ebs, 'm5.12xlarge' => :ebs, 'm5.24xlarge' => :ebs,
+      'm5d.large' => :ssd, 'm5d.xlarge' => :ssd, 'm5d.2xlarge' => :ssd, 'm5d.4xlarge' => :ssd, 'm5d.12xlarge' => :ssd, 'm5d.24xlarge' => :ssd,
       'c1.medium' => :ephemeral, 'c1.xlarge' => :ephemeral,
       'hi1.4xlarge' => :ssd,
       'cg1.4xlarge' => :ephemeral,
@@ -491,6 +497,12 @@ module AwsPricing
       'm5.4xlarge' => [ 265, 16000], # EBSOptimized
       'm5.12xlarge'=> [ 625, 32500], # EBSOptimized
       'm5.24xlarge'=> [1250, 65000], # EBSOptimized
+      'm5d.large'   => [ 2120, 16000], # NVMe
+      'm5d.xlarge'  => [ 2120, 16000], # NVMe
+      'm5d.2xlarge' => [ 2120, 16000], # NVMe
+      'm5d.4xlarge' => [ 2210, 16000], # NVMe
+      'm5d.12xlarge'=> [ 5000, 32000], # NVMe
+      'm5d.24xlarge'=> [10000, 64000], # NVMe
       'p2.xlarge'  => [  94,  6000], # EBSOptimized
       'p2.8xlarge' => [ 625, 32500], # EBSOptimized
       'p2.16xlarge'=> [1250, 65000], # EBSOptimized
