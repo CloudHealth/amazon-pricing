@@ -78,6 +78,7 @@ module AwsPricing
         AURORA_MYSQL              => { engine: "aurora",        license: "none", multiaz: true,  sizeflex: true },
         AURORA_POSTGRESQL         => { engine: "aurora-postgresql", license: "none", multiaz: true, sizeflex: true },
         MARIADB_STANDARD          => { engine: "mariadb",       license: "none", multiaz: false, sizeflex: true },
+        MARIADB_MULTIAZ           => { engine: "mariadb",       license: "none", multiaz: true,  sizeflex: true },
         # Neptune isn't SF, since it doesn't support RI's (yet)
         NEPTUNE_STANDARD          => { engine: "neptune",       license: "none", multiaz: false, sizeflex: false },
         NEPTUNE_MULTIAZ           => { engine: "neptune",       license: "none", multiaz: true,  sizeflex: false },
