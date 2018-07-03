@@ -8,5 +8,5 @@
 # Home::      http://github.com/CloudHealth/amazon-pricing
 #++
 module AwsPricing
-VERSION = '0.1.113' # [major,minor.fix]: adding m5d
+VERSION = '0.1.114' # [major,minor.fix]: adding linuxSQL* previousGen
 end
