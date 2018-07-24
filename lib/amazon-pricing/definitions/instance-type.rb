@@ -114,6 +114,16 @@ module AwsPricing
           end
         end
       end
+      ["https://pricing.us-east-1.amazonaws.com/offers/v1.0/aws/AmazonRDS/current/us-east-1/index.json"].each do |url|
+        res = AwsPricing::PriceList.fetch_url(url)
+        res['products'].each do |product|
+          next if product.second["productFamily"] != "Database Instance"
+          attributes = product.second['attributes']
+          api_name = attributes["instanceType"]
+          @@Memory_Lookup[api_name]        = attributes["memory"].to_i * 1000
+          @@Virtual_Cores_Lookup[api_name] = attributes["vcpu"].to_i
+        end
+      end
     end
 
     # Returns the bytes/s capacity if defined, `nil` otherwise
