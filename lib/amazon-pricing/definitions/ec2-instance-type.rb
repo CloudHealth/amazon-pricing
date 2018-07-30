@@ -368,12 +368,6 @@ module AwsPricing
       'x1e.4xlarge' => :ten_gigabit,        # upto 10G
       'x1e.8xlarge' => :ten_gigabit,        # upto 10G
       'x1e.xlarge' => :ten_gigabit,         # upto 10G
-      'z1d.large' => :ten_gigabit, # upto 10G
-      'z1d.xlarge' => :ten_gigabit, # upto 10G
-      'z1d.2xlarge' => :ten_gigabit, # upto 10G
-      'z1d.3xlarge' => :ten_gigabit, # upto 10G
-      'z1d.6xlarge' => :ten_gigabit,
-      'z1d.12xlarge' => :twentyfive_gigabit,
     }
 
   end
