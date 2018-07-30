@@ -180,7 +180,7 @@ module AwsPricing
       values
     end
 
-    @@Name_Lookup = {
+    @@Name_Lookup = { # basic name and description lookup
       'm1.small' => 'Standard Small', 'm1.medium' => 'Standard Medium', 'm1.large' => 'Standard Large', 'm1.xlarge' => 'Standard Extra Large',
       'm2.xlarge' => 'Hi-Memory Extra Large', 'm2.2xlarge' => 'Hi-Memory Double Extra Large', 'm2.4xlarge' => 'Hi-Memory Quadruple Extra Large',
       'm3.medium' => 'M3 Medium Instance', 'm3.large'=>'M3 Large Instance', 'm3.xlarge' => 'M3 Extra Large Instance', 'm3.2xlarge' => 'M3 Double Extra Large Instance',
@@ -232,9 +232,11 @@ module AwsPricing
         'x1e.8xlarge'  => 'Memory Optimized Extended 8 Extra Large Enterprise-class',
         'x1e.16xlarge' => 'Memory Optimized Extended 16 Extra Large Enterprise-class',
         'x1e.32xlarge' => 'Memory Optimized Extended 32 Extra Large Enterprise-class',
-      'f1.2xlarge' => 'FPGA Hardware Acceleration Double Extra Large', 'f1.16xlarge' => 'FPGA Hardware Acceleration Hextuple Extra Large'
+      'f1.2xlarge' => 'FPGA Hardware Acceleration Double Extra Large', 'f1.16xlarge' => 'FPGA Hardware Acceleration Hextuple Extra Large',
+      'z1d.large' => 'Compute Optimized Z1D Large', 'z1d.xlarge' => 'Compute Optimized Z1D Extra large', 'z1d.2xlarge' => 'Compute Optimized Z1D Double Extra Large', 'z1d.3xlarge' => 'Compute Optimized Z1D Triple Extra Large',
+        'z1d.6xlarge' => 'Compute Optimized Z1D 6 Extra Large', 'z1d.12xlarge' => 'Compute Optimized Z1D 12 Extra Large',
     }
-    @@Disk_Lookup = {
+    @@Disk_Lookup = { # size of disk supported (local disk size) TOTAL size in gb
       'm1.small' => 160, 'm1.medium' => 410, 'm1.large' =>850, 'm1.xlarge' => 1690,
       'm2.xlarge' => 420, 'm2.2xlarge' => 850, 'm2.4xlarge' => 1690,
       'm3.medium' => 4, 'm3.large' => 32, 'm3.xlarge' => 80, 'm3.2xlarge' => 160,
@@ -269,8 +271,9 @@ module AwsPricing
       'p2.xlarge' => 0, 'p2.8xlarge' => 0, 'p2.16xlarge' => 0,  # ebs-optimized
       'p3.2xlarge' => 0, 'p3.8xlarge' => 0, 'p3.16xlarge' => 0, # ebs-optimized
       'f1.2xlarge' => 470, 'f1.16xlarge' => 3760,
+      'z1d.large' => 75, 'z1d.xlarge' => 150, 'z1d.2xlarge' => 300, 'z1d.3xlarge' => 450, 'z1d.6xlarge' => 900, 'z1d.12xlarge' => 1800, # NVMe
     }
-    @@Platform_Lookup = {
+    @@Platform_Lookup = { #bit width of cpu
       'm1.small' => 32, 'm1.medium' => 32, 'm1.large' => 64, 'm1.xlarge' => 64,
       'm2.xlarge' => 64, 'm2.2xlarge' => 64, 'm2.4xlarge' => 64,
       'm3.medium' => 64, 'm3.large' => 64, 'm3.xlarge' => 64, 'm3.2xlarge' => 64,
@@ -304,8 +307,9 @@ module AwsPricing
       'x1e.xlarge' => 64, 'x1e.2xlarge' => 64, 'x1e.4xlarge' => 64, 'x1e.8xlarge' => 64, 'x1e.16xlarge' => 64, 'x1e.32xlarge' => 64,
       'p2.xlarge' => 64, 'p2.8xlarge' => 64, 'p2.16xlarge' => 64,
       'p3.2xlarge' => 64, 'p3.8xlarge' => 64, 'p3.16xlarge' => 64,
+      'z1d.large' => 64, 'z1d.xlarge' => 64, 'z1d.2xlarge' => 64, 'z1d.3xlarge' => 64, 'z1d.6xlarge' => 64, 'z1d.12xlarge' => 64,
     }
-    @@Disk_Type_Lookup = {
+    @@Disk_Type_Lookup = { #type of local storage for the disk
       'm1.small' => :ephemeral, 'm1.medium' => :ephemeral, 'm1.large' => :ephemeral, 'm1.xlarge' => :ephemeral,
       'm2.xlarge' => :ephemeral, 'm2.2xlarge' => :ephemeral, 'm2.4xlarge' => :ephemeral,
       'm3.medium' => :ssd, 'm3.large' => :ssd, 'm3.xlarge' => :ssd, 'm3.2xlarge' => :ssd,
@@ -341,11 +345,12 @@ module AwsPricing
       'p2.xlarge' => :ebs, 'p2.8xlarge' => :ebs, 'p2.16xlarge' => :ebs,
       'p3.2xlarge' => :ebs, 'p3.8xlarge' => :ebs, 'p3.16xlarge' => :ebs,
       'f1.2xlarge' => :ssd, 'f1.16xlarge' => :ssd,
+       'z1d.large' => :ssd, 'z1d.xlarge' => :ssd, 'z1d.2xlarge' => :ssd, 'z1d.3xlarge' => :ssd, 'z1d.6xlarge' => :ssd, 'z1d.12xlarge' => :ssd,
     }
 
     # NOTE: These are populated by "populate_lookups"
     #       But... AWS does not always provide memory info (e.g. t2, r3, cache.*), so those are hardcoded below
-    @@Memory_Lookup = {
+    @@Memory_Lookup = { # these are provided via the pricing json
       'cache.r3.large' => 13500, 'cache.r3.xlarge' => 28400, 'cache.r3.2xlarge' => 58200, 'cache.r3.4xlarge' => 118000, 'cache.r3.8xlarge' => 237000,
       'r3.large' => 15250, 'r3.xlarge' => 30500, 'r3.2xlarge' => 61000, 'r3.4xlarge' => 122000, 'r3.8xlarge' => 244000,
       'r4.large' => 15250, 'r4.xlarge' => 30500, 'r4.2xlarge' => 61000, 'r4.4xlarge' => 122000, 'r4.8xlarge' => 244000, 'r4.16xlarge' => 488000,
@@ -535,6 +540,12 @@ module AwsPricing
       'x1e.8xlarge'  => [ 437, 20000], # EBSOptimized
       'x1e.16xlarge' => [ 875, 40000], # EBSOptimized
       'x1e.32xlarge' => [1750, 80000], # EBSOptimized
+      'z1d.large' => [ 291, 13333], # EBSOptimized
+      'z1d.xlarge' => [ 291, 13333], # EBSOptimized
+      'z1d.2xlarge' => [ 292, 13333], # EBSOptimized
+      'z1d.3xlarge' => [ 438, 20000], # EBSOptimized
+      'z1d.6xlarge' => [ 875, 40000], # EBSOptimized
+      'z1d.12xlarge' => [ 1750, 80000], # EBSOptimized
     }
   end
 
