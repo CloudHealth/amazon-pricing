@@ -208,6 +208,7 @@ module AwsPricing
           "large"   => 4,
           "xlarge"  => 8,
           "2xlarge" => 16,
+          "3xlarge" => 24,
           "4xlarge" => 32,
           "6xlarge" => 48,
           "8xlarge" => 64,
