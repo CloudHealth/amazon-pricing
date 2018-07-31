@@ -233,8 +233,8 @@ module AwsPricing
         'x1e.16xlarge' => 'Memory Optimized Extended 16 Extra Large Enterprise-class',
         'x1e.32xlarge' => 'Memory Optimized Extended 32 Extra Large Enterprise-class',
       'f1.2xlarge' => 'FPGA Hardware Acceleration Double Extra Large', 'f1.16xlarge' => 'FPGA Hardware Acceleration Hextuple Extra Large',
-      'z1d.large' => 'Compute Optimized Z1D Large', 'z1d.xlarge' => 'Compute Optimized Z1D Extra large', 'z1d.2xlarge' => 'Compute Optimized Z1D Double Extra Large', 'z1d.3xlarge' => 'Compute Optimized Z1D Triple Extra Large',
-        'z1d.6xlarge' => 'Compute Optimized Z1D 6 Extra Large', 'z1d.12xlarge' => 'Compute Optimized Z1D 12 Extra Large',
+      'z1d.large' => 'Memory Optimized Z1D Large', 'z1d.xlarge' => 'Memory Optimized Z1D Extra large', 'z1d.2xlarge' => 'Memory Optimized Z1D Double Extra Large', 'z1d.3xlarge' => 'Memory Optimized Z1D Triple Extra Large',
+        'z1d.6xlarge' => 'Memory Optimized Z1D 6 Extra Large', 'z1d.12xlarge' => 'Memory Optimized Z1D 12 Extra Large',
     }
     @@Disk_Lookup = { # size of disk supported (local disk size) TOTAL size in gb
       'm1.small' => 160, 'm1.medium' => 410, 'm1.large' =>850, 'm1.xlarge' => 1690,
