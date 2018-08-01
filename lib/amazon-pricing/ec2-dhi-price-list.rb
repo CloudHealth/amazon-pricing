@@ -31,8 +31,9 @@ module AwsPricing
       'm3' => { "medium"=>32, "large"=>16, "xlarge"=>8, "2xlarge"=>4 },
       'd2' => { "xlarge"=>8, "2xlarge"=>4, "4xlarge"=>2, "8xlarge"=>1 },
       'h1' => { "2xlarge"=>8, "4xlarge"=>4, "8xlarge"=>2, "16xlarge"=>1 },
-      'r4' => { "large"=>32, "xlarge"=>16, "2xlarge"=>8, "4xlarge"=>4, "8xlarge"=>2, "16xlarge"=>1 },
       'r3' => { "large"=>16, "xlarge"=>8, "2xlarge"=>4, "4xlarge"=>2, "8xlarge"=>1 },
+      'r4' => { "large"=>32, "xlarge"=>16, "2xlarge"=>8, "4xlarge"=>4, "8xlarge"=>2, "16xlarge"=>1 },
+      'r5' => { "large"=>36, "xlarge"=>24, "2xlarge"=>12, "4xlarge"=>6, "12xlarge"=>2, "24xlarge"=>1 }
       'm4' => { "large"=>22, "xlarge"=>11, "2xlarge"=>5, "4xlarge"=>4, "10xlarge"=>1, "16xlarge"=>1 },
       'm5' => { "large"=>48, "xlarge"=>24, "2xlarge"=>12, "4xlarge"=>6, "12xlarge"=>2, "24xlarge"=>1 },
       'm5d' => { "large"=>48, "xlarge"=>24, "2xlarge"=>12, "4xlarge"=>6, "12xlarge"=>2, "24xlarge"=>1 },
@@ -41,6 +42,7 @@ module AwsPricing
       'x1' => { "16xlarge"=>2, "32xlarge"=>1 },
       'x1e' =>{ "xlarge"=>32, "2xlarge"=>16, "4xlarge"=>8, "8xlarge"=>4, "16xlarge"=>2, "32xlarge"=>1 },
       'z1d' => {"large"=> 24, "xlarge"=> 12,  "2xlarge"=> 6,  "3xlarge"=> 4,  "6xlarge"=> 2,  "12xlarge"=> 1},
+
     }
 
     def get_ec2_dhi_od_pricing

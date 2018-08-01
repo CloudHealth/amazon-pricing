@@ -352,6 +352,12 @@ module AwsPricing
       'r4.8xlarge' => :ten_gigabit,
       'r4.large' => :ten_gigabit,
       'r4.xlarge' => :ten_gigabit,
+      'r5.large' => :ten_gigabit, # upto 10G
+      'r5.xlarge' => :ten_gigabit, # upto 10G
+      'r5.2xlarge' => :ten_gigabit, # upto 10G
+      'r5.4xlarge' => :ten_gigabit, # upto 10G
+      'r5.12xlarge' => :ten_gigabit,
+      'r5.24xlarge' => :twentyfive_gigabit,
       't1.micro' => :very_low,
       't2.large' => :low_to_moderate,
       't2.medium' => :low_to_moderate,
