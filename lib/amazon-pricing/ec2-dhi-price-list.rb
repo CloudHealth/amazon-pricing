@@ -33,7 +33,8 @@ module AwsPricing
       'h1' => { "2xlarge"=>8, "4xlarge"=>4, "8xlarge"=>2, "16xlarge"=>1 },
       'r3' => { "large"=>16, "xlarge"=>8, "2xlarge"=>4, "4xlarge"=>2, "8xlarge"=>1 },
       'r4' => { "large"=>32, "xlarge"=>16, "2xlarge"=>8, "4xlarge"=>4, "8xlarge"=>2, "16xlarge"=>1 },
-      'r5' => { "large"=>36, "xlarge"=>24, "2xlarge"=>12, "4xlarge"=>6, "12xlarge"=>2, "24xlarge"=>1 }
+      'r5' => { "large"=>36, "xlarge"=>24, "2xlarge"=>12, "4xlarge"=>6, "12xlarge"=>2, "24xlarge"=>1 },
+      'r5d' => { "large"=>36, "xlarge"=>24, "2xlarge"=>12, "4xlarge"=>6, "12xlarge"=>2, "24xlarge"=>1 },
       'm4' => { "large"=>22, "xlarge"=>11, "2xlarge"=>5, "4xlarge"=>4, "10xlarge"=>1, "16xlarge"=>1 },
       'm5' => { "large"=>48, "xlarge"=>24, "2xlarge"=>12, "4xlarge"=>6, "12xlarge"=>2, "24xlarge"=>1 },
       'm5d' => { "large"=>48, "xlarge"=>24, "2xlarge"=>12, "4xlarge"=>6, "12xlarge"=>2, "24xlarge"=>1 },

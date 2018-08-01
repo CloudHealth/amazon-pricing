@@ -218,6 +218,8 @@ module AwsPricing
         'r4.8xlarge' => 'Memory Optimized Eight Extra Large Enterprise', 'r4.16xlarge' => 'Memory Optimized Hextuple Extra Large Enterprise',
       'r5.large' => 'Memory Optimized Large', 'r5.xlarge' => 'Memory Optimized Extra Large', 'r5.2xlarge' => 'Memory Optimized Double Extra Large', 'r5.4xlarge' => 'Memory Optimized Quadruple Extra Large', 'r5.12xlarge' => 'Memory Optimized Twelve Extra Large',
         'r5.24xlarge' => 'Memory Optimized Twenty Four Extra Large',
+      'r5d.large' => 'Memory Optimized Large', 'r5d.xlarge' => 'Memory Optimized Extra Large', 'r5d.2xlarge' => 'Memory Optimized Double Extra Large', 'r5d.4xlarge' => 'Memory Optimized Quadruple Extra Large', 'r5d.12xlarge' => 'Memory Optimized Twelve Extra Large',
+        'r5d.24xlarge' => 'Memory Optimized Twenty Four Extra Large',
       't2.nano' => 'Burstable Performance Instance Nano', 't2.micro' => 'Burstable Performance Instance Micro', 't2.small' => 'Burstable Performance Instance Small', 't2.medium' => 'Burstable Performance Instance Medium', 't2.large' => 'Burstable Performance Instance Large',
         't2.xlarge' => 'Burstable Performance Instance Extra Large', 't2.2xlarge' => 'Burstable Performance Instance Double Extra Large',
       'c4.large' => 'Compute Optimized Large', 'c4.xlarge' => 'Compute Optimized Extra Large', 'c4.2xlarge' => 'Compute Optimized Double Extra Large', 'c4.4xlarge' => 'Compute Optimized Quadruple Extra Large',
@@ -265,6 +267,7 @@ module AwsPricing
       'r3.large' => 32, 'r3.xlarge' => 80, 'r3.2xlarge' => 160, 'r3.4xlarge' => 320, 'r3.8xlarge' => 640,
       'r4.large' => 0, 'r4.xlarge' => 0, 'r4.2xlarge' => 0, 'r4.4xlarge' => 0, 'r4.8xlarge' => 0, 'r4.16xlarge' => 0,
       'r5.large' => 0, 'r5.xlarge' => 0, 'r5.2xlarge' => 0, 'r5.4xlarge' => 0, 'r5.12xlarge' => 0, 'r5.24xlarge' => 0, # ebs-optimized
+      'r5d.large' => 75, 'r5d.xlarge' => 150, 'r5d.2xlarge' => 300, 'r5d.4xlarge' => 600, 'r5d.12xlarge' => 1800, 'r5d.24xlarge' => 3600, #NVMe
       't2.nano' => 0, 't2.micro' => 0, 't2.small' => 0, 't2.medium' => 0, 't2.large' => 0, 't2.xlarge' => 0, 't2.2xlarge' => 0,
       'c4.large' => 0, 'c4.xlarge' => 0, 'c4.2xlarge' => 0, 'c4.4xlarge' => 0, 'c4.8xlarge' => 0,
       'c5.large' => 0, 'c5.xlarge' => 0, 'c5.2xlarge' => 0, 'c5.4xlarge' => 0, 'c5.9xlarge' => 0, 'c5.18xlarge' => 0, # ebs-optimized
@@ -303,6 +306,7 @@ module AwsPricing
       'r3.large' => 64, 'r3.xlarge' => 64, 'r3.2xlarge' => 64, 'r3.4xlarge' => 64, 'r3.8xlarge' => 64,
       'r4.large' => 64, 'r4.xlarge' => 64, 'r4.2xlarge' => 64, 'r4.4xlarge' => 64, 'r4.8xlarge' => 64, 'r4.16xlarge' => 64,
       'r5.large' => 64, 'r5.xlarge' => 64, 'r5.2xlarge' => 64, 'r5.4xlarge' => 64, 'r5.12xlarge' => 64, 'r5.24xlarge' => 64,
+      'r5d.large' => 64, 'r5d.xlarge' => 64, 'r5d.2xlarge' => 64, 'r5d.4xlarge' => 64, 'r5d.12xlarge' => 64, 'r5d.24xlarge' => 64,
       't2.nano' => 64, 't2.micro' => 64, 't2.small' => 64, 't2.medium' => 64, 't2.large' => 64, 't2.xlarge' => 64, 't2.2xlarge' => 64,
       'c4.large' => 64, 'c4.xlarge' => 64, 'c4.2xlarge' => 64, 'c4.4xlarge' => 64, 'c4.8xlarge' => 64,
       'c5.large' => 64, 'c5.xlarge' => 64, 'c5.2xlarge' => 64, 'c5.4xlarge' => 64, 'c5.9xlarge' => 64, 'c5.18xlarge' => 64,
@@ -341,6 +345,7 @@ module AwsPricing
       'r3.large' => :ssd, 'r3.xlarge' => :ssd, 'r3.2xlarge' => :ssd, 'r3.4xlarge' => :ssd, 'r3.8xlarge' => :ssd,
       'r4.large' => :ebs, 'r4.xlarge' => :ebs, 'r4.2xlarge' => :ebs, 'r4.4xlarge' => :ebs, 'r4.8xlarge' => :ebs, 'r4.16xlarge' => :ebs,
       'r5.large' => :ebs, 'r5.xlarge' => :ebs, 'r5.2xlarge' => :ebs, 'r5.4xlarge' => :ebs, 'r5.12xlarge' => :ebs, 'r5.24xlarge' => :ebs,
+      'r5d.large' => :ssd, 'r5d.xlarge' => :ssd, 'r5d.2xlarge' => :ssd, 'r5d.4xlarge' => :ssd, 'r5d.12xlarge' => :ssd, 'r5d.24xlarge' => :ssd,
       't2.nano' => :ebs, 't2.micro' => :ebs, 't2.small' => :ebs, 't2.medium' => :ebs, 't2.large' => :ebs, 't2.xlarge' => :ebs, 't2.2xlarge' => :ebs,
       'c4.large' => :ebs, 'c4.xlarge' => :ebs, 'c4.2xlarge' => :ebs, 'c4.4xlarge' => :ebs, 'c4.8xlarge' => :ebs,
       'c5.large' => :ebs, 'c5.xlarge' => :ebs, 'c5.2xlarge' => :ebs, 'c5.4xlarge' => :ebs, 'c5.9xlarge' => :ebs, 'c5.18xlarge' => :ebs,
@@ -536,6 +541,12 @@ module AwsPricing
       'r5.4xlarge' => [ 437, 18750], # EBSOptimized
       'r5.12xlarge' => [ 875, 40000], # EBSOptimized
       'r5.24lxarge' => [ 1750, 80000], # EBSOptimized
+      'r5d.large' => [ 437, 18750], # EBSOptimized
+      'r5d.xlarge' => [ 437, 18750], # EBSOptimized
+      'r5d.2xlarge' => [ 437, 18750], # EBSOptimized
+      'r5d.4xlarge' => [ 437, 18750], # EBSOptimized
+      'r5d.12xlarge' => [ 875, 40000], # EBSOptimized
+      'r5d.24lxarge' => [ 1750, 80000], # EBSOptimized
       # t1.micro is EBS-only
       # t2.large is EBS-only
       # t2.medium is EBS-only
