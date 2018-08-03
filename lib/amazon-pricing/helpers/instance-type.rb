@@ -159,15 +159,6 @@ module AwsPricing
 
       def api_name_to_nf(name)
         type = name.split('.').last
-        if (type == METAL)
-          # try to get largest size supported for family: presumes METAL is *not* in size_to_nf hash
-          # assumes family_members are sorted by size
-          sizes = family_members(name)
-          type = sizes[-1].split('.').last        # 'metal' defaults to largest size
-          if sizes[-1].split('.').last == METAL
-            type = sizes[-2].split('.').last      # 'metal' already largest, so 2nd largest      
-          end
-        end
         size_to_nf[type]
       end
 
@@ -199,7 +190,6 @@ module AwsPricing
         NF_TO_SIZE_TABLE
       end
 
-      # NB: 'metal' is not in this table (since it's family specific), see #api_name_to_nf
       SIZE_TO_NF_TABLE = {
           "nano"    => 0.25,
           "micro"   => 0.5,
@@ -214,13 +204,11 @@ module AwsPricing
           "10xlarge" => 80,
           "12xlarge" => 96,
           "16xlarge" => 128,
-          "metal"    => 128, # temporary (for _direct_ users of this hash), as only applies to i3.metal
           "18xlarge" => 144,
           "24xlarge" => 192,
           "32xlarge" => 256,
       }
       NF_TO_SIZE_TABLE = SIZE_TO_NF_TABLE.invert
-
     end
   end
 end
