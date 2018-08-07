@@ -31,7 +31,7 @@ describe AwsPricing::ElastiCachePriceList do
             # our tests may fail. The below is to warn us that the price list is not formatted/populated correctly from amazon
             # TO DO: rewrite tests to use static data, rather than data downloaded/provided on the fly from amazon
             if breakeven_month.nil?
-              warn "Break even month has been set to nil; this may be due to missing data in the test"
+              warn "validate_breakeven_month_in_region: Break even month has been set to nil; this may be due to missing data in the test"
             end
           end
         end
