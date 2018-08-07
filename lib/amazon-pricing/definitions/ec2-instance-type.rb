@@ -352,6 +352,18 @@ module AwsPricing
       'r4.8xlarge' => :ten_gigabit,
       'r4.large' => :ten_gigabit,
       'r4.xlarge' => :ten_gigabit,
+      'r5.large' => :ten_gigabit, # upto 10G
+      'r5.xlarge' => :ten_gigabit, # upto 10G
+      'r5.2xlarge' => :ten_gigabit, # upto 10G
+      'r5.4xlarge' => :ten_gigabit, # upto 10G
+      'r5.12xlarge' => :ten_gigabit,
+      'r5.24xlarge' => :twentyfive_gigabit,
+      'r5d.large' => :ten_gigabit, # upto 10G
+      'r5d.xlarge' => :ten_gigabit, # upto 10G
+      'r5d.2xlarge' => :ten_gigabit, # upto 10G
+      'r5d.4xlarge' => :ten_gigabit, # upto 10G
+      'r5d.12xlarge' => :ten_gigabit,
+      'r5d.24xlarge' => :twentyfive_gigabit,
       't1.micro' => :very_low,
       't2.large' => :low_to_moderate,
       't2.medium' => :low_to_moderate,
@@ -368,6 +380,12 @@ module AwsPricing
       'x1e.4xlarge' => :ten_gigabit,        # upto 10G
       'x1e.8xlarge' => :ten_gigabit,        # upto 10G
       'x1e.xlarge' => :ten_gigabit,         # upto 10G
+      'z1d.large' => :ten_gigabit, # upto 10G
+      'z1d.xlarge' => :ten_gigabit, # upto 10G
+      'z1d.2xlarge' => :ten_gigabit, # upto 10G
+      'z1d.3xlarge' => :ten_gigabit, # upto 10G
+      'z1d.6xlarge' => :ten_gigabit,
+      'z1d.12xlarge' => :twentyfive_gigabit,
     }
 
   end
