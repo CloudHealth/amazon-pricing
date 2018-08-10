@@ -4,7 +4,7 @@ Amazon Web Services Pricing Ruby Gem
 [![Test Report](https://ci.solanolabs.com/cloudhealthtech/amazon-pricing/badges/branches/master)](https://ci.solanolabs.com/cloudhealthtech/amazon-pricing/suites/48198)
 [![Gem Version](https://badge.fury.io/rb/amazon-pricing.svg)](http://badge.fury.io/rb/amazon-pricing)
 [![Code Climate](https://codeclimate.com/github/CloudHealth/amazon-pricing/badges/gpa.svg)](https://codeclimate.com/github/CloudHealth/amazon-pricing)
-[![Coverage Status](https://coveralls.io/repos/CloudHealth/amazon-pricing/badge.svg?branch=master)](https://coveralls.io/r/CloudHealth/amazon-pricing?branch=master)
+[![Code Coverage](https://ci.solanolabs.com:443/cloudhealthtech/amazon-pricing/badges/branches/master?show_coverage=true)](https://ci.solanolabs.com:443/cloudhealthtech/amazon-pricing/suites/48198)
 
 About amazon-pricing
 --------------------
