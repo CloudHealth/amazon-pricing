@@ -8,5 +8,4 @@
 # Home::      http://github.com/CloudHealth/amazon-pricing
 #++
 module AwsPricing
-VERSION = '0.1.117' # [major,minor.fix]: adding z1D, r5, r5d instances
-end
+VERSION = '0.1.118' # [major,minor.fix]: adding t3 instances
