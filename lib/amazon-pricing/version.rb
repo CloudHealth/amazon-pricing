@@ -9,3 +9,4 @@
 #++
 module AwsPricing
 VERSION = '0.1.118' # [major,minor.fix]: adding t3 instances
+end
