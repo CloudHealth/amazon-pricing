@@ -40,7 +40,6 @@ module AwsPricing
       'm5d' => { "large"=>48, "xlarge"=>24, "2xlarge"=>12, "4xlarge"=>6, "12xlarge"=>2, "24xlarge"=>1 },
       'i2' => { "xlarge"=>8, "2xlarge"=>4, "4xlarge"=>2, "8xlarge"=>1, "16xlarge"=>1 },
       'i3' => { "large"=>32, "xlarge"=>16, "2xlarge"=>8, "4xlarge"=>4, "8xlarge"=>2, "16xlarge"=>1, "metal"=>1 },
-      't3' => { "nano"=> 64, "micro"=> 32, "small"=> 16, "medium"=> 8, "large"=> 4, "xlarge" => 2, "2xlarge"=> 1},
       'x1' => { "16xlarge"=>2, "32xlarge"=>1 },
       'x1e' =>{ "xlarge"=>32, "2xlarge"=>16, "4xlarge"=>8, "8xlarge"=>4, "16xlarge"=>2, "32xlarge"=>1 },
       'z1d' => {"large"=> 24, "xlarge"=> 12,  "2xlarge"=> 6,  "3xlarge"=> 4,  "6xlarge"=> 2,  "12xlarge"=> 1},
