@@ -372,6 +372,13 @@ module AwsPricing
       't2.small' => :low_to_moderate,
       't2.xlarge' => :high,   # same as c4.2xlarge, cf:https://aws.amazon.com/blogs/aws/new-t2-xlarge-and-t2-2xlarge-instances/
       't2.2xlarge' => :high,  # same as m4.xlarge,  cf:https://aws.amazon.com/blogs/aws/new-t2-xlarge-and-t2-2xlarge-instances/
+      't3.nano' => :low,
+      't3.micro' => :low_to_moderate,
+      't3.small' => :low_to_moderate,
+      't3.medium' => :low_to_moderate,
+      't3.large' => :low_to_moderate,
+      't3.xlarge' => :moderate,
+      't3.2xlarge' => :moderate,
       'x1.16xlarge' => :ten_gigabit,
       'x1.32xlarge' => :twenty_gigabit,
       'x1e.16xlarge' => :ten_gigabit,
