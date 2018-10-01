@@ -136,8 +136,10 @@ module AwsPricing
       throughput
     end
     def self.get_network_mbps(throughput)
+
       network_mbps = @Network_Throughput_MBits_Per_Second[throughput]
       if not network_mbps
+        binding.pry
         logger.warn "Unknown network throughput for #{throughput}"
       end
       network_mbps
@@ -283,6 +285,7 @@ module AwsPricing
       'db.x1.16xlarge' => :ten_gigabit,
       'db.x1.32xlarge' => :ten_gigabit,
       'f1.2xlarge' => :high,
+      'f1.4xlarge' => :high,
       'f1.16xlarge' => :twentyfive_gigabit,
       'g2.2xlarge' => :high,
       'g2.8xlarge' => :ten_gigabit,
