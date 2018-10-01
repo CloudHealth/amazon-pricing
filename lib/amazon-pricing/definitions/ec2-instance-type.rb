@@ -136,10 +136,8 @@ module AwsPricing
       throughput
     end
     def self.get_network_mbps(throughput)
-
       network_mbps = @Network_Throughput_MBits_Per_Second[throughput]
       if not network_mbps
-        binding.pry
         logger.warn "Unknown network throughput for #{throughput}"
       end
       network_mbps
