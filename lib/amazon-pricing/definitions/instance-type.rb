@@ -319,7 +319,6 @@ module AwsPricing
       'x1e.xlarge' => 64, 'x1e.2xlarge' => 64, 'x1e.4xlarge' => 64, 'x1e.8xlarge' => 64, 'x1e.16xlarge' => 64, 'x1e.32xlarge' => 64,
       'p2.xlarge' => 64, 'p2.8xlarge' => 64, 'p2.16xlarge' => 64,
       'p3.2xlarge' => 64, 'p3.8xlarge' => 64, 'p3.16xlarge' => 64,
-      'f1.2xlarge' => 64, 'f1.4xlarge' => 64, 'f1.16xlarge' => 64,
       'z1d.large' => 64, 'z1d.xlarge' => 64, 'z1d.2xlarge' => 64, 'z1d.3xlarge' => 64, 'z1d.6xlarge' => 64, 'z1d.12xlarge' => 64,
     }
     @@Disk_Type_Lookup = { #type of local storage for the disk
