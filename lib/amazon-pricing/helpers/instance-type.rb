@@ -43,7 +43,9 @@ module AwsPricing
                 'X1'  => ['x1.16xlarge', 'x1.32xlarge'],
                 'X1E'  => ['x1e.xlarge', 'x1e.2xlarge', 'x1e.4xlarge', 'x1e.8xlarge', 'x1e.16xlarge', 'x1e.32xlarge'],
                 'Z1D' => ['z1d.large', 'z1d.xlarge', 'z1d.2xlarge', 'z1d.3xlarge', 'z1d.6xlarge', 'z1d.12xlarge'],
-                'U' => ['u-6tb1.metal', 'u-9tb1.metal', 'u-12tb1.metal']
+                'U-6TB1' => ['u-6tb1.metal'],
+                'U-9TB1' => ['u-9tb1.metal'],
+                'U-12TB1' => ['u-12tb1.metal']
             },
             'PreviousGen' => {
                 'M2'  => ['m2.xlarge', 'm2.2xlarge', 'm2.4xlarge'],
