@@ -67,7 +67,7 @@ module AwsPricing
                 'G3'  => ['g3.4xlarge', 'g3.8xlarge', 'g3.16xlarge'],
                 'P2'  => ['p2.xlarge', 'p2.8xlarge', 'p2.16xlarge'],
                 'P3'  => ['p3.2xlarge', 'p3.8xlarge', 'p3.16xlarge'],
-                'F1'  => ['f1.2xlarge', 'f1.16xlarge'],
+                'F1'  => ['f1.2xlarge', 'f1.4xlarge', 'f1.16xlarge'],
             },
             'PreviousGen' => {
                 'CG1' => ['cg1.4xlarge']
