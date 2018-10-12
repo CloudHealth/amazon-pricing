@@ -238,7 +238,7 @@ module AwsPricing
         'x1e.8xlarge'  => 'Memory Optimized Extended 8 Extra Large Enterprise-class',
         'x1e.16xlarge' => 'Memory Optimized Extended 16 Extra Large Enterprise-class',
         'x1e.32xlarge' => 'Memory Optimized Extended 32 Extra Large Enterprise-class',
-      'f1.2xlarge' => 'FPGA Hardware Acceleration Double Extra Large', 'f1.16xlarge' => 'FPGA Hardware Acceleration Hextuple Extra Large',
+      'f1.2xlarge' => 'FPGA Hardware Acceleration Double Extra Large', 'f1.4xlarge' => 'FPGA Hardware Acceleration Quadruple Extra Large', 'f1.16xlarge' =>  'FPGA Hardware Acceleration Hextuple Extra Large',
       'z1d.large' => 'Memory Optimized Z1D Large', 'z1d.xlarge' => 'Memory Optimized Z1D Extra large', 'z1d.2xlarge' => 'Memory Optimized Z1D Double Extra Large', 'z1d.3xlarge' => 'Memory Optimized Z1D Triple Extra Large',
         'z1d.6xlarge' => 'Memory Optimized Z1D 6 Extra Large', 'z1d.12xlarge' => 'Memory Optimized Z1D 12 Extra Large',
     }
@@ -279,7 +279,7 @@ module AwsPricing
       'x1e.xlarge' => 120, 'x1e.2xlarge' => 240, 'x1e.4xlarge' => 480, 'x1e.8xlarge' => 960, 'x1e.16xlarge' => 1920, 'x1e.32xlarge' => 3840,
       'p2.xlarge' => 0, 'p2.8xlarge' => 0, 'p2.16xlarge' => 0,  # ebs-optimized
       'p3.2xlarge' => 0, 'p3.8xlarge' => 0, 'p3.16xlarge' => 0, # ebs-optimized
-      'f1.2xlarge' => 470, 'f1.16xlarge' => 3760,
+      'f1.2xlarge' => 470, 'f1.4xlarge' => 940, 'f1.16xlarge' => 3760,
       'z1d.large' => 75, 'z1d.xlarge' => 150, 'z1d.2xlarge' => 300, 'z1d.3xlarge' => 450, 'z1d.6xlarge' => 900, 'z1d.12xlarge' => 1800, # NVMe
     }
     @@Platform_Lookup = { #bit width of cpu
@@ -359,7 +359,7 @@ module AwsPricing
       'x1e.xlarge' => :ssd, 'x1e.2xlarge' => :ssd, 'x1e.4xlarge' => :ssd, 'x1e.8xlarge' => :ssd, 'x1e.16xlarge' => :ssd, 'x1e.32xlarge' => :ssd,
       'p2.xlarge' => :ebs, 'p2.8xlarge' => :ebs, 'p2.16xlarge' => :ebs,
       'p3.2xlarge' => :ebs, 'p3.8xlarge' => :ebs, 'p3.16xlarge' => :ebs,
-      'f1.2xlarge' => :ssd, 'f1.16xlarge' => :ssd,
+      'f1.2xlarge' => :ssd, 'f1.4xlarge' => :ssd,'f1.16xlarge' => :ssd,
        'z1d.large' => :ssd, 'z1d.xlarge' => :ssd, 'z1d.2xlarge' => :ssd, 'z1d.3xlarge' => :ssd, 'z1d.6xlarge' => :ssd, 'z1d.12xlarge' => :ssd,
     }
 
@@ -480,6 +480,7 @@ module AwsPricing
       # db.t2.micro, like all RDS instances, are EBS-only
       # db.t2.small, like all RDS instances, are EBS-only
       'f1.2xlarge' => [ 212, 12000], # EBSOptimized
+      'f1.4xlarge' => [ 400, 44000], # EBSOptimized
       'f1.16xlarge'=> [1750, 75000], # EBSOptimized
       'g2.2xlarge' => [125, 8000], # EBSOptimized
       'g3.4xlarge' => [ 437, 20000], # EBSOptimized
