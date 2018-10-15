@@ -283,6 +283,7 @@ module AwsPricing
       'db.x1.16xlarge' => :ten_gigabit,
       'db.x1.32xlarge' => :ten_gigabit,
       'f1.2xlarge' => :high,
+      'f1.4xlarge' => :high,
       'f1.16xlarge' => :twentyfive_gigabit,
       'g2.2xlarge' => :high,
       'g2.8xlarge' => :ten_gigabit,
