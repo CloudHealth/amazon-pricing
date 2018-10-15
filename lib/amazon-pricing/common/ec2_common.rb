@@ -124,7 +124,7 @@ module AwsPricing
             end
             price = od_option["prices"]["USD"]
             instance_type.update_pricing_new(operating_system, :ondemand, price)
-            Rails.logger.debug "od pricing update #{api_name} price #{price} for #{region_name}/#{operating_system}"
+            Logger.debug "od pricing update #{api_name} price #{price} for #{region_name}/#{operating_system}"
             # prevent iteration, since it doesn't make sense, noting it's (theoretically) possible
             break
           end
