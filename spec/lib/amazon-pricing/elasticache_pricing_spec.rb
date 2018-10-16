@@ -3,7 +3,7 @@ require 'spec_helper'
 describe AwsPricing::ElastiCachePriceList do
   # When new regions are introduced and elasticache prices are not available
   # in the new regions yet, add the new regions to NEW_REGIONS.
-  NEW_REGIONS = []
+  NEW_REGIONS = [ "ap-northeast-3"]
   before(:all) do
     @pricing = AwsPricing::ElastiCachePriceList.new
     @node_types = [:memcached]
@@ -81,7 +81,6 @@ describe AwsPricing::ElastiCachePriceList do
         next unless NEW_REGIONS.include?(region.name)
         begin
           validate_breakeven_month_in_region region
-          fail
         rescue RSpec::Expectations::ExpectationNotMetError => ex
           # Success
         end

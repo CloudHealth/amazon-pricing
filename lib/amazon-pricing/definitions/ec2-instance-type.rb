@@ -131,14 +131,14 @@ module AwsPricing
     def self.get_network_capacity(api_name)
       throughput = @Network_Performance[api_name]
       if not throughput
-        logger.warn "Unknown network throughput for instance type #{api_name}"
+        $stderr.puts "Unknown network throughput for instance type #{api_name}"
       end
       throughput
     end
     def self.get_network_mbps(throughput)
       network_mbps = @Network_Throughput_MBits_Per_Second[throughput]
       if not network_mbps
-        logger.warn "Unknown network throughput for #{throughput}"
+        $stderr.puts "Unknown network throughput for #{throughput}"
       end
       network_mbps
     end

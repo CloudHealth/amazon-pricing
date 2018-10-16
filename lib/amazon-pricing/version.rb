@@ -8,5 +8,5 @@
 # Home::      http://github.com/CloudHealth/amazon-pricing
 #++
 module AwsPricing
-VERSION = '0.1.119' # [major,minor.fix]: adding f1.4xlarge instances
+VERSION = '0.1.120' # [major,minor.fix]: adding osaka region
 end
