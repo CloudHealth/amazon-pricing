@@ -187,10 +187,6 @@ module AwsPricing
       [api_name, name]
     end
 
-
-
-
-
     # throughput values for performance ratings
     # Amazon informally tells customers that they translate as follows:
     #   Low = 100 Mbps
