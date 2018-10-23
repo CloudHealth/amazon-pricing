@@ -143,6 +143,34 @@ module AwsPricing
       network_mbps
     end
 
+    # Take in string from amazon pricing api, return network properties
+    def self.get_network_information(network_string)
+      throughput = nil
+      case network_string
+        when 'Very Low'
+          throughput = :very_low
+        when 'Low'
+          throughput = :low
+        when 'Low to Moderate'
+          throughput = :low_to_moderate
+        when 'Moderate'
+          throughput = :moderate
+        when 'High'
+          throughput = :high
+        when '10 Gigabit','Up to 10 Gigabit'
+          throughput = :ten_gigabit
+        when '20 Gigabit'
+          throughput = :twenty_gigabit
+        when '25 Gigabit'
+          throughput = :twentyfive_gigabit
+
+        else
+          binding.pry
+      end
+      network_mbps = @Network_Throughput_MBits_Per_Second[throughput]
+      [throughput.to_s, network_mbps]
+    end
+
     protected
     # Returns [api_name, name]
     def self.get_name(instance_type, api_name, is_reserved = false)
@@ -158,6 +186,10 @@ module AwsPricing
 
       [api_name, name]
     end
+
+
+
+
 
     # throughput values for performance ratings
     # Amazon informally tells customers that they translate as follows:
