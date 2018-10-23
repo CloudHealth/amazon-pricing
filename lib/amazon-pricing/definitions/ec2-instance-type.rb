@@ -163,7 +163,6 @@ module AwsPricing
           throughput = :twenty_gigabit
         when '25 Gigabit'
           throughput = :twentyfive_gigabit
-
         else
           binding.pry
       end
