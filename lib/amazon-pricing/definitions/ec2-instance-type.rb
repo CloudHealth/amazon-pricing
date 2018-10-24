@@ -164,7 +164,7 @@ module AwsPricing
         when '25 Gigabit'
           throughput = :twentyfive_gigabit
         else
-          binding.pry
+          $stderr.puts "[#{__method__}] WARNING: unknown network throughput string:#{network_string}"
       end
       network_mbps = @Network_Throughput_MBits_Per_Second[throughput]
       [throughput.to_s, network_mbps]
