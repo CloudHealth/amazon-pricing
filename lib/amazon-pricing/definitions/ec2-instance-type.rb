@@ -144,6 +144,8 @@ module AwsPricing
     end
 
     # Take in string from amazon pricing api, return network properties
+    # Input: String containing network capacity from amazon-pricing-api
+    # Output: network throughput as a string, int containing network mbps
     def self.get_network_information(network_string)
       throughput = nil
       case network_string
