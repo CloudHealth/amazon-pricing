@@ -319,6 +319,7 @@ module AwsPricing
       'g3.4xlarge' => :twenty_gigabit,
       'g3.8xlarge' => :twenty_gigabit,
       'g3.16xlarge' => :twenty_gigabit,
+      'g3s.xlarge' => :ten_gigabit,
       'h1.2xlarge' => :ten_gigabit, # upto 10G
       'h1.4xlarge' => :ten_gigabit, # upto 10G
       'h1.8xlarge' => :ten_gigabit,

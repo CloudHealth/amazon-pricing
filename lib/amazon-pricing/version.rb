@@ -8,5 +8,5 @@
 # Home::      http://github.com/CloudHealth/amazon-pricing
 #++
 module AwsPricing
-VERSION = '0.1.121' # [major,minor.fix]: adding support to allow instance profile population
+VERSION = '0.1.122' # [major,minor.fix]: Support for g3s.xlarge instances
 end
