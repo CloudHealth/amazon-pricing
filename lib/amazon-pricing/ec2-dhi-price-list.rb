@@ -28,6 +28,7 @@ module AwsPricing
       'p3' => { "2xlarge"=>8, "8xlarge"=>2, "16xlarge"=>1 },
       'g2' => { "2xlarge"=>4, "8xlarge"=>1 },
       'g3' => { "4xlarge"=>4, "8xlarge"=>2, "16xlarge"=>1 },
+      'g3s' => { "xlarge" => 1},
       'f1' => { "2xlarge"=>8, "4xlarge"=>4, "16xlarge" =>1 },
       'm3' => { "medium"=>32, "large"=>16, "xlarge"=>8, "2xlarge"=>4 },
       'd2' => { "xlarge"=>8, "2xlarge"=>4, "4xlarge"=>2, "8xlarge"=>1 },

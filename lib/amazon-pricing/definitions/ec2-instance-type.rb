@@ -147,25 +147,8 @@ module AwsPricing
     # Input: String containing network capacity from amazon-pricing-api
     # Output: network throughput as a string, int containing network mbps
     def self.get_network_information(network_string)
-      throughput = nil
-      case network_string
-        when 'Very Low'
-          throughput = :very_low
-        when 'Low'
-          throughput = :low
-        when 'Low to Moderate'
-          throughput = :low_to_moderate
-        when 'Moderate'
-          throughput = :moderate
-        when 'High'
-          throughput = :high
-        when '10 Gigabit','Up to 10 Gigabit'
-          throughput = :ten_gigabit
-        when '20 Gigabit'
-          throughput = :twenty_gigabit
-        when '25 Gigabit'
-          throughput = :twentyfive_gigabit
-        else
+      throughput = @Network_String_To_Sym[network_string]
+      if throughput.nil?
           $stderr.puts "[#{__method__}] WARNING: unknown network throughput string:#{network_string}"
       end
       network_mbps = @Network_Throughput_MBits_Per_Second[throughput]
@@ -203,6 +186,20 @@ module AwsPricing
         :ten_gigabit => 10000,
         :twenty_gigabit => 20000,
         :twentyfive_gigabit => 25000, # presumes ENA
+    }
+
+    # Use in population of profiles, takes in string value that amazon uses to reflect network capacity
+    # Returns symbol we use to map to numeric value
+    @Network_String_To_Sym = {
+        'Very Low' =>  :very_low,
+        'Low' => :low,
+        'Low to Moderate' => :low_to_moderate,
+        'Moderate' => :moderate,
+        'High' => :high,
+        '10 Gigabit'=> :ten_gigabit,
+        'Up to 10 Gigabit' => :ten_gigabit,
+        '20 Gigabit' => :twenty_gigabit,
+        '25 Gigabit' => :twentyfive_gigabit
     }
 
     # handy summary here: www.ec2instances.info
@@ -319,6 +316,7 @@ module AwsPricing
       'g3.4xlarge' => :twenty_gigabit,
       'g3.8xlarge' => :twenty_gigabit,
       'g3.16xlarge' => :twenty_gigabit,
+      'g3s.xlarge' => :ten_gigabit,
       'h1.2xlarge' => :ten_gigabit, # upto 10G
       'h1.4xlarge' => :ten_gigabit, # upto 10G
       'h1.8xlarge' => :ten_gigabit,

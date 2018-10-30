@@ -65,6 +65,7 @@ module AwsPricing
             'CurrentGen' => { # G2=GPU Graphics, G3=GPU-3 Graphics, P2=GPU Computes, P3=GPU-3 Computes, F1=FPGA Accelerated
                 'G2'  => ['g2.2xlarge', 'g2.8xlarge'],
                 'G3'  => ['g3.4xlarge', 'g3.8xlarge', 'g3.16xlarge'],
+                'G3S' => ['g3s.xlarge'],
                 'P2'  => ['p2.xlarge', 'p2.8xlarge', 'p2.16xlarge'],
                 'P3'  => ['p3.2xlarge', 'p3.8xlarge', 'p3.16xlarge'],
                 'F1'  => ['f1.2xlarge', 'f1.4xlarge', 'f1.16xlarge'],
