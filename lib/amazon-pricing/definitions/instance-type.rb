@@ -242,6 +242,10 @@ module AwsPricing
       'f1.2xlarge' => 'FPGA Hardware Acceleration Double Extra Large', 'f1.4xlarge' => 'FPGA Hardware Acceleration Quadruple Extra Large', 'f1.16xlarge' =>  'FPGA Hardware Acceleration Hextuple Extra Large',
       'z1d.large' => 'Memory Optimized Z1D Large', 'z1d.xlarge' => 'Memory Optimized Z1D Extra large', 'z1d.2xlarge' => 'Memory Optimized Z1D Double Extra Large', 'z1d.3xlarge' => 'Memory Optimized Z1D Triple Extra Large',
         'z1d.6xlarge' => 'Memory Optimized Z1D 6 Extra Large', 'z1d.12xlarge' => 'Memory Optimized Z1D 12 Extra Large',
+      'm5a.large' => 'General Purpose M5A Large', 'm5a.xlarge' => 'General Purpose M5A Extra Large', 'm5a.2xlarge' => 'General Purpose M5A Double Extra Large', 'm5a.4xlarge' => 'General Purpose M5A Quadruple Extra Large',
+        'm5a.12xlarge' => 'General Purpose M5A Twelve Extra Large',  'm5a.24xlarge' => 'General Purpose M5A Twenty Four Extra Large',
+      'r5a.large' => 'Memory Optimized R5A Large', 'r5a.xlarge' => 'Memory Optimized R5A Extra Large', 'r5a.2xlarge' => 'Memory Optimized R5A Double Extra Large', 'r5a.4xlarge' => 'Memory Optimized R5A Quadruple Extra Large',
+        'r5a.12xlarge' => 'Memory Optimized R5A Twelve Extra Large', 'r5a.24xlarge' => 'Memory Optimized R5A Twenty Four Extra Large',
     }
     @@Disk_Lookup = { # size of disk supported (local disk size) TOTAL size in gb
       'm1.small' => 160, 'm1.medium' => 410, 'm1.large' =>850, 'm1.xlarge' => 1690,
@@ -283,6 +287,8 @@ module AwsPricing
       'p3.2xlarge' => 0, 'p3.8xlarge' => 0, 'p3.16xlarge' => 0, # ebs-optimized
       'f1.2xlarge' => 470, 'f1.4xlarge' => 940, 'f1.16xlarge' => 3760,
       'z1d.large' => 75, 'z1d.xlarge' => 150, 'z1d.2xlarge' => 300, 'z1d.3xlarge' => 450, 'z1d.6xlarge' => 900, 'z1d.12xlarge' => 1800, # NVMe
+      'm5a.large' => 0, 'm5a.xlarge' => 0, 'm5a.2xlarge' => 0, 'm5a.4xlarge' => 0, 'm5a.12xlarge' => 0, 'm5a.24xlarge' => 0, #ebs-only
+      'r5a.large' => 0, 'r5a.xlarge' => 0, 'r5a.2xlarge' => 0, 'r5a.4xlarge' => 0, 'r5a.12xlarge' => 0, 'r5a.24xlarge' => 0, #ebs-only
     }
     @@Platform_Lookup = { #bit width of cpu
       'm1.small' => 32, 'm1.medium' => 32, 'm1.large' => 64, 'm1.xlarge' => 64,
@@ -323,6 +329,8 @@ module AwsPricing
       'p2.xlarge' => 64, 'p2.8xlarge' => 64, 'p2.16xlarge' => 64,
       'p3.2xlarge' => 64, 'p3.8xlarge' => 64, 'p3.16xlarge' => 64,
       'z1d.large' => 64, 'z1d.xlarge' => 64, 'z1d.2xlarge' => 64, 'z1d.3xlarge' => 64, 'z1d.6xlarge' => 64, 'z1d.12xlarge' => 64,
+      'm5a.large' => 64, 'm5a.xlarge' => 64, 'm5a.2xlarge' => 64, 'm5a.4xlarge' => 64, 'm5a.12xlarge' => 64, 'm5a.24xlarge' => 64,
+      'r5a.large' => 64, 'r5a.xlarge' => 64, 'r5a.2xlarge' => 64, 'r5a.4xlarge' => 64, 'r5a.12xlarge' => 64, 'r5a.24xlarge' => 64,
     }
     @@Disk_Type_Lookup = { #type of local storage for the disk
       'm1.small' => :ephemeral, 'm1.medium' => :ephemeral, 'm1.large' => :ephemeral, 'm1.xlarge' => :ephemeral,
@@ -364,7 +372,9 @@ module AwsPricing
       'p2.xlarge' => :ebs, 'p2.8xlarge' => :ebs, 'p2.16xlarge' => :ebs,
       'p3.2xlarge' => :ebs, 'p3.8xlarge' => :ebs, 'p3.16xlarge' => :ebs,
       'f1.2xlarge' => :ssd, 'f1.4xlarge' => :ssd,'f1.16xlarge' => :ssd,
-       'z1d.large' => :ssd, 'z1d.xlarge' => :ssd, 'z1d.2xlarge' => :ssd, 'z1d.3xlarge' => :ssd, 'z1d.6xlarge' => :ssd, 'z1d.12xlarge' => :ssd,
+      'z1d.large' => :ssd, 'z1d.xlarge' => :ssd, 'z1d.2xlarge' => :ssd, 'z1d.3xlarge' => :ssd, 'z1d.6xlarge' => :ssd, 'z1d.12xlarge' => :ssd,
+      'm5a.large' => :ebs, 'm5a.xlarge' => :ebs, 'm5a.2xlarge' => :ebs, 'm5a.4xlarge' => :ebs, 'm5a.12xlarge' => :ebs, 'm5a.24xlarge' => :ebs,
+      'r5a.large' => :ebs, 'r5a.xlarge' => :ebs, 'r5a.2xlarge' => :ebs, 'r5a.4xlarge' => :ebs, 'r5a.12xlarge' => :ebs, 'r5a.24xlarge' => :ebs,
     }
 
     # NOTE: These are populated by "populate_lookups"
@@ -390,6 +400,8 @@ module AwsPricing
       'r5.large' => 2, 'r5.xlarge' => 4, 'r5.2xlarge' => 8, 'r5.4xlarge' => 16, 'r5.12xlarge' => 48, 'r5.24xlarge' => 96,
       't2.nano' => 1, 't2.micro' => 1, 't2.small' => 1, 't2.medium' => 2, 't2.large' => 2, 't2.xlarge' => 4, 't2.2xlarge' => 8,
       't3.nano' => 2, 't3.micro' => 2, 't3.small' => 2, 't3.medium' => 2, 't3.large' => 2, 't3.xlarge' => 4, 't3.2xlarge' => 8,
+      'm5a.large' => 2, 'm5a.xlarge' => 4, 'm5a.2xlarge' => 8, 'm5a.4xlarge' => 16, 'm5a.12xlarge' => 48, 'm5a.24xlarge' => 96,
+      'r5a.large' => 2, 'r5a.xlarge' => 4, 'r5a.2xlarge' => 8, 'r5a.4xlarge' => 16, 'r5a.12xlarge' => 48, 'r5a.24xlarge' => 96,
     }
 
     # Due to fact AWS pricing API only reports these for EC2, we will fetch from EC2 and keep around for lookup
@@ -589,6 +601,18 @@ module AwsPricing
       'z1d.3xlarge' => [ 438, 20000], # EBSOptimized
       'z1d.6xlarge' => [ 875, 40000], # EBSOptimized
       'z1d.12xlarge' => [ 1750, 80000], # EBSOptimized
+      'm5a.large' => [ 265, 16000 ], #EBSOptimized
+      'm5a.xlarge' => [ 265, 16000 ], #EBSOptimized
+      'm5a.2xlarge' => [ 265, 16000 ], #EBSOptimized
+      'm5a.4xlarge' => [ 265, 16000 ], #EBSOptimized
+      'm5a.12xlarge' => [ 675, 30000 ], #EBSOptimized
+      'm5a.24xlarge' => [ 1250, 60000 ], #EBSOptimized
+      'r5a.large' => [ 265, 16000 ], #EBSOptimized
+      'r5a.xlarge' => [ 265, 16000 ], #EBSOptimized
+      'r5a.2xlarge' => [ 265, 16000 ], #EBSOptimized
+      'r5a.4xlarge' => [ 265, 16000 ], #EBSOptimized
+      'r5a.12xlarge' => [ 625, 30000 ], #EBSOptimized
+      'r5a.24xlarge' => [ 1250, 60000 ], #EBSOptimized
     }
   end
 
