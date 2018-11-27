@@ -8,5 +8,5 @@
 # Home::      http://github.com/CloudHealth/amazon-pricing
 #++
 module AwsPricing
-VERSION = '0.1.123' # [major,minor.fix]: Support for m5a, r5a instance families
+VERSION = '0.1.124' # [major,minor.fix]: Support for c5n, a1 families
 end
