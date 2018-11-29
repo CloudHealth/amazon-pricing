@@ -186,6 +186,8 @@ module AwsPricing
         :ten_gigabit => 10000,
         :twenty_gigabit => 20000,
         :twentyfive_gigabit => 25000, # presumes ENA
+        :fifty_gigabit => 50000,
+        :one_hundred_gigabit => 100000
     }
 
     # Use in population of profiles, takes in string value that amazon uses to reflect network capacity
@@ -199,11 +201,19 @@ module AwsPricing
         '10 Gigabit'=> :ten_gigabit,
         'Up to 10 Gigabit' => :ten_gigabit,
         '20 Gigabit' => :twenty_gigabit,
-        '25 Gigabit' => :twentyfive_gigabit
+        'Up to 25 Gigabit' => :twentyfive_gigabit,
+        '25 Gigabit' => :twentyfive_gigabit,
+        '50 Gigabit' => :fifty_gigabit,
+        '100 Gigabit' => :one_hundred_gigabit
     }
 
     # handy summary here: www.ec2instances.info
     @Network_Performance = {
+      'a1.medium' => :ten_gigabit, # up to 10G
+      'a1.large' => :ten_gigabit, # up to 10G
+      'a1.xlarge' => :ten_gigabit, # up to 10G
+      'a1.2xlarge' => :ten_gigabit, # up to 10G
+      'a1.4xlarge' => :ten_gigabit, # up to 10G
       'c1.medium' => :moderate,
       'c1.xlarge' => :high,
       'c3.2xlarge' => :high,
@@ -228,6 +238,12 @@ module AwsPricing
       'c5d.9xlarge' => :ten_gigabit,
       'c5d.large' => :ten_gigabit,   # upto 10G
       'c5d.xlarge' => :ten_gigabit,  # upto 10G
+      'c5n.large' => :twentyfive_gigabit, # up to 25gb
+      'c5n.xlarge' => :twentyfive_gigabit, # up to 25gb
+      'c5n.2xlarge' => :twentyfive_gigabit, # up to 25gb
+      'c5n.4xlarge' => :twentyfive_gigabit, # up to 25gb
+      'c5n.9xlarge' => :fifty_gigabit,
+      'c5n.18xlarge' => :one_hundred_gigabit,
       'cache.c1.xlarge' => :high,
       'cache.m1.large' => :moderate,
       'cache.m1.medium' => :moderate,

@@ -7,6 +7,7 @@ module AwsPricing
       @@INSTANCE_TYPES_BY_CLASSIFICATION = {
         'GeneralPurpose' => {
             'CurrentGen' => {
+                'A1' => ['a1.medium', 'a1.large', 'a1.xlarge', 'a1.2xlarge', 'a1.4xlarge'],
                 'M3' => ['m3.medium', 'm3.large', 'm3.xlarge', 'm3.2xlarge'],
                 'M4' => ['m4.large', 'm4.xlarge', 'm4.2xlarge', 'm4.4xlarge', 'm4.10xlarge', 'm4.16xlarge'],
                 'M5' => ['m5.large', 'm5.xlarge', 'm5.2xlarge', 'm5.4xlarge', 'm5.12xlarge', 'm5.24xlarge'],
@@ -29,6 +30,7 @@ module AwsPricing
                 'C4' => ['c4.large', 'c4.xlarge', 'c4.2xlarge', 'c4.4xlarge', 'c4.8xlarge'],
                 'C5' => ['c5.large', 'c5.xlarge', 'c5.2xlarge', 'c5.4xlarge', 'c5.9xlarge', 'c5.18xlarge'],
                 'C5D' => ['c5d.large', 'c5d.xlarge', 'c5d.2xlarge', 'c5d.4xlarge', 'c5d.9xlarge', 'c5d.18xlarge'],
+                'C5N' => ['c5n.large', 'c5n.xlarge', 'c5n.2xlarge', 'c5n.4xlarge', 'c5n.9xlarge', 'c5n.18xlarge'],
             },
             'PreviousGen' => {
                 'C1' => ['c1.medium', 'c1.xlarge', 'cc1.4xlarge'],

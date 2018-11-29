@@ -181,6 +181,8 @@ module AwsPricing
     end
 
     @@Name_Lookup = { # basic name and description lookup
+      'a1.medium' =>  'General purpose A1 Medium', 'a1.large' =>  'General purpose A1 Large', 'a1.xlarge' =>  'General purpose A1 Extra Large',
+      'a1.2xlarge' => 'General purpose A1 Double Extra Large', 'a1.4xlarge' => 'General purpose A1 Quadruple Extra Large',
       'm1.small' => 'Standard Small', 'm1.medium' => 'Standard Medium', 'm1.large' => 'Standard Large', 'm1.xlarge' => 'Standard Extra Large',
       'm2.xlarge' => 'Hi-Memory Extra Large', 'm2.2xlarge' => 'Hi-Memory Double Extra Large', 'm2.4xlarge' => 'Hi-Memory Quadruple Extra Large',
       'm3.medium' => 'M3 Medium Instance', 'm3.large'=>'M3 Large Instance', 'm3.xlarge' => 'M3 Extra Large Instance', 'm3.2xlarge' => 'M3 Double Extra Large Instance',
@@ -212,7 +214,7 @@ module AwsPricing
       'i3.4xlarge' => 'Storage Optimized High I/O Quadruple Extra Large', 'i3.8xlarge' => 'Storage Optimized High I/O Extra Large',
       'i3.16xlarge' => 'Storage Optimized High I/O Hextuple Extra Large',
       'i3.metal' => 'Storage Optimized High I/O Metal',
-      'd2.xlarge' => 'Dense Storage Extra Large', 'd2.2xlarge' => 'Dense Storage Double Extra Large', 'd2.4xlarge' => 'Dense Storage Quadruple Extra Large', 'd2.8xlarge' => 'Dense Storage Eight Extra Large',
+       'd2.xlarge' => 'Dense Storage Extra Large', 'd2.2xlarge' => 'Dense Storage Double Extra Large', 'd2.4xlarge' => 'Dense Storage Quadruple Extra Large', 'd2.8xlarge' => 'Dense Storage Eight Extra Large',
       'h1.2xlarge' => 'Dense Storage H1 Double Extra Large', 'h1.4xlarge' => 'Dense Storage H1 Quadruple Extra Large', 'h1.8xlarge' => 'Dense Storage H1 Eight Extra Large', 'h1.16xlarge' => 'Dense Storage H1 Hextuple Extra Large',
       'r3.large' => 'Memory Optimized Large', 'r3.xlarge' => 'Memory Optimized Extra Large', 'r3.2xlarge' => 'Memory Optimized Double Extra Large', 'r3.4xlarge' => 'Memory Optimized Quadruple Extra Large', 'r3.8xlarge' => 'Memory Optimized Eight Extra Large',
       'r4.large' => 'Memory Optimized Large Enterprise', 'r4.xlarge' => 'Memory Optimized Extra Large Enterprise', 'r4.2xlarge' => 'Memory Optimized Double Extra Large Enterprise', 'r4.4xlarge' => 'Memory Optimized Quadruple Extra Large Enterprise',
@@ -231,6 +233,8 @@ module AwsPricing
         'c5.9xlarge' => 'Compute Optimized C5 Nine Extra Large', 'c5.18xlarge' => 'Compute Optimized C5 Eighteen Extra Large',
       'c5d.large' => 'Compute Optimized C5d Large', 'c5d.xlarge' => 'Compute Optimized C5d Extra Large', 'c5d.2xlarge' => 'Compute Optimized C5d Double Extra Large', 'c5d.4xlarge' => 'Compute Optimized C5d Quadruple Extra Large',
         'c5d.9xlarge' => 'Compute Optimized C5d Nine Extra Large', 'c5d.18xlarge' => 'Compute Optimized C5d Eighteen Extra Large',
+      'c5n.large' => 'Compute Optimized C5N Large', 'c5n.xlarge' =>  'Compute Optimized C5N Extra Large', 'c5n.2xlarge' => 'Compute Optimized C5N Double Extra Large', 'c5n.4xlarge' => 'Compute Optimized C5N Quadruple Extra Large',
+        'c5n.9xlarge' => 'Compute Optimized C5N Nine Extra Large', 'c5n.18xlarge' => 'Compute Optimized C5N Eighteen Extra Large',
       'x1.16xlarge'   => 'Memory Optimized 16 Extra Large Enterprise-class',
         'x1.32xlarge' => 'Memory Optimized 32 Extra Large Enterprise-class',
       'x1e.xlarge'     => 'Memory Optimized Extended Extra Large Enterprise-class',
@@ -248,6 +252,7 @@ module AwsPricing
         'r5a.12xlarge' => 'Memory Optimized R5A Twelve Extra Large', 'r5a.24xlarge' => 'Memory Optimized R5A Twenty Four Extra Large',
     }
     @@Disk_Lookup = { # size of disk supported (local disk size) TOTAL size in gb
+      'a1.medium' => 0, 'a1.large' => 0, 'a1.xlarge' => 0,  'a1.2xlarge' => 0, 'a1.4xlarge' => 0, # ebs-optimized
       'm1.small' => 160, 'm1.medium' => 410, 'm1.large' =>850, 'm1.xlarge' => 1690,
       'm2.xlarge' => 420, 'm2.2xlarge' => 850, 'm2.4xlarge' => 1690,
       'm3.medium' => 4, 'm3.large' => 32, 'm3.xlarge' => 80, 'm3.2xlarge' => 160,
@@ -280,6 +285,7 @@ module AwsPricing
       't3.nano' => 0, 't3.micro' => 0, 't3.small' => 0, 't3.medium' => 0, 't3.large' => 0, 't3.xlarge' => 0, 't3.2xlarge' => 0, #ebs-only
       'c4.large' => 0, 'c4.xlarge' => 0, 'c4.2xlarge' => 0, 'c4.4xlarge' => 0, 'c4.8xlarge' => 0,
       'c5.large' => 0, 'c5.xlarge' => 0, 'c5.2xlarge' => 0, 'c5.4xlarge' => 0, 'c5.9xlarge' => 0, 'c5.18xlarge' => 0, # ebs-optimized
+      'c5n.large' =>  0,'c5n.xlarge' =>  0,'c5n.2xlarge' => 0, 'c5n.4xlarge' => 0,  'c5n.9xlarge' =>  0, 'c5n.18xlarge' => 0, # ebs-optimized
       'c5d.large' => 50, 'c5d.xlarge' => 100, 'c5d.2xlarge' => 225, 'c5d.4xlarge' => 450, 'c5d.9xlarge' => 900, 'c5d.18xlarge' => 1800, # NVMe
       'x1.16xlarge' => 1920, 'x1.32xlarge' => 3840,
       'x1e.xlarge' => 120, 'x1e.2xlarge' => 240, 'x1e.4xlarge' => 480, 'x1e.8xlarge' => 960, 'x1e.16xlarge' => 1920, 'x1e.32xlarge' => 3840,
@@ -291,6 +297,7 @@ module AwsPricing
       'r5a.large' => 0, 'r5a.xlarge' => 0, 'r5a.2xlarge' => 0, 'r5a.4xlarge' => 0, 'r5a.12xlarge' => 0, 'r5a.24xlarge' => 0, #ebs-only
     }
     @@Platform_Lookup = { #bit width of cpu
+      'a1.medium' =>  64, 'a1.large' =>  64,   'a1.xlarge' =>  64, 'a1.2xlarge' => 64, 'a1.4xlarge' => 64,
       'm1.small' => 32, 'm1.medium' => 32, 'm1.large' => 64, 'm1.xlarge' => 64,
       'm2.xlarge' => 64, 'm2.2xlarge' => 64, 'm2.4xlarge' => 64,
       'm3.medium' => 64, 'm3.large' => 64, 'm3.xlarge' => 64, 'm3.2xlarge' => 64,
@@ -324,6 +331,7 @@ module AwsPricing
       'c4.large' => 64, 'c4.xlarge' => 64, 'c4.2xlarge' => 64, 'c4.4xlarge' => 64, 'c4.8xlarge' => 64,
       'c5.large' => 64, 'c5.xlarge' => 64, 'c5.2xlarge' => 64, 'c5.4xlarge' => 64, 'c5.9xlarge' => 64, 'c5.18xlarge' => 64,
       'c5d.large' => 64, 'c5d.xlarge' => 64, 'c5d.2xlarge' => 64, 'c5d.4xlarge' => 64, 'c5d.9xlarge' => 64, 'c5d.18xlarge' => 64,
+      'c5n.large' =>  64,  'c5n.xlarge' =>  64, 'c5n.2xlarge' => 64,  'c5n.4xlarge' => 64,  'c5n.9xlarge' =>  64,  'c5n.18xlarge' => 64,
       'x1.16xlarge' => 64, 'x1.32xlarge' => 64,
       'x1e.xlarge' => 64, 'x1e.2xlarge' => 64, 'x1e.4xlarge' => 64, 'x1e.8xlarge' => 64, 'x1e.16xlarge' => 64, 'x1e.32xlarge' => 64,
       'p2.xlarge' => 64, 'p2.8xlarge' => 64, 'p2.16xlarge' => 64,
@@ -333,6 +341,7 @@ module AwsPricing
       'r5a.large' => 64, 'r5a.xlarge' => 64, 'r5a.2xlarge' => 64, 'r5a.4xlarge' => 64, 'r5a.12xlarge' => 64, 'r5a.24xlarge' => 64,
     }
     @@Disk_Type_Lookup = { #type of local storage for the disk
+      'a1.medium' => :ebs,'a1.large' =>  :ebs, 'a1.xlarge' => :ebs, 'a1.2xlarge' => :ebs, 'a1.4xlarge' => :ebs,
       'm1.small' => :ephemeral, 'm1.medium' => :ephemeral, 'm1.large' => :ephemeral, 'm1.xlarge' => :ephemeral,
       'm2.xlarge' => :ephemeral, 'm2.2xlarge' => :ephemeral, 'm2.4xlarge' => :ephemeral,
       'm3.medium' => :ssd, 'm3.large' => :ssd, 'm3.xlarge' => :ssd, 'm3.2xlarge' => :ssd,
@@ -366,6 +375,7 @@ module AwsPricing
       't3.nano' => :ebs, 't3.micro' => :ebs, 't3.small' => :ebs, 't3.medium' => :ebs, 't3.large' => :ebs, 't3.xlarge' => :ebs, 't3.2xlarge' => :ebs,
       'c4.large' => :ebs, 'c4.xlarge' => :ebs, 'c4.2xlarge' => :ebs, 'c4.4xlarge' => :ebs, 'c4.8xlarge' => :ebs,
       'c5.large' => :ebs, 'c5.xlarge' => :ebs, 'c5.2xlarge' => :ebs, 'c5.4xlarge' => :ebs, 'c5.9xlarge' => :ebs, 'c5.18xlarge' => :ebs,
+      'c5n.large' =>  :ebs, 'c5n.xlarge' =>  :ebs, 'c5n.2xlarge' => :ebs, 'c5n.4xlarge' => :ebs, 'c5n.9xlarge' => :ebs, 'c5n.18xlarge' => :ebs,
       'c5d.large' => :ssd, 'c5d.xlarge' => :ssd, 'c5d.2xlarge' => :ssd, 'c5d.4xlarge' => :ssd, 'c5d.9xlarge' => :ssd, 'c5d.18xlarge' => :ssd,
       'x1.16xlarge' => :ssd, 'x1.32xlarge' => :ssd,
       'x1e.xlarge' => :ssd, 'x1e.2xlarge' => :ssd, 'x1e.4xlarge' => :ssd, 'x1e.8xlarge' => :ssd, 'x1e.16xlarge' => :ssd, 'x1e.32xlarge' => :ssd,
@@ -416,6 +426,11 @@ module AwsPricing
     #  - cf: http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSOptimized.html
     #  - MB/s (128KB I/O size), IOPS (16KB IO size)
     PER_SEC_CAPACITIES = {
+      'a1.medium' => [437, 20000],
+      'a1.large' => [437, 20000],
+      'a1.xlarge' => [437, 20000],
+      'a1.2xlarge' =>[437, 20000],
+      'a1.4xlarge' =>[437, 20000],
       'c1.medium' => [118, 5471],
       'c1.xlarge' => [125, 8000],   # EBS
       'c3.xlarge'  => [ 62,  4000], # EBSOptimized
@@ -433,12 +448,18 @@ module AwsPricing
       'c5.4xlarge'  => [ 281, 16000], # EBSOptimized
       'c5.9xlarge'  => [ 563, 32000], # EBSOptimized
       'c5.18xlarge' => [1125, 64000], # EBSOptimized
-      'c5d.large'    => [2250, 16000], # NVMe
-      'c5d.xlarge'   => [2250, 16000], # NVMe
-      'c5d.2xlarge'  => [2250, 16000], # NVMe
-      'c5d.4xlarge'  => [2250, 16000], # NVMe
-      'c5d.9xlarge'  => [4500, 32000], # NVMe
-      'c5d.18xlarge' => [9000, 64000], # NVMe
+      'c5d.large'    => [437, 20000], # NVMe
+      'c5d.xlarge'   => [437, 20000], # NVMe
+      'c5d.2xlarge'  => [437, 20000], # NVMe
+      'c5d.4xlarge'  => [437, 20000], # NVMe
+      'c5d.9xlarge'  => [875, 40000], # NVMe
+      'c5d.18xlarge' => [1750, 80000], # NVMe
+      'c5n.large' => [437, 20000],
+      'c5n.xlarge' => [437, 20000],
+      'c5n.2xlarge' => [437, 20000],
+      'c5n.4xlarge' => [437, 20000],
+      'c5n.9xlarge' => [75, 40000],
+      'c5n.18xlarge' => [1750, 80000],
       # cache.c1.xlarge is not picked up by CloudWatch
       # cache.m1.large is not picked up by CloudWatch
       # cache.m1.medium is not picked up by CloudWatch
@@ -615,5 +636,4 @@ module AwsPricing
       'r5a.24xlarge' => [ 1250, 60000 ], #EBSOptimized
     }
   end
-
 end
