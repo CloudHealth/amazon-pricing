@@ -8,5 +8,5 @@
 # Home::      http://github.com/CloudHealth/amazon-pricing
 #++
 module AwsPricing
-VERSION = '0.1.124' # [major,minor.fix]: Support for c5n, a1 families
+VERSION = '0.1.125' # [major,minor.fix]: Adding us-gov-east region
 end
