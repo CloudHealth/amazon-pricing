@@ -8,5 +8,5 @@
 # Home::      http://github.com/CloudHealth/amazon-pricing
 #++
 module AwsPricing
-VERSION = '0.1.126' # [major,minor.fix]: Support for vmware specific i3p.16xlarge instances
+VERSION = '0.1.127' # [major,minor.fix]: Support for all metal instances
 end
