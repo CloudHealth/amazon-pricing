@@ -214,7 +214,7 @@ module AwsPricing
       'i3.4xlarge' => 'Storage Optimized High I/O Quadruple Extra Large', 'i3.8xlarge' => 'Storage Optimized High I/O Extra Large',
       'i3.16xlarge' => 'Storage Optimized High I/O Hextuple Extra Large',
       'i3.metal' => 'Storage Optimized High I/O Metal',
-      'i3p.16xlarge' => "Storage Optimized VMWare High I/O",
+      'i3p.16xlarge' => "Storage Optimized VMware High I/O",
        'd2.xlarge' => 'Dense Storage Extra Large', 'd2.2xlarge' => 'Dense Storage Double Extra Large', 'd2.4xlarge' => 'Dense Storage Quadruple Extra Large', 'd2.8xlarge' => 'Dense Storage Eight Extra Large',
       'h1.2xlarge' => 'Dense Storage H1 Double Extra Large', 'h1.4xlarge' => 'Dense Storage H1 Quadruple Extra Large', 'h1.8xlarge' => 'Dense Storage H1 Eight Extra Large', 'h1.16xlarge' => 'Dense Storage H1 Hextuple Extra Large',
       'r3.large' => 'Memory Optimized Large', 'r3.xlarge' => 'Memory Optimized Extra Large', 'r3.2xlarge' => 'Memory Optimized Double Extra Large', 'r3.4xlarge' => 'Memory Optimized Quadruple Extra Large', 'r3.8xlarge' => 'Memory Optimized Eight Extra Large',
