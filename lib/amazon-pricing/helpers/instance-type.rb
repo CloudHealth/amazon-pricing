@@ -1,3 +1,4 @@
+require 'pry'
 module AwsPricing
   module Helper
     module InstanceType
@@ -168,6 +169,10 @@ module AwsPricing
         all_instances.select { |family, instances| instances.include?(api_name) }.values.first
       end
 
+      def get_nf_size(instance_or_size)
+        nf = size_to_nf[instance_or_size]
+        nf.nil? ? api_name_to_nf(instance_or_size) : nf
+      end
 
       def api_name_to_nf(name)
         type = name.split('.').last
@@ -177,6 +182,9 @@ module AwsPricing
           sizes = family_members(name)
           type = sizes[-1].split('.').last        # 'metal' defaults to largest size
           if sizes[-1].split('.').last == METAL
+            if sizes.size == 1 # We have an instance family with only metals, return 1 as the NF
+              return 1
+            end
             type = sizes[-2].split('.').last      # 'metal' already largest, so 2nd largest      
           end
         end
