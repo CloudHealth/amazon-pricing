@@ -1,4 +1,3 @@
-require 'pry'
 module AwsPricing
   module Helper
     module InstanceType
@@ -169,11 +168,6 @@ module AwsPricing
         all_instances.select { |family, instances| instances.include?(api_name) }.values.first
       end
 
-      def get_nf_size(instance_or_size)
-        nf = size_to_nf[instance_or_size]
-        nf.nil? ? api_name_to_nf(instance_or_size) : nf
-      end
-
       def api_name_to_nf(name)
         type = name.split('.').last
         if (type == METAL)
@@ -185,7 +179,7 @@ module AwsPricing
             if sizes.size == 1 # We have an instance family with only metals, return 1 as the NF
               return 1
             end
-            type = sizes[-2].split('.').last      # 'metal' already largest, so 2nd largest      
+            type = sizes[-2].split('.').last      # 'metal' already largest, so 2nd largest
           end
         end
         size_to_nf[type]
@@ -219,6 +213,7 @@ module AwsPricing
         NF_TO_SIZE_TABLE
       end
 
+      # Remove metal from this array? force adoption of this
       # NB: 'metal' is not in this table (since it's family specific), see #api_name_to_nf
       SIZE_TO_NF_TABLE = {
           "nano"    => 0.25,
@@ -236,7 +231,6 @@ module AwsPricing
           "10xlarge" => 80,
           "12xlarge" => 96,
           "16xlarge" => 128,
-          "metal"    => 128, # temporary (for _direct_ users of this hash), as only applies to i3.metal
           "18xlarge" => 144,
           "24xlarge" => 192,
           "32xlarge" => 256,
