@@ -184,8 +184,8 @@ module AwsPricing
           end
           type = sizes[-1].split('.').last        # 'metal' defaults to largest size
           if sizes[-1].split('.').last == METAL
-            if sizes.size == 1 # We have an instance family with only metals, return 1 as the NF
-              return 1
+            if sizes.size == 1 # We have an instance family with only metals but no NF associated; raise an error
+              raise UnknownTypeError, "Unknown metal type #{name}", caller
             end
             type = sizes[-2].split('.').last      # 'metal' already largest, so 2nd largest
           end
