@@ -179,7 +179,7 @@ module AwsPricing
           # assumes family_members are sorted by size
           sizes = family_members(name)
           # Return nil if we have a bogus instance type
-          if sizes.nil? 
+          if sizes.nil?
             return nil
           end
           type = sizes[-1].split('.').last        # 'metal' defaults to largest size
@@ -243,6 +243,7 @@ module AwsPricing
           "10xlarge" => 80,
           "12xlarge" => 96,
           "16xlarge" => 128,
+          "metal" => 128,  # We will be removing this once size_to_nf is deprecated.
           "18xlarge" => 144,
           "24xlarge" => 192,
           "32xlarge" => 256,
