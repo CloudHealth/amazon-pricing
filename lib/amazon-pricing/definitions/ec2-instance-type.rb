@@ -385,6 +385,7 @@ module AwsPricing
       'p3.2xlarge' =>   :high,
       'p3.8xlarge' =>  :ten_gigabit,
       'p3.16xlarge' => :twentyfive_gigabit,
+      'p3dn.24xlarge' => :one_hundred_gigabit,
       'r3.2xlarge' => :high,
       'r3.4xlarge' => :high,
       'r3.8xlarge' => :ten_gigabit,
