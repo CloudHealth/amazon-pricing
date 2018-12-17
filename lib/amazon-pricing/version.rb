@@ -8,5 +8,5 @@
 # Home::      http://github.com/CloudHealth/amazon-pricing
 #++
 module AwsPricing
-VERSION = '0.1.125' # [major,minor.fix]: Adding us-gov-east region
+VERSION = '0.1.128' # [major,minor.fix]: Adding eu-north-1 region
 end
