@@ -178,6 +178,10 @@ module AwsPricing
           # try to get largest size supported for family: presumes METAL is *not* in size_to_nf hash
           # assumes family_members are sorted by size
           sizes = family_members(name)
+          # Return nil if we have a bogus instance type
+          if sizes.nil? 
+            return nil
+          end
           type = sizes[-1].split('.').last        # 'metal' defaults to largest size
           if sizes[-1].split('.').last == METAL
             if sizes.size == 1 # We have an instance family with only metals, return 1 as the NF
