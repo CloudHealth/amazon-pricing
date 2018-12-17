@@ -171,6 +171,10 @@ module AwsPricing
       def api_name_to_nf(name)
         type = name.split('.').last
         if (type == METAL)
+          # See if our metal instance has a hard-coded nf value
+          if !metal_to_nf[name].nil?
+            return metal_to_nf[name]
+          end
           # try to get largest size supported for family: presumes METAL is *not* in size_to_nf hash
           # assumes family_members are sorted by size
           sizes = family_members(name)
@@ -213,6 +217,10 @@ module AwsPricing
         NF_TO_SIZE_TABLE
       end
 
+      def metal_to_nf
+        METAL_TO_NF_TABLE
+      end
+
       # Remove metal from this array? force adoption of this
       # NB: 'metal' is not in this table (since it's family specific), see #api_name_to_nf
       SIZE_TO_NF_TABLE = {
@@ -236,6 +244,13 @@ module AwsPricing
           "32xlarge" => 256,
       }
       NF_TO_SIZE_TABLE = SIZE_TO_NF_TABLE.invert
+
+      METAL_TO_NF_TABLE = {
+        'u-6tb1.metal' => 896,
+        'u-9tb1.metal' => 896,
+        'u-12tb1.metal' => 896,
+        'i3.metal' => 128,
+      }
 
     end
   end
