@@ -214,7 +214,7 @@ module AwsPricing
       'i3.4xlarge' => 'Storage Optimized High I/O Quadruple Extra Large', 'i3.8xlarge' => 'Storage Optimized High I/O Extra Large',
       'i3.16xlarge' => 'Storage Optimized High I/O Hextuple Extra Large',
       'i3.metal' => 'Storage Optimized High I/O Metal',
-      'i3p.16xlarge' => "Storage Optimized VMWare High I/O",
+      'i3p.16xlarge' => 'Storage Optimized VMware High I/O Hextuple Extra Large',
       'u-6tb1.metal' => 'Memory Optimized 6tb Metal',
       'u-9tb1.metal' => 'Memory Optimized 9tb Metal',
       'u-12tb1.metal' => 'Memory Optimized 12tb Metal',
