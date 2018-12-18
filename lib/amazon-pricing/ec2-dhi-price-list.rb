@@ -20,14 +20,18 @@ module AwsPricing
                  ]
 
     @@CAPACITY_HASH = { # number of instances a host can run, by definition largest size can only run one instance/host
+      'a1' => {"medium" =>16, "large"=>8, "xlarge"=>4, "2xlarge"=>2, "4xlarge"=>1},
       'c3' => { "large"=>16, "xlarge"=>8, "2xlarge"=>4, "4xlarge"=>2, "8xlarge"=>1 },
       'c4' => { "large"=>16, "xlarge"=>8, "2xlarge"=>4, "4xlarge"=>2, "8xlarge"=>1 },
-      'c5' => { "large"=>36, "xlarge"=>18, "2xlarge"=>9, "4xlarge"=>4,"9xlarge"=>2, "18xlarge"=>1 },
-      'c5d' => { "large"=>36, "xlarge"=>18, "2xlarge"=>9, "4xlarge"=>4,"9xlarge"=>2, "18xlarge"=>1 },
+      'c5' => { "large"=>36, "xlarge"=>18, "2xlarge"=>8, "4xlarge"=>4,"9xlarge"=>2, "18xlarge"=>1 },
+      'c5d' => { "large"=>36, "xlarge"=>18, "2xlarge"=>8, "4xlarge"=>4,"9xlarge"=>2, "18xlarge"=>1 },
+      'c5n' => { "large"=>36, "xlarge"=>18, "2xlarge"=>8, "4xlarge"=>4, "9xlarge"=>2, "18xlarge" =>1 },
       'p2' => { "xlarge"=>16, "8xlarge"=>2, "16xlarge"=>1 },
       'p3' => { "2xlarge"=>8, "8xlarge"=>2, "16xlarge"=>1 },
       'g2' => { "2xlarge"=>4, "8xlarge"=>1 },
       'g3' => { "4xlarge"=>4, "8xlarge"=>2, "16xlarge"=>1 },
+      'g3s' => { "xlarge" => 1},
+      'f1' => { "2xlarge"=>8, "4xlarge"=>4, "16xlarge" =>1 },
       'm3' => { "medium"=>32, "large"=>16, "xlarge"=>8, "2xlarge"=>4 },
       'd2' => { "xlarge"=>8, "2xlarge"=>4, "4xlarge"=>2, "8xlarge"=>1 },
       'h1' => { "2xlarge"=>8, "4xlarge"=>4, "8xlarge"=>2, "16xlarge"=>1 },
@@ -40,6 +44,7 @@ module AwsPricing
       'm5d' => { "large"=>48, "xlarge"=>24, "2xlarge"=>12, "4xlarge"=>6, "12xlarge"=>2, "24xlarge"=>1 },
       'i2' => { "xlarge"=>8, "2xlarge"=>4, "4xlarge"=>2, "8xlarge"=>1, "16xlarge"=>1 },
       'i3' => { "large"=>32, "xlarge"=>16, "2xlarge"=>8, "4xlarge"=>4, "8xlarge"=>2, "16xlarge"=>1, "metal"=>1 },
+      'i3p' => {"16xlarge"=>1},
       'u-6tb1' => { "metal"=>1 },
       'u-9tb1' => { "metal"=>1 },
       'u-12tb1' => { "metal"=>1 },

@@ -7,10 +7,12 @@ module AwsPricing
       @@INSTANCE_TYPES_BY_CLASSIFICATION = {
         'GeneralPurpose' => {
             'CurrentGen' => {
+                'A1' => ['a1.medium', 'a1.large', 'a1.xlarge', 'a1.2xlarge', 'a1.4xlarge'],
                 'M3' => ['m3.medium', 'm3.large', 'm3.xlarge', 'm3.2xlarge'],
                 'M4' => ['m4.large', 'm4.xlarge', 'm4.2xlarge', 'm4.4xlarge', 'm4.10xlarge', 'm4.16xlarge'],
                 'M5' => ['m5.large', 'm5.xlarge', 'm5.2xlarge', 'm5.4xlarge', 'm5.12xlarge', 'm5.24xlarge'],
                 'M5D' => ['m5d.large', 'm5d.xlarge', 'm5d.2xlarge', 'm5d.4xlarge', 'm5d.12xlarge', 'm5d.24xlarge'],
+                'M5A' => ['m5a.large', 'm5a.xlarge', 'm5a.2xlarge', 'm5a.4xlarge', 'm5a.12xlarge', 'm5a.24xlarge'],
             },
             'PreviousGen' => {
                 'M1' => ['m1.small', 'm1.medium', 'm1.large', 'm1.xlarge']
@@ -28,6 +30,7 @@ module AwsPricing
                 'C4' => ['c4.large', 'c4.xlarge', 'c4.2xlarge', 'c4.4xlarge', 'c4.8xlarge'],
                 'C5' => ['c5.large', 'c5.xlarge', 'c5.2xlarge', 'c5.4xlarge', 'c5.9xlarge', 'c5.18xlarge'],
                 'C5D' => ['c5d.large', 'c5d.xlarge', 'c5d.2xlarge', 'c5d.4xlarge', 'c5d.9xlarge', 'c5d.18xlarge'],
+                'C5N' => ['c5n.large', 'c5n.xlarge', 'c5n.2xlarge', 'c5n.4xlarge', 'c5n.9xlarge', 'c5n.18xlarge'],
             },
             'PreviousGen' => {
                 'C1' => ['c1.medium', 'c1.xlarge', 'cc1.4xlarge'],
@@ -40,6 +43,7 @@ module AwsPricing
                 'R4'  => ['r4.large', 'r4.xlarge', 'r4.2xlarge', 'r4.4xlarge', 'r4.8xlarge', 'r4.16xlarge'],
                 'R5' => ['r5.large', 'r5.xlarge', 'r5.2xlarge', 'r5.4xlarge', 'r5.12xlarge', 'r5.24xlarge'],
                 'R5D' => ['r5d.large', 'r5d.xlarge', 'r5d.2xlarge', 'r5d.4xlarge', 'r5d.12xlarge', 'r5d.24xlarge'],
+                'R5A' => ['r5a.large', 'r5a.xlarge', 'r5a.2xlarge', 'r5a.4xlarge', 'r5a.12xlarge', 'r5a.24xlarge'],
                 'X1'  => ['x1.16xlarge', 'x1.32xlarge'],
                 'X1E'  => ['x1e.xlarge', 'x1e.2xlarge', 'x1e.4xlarge', 'x1e.8xlarge', 'x1e.16xlarge', 'x1e.32xlarge'],
                 'Z1D' => ['z1d.large', 'z1d.xlarge', 'z1d.2xlarge', 'z1d.3xlarge', 'z1d.6xlarge', 'z1d.12xlarge'],
@@ -57,6 +61,7 @@ module AwsPricing
                 'HS1' => ['hs1.8xlarge'],
                 'I2'  => ['i2.xlarge', 'i2.2xlarge', 'i2.4xlarge', 'i2.8xlarge'],
                 'I3'  => ['i3.large', 'i3.xlarge', 'i3.2xlarge', 'i3.4xlarge', 'i3.8xlarge', 'i3.16xlarge', 'i3.metal'],
+                'I3P' => ['i3p.16xlarge'],
                 'D2'  => ['d2.xlarge', 'd2.2xlarge', 'd2.4xlarge', 'd2.8xlarge'],
                 'H1'  => ['h1.2xlarge', 'h1.4xlarge', 'h1.8xlarge', 'h1.16xlarge'],
             },
@@ -68,9 +73,11 @@ module AwsPricing
             'CurrentGen' => { # G2=GPU Graphics, G3=GPU-3 Graphics, P2=GPU Computes, P3=GPU-3 Computes, F1=FPGA Accelerated
                 'G2'  => ['g2.2xlarge', 'g2.8xlarge'],
                 'G3'  => ['g3.4xlarge', 'g3.8xlarge', 'g3.16xlarge'],
+                'G3S' => ['g3s.xlarge'],
                 'P2'  => ['p2.xlarge', 'p2.8xlarge', 'p2.16xlarge'],
                 'P3'  => ['p3.2xlarge', 'p3.8xlarge', 'p3.16xlarge'],
-                'F1'  => ['f1.2xlarge', 'f1.16xlarge'],
+                'P3DN' => ['p3dn.24xlarge'],
+                'F1'  => ['f1.2xlarge', 'f1.4xlarge', 'f1.16xlarge'],
             },
             'PreviousGen' => {
                 'CG1' => ['cg1.4xlarge']

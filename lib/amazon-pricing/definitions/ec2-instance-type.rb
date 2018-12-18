@@ -131,16 +131,28 @@ module AwsPricing
     def self.get_network_capacity(api_name)
       throughput = @Network_Performance[api_name]
       if not throughput
-        logger.warn "Unknown network throughput for instance type #{api_name}"
+        $stderr.puts "Unknown network throughput for instance type #{api_name}"
       end
       throughput
     end
     def self.get_network_mbps(throughput)
       network_mbps = @Network_Throughput_MBits_Per_Second[throughput]
       if not network_mbps
-        logger.warn "Unknown network throughput for #{throughput}"
+        $stderr.puts "Unknown network throughput for #{throughput}"
       end
       network_mbps
+    end
+
+    # Take in string from amazon pricing api, return network properties
+    # Input: String containing network capacity from amazon-pricing-api
+    # Output: network throughput as a string, int containing network mbps
+    def self.get_network_information(network_string)
+      throughput = @Network_String_To_Sym[network_string]
+      if throughput.nil?
+          $stderr.puts "[#{__method__}] WARNING: unknown network throughput string:#{network_string}"
+      end
+      network_mbps = @Network_Throughput_MBits_Per_Second[throughput]
+      [throughput.to_s, network_mbps]
     end
 
     protected
@@ -174,10 +186,34 @@ module AwsPricing
         :ten_gigabit => 10000,
         :twenty_gigabit => 20000,
         :twentyfive_gigabit => 25000, # presumes ENA
+        :fifty_gigabit => 50000,
+        :one_hundred_gigabit => 100000
+    }
+
+    # Use in population of profiles, takes in string value that amazon uses to reflect network capacity
+    # Returns symbol we use to map to numeric value
+    @Network_String_To_Sym = {
+        'Very Low' =>  :very_low,
+        'Low' => :low,
+        'Low to Moderate' => :low_to_moderate,
+        'Moderate' => :moderate,
+        'High' => :high,
+        '10 Gigabit'=> :ten_gigabit,
+        'Up to 10 Gigabit' => :ten_gigabit,
+        '20 Gigabit' => :twenty_gigabit,
+        'Up to 25 Gigabit' => :twentyfive_gigabit,
+        '25 Gigabit' => :twentyfive_gigabit,
+        '50 Gigabit' => :fifty_gigabit,
+        '100 Gigabit' => :one_hundred_gigabit
     }
 
     # handy summary here: www.ec2instances.info
     @Network_Performance = {
+      'a1.medium' => :ten_gigabit, # up to 10G
+      'a1.large' => :ten_gigabit, # up to 10G
+      'a1.xlarge' => :ten_gigabit, # up to 10G
+      'a1.2xlarge' => :ten_gigabit, # up to 10G
+      'a1.4xlarge' => :ten_gigabit, # up to 10G
       'c1.medium' => :moderate,
       'c1.xlarge' => :high,
       'c3.2xlarge' => :high,
@@ -202,6 +238,12 @@ module AwsPricing
       'c5d.9xlarge' => :ten_gigabit,
       'c5d.large' => :ten_gigabit,   # upto 10G
       'c5d.xlarge' => :ten_gigabit,  # upto 10G
+      'c5n.large' => :twentyfive_gigabit, # up to 25gb
+      'c5n.xlarge' => :twentyfive_gigabit, # up to 25gb
+      'c5n.2xlarge' => :twentyfive_gigabit, # up to 25gb
+      'c5n.4xlarge' => :twentyfive_gigabit, # up to 25gb
+      'c5n.9xlarge' => :fifty_gigabit,
+      'c5n.18xlarge' => :one_hundred_gigabit,
       'cache.c1.xlarge' => :high,
       'cache.m1.large' => :moderate,
       'cache.m1.medium' => :moderate,
@@ -283,12 +325,14 @@ module AwsPricing
       'db.x1.16xlarge' => :ten_gigabit,
       'db.x1.32xlarge' => :ten_gigabit,
       'f1.2xlarge' => :high,
+      'f1.4xlarge' => :high,
       'f1.16xlarge' => :twentyfive_gigabit,
       'g2.2xlarge' => :high,
       'g2.8xlarge' => :ten_gigabit,
       'g3.4xlarge' => :twenty_gigabit,
       'g3.8xlarge' => :twenty_gigabit,
       'g3.16xlarge' => :twenty_gigabit,
+      'g3s.xlarge' => :ten_gigabit,
       'h1.2xlarge' => :ten_gigabit, # upto 10G
       'h1.4xlarge' => :ten_gigabit, # upto 10G
       'h1.8xlarge' => :ten_gigabit,
@@ -305,6 +349,7 @@ module AwsPricing
       'i3.8xlarge' => :ten_gigabit,
       'i3.large' => :ten_gigabit,
       'i3.metal' => :twentyfive_gigabit,
+      'i3p.16xlarge' => :twentyfive_gigabit,
       'i3.xlarge' => :ten_gigabit,
       'u-5tb1.metal' => :twentyfive_gigabit,
       'u-9tb1.metal' => :twentyfive_gigabit,
@@ -396,6 +441,19 @@ module AwsPricing
       'z1d.3xlarge' => :ten_gigabit, # upto 10G
       'z1d.6xlarge' => :ten_gigabit,
       'z1d.12xlarge' => :twentyfive_gigabit,
+      'm5a.large' => :ten_gigabit, # upto 10G
+      'm5a.xlarge' => :ten_gigabit, # upto 10G
+      'm5a.2xlarge' => :ten_gigabit, # upto 10G
+      'm5a.4xlarge' => :ten_gigabit, # upto 10G
+      'm5a.12xlarge' => :ten_gigabit,
+      'm5a.24xlarge' => :twenty_gigabit,
+      'r5a.large' => :ten_gigabit, # upto 10G
+      'r5a.xlarge' => :ten_gigabit, # upto 10G
+      'r5a.2xlarge' => :ten_gigabit, # upto 10G
+      'r5a.4xlarge' => :ten_gigabit, # upto 10G
+      'r5a.12xlarge' => :ten_gigabit,
+      'r5a.24xlarge' => :twenty_gigabit,
+
     }
 
   end
