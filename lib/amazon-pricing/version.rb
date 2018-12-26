@@ -8,5 +8,7 @@
 # Home::      http://github.com/CloudHealth/amazon-pricing
 #++
 module AwsPricing
-VERSION = '0.1.127' # [major,minor.fix]: Support for vmware specific p3dn instances
+
+VERSION = '0.1.128' # [major,minor.fix]: Fix for r5a instances not showing up
+
 end
