@@ -58,6 +58,7 @@ module AwsPricing
                 'HS1' => ['hs1.8xlarge'],
                 'I2'  => ['i2.xlarge', 'i2.2xlarge', 'i2.4xlarge', 'i2.8xlarge'],
                 'I3'  => ['i3.large', 'i3.xlarge', 'i3.2xlarge', 'i3.4xlarge', 'i3.8xlarge', 'i3.16xlarge', 'i3.metal'],
+                'I3P' => ['i3p.16xlarge'],
                 'D2'  => ['d2.xlarge', 'd2.2xlarge', 'd2.4xlarge', 'd2.8xlarge'],
                 'H1'  => ['h1.2xlarge', 'h1.4xlarge', 'h1.8xlarge', 'h1.16xlarge'],
             },
@@ -72,6 +73,7 @@ module AwsPricing
                 'G3S' => ['g3s.xlarge'],
                 'P2'  => ['p2.xlarge', 'p2.8xlarge', 'p2.16xlarge'],
                 'P3'  => ['p3.2xlarge', 'p3.8xlarge', 'p3.16xlarge'],
+                'P3DN' => ['p3dn.24xlarge'],
                 'F1'  => ['f1.2xlarge', 'f1.4xlarge', 'f1.16xlarge'],
             },
             'PreviousGen' => {
