@@ -9,6 +9,6 @@
 #++
 module AwsPricing
 
-VERSION = '0.1.128' # [major,minor.fix]: Fix for r5a instances not showing up
+VERSION = '0.1.129' # [major,minor.fix]: Adding eu-north-1 region
 
 end
