@@ -8,5 +8,7 @@
 # Home::      http://github.com/CloudHealth/amazon-pricing
 #++
 module AwsPricing
-VERSION = '0.1.127' # [major,minor.fix]: Support for all metal instances
+
+VERSION = '0.1.130' # [major,minor.fix]: Support for all metal instances
+
 end
