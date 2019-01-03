@@ -252,6 +252,9 @@ module AwsPricing
         'm5a.12xlarge' => 'General Purpose M5A Twelve Extra Large',  'm5a.24xlarge' => 'General Purpose M5A Twenty Four Extra Large',
       'r5a.large' => 'Memory Optimized R5A Large', 'r5a.xlarge' => 'Memory Optimized R5A Extra Large', 'r5a.2xlarge' => 'Memory Optimized R5A Double Extra Large', 'r5a.4xlarge' => 'Memory Optimized R5A Quadruple Extra Large',
         'r5a.12xlarge' => 'Memory Optimized R5A Twelve Extra Large', 'r5a.24xlarge' => 'Memory Optimized R5A Twenty Four Extra Large',
+      'u-6tb1.metal' => "Memory Optimized 6tb Metal",
+      'u-9tb1.metal' => "Memory Optimized 9tb Metal",
+      'u-12tb1.metal' => "Memory Optimized 12tb Metal",
     }
     @@Disk_Lookup = { # size of disk supported (local disk size) TOTAL size in gb
       'a1.medium' => 0, 'a1.large' => 0, 'a1.xlarge' => 0,  'a1.2xlarge' => 0, 'a1.4xlarge' => 0, # ebs-optimized
@@ -298,6 +301,9 @@ module AwsPricing
       'z1d.large' => 75, 'z1d.xlarge' => 150, 'z1d.2xlarge' => 300, 'z1d.3xlarge' => 450, 'z1d.6xlarge' => 900, 'z1d.12xlarge' => 1800, # NVMe
       'm5a.large' => 0, 'm5a.xlarge' => 0, 'm5a.2xlarge' => 0, 'm5a.4xlarge' => 0, 'm5a.12xlarge' => 0, 'm5a.24xlarge' => 0, #ebs-only
       'r5a.large' => 0, 'r5a.xlarge' => 0, 'r5a.2xlarge' => 0, 'r5a.4xlarge' => 0, 'r5a.12xlarge' => 0, 'r5a.24xlarge' => 0, #ebs-only
+      'u-6tb1.metal' =>  0, #ebs-only
+      'u-9tb1.metal' =>  0, #ebs-only
+      'u-12tb1.metal' => 0, #ebs-only
     }
     @@Platform_Lookup = { #bit width of cpu
       'a1.medium' =>  64, 'a1.large' =>  64,   'a1.xlarge' =>  64, 'a1.2xlarge' => 64, 'a1.4xlarge' => 64,
@@ -343,6 +349,9 @@ module AwsPricing
       'z1d.large' => 64, 'z1d.xlarge' => 64, 'z1d.2xlarge' => 64, 'z1d.3xlarge' => 64, 'z1d.6xlarge' => 64, 'z1d.12xlarge' => 64,
       'm5a.large' => 64, 'm5a.xlarge' => 64, 'm5a.2xlarge' => 64, 'm5a.4xlarge' => 64, 'm5a.12xlarge' => 64, 'm5a.24xlarge' => 64,
       'r5a.large' => 64, 'r5a.xlarge' => 64, 'r5a.2xlarge' => 64, 'r5a.4xlarge' => 64, 'r5a.12xlarge' => 64, 'r5a.24xlarge' => 64,
+      'u-6tb1.metal' =>  64,
+      'u-9tb1.metal' =>  64,
+      'u-12tb1.metal' => 64,
     }
     @@Disk_Type_Lookup = { #type of local storage for the disk
       'a1.medium' => :ebs,'a1.large' =>  :ebs, 'a1.xlarge' => :ebs, 'a1.2xlarge' => :ebs, 'a1.4xlarge' => :ebs,
@@ -390,6 +399,9 @@ module AwsPricing
       'z1d.large' => :ssd, 'z1d.xlarge' => :ssd, 'z1d.2xlarge' => :ssd, 'z1d.3xlarge' => :ssd, 'z1d.6xlarge' => :ssd, 'z1d.12xlarge' => :ssd,
       'm5a.large' => :ebs, 'm5a.xlarge' => :ebs, 'm5a.2xlarge' => :ebs, 'm5a.4xlarge' => :ebs, 'm5a.12xlarge' => :ebs, 'm5a.24xlarge' => :ebs,
       'r5a.large' => :ebs, 'r5a.xlarge' => :ebs, 'r5a.2xlarge' => :ebs, 'r5a.4xlarge' => :ebs, 'r5a.12xlarge' => :ebs, 'r5a.24xlarge' => :ebs,
+      'u-6tb1.metal' =>  :ebs,
+      'u-9tb1.metal' =>  :ebs,
+      'u-12tb1.metal' => :ebs,
     }
 
     # NOTE: These are populated by "populate_lookups"
@@ -641,6 +653,9 @@ module AwsPricing
       'r5a.4xlarge' => [ 265, 16000 ], #EBSOptimized
       'r5a.12xlarge' => [ 625, 30000 ], #EBSOptimized
       'r5a.24xlarge' => [ 1250, 60000 ], #EBSOptimized
+      'u-6tb1.metal' => [ 1750, 80000], #EBSOptimized
+      'u-9tb1.metal' =>  [ 1750, 80000], #EBSOptimized
+      'u-12tb1.metal' => [ 1750, 80000], #EBSOptimized
     }
   end
 end
