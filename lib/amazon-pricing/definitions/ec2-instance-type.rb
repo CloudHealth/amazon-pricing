@@ -451,6 +451,9 @@ module AwsPricing
       'r5a.4xlarge' => :ten_gigabit, # upto 10G
       'r5a.12xlarge' => :ten_gigabit,
       'r5a.24xlarge' => :twenty_gigabit,
+      'u-6tb1.metal' =>  :twentyfive_gigabit,
+      'u-9tb1.metal' =>  :twentyfive_gigabit,
+      'u-12tb1.metal' => :twentyfive_gigabit,
 
     }
 
