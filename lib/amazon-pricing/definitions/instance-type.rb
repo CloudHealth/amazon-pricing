@@ -252,9 +252,9 @@ module AwsPricing
         'm5a.12xlarge' => 'General Purpose M5A Twelve Extra Large',  'm5a.24xlarge' => 'General Purpose M5A Twenty Four Extra Large',
       'r5a.large' => 'Memory Optimized R5A Large', 'r5a.xlarge' => 'Memory Optimized R5A Extra Large', 'r5a.2xlarge' => 'Memory Optimized R5A Double Extra Large', 'r5a.4xlarge' => 'Memory Optimized R5A Quadruple Extra Large',
         'r5a.12xlarge' => 'Memory Optimized R5A Twelve Extra Large', 'r5a.24xlarge' => 'Memory Optimized R5A Twenty Four Extra Large',
-      'u-6tb1.metal' => "Memory Optimized 6tb Metal",
-      'u-9tb1.metal' => "Memory Optimized 9tb Metal",
-      'u-12tb1.metal' => "Memory Optimized 12tb Metal",
+      'u-6tb1.metal' => "Memory Optimized 6tb-1 Metal",
+      'u-9tb1.metal' => "Memory Optimized 9tb-1 Metal",
+      'u-12tb1.metal' => "Memory Optimized 12tb-1 Metal",
     }
     @@Disk_Lookup = { # size of disk supported (local disk size) TOTAL size in gb
       'a1.medium' => 0, 'a1.large' => 0, 'a1.xlarge' => 0,  'a1.2xlarge' => 0, 'a1.4xlarge' => 0, # ebs-optimized
