@@ -51,7 +51,9 @@ module AwsPricing
       'x1' => { "16xlarge"=>2, "32xlarge"=>1 },
       'x1e' =>{ "xlarge"=>32, "2xlarge"=>16, "4xlarge"=>8, "8xlarge"=>4, "16xlarge"=>2, "32xlarge"=>1 },
       'z1d' => {"large"=> 24, "xlarge"=> 12,  "2xlarge"=> 6,  "3xlarge"=> 4,  "6xlarge"=> 2,  "12xlarge"=> 1},
-
+      'u-6tb1' => {"metal" => 1},
+      'u-9tb1' => {"metal" => 1},
+      'u-12tb1' => {"metal" => 1},
     }
 
     def get_ec2_dhi_od_pricing

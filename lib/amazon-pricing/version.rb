@@ -9,6 +9,6 @@
 #++
 module AwsPricing
 
-VERSION = '0.1.129' # [major,minor.fix]: Adding eu-north-1 region
+VERSION = '0.1.130' # [major,minor.fix]: Support for all metal instances
 
 end

@@ -46,7 +46,10 @@ module AwsPricing
                 'R5A' => ['r5a.large', 'r5a.xlarge', 'r5a.2xlarge', 'r5a.4xlarge', 'r5a.12xlarge', 'r5a.24xlarge'],
                 'X1'  => ['x1.16xlarge', 'x1.32xlarge'],
                 'X1E'  => ['x1e.xlarge', 'x1e.2xlarge', 'x1e.4xlarge', 'x1e.8xlarge', 'x1e.16xlarge', 'x1e.32xlarge'],
-                'Z1D' => ['z1d.large', 'z1d.xlarge', 'z1d.2xlarge', 'z1d.3xlarge', 'z1d.6xlarge', 'z1d.12xlarge']
+                'Z1D' => ['z1d.large', 'z1d.xlarge', 'z1d.2xlarge', 'z1d.3xlarge', 'z1d.6xlarge', 'z1d.12xlarge'],
+                'U-6TB1' => ['u-6tb1.metal'],
+                'U-9TB1' => ['u-9tb1.metal'],
+                'U-12TB1' => ['u-12tb1.metal'],
             },
             'PreviousGen' => {
                 'M2'  => ['m2.xlarge', 'm2.2xlarge', 'm2.4xlarge'],
@@ -167,16 +170,26 @@ module AwsPricing
         all_instances.select { |family, instances| instances.include?(api_name) }.values.first
       end
 
-
       def api_name_to_nf(name)
         type = name.split('.').last
         if (type == METAL)
+          # See if our metal instance has a hard-coded nf value
+          if !metal_to_nf[name].nil?
+            return metal_to_nf[name]
+          end
           # try to get largest size supported for family: presumes METAL is *not* in size_to_nf hash
           # assumes family_members are sorted by size
           sizes = family_members(name)
+          # Return nil if we have a bogus instance type
+          if sizes.nil?
+            return nil
+          end
           type = sizes[-1].split('.').last        # 'metal' defaults to largest size
           if sizes[-1].split('.').last == METAL
-            type = sizes[-2].split('.').last      # 'metal' already largest, so 2nd largest      
+            if sizes.size == 1 # We have an instance family with only metals but no NF associated; raise an error
+              raise UnknownTypeError, "Unknown metal type #{name}", caller
+            end
+            type = sizes[-2].split('.').last      # 'metal' already largest, so 2nd largest
           end
         end
         size_to_nf[type]
@@ -210,6 +223,11 @@ module AwsPricing
         NF_TO_SIZE_TABLE
       end
 
+      def metal_to_nf
+        METAL_TO_NF_TABLE
+      end
+
+      # Remove metal from this array? force adoption of this
       # NB: 'metal' is not in this table (since it's family specific), see #api_name_to_nf
       SIZE_TO_NF_TABLE = {
           "nano"    => 0.25,
@@ -227,12 +245,19 @@ module AwsPricing
           "10xlarge" => 80,
           "12xlarge" => 96,
           "16xlarge" => 128,
-          "metal"    => 128, # temporary (for _direct_ users of this hash), as only applies to i3.metal
+          "metal" => 128,  # We will be removing this once size_to_nf is deprecated.
           "18xlarge" => 144,
           "24xlarge" => 192,
           "32xlarge" => 256,
       }
       NF_TO_SIZE_TABLE = SIZE_TO_NF_TABLE.invert
+
+      METAL_TO_NF_TABLE = {
+        'u-6tb1.metal' => 896,
+        'u-9tb1.metal' => 896,
+        'u-12tb1.metal' => 896,
+        'i3.metal' => 128,
+      }
 
     end
   end
