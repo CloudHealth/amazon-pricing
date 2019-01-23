@@ -9,6 +9,5 @@
 #++
 module AwsPricing
 
-VERSION = '0.1.130' # [major,minor.fix]: Support for all metal instances
-
+VERSION = '0.1.131' # [major,minor.fix]: Moving VPC only instance families to be in amazon-pricing gem
 end

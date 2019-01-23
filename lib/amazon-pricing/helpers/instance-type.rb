@@ -2,6 +2,9 @@ module AwsPricing
   module Helper
     module InstanceType
 
+
+      VPC_ONLY_INSTANCE_FAMILIES = ['a1', 'c4', 'c5', 'c5d', 'c5n', 'f1', 'g3', 'g3s', 'h1', 'i3', 'i3p', 'm4', 'm5', 'm5d', 'm5a', 'p2', 'p3', 'p3dn', 'r4', 't2', 't3', 'x1', 'x1e', 'r5', 'r5d', 'r5a', 'z1d', 'u-6tb1', 'u-9tb1', 'u-12tb1']
+
       METAL = 'metal'.freeze
       # the following family sizes should be kept in size order, see #api_name_to_nf below
       @@INSTANCE_TYPES_BY_CLASSIFICATION = {
@@ -227,7 +230,8 @@ module AwsPricing
         METAL_TO_NF_TABLE
       end
 
-      # Remove metal from this array? force adoption of this
+
+     # Remove metal from this array? force adoption of this
       # NB: 'metal' is not in this table (since it's family specific), see #api_name_to_nf
       SIZE_TO_NF_TABLE = {
           "nano"    => 0.25,
