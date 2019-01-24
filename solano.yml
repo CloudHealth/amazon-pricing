@@ -1,6 +1,0 @@
----
-coverage:
-  version: 2
-  enabled: true
-environment:
-  TZ: UTC
