@@ -6,6 +6,13 @@ properties([
     compressBuildLog()
 ]);
 
+if (env.BRANCH_NAME == 'master') {
+   properties([pipelineTriggers([cron('H H(8-10) * * 4')])],
+       [$class: 'BuildDiscarderProperty', strategy: [$class: 'LogRotator', artifactDaysToKeepStr: '', artifactNumToKeepStr: '', daysToKeepStr: '', numToKeepStr: '15']],
+       compressBuildLog()
+   );
+}
+
 // NODE FOR RUBY2.3.3-RAILS3.2
 node('testing') {
     try {
