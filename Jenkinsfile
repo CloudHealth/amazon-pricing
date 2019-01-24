@@ -22,7 +22,7 @@ node('testing') {
         timestamps {
             stage('Test_1.9.3-3.0') {
                 try {
-                    sh "bundle exec rspec --require yarjuf --format JUnit --out pricing_rspec_1-3_${JOB_BASE_NAME}_${BUILD_NUMBER}.xml"
+                    sh "bundle exec rspec --format RspecJunitFormatter --out pricing_rspec_1-3_${JOB_BASE_NAME}_${BUILD_NUMBER}.xml"
                 } finally {
                     junit(testResults: 'pricing_rspec_1-3_${JOB_BASE_NAME}_${BUILD_NUMBER}.xml')
                 }

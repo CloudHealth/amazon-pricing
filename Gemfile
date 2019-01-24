@@ -11,4 +11,5 @@ group :test do
   gem 'test-unit'
   gem 'rspec', '~> 2.11.0'
   gem 'simplecov', require: false
+  gem 'rspec_junit_formatter', '0.3.0'
 end
