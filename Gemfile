@@ -7,8 +7,9 @@ group :development do
 end
 
 group :test do
-  gem 'rake'
-  gem 'test-unit'
+  gem 'rake', '11.3.0'
+  gem 'test-unit', '3.2.3'
   gem 'rspec', '~> 2.11.0'
   gem 'simplecov', require: false
+  gem 'rspec_junit_formatter', '0.3.0'
 end
