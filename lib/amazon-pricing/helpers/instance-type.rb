@@ -231,7 +231,7 @@ module AwsPricing
       end
 
 
-     # Remove metal from this array? force adoption of this
+      # Remove metal from this array? force adoption of this
       # NB: 'metal' is not in this table (since it's family specific), see #api_name_to_nf
       SIZE_TO_NF_TABLE = {
           "nano"    => 0.25,
