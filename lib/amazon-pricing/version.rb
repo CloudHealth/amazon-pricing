@@ -9,5 +9,5 @@
 #++
 module AwsPricing
 
-VERSION = '0.1.131' # [major,minor.fix]: Moving VPC only instance families to be in amazon-pricing gem
+VERSION = '0.1.132' # [major,minor.fix]: Adding values for cache instance names
 end
