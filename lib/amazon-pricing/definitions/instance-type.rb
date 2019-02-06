@@ -440,7 +440,8 @@ module AwsPricing
     # e.g. RDS = http://aws-assets-pricing-prod.s3.amazonaws.com/pricing/rds/mysql/pricing-standard-deployments.js
     @@Compute_Units_Lookup = {}
 
-    # Names here match what are in the aws_instance_type_profiles table
+
+    # basic name and description lookup for cache instances
     @@Cache_Name_Lookup = {
       'cache.c1.xlarge' => 'High-CPU Cache Nodes',
       'cache.m1.large' => 'Standard Cache Nodes - Previous Generation',
