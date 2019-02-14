@@ -134,6 +134,10 @@ module AwsPricing
       @@Name_Lookup[api_name]
     end
 
+    def self.get_descriptive_cache_name(api_name)
+      @@Cache_Name_Lookup[api_name]
+    end
+
     protected
 
     def self.get_disk(api_name)
@@ -435,6 +439,55 @@ module AwsPricing
     # e.g. EC2 = http://aws-assets-pricing-prod.s3.amazonaws.com/pricing/ec2/linux-od.js
     # e.g. RDS = http://aws-assets-pricing-prod.s3.amazonaws.com/pricing/rds/mysql/pricing-standard-deployments.js
     @@Compute_Units_Lookup = {}
+
+
+    # basic name and description lookup for cache instances
+    @@Cache_Name_Lookup = {
+      'cache.c1.xlarge' => 'High-CPU Cache Nodes',
+      'cache.m1.large' => 'Standard Cache Nodes',
+      'cache.m1.medium' => 'Standard Cache Nodes',
+      'cache.m1.small' => 'Standard Cache Nodes',
+      'cache.m1.xlarge' => 'Standard Cache Nodes',
+      'cache.m2.2xlarge' => 'Memory Optimized Cache Nodes',
+      'cache.m2.4xlarge' => 'Memory Optimized Cache Nodes',
+      'cache.m2.xlarge' => 'Memory Optimized Cache Nodes',
+      'cache.m3.2xlarge' => 'Standard Cache Nodes',
+      'cache.m3.large' => 'Standard Cache Nodes',
+      'cache.m3.medium' => 'Standard Cache Nodes',
+      'cache.m3.xlarge' => 'Standard Cache Nodes',
+      'cache.m4.10xlarge' => 'Standard Cache Nodes',
+      'cache.m4.2xlarge' => 'Standard Cache Nodes',
+      'cache.m4.4xlarge' => 'Standard Cache Nodes',
+      'cache.m4.large' => 'Standard Cache Nodes',
+      'cache.m4.xlarge' => 'Standard Cache Nodes',
+      'cache.m5.large' => 'Standard Cache Nodes',
+      'cache.m5.xlarge' => 'Standard Cache Nodes',
+      'cache.m5.2xlarge' => 'Standard Cache Nodes',
+      'cache.m5.4xlarge'  => 'Standard Cache Nodes',
+      'cache.m5.12xlarge' => 'Standard Cache Nodes',
+      'cache.m5.24xlarge' => 'Standard Cache Nodes',
+      'cache.r3.2xlarge' => 'Memory Optimized Cache Nodes',
+      'cache.r3.4xlarge' => 'Memory Optimized Cache Nodes',
+      'cache.r3.8xlarge' => 'Memory Optimized Cache Nodes',
+      'cache.r3.large' => 'Memory Optimized Cache Nodes',
+      'cache.r3.xlarge' => 'Memory Optimized Cache Nodes',
+      'cache.r4.16xlarge' => 'Memory Optimized Cache Nodes',
+      'cache.r4.2xlarge' => 'Memory Optimized Cache Nodes',
+      'cache.r4.4xlarge' => 'Memory Optimized Cache Nodes',
+      'cache.r4.8xlarge' => 'Memory Optimized Cache Nodes',
+      'cache.r4.large' => 'Memory Optimized Cache Nodes',
+      'cache.r4.xlarge' => 'Memory Optimized Cache Nodes',
+      'cache.r5.large' => 'Memory Optimized Cache Nodes',
+      'cache.r5.xlarge' => 'Memory Optimized',
+      'cache.r5.4xlarge' =>  'Memory Optimized',
+      'cache.r5.2xlarge' => 'Memory Optimized',
+      'cache.r5.12xlarge'  => 'Memory Optimized',
+      'cache.r5.24xlarge' => 'Memory Optimized',
+      'cache.t1.micro' => 'Micro Cache Nodes',
+      'cache.t2.medium' => 'Standard Cache Nodes',
+      'cache.t2.micro' => 'Standard Cache Nodes',
+      'cache.t2.small' => 'Standard Cache Nodes'
+    }
 
     private
 
