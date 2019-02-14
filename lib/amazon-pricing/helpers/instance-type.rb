@@ -13,8 +13,8 @@ module AwsPricing
                 'A1' => ['a1.medium', 'a1.large', 'a1.xlarge', 'a1.2xlarge', 'a1.4xlarge'],
                 'M3' => ['m3.medium', 'm3.large', 'm3.xlarge', 'm3.2xlarge'],
                 'M4' => ['m4.large', 'm4.xlarge', 'm4.2xlarge', 'm4.4xlarge', 'm4.10xlarge', 'm4.16xlarge'],
-                'M5' => ['m5.large', 'm5.xlarge', 'm5.2xlarge', 'm5.4xlarge', 'm5.12xlarge', 'm5.24xlarge'],
-                'M5D' => ['m5d.large', 'm5d.xlarge', 'm5d.2xlarge', 'm5d.4xlarge', 'm5d.12xlarge', 'm5d.24xlarge'],
+                'M5' => ['m5.large', 'm5.xlarge', 'm5.2xlarge', 'm5.4xlarge', 'm5.12xlarge', 'm5.24xlarge', 'm5.metal'],
+                'M5D' => ['m5d.large', 'm5d.xlarge', 'm5d.2xlarge', 'm5d.4xlarge', 'm5d.12xlarge', 'm5d.24xlarge', 'm5d.metal'],
                 'M5A' => ['m5a.large', 'm5a.xlarge', 'm5a.2xlarge', 'm5a.4xlarge', 'm5a.12xlarge', 'm5a.24xlarge'],
             },
             'PreviousGen' => {
@@ -44,12 +44,12 @@ module AwsPricing
             'CurrentGen' => {
                 'R3'  => ['r3.large', 'r3.xlarge', 'r3.2xlarge', 'r3.4xlarge', 'r3.8xlarge'],
                 'R4'  => ['r4.large', 'r4.xlarge', 'r4.2xlarge', 'r4.4xlarge', 'r4.8xlarge', 'r4.16xlarge'],
-                'R5' => ['r5.large', 'r5.xlarge', 'r5.2xlarge', 'r5.4xlarge', 'r5.12xlarge', 'r5.24xlarge'],
-                'R5D' => ['r5d.large', 'r5d.xlarge', 'r5d.2xlarge', 'r5d.4xlarge', 'r5d.12xlarge', 'r5d.24xlarge'],
+                'R5' => ['r5.large', 'r5.xlarge', 'r5.2xlarge', 'r5.4xlarge', 'r5.12xlarge', 'r5.24xlarge', 'r5.metal'],
+                'R5D' => ['r5d.large', 'r5d.xlarge', 'r5d.2xlarge', 'r5d.4xlarge', 'r5d.12xlarge', 'r5d.24xlarge', 'r5d.metal'],
                 'R5A' => ['r5a.large', 'r5a.xlarge', 'r5a.2xlarge', 'r5a.4xlarge', 'r5a.12xlarge', 'r5a.24xlarge'],
                 'X1'  => ['x1.16xlarge', 'x1.32xlarge'],
                 'X1E'  => ['x1e.xlarge', 'x1e.2xlarge', 'x1e.4xlarge', 'x1e.8xlarge', 'x1e.16xlarge', 'x1e.32xlarge'],
-                'Z1D' => ['z1d.large', 'z1d.xlarge', 'z1d.2xlarge', 'z1d.3xlarge', 'z1d.6xlarge', 'z1d.12xlarge'],
+                'Z1D' => ['z1d.large', 'z1d.xlarge', 'z1d.2xlarge', 'z1d.3xlarge', 'z1d.6xlarge', 'z1d.12xlarge', 'z1d.metal'],
                 'U-6TB1' => ['u-6tb1.metal'],
                 'U-9TB1' => ['u-9tb1.metal'],
                 'U-12TB1' => ['u-12tb1.metal'],
@@ -261,6 +261,11 @@ module AwsPricing
         'u-9tb1.metal' => 896,
         'u-12tb1.metal' => 896,
         'i3.metal' => 128,
+        'm5.metal' => 192,
+        'm5d.metal' => 192,
+        'r5.metal' => 192,
+        'r5d.metal' => 192,
+        'z1d.metal' => 96
       }
 
     end
