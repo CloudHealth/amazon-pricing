@@ -613,7 +613,7 @@ module AwsPricing
       'i3.8xlarge'  => [ 875, 32500], # EBSOptimized
       'i3.16xlarge' => [1750, 65000], # EBSOptimized
       'i3.metal'    => [1750, 65000], # EBSOptimized
-      'i3p.16xlarge' => [1250, 64000], # EBSOptimized
+      'i3p.16xlarge' => [1750, 65000], # EBSOptimized
       'm1.large'  => [ 62, 4000], # EBSOptimized
       'm1.xlarge' => [125, 8000], # EBSOptimized
       'm2.2xlarge' => [ 62, 4000], # EBSOptimized
