@@ -290,8 +290,8 @@ module AwsPricing
       'h1.2xlarge' => 2000, 'h1.4xlarge' => 4000, 'h1.8xlarge' => 8000, 'h1.16xlarge' => 16000,
       'r3.large' => 32, 'r3.xlarge' => 80, 'r3.2xlarge' => 160, 'r3.4xlarge' => 320, 'r3.8xlarge' => 640,
       'r4.large' => 0, 'r4.xlarge' => 0, 'r4.2xlarge' => 0, 'r4.4xlarge' => 0, 'r4.8xlarge' => 0, 'r4.16xlarge' => 0,
-      'r5.large' => 0, 'r5.xlarge' => 0, 'r5.2xlarge' => 0, 'r5.4xlarge' => 0, 'r5.12xlarge' => 0, 'r5.24xlarge' => 0, 'r5.metal' => ,0# ebs-optimized
-      'r5d.large' => 75, 'r5d.xlarge' => 150, 'r5d.2xlarge' => 300, 'r5d.4xlarge' => 600, 'r5d.12xlarge' => 1800, 'r5d.24xlarge' => 3600, 'r5d.metal' => 3600 #NVMe
+      'r5.large' => 0, 'r5.xlarge' => 0, 'r5.2xlarge' => 0, 'r5.4xlarge' => 0, 'r5.12xlarge' => 0, 'r5.24xlarge' => 0, 'r5.metal' => 0, # ebs-optimized
+      'r5d.large' => 75, 'r5d.xlarge' => 150, 'r5d.2xlarge' => 300, 'r5d.4xlarge' => 600, 'r5d.12xlarge' => 1800, 'r5d.24xlarge' => 3600, 'r5d.metal' => 3600, #NVMe
       't2.nano' => 0, 't2.micro' => 0, 't2.small' => 0, 't2.medium' => 0, 't2.large' => 0, 't2.xlarge' => 0, 't2.2xlarge' => 0,
       't3.nano' => 0, 't3.micro' => 0, 't3.small' => 0, 't3.medium' => 0, 't3.large' => 0, 't3.xlarge' => 0, 't3.2xlarge' => 0, #ebs-only
       'c4.large' => 0, 'c4.xlarge' => 0, 'c4.2xlarge' => 0, 'c4.4xlarge' => 0, 'c4.8xlarge' => 0,
@@ -318,7 +318,7 @@ module AwsPricing
       'm3.medium' => 64, 'm3.large' => 64, 'm3.xlarge' => 64, 'm3.2xlarge' => 64,
       'm4.large' => 64, 'm4.xlarge' => 64, 'm4.2xlarge' => 64, 'm4.4xlarge' => 64, 'm4.10xlarge' => 64, 'm4.16xlarge' => 64,
       'm5.large' => 64, 'm5.xlarge' => 64, 'm5.2xlarge' => 64, 'm5.4xlarge' => 64, 'm5.12xlarge' => 64, 'm5.24xlarge' => 64,
-      'm5d.large' => 64, 'm5d.xlarge' => 64, 'm5d.2xlarge' => 64, 'm5d.4xlarge' => 64, 'm5d.12xlarge' => 64, 'm5d.24xlarge' => 64, 'm5d.metal' => 64, 'm5d.24xlarge'=> 64,
+      'm5d.large' => 64, 'm5d.xlarge' => 64, 'm5d.2xlarge' => 64, 'm5d.4xlarge' => 64, 'm5d.12xlarge' => 64, 'm5d.24xlarge' => 64, 'm5d.metal' => 64,
       'c1.medium' => 32, 'c1.xlarge' => 64,
       'hi1.4xlarge' => 64,
       'cg1.4xlarge' => 64,
@@ -339,7 +339,7 @@ module AwsPricing
       'h1.2xlarge' => 64, 'h1.4xlarge' => 64, 'h1.8xlarge' => 64, 'h1.16xlarge' => 64,
       'r3.large' => 64, 'r3.xlarge' => 64, 'r3.2xlarge' => 64, 'r3.4xlarge' => 64, 'r3.8xlarge' => 64,
       'r4.large' => 64, 'r4.xlarge' => 64, 'r4.2xlarge' => 64, 'r4.4xlarge' => 64, 'r4.8xlarge' => 64, 'r4.16xlarge' => 64,
-      'r5.large' => 64, 'r5.xlarge' => 64, 'r5.2xlarge' => 64, 'r5.4xlarge' => 64, 'r5.12xlarge' => 64, 'r5.24xlarge' => 64, 'r5d.metal' => 64,
+      'r5.large' => 64, 'r5.xlarge' => 64, 'r5.2xlarge' => 64, 'r5.4xlarge' => 64, 'r5.12xlarge' => 64, 'r5.24xlarge' => 64, 'r5.metal' => 64,
       'r5d.large' => 64, 'r5d.xlarge' => 64, 'r5d.2xlarge' => 64, 'r5d.4xlarge' => 64, 'r5d.12xlarge' => 64, 'r5d.24xlarge' => 64, 'r5d.metal' => 64,
       't2.nano' => 64, 't2.micro' => 64, 't2.small' => 64, 't2.medium' => 64, 't2.large' => 64, 't2.xlarge' => 64, 't2.2xlarge' => 64,
       't3.nano' => 64, 't3.micro' => 64, 't3.small' => 64, 't3.medium' => 64, 't3.large' => 64, 't3.xlarge' => 64, 't3.2xlarge' => 64,
@@ -632,7 +632,7 @@ module AwsPricing
       'm5.4xlarge' => [ 437, 18750], # EBSOptimized
       'm5.12xlarge'=> [ 875, 40000], # EBSOptimized
       'm5.24xlarge'=> [ 1750, 80000], # EBSOptimized
-      'm5.metal' =>   [ 1750, 80000]
+      'm5.metal' =>   [ 1750, 80000],
       'm5d.large'   => [ 437, 18750], # NVMe peak.30min/24hrs, else [60, 3600]
       'm5d.xlarge'  => [ 437, 18750], # NVMe peak.30min/24hrs, else [107, 6000]
       'm5d.2xlarge' => [ 437, 18750], # NVMe peak.30min/24hrs, else [213, 12000]
