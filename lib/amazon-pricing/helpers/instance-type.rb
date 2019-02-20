@@ -173,7 +173,7 @@ module AwsPricing
         all_instances.select { |family, instances| instances.include?(api_name) }.values.first
       end
 
-      def api_name_to_nf(name)
+      def self.api_name_to_nf(name)
         type = name.split('.').last
         if (type == METAL)
           # See if our metal instance has a hard-coded nf value
@@ -218,20 +218,18 @@ module AwsPricing
         ["#{fam}.#{new_type}" , nf]
       end
 
-      def size_to_nf
+      def self.size_to_nf
         SIZE_TO_NF_TABLE
+      end
+
+      def self.metal_to_nf
+        METAL_TO_NF_TABLE
       end
 
       def nf_to_size
         NF_TO_SIZE_TABLE
       end
 
-      def metal_to_nf
-        METAL_TO_NF_TABLE
-      end
-
-
-      # Remove metal from this array? force adoption of this
       # NB: 'metal' is not in this table (since it's family specific), see #api_name_to_nf
       SIZE_TO_NF_TABLE = {
           "nano"    => 0.25,
@@ -249,7 +247,6 @@ module AwsPricing
           "10xlarge" => 80,
           "12xlarge" => 96,
           "16xlarge" => 128,
-          "metal" => 128,  # We will be removing this once size_to_nf is deprecated.
           "18xlarge" => 144,
           "24xlarge" => 192,
           "32xlarge" => 256,
