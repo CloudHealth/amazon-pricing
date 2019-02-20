@@ -9,5 +9,5 @@
 #++
 module AwsPricing
 
-VERSION = '0.1.132' # [major,minor.fix]: Adding values for cache instance names
+VERSION = '0.1.133' # [major,minor.fix]: Adding m5/m5d/r5/rd5/z1d.metal support, clearing up throughput/IOPs map
 end
