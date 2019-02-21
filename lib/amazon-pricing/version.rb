@@ -9,5 +9,5 @@
 #++
 module AwsPricing
 
-VERSION = '0.1.133' # [major,minor.fix]: Adding m5/m5d/r5/rd5/z1d.metal support, clearing up throughput/IOPs map
+VERSION = '0.1.134' # [major,minor.fix]: Moving instance-type methods to be class methods rather than instance methods
 end
