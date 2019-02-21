@@ -185,12 +185,14 @@ module AwsPricing
           sizes = family_members(name)
           # Return nil if we have a bogus instance type
           if sizes.nil?
-            raise UnknownTypeError, "Unknown instance type #{name}", caller
+            return nil
+            #raise UnknownTypeError, "Unknown instance type #{name}", caller
           end
           type = sizes[-1].split('.').last        # 'metal' defaults to largest size
           if sizes[-1].split('.').last == METAL
             if sizes.size == 1 # We have an instance family with only metals but no NF associated; raise an error
-              raise UnknownTypeError, "Unknown metal type #{name}", caller
+              return nil
+              #raise UnknownTypeError, "Unknown metal type #{name}", caller
             end
             type = sizes[-2].split('.').last      # 'metal' already largest, so 2nd largest
           end
