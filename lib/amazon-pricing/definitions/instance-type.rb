@@ -282,7 +282,9 @@ module AwsPricing
       'g3s.xlarge' => 0, # g3s are ebs-only
       'db.m1.small' => 160, 'db.m1.medium' => 410, 'db.m1.large' =>850, 'db.m1.xlarge' => 1690,
       'db.m2.xlarge' => 420, 'db.m2.2xlarge' => 850, 'db.m2.4xlarge' => 1690, 'db.cr1.8xlarge' => 1690,
+      'db.r5.large' => 0, 'db.r5.xlarge' => 0, 'db.r5.2xlarge' => 0, 'db.r5.4xlarge' => 0, 'db.r5.12xlarge' => 0, 'db.r5.24xlarge' => 0, #ebs only
       'db.t1.micro' => 160,
+      'db.t3.micro' => 0, 'db.t3.small' => 0, 'db.t3.medium' => 0, 'db.t3.large'=> 0, 'db.t3.xlarge' => 0, 'db.t3.2xlarge' => 0,
       'c3.large' => 32, 'c3.xlarge' => 80, 'c3.2xlarge' => 160, 'c3.4xlarge' => 320, 'c3.8xlarge' => 640,
       'i2.xlarge' => 800, 'i2.2xlarge' => 1600, 'i2.4xlarge' => 3200, 'i2.8xlarge' => 6400,
       'i3.large' => 475, 'i3.xlarge' => 950, 'i3.2xlarge' => 1900, 'i3.4xlarge' => 3800, 'i3.8xlarge' => 7600, 'i3.16xlarge' => 15200, 'i3.metal' => 15200, 'i3p.16xlarge' => 15200,
@@ -332,6 +334,8 @@ module AwsPricing
       'db.m1.small' => 64, 'db.m1.medium' => 64, 'db.m1.large' => 64, 'db.m1.xlarge' => 64,
       'db.m2.xlarge' => 64, 'db.m2.2xlarge' => 64, 'db.m2.4xlarge' => 64, 'db.cr1.8xlarge' => 64,
       'db.t1.micro' => 64,
+      'db.t3.micro' => 64, 'db.t3.small' => 64, 'db.t3.medium' => 64, 'db.t3.large'=> 64, 'db.t3.xlarge' => 64, 'db.t3.2xlarge' => 64,
+      'db.r5.large' => 64, 'db.r5.xlarge' => 64, 'db.r5.2xlarge' => 64, 'db.r5.4xlarge' => 64, 'db.r5.12xlarge' => 64, 'db.r5.24xlarge' => 64, #ebs only
       'c3.large' => 64, 'c3.xlarge' => 64, 'c3.2xlarge' => 64, 'c3.4xlarge' => 64, 'c3.8xlarge' => 64,
       'i2.large' => 64, 'i2.xlarge' => 64, 'i2.2xlarge' => 64, 'i2.4xlarge' => 64, 'i2.8xlarge' => 64,
       'i3.large' => 64, 'i3.xlarge' => 64, 'i3.2xlarge' => 64, 'i3.4xlarge' => 64, 'i3.8xlarge' => 64, 'i3.16xlarge' => 64, 'i3.metal' => 64, 'i3p.16xlarge' => 64,
@@ -380,6 +384,8 @@ module AwsPricing
       'unknown' => :ephemeral,
       'db.m1.small' => :ephemeral, 'db.m1.medium' => :ephemeral, 'db.m1.large' => :ephemeral, 'db.m1.xlarge' => :ephemeral,
       'db.m2.xlarge' => :ephemeral, 'db.m2.2xlarge' => :ephemeral, 'db.m2.4xlarge' => :ephemeral, 'db.cr1.8xlarge' => :ephemeral,
+      'db.t3.micro' => :ebs, 'db.t3.small' => :ebs, 'db.t3.medium' => :ebs, 'db.t3.large'=> :ebs, 'db.t3.xlarge' => :ebs, 'db.t3.2xlarge' => :ebs,
+      'db.r5.large' => :ebs, 'db.r5.xlarge' => :ebs, 'db.r5.2xlarge' => :ebs, 'db.r5.4xlarge' => :ebs, 'db.r5.12xlarge' => :ebs, 'db.r5.24xlarge' => :ebs,
       'db.t1.micro' => :ebs,
       'c3.large' => :ssd, 'c3.xlarge' => :ssd, 'c3.2xlarge' => :ssd, 'c3.4xlarge' => :ssd, 'c3.8xlarge' => :ssd,
       'i2.large' => :ssd, 'i2.xlarge' => :ssd, 'i2.2xlarge' => :ssd, 'i2.4xlarge' => :ssd, 'i2.8xlarge' => :ssd,
