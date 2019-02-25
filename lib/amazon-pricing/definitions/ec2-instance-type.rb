@@ -341,8 +341,8 @@ module AwsPricing
       'f1.16xlarge' => :twentyfive_gigabit,
       'g2.2xlarge' => :high,
       'g2.8xlarge' => :ten_gigabit,
-      'g3.4xlarge' => :twenty_gigabit,
-      'g3.8xlarge' => :twenty_gigabit,
+      'g3.4xlarge' => :ten_gigabit,
+      'g3.8xlarge' => :ten_gigabit,
       'g3.16xlarge' => :twenty_gigabit,
       'g3s.xlarge' => :ten_gigabit,
       'h1.2xlarge' => :ten_gigabit, # upto 10G
@@ -385,7 +385,7 @@ module AwsPricing
       'm5.2xlarge' => :ten_gigabit, # upto 10G
       'm5.4xlarge' => :ten_gigabit, # upto 10G
       'm5.12xlarge' => :ten_gigabit,
-      'm5.24xlarge' => :ten_gigabit,
+      'm5.24xlarge' => :twentyfive_gigabit,
       'm5.metal' => :twentyfive_gigabit,
       'm5d.large' => :ten_gigabit,   # upto 10G
       'm5d.xlarge' => :ten_gigabit,  # upto 10G
@@ -397,7 +397,7 @@ module AwsPricing
       'p2.xlarge' =>   :high,
       'p2.8xlarge' =>  :ten_gigabit,
       'p2.16xlarge' => :twenty_gigabit,
-      'p3.2xlarge' =>   :high,
+      'p3.2xlarge' =>   :ten_gigabit,
       'p3.8xlarge' =>  :ten_gigabit,
       'p3.16xlarge' => :twentyfive_gigabit,
       'p3dn.24xlarge' => :one_hundred_gigabit,
@@ -432,8 +432,8 @@ module AwsPricing
       't2.micro' => :low_to_moderate,
       't2.nano' => :low,
       't2.small' => :low_to_moderate,
-      't2.xlarge' => :high,   # same as c4.2xlarge, cf:https://aws.amazon.com/blogs/aws/new-t2-xlarge-and-t2-2xlarge-instances/
-      't2.2xlarge' => :high,  # same as m4.xlarge,  cf:https://aws.amazon.com/blogs/aws/new-t2-xlarge-and-t2-2xlarge-instances/
+      't2.xlarge' => :moderate,   # same as c4.2xlarge, cf:https://aws.amazon.com/blogs/aws/new-t2-xlarge-and-t2-2xlarge-instances/
+      't2.2xlarge' => :moderate,  # same as m4.xlarge,  cf:https://aws.amazon.com/blogs/aws/new-t2-xlarge-and-t2-2xlarge-instances/
       't3.nano' => :low,
       't3.micro' => :low_to_moderate,
       't3.small' => :low_to_moderate,
