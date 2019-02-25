@@ -11,14 +11,14 @@ module AwsPricing
         'GeneralPurpose' => {
             'CurrentGen' => {
                 'A1' => ['a1.medium', 'a1.large', 'a1.xlarge', 'a1.2xlarge', 'a1.4xlarge'],
+                'M3' => ['m3.medium', 'm3.large', 'm3.xlarge', 'm3.2xlarge'],
                 'M4' => ['m4.large', 'm4.xlarge', 'm4.2xlarge', 'm4.4xlarge', 'm4.10xlarge', 'm4.16xlarge'],
                 'M5' => ['m5.large', 'm5.xlarge', 'm5.2xlarge', 'm5.4xlarge', 'm5.12xlarge', 'm5.24xlarge', 'm5.metal'],
                 'M5D' => ['m5d.large', 'm5d.xlarge', 'm5d.2xlarge', 'm5d.4xlarge', 'm5d.12xlarge', 'm5d.24xlarge', 'm5d.metal'],
                 'M5A' => ['m5a.large', 'm5a.xlarge', 'm5a.2xlarge', 'm5a.4xlarge', 'm5a.12xlarge', 'm5a.24xlarge'],
             },
             'PreviousGen' => {
-                'M1' => ['m1.small', 'm1.medium', 'm1.large', 'm1.xlarge'],
-                'M3' => ['m3.medium', 'm3.large', 'm3.xlarge', 'm3.2xlarge'],
+                'M1' => ['m1.small', 'm1.medium', 'm1.large', 'm1.xlarge']
             }
         },
         'BurstableInstances' => {
@@ -95,39 +95,39 @@ module AwsPricing
 
       # Important: Members of a family must be kept in 'size' order (small, medium, large, etc.)
       # AWS Docs: http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-types.html
-      def self.instance_types
+      def instance_types
         @@INSTANCE_TYPES_BY_CLASSIFICATION
       end
 
-      def self.general_purpose_instances
+      def general_purpose_instances
         instance_types['GeneralPurpose']
       end
 
-      def self.burstable_instances
+      def burstable_instances
         instance_types['BurstableInstances']
       end
 
-      def self.compute_optimized_instances
+      def compute_optimized_instances
         instance_types['ComputeOptimized']
       end
 
-      def self.memory_optimized_instances
+      def memory_optimized_instances
         instance_types['MemoryOptimized']
       end
 
-      def self.storage_optimized_instances
+      def storage_optimized_instances
         instance_types['StorageOptimized']
       end
 
-      def self.gpu_instances
+      def gpu_instances
         instance_types['GPUInstances']
       end
 
-      def self.micro_instances
+      def micro_instances
         instance_types['MicroInstances']
       end
 
-      def self.previous_generation_instances
+      def previous_generation_instances
         [
           general_purpose_instances['PreviousGen'],
           compute_optimized_instances['PreviousGen'],
@@ -142,7 +142,7 @@ module AwsPricing
         end
       end
 
-      def self.current_generation_instances
+      def current_generation_instances
         [
           general_purpose_instances['CurrentGen'],
           burstable_instances['CurrentGen'],
@@ -157,7 +157,7 @@ module AwsPricing
         end
       end
 
-      def self.all_instances
+      def all_instances
         @all_instances ||= begin
           [previous_generation_instances, current_generation_instances].inject({}) do |instances, family|
             instances.merge(family)
@@ -165,15 +165,15 @@ module AwsPricing
         end
       end
 
-      def self.family(api_name)
+      def family(api_name)
         all_instances.select { |family, instances| instances.include?(api_name) }.keys.first
       end
 
-      def self.family_members(api_name)
+      def family_members(api_name)
         all_instances.select { |family, instances| instances.include?(api_name) }.values.first
       end
 
-      def self.api_name_to_nf(name)
+      def api_name_to_nf(name)
         type = name.split('.').last
         if (type == METAL)
           # See if our metal instance has a hard-coded nf value
@@ -186,13 +186,11 @@ module AwsPricing
           # Return nil if we have a bogus instance type
           if sizes.nil?
             return nil
-            #raise UnknownTypeError, "Unknown instance type #{name}", caller
           end
           type = sizes[-1].split('.').last        # 'metal' defaults to largest size
           if sizes[-1].split('.').last == METAL
             if sizes.size == 1 # We have an instance family with only metals but no NF associated; raise an error
-              return nil
-              #raise UnknownTypeError, "Unknown metal type #{name}", caller
+              raise UnknownTypeError, "Unknown metal type #{name}", caller
             end
             type = sizes[-2].split('.').last      # 'metal' already largest, so 2nd largest
           end
@@ -220,14 +218,20 @@ module AwsPricing
         ["#{fam}.#{new_type}" , nf]
       end
 
-      def self.size_to_nf
+      def size_to_nf
         SIZE_TO_NF_TABLE
       end
 
-      def self.metal_to_nf
+      def nf_to_size
+        NF_TO_SIZE_TABLE
+      end
+
+      def metal_to_nf
         METAL_TO_NF_TABLE
       end
 
+
+      # Remove metal from this array? force adoption of this
       # NB: 'metal' is not in this table (since it's family specific), see #api_name_to_nf
       SIZE_TO_NF_TABLE = {
           "nano"    => 0.25,
@@ -245,6 +249,7 @@ module AwsPricing
           "10xlarge" => 80,
           "12xlarge" => 96,
           "16xlarge" => 128,
+          "metal" => 128,  # We will be removing this once size_to_nf is deprecated.
           "18xlarge" => 144,
           "24xlarge" => 192,
           "32xlarge" => 256,
