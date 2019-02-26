@@ -11,6 +11,7 @@ module AwsPricing
         'GeneralPurpose' => {
             'CurrentGen' => {
                 'A1' => ['a1.medium', 'a1.large', 'a1.xlarge', 'a1.2xlarge', 'a1.4xlarge'],
+                'M3' => ['m3.medium', 'm3.large', 'm3.xlarge', 'm3.2xlarge'],
                 'M4' => ['m4.large', 'm4.xlarge', 'm4.2xlarge', 'm4.4xlarge', 'm4.10xlarge', 'm4.16xlarge'],
                 'M5' => ['m5.large', 'm5.xlarge', 'm5.2xlarge', 'm5.4xlarge', 'm5.12xlarge', 'm5.24xlarge', 'm5.metal'],
                 'M5D' => ['m5d.large', 'm5d.xlarge', 'm5d.2xlarge', 'm5d.4xlarge', 'm5d.12xlarge', 'm5d.24xlarge', 'm5d.metal'],
@@ -186,13 +187,11 @@ module AwsPricing
           # Return nil if we have a bogus instance type
           if sizes.nil?
             return nil
-            #raise UnknownTypeError, "Unknown instance type #{name}", caller
           end
           type = sizes[-1].split('.').last        # 'metal' defaults to largest size
           if sizes[-1].split('.').last == METAL
             if sizes.size == 1 # We have an instance family with only metals but no NF associated; raise an error
               return nil
-              #raise UnknownTypeError, "Unknown metal type #{name}", caller
             end
             type = sizes[-2].split('.').last      # 'metal' already largest, so 2nd largest
           end
@@ -245,6 +244,7 @@ module AwsPricing
           "10xlarge" => 80,
           "12xlarge" => 96,
           "16xlarge" => 128,
+          "metal" => 128,  # We will be removing this once size_to_nf is deprecated.
           "18xlarge" => 144,
           "24xlarge" => 192,
           "32xlarge" => 256,

@@ -264,16 +264,16 @@ module AwsPricing
     }
     @@Disk_Lookup = { # size of disk supported (local disk size) TOTAL size in gb
       'a1.medium' => 0, 'a1.large' => 0, 'a1.xlarge' => 0,  'a1.2xlarge' => 0, 'a1.4xlarge' => 0, # ebs-optimized
-      'm1.small' => 160, 'm1.medium' => 410, 'm1.large' =>850, 'm1.xlarge' => 1690,
+      'm1.small' => 160, 'm1.medium' => 410, 'm1.large' =>840, 'm1.xlarge' => 1680,
       'm2.xlarge' => 420, 'm2.2xlarge' => 850, 'm2.4xlarge' => 1690,
       'm3.medium' => 4, 'm3.large' => 32, 'm3.xlarge' => 80, 'm3.2xlarge' => 160,
       'm4.large' => 0, 'm4.xlarge' => 0, 'm4.2xlarge' => 0, 'm4.4xlarge' => 0, 'm4.10xlarge' => 0, 'm4.16xlarge' => 0,
       'm5.large' => 0, 'm5.xlarge' => 0, 'm5.2xlarge' => 0, 'm5.4xlarge' => 0, 'm5.12xlarge' => 0, 'm5.24xlarge' => 0, 'm5.metal' => 0,
       'm5d.large' =>75, 'm5d.xlarge' => 150, 'm5d.2xlarge' => 300, 'm5d.4xlarge' => 600, 'm5d.12xlarge' => 1800, 'm5d.24xlarge' => 3600, 'm5d.metal' => 3600,
-      'c1.medium' => 350, 'c1.xlarge' => 1690,
+      'c1.medium' => 350, 'c1.xlarge' => 1680,
       'hi1.4xlarge' => 2048,
       'cg1.4xlarge' => 1690,
-      'cc1.4xlarge' => 1690, 'cc2.8xlarge' => 3370,
+      'cc1.4xlarge' => 1690, 'cc2.8xlarge' => 3360,
       't1.micro' => 160,
       'cr1.8xlarge' => 240,
       'hs1.8xlarge' => 48000,
@@ -282,7 +282,9 @@ module AwsPricing
       'g3s.xlarge' => 0, # g3s are ebs-only
       'db.m1.small' => 160, 'db.m1.medium' => 410, 'db.m1.large' =>850, 'db.m1.xlarge' => 1690,
       'db.m2.xlarge' => 420, 'db.m2.2xlarge' => 850, 'db.m2.4xlarge' => 1690, 'db.cr1.8xlarge' => 1690,
+      'db.r5.large' => 0, 'db.r5.xlarge' => 0, 'db.r5.2xlarge' => 0, 'db.r5.4xlarge' => 0, 'db.r5.12xlarge' => 0, 'db.r5.24xlarge' => 0, #ebs only
       'db.t1.micro' => 160,
+      'db.t3.micro' => 0, 'db.t3.small' => 0, 'db.t3.medium' => 0, 'db.t3.large'=> 0, 'db.t3.xlarge' => 0, 'db.t3.2xlarge' => 0,
       'c3.large' => 32, 'c3.xlarge' => 80, 'c3.2xlarge' => 160, 'c3.4xlarge' => 320, 'c3.8xlarge' => 640,
       'i2.xlarge' => 800, 'i2.2xlarge' => 1600, 'i2.4xlarge' => 3200, 'i2.8xlarge' => 6400,
       'i3.large' => 475, 'i3.xlarge' => 950, 'i3.2xlarge' => 1900, 'i3.4xlarge' => 3800, 'i3.8xlarge' => 7600, 'i3.16xlarge' => 15200, 'i3.metal' => 15200, 'i3p.16xlarge' => 15200,
@@ -297,7 +299,7 @@ module AwsPricing
       'c4.large' => 0, 'c4.xlarge' => 0, 'c4.2xlarge' => 0, 'c4.4xlarge' => 0, 'c4.8xlarge' => 0,
       'c5.large' => 0, 'c5.xlarge' => 0, 'c5.2xlarge' => 0, 'c5.4xlarge' => 0, 'c5.9xlarge' => 0, 'c5.18xlarge' => 0, # ebs-optimized
       'c5n.large' =>  0,'c5n.xlarge' =>  0,'c5n.2xlarge' => 0, 'c5n.4xlarge' => 0,  'c5n.9xlarge' =>  0, 'c5n.18xlarge' => 0, # ebs-optimized
-      'c5d.large' => 50, 'c5d.xlarge' => 100, 'c5d.2xlarge' => 225, 'c5d.4xlarge' => 450, 'c5d.9xlarge' => 900, 'c5d.18xlarge' => 1800, # NVMe
+      'c5d.large' => 50, 'c5d.xlarge' => 100, 'c5d.2xlarge' => 200, 'c5d.4xlarge' => 400, 'c5d.9xlarge' => 900, 'c5d.18xlarge' => 1800, # NVMe
       'x1.16xlarge' => 1920, 'x1.32xlarge' => 3840,
       'x1e.xlarge' => 120, 'x1e.2xlarge' => 240, 'x1e.4xlarge' => 480, 'x1e.8xlarge' => 960, 'x1e.16xlarge' => 1920, 'x1e.32xlarge' => 3840,
       'p2.xlarge' => 0, 'p2.8xlarge' => 0, 'p2.16xlarge' => 0,  # ebs-optimized
@@ -332,6 +334,8 @@ module AwsPricing
       'db.m1.small' => 64, 'db.m1.medium' => 64, 'db.m1.large' => 64, 'db.m1.xlarge' => 64,
       'db.m2.xlarge' => 64, 'db.m2.2xlarge' => 64, 'db.m2.4xlarge' => 64, 'db.cr1.8xlarge' => 64,
       'db.t1.micro' => 64,
+      'db.t3.micro' => 64, 'db.t3.small' => 64, 'db.t3.medium' => 64, 'db.t3.large'=> 64, 'db.t3.xlarge' => 64, 'db.t3.2xlarge' => 64,
+      'db.r5.large' => 64, 'db.r5.xlarge' => 64, 'db.r5.2xlarge' => 64, 'db.r5.4xlarge' => 64, 'db.r5.12xlarge' => 64, 'db.r5.24xlarge' => 64, #ebs only
       'c3.large' => 64, 'c3.xlarge' => 64, 'c3.2xlarge' => 64, 'c3.4xlarge' => 64, 'c3.8xlarge' => 64,
       'i2.large' => 64, 'i2.xlarge' => 64, 'i2.2xlarge' => 64, 'i2.4xlarge' => 64, 'i2.8xlarge' => 64,
       'i3.large' => 64, 'i3.xlarge' => 64, 'i3.2xlarge' => 64, 'i3.4xlarge' => 64, 'i3.8xlarge' => 64, 'i3.16xlarge' => 64, 'i3.metal' => 64, 'i3p.16xlarge' => 64,
@@ -380,12 +384,14 @@ module AwsPricing
       'unknown' => :ephemeral,
       'db.m1.small' => :ephemeral, 'db.m1.medium' => :ephemeral, 'db.m1.large' => :ephemeral, 'db.m1.xlarge' => :ephemeral,
       'db.m2.xlarge' => :ephemeral, 'db.m2.2xlarge' => :ephemeral, 'db.m2.4xlarge' => :ephemeral, 'db.cr1.8xlarge' => :ephemeral,
+      'db.t3.micro' => :ebs, 'db.t3.small' => :ebs, 'db.t3.medium' => :ebs, 'db.t3.large'=> :ebs, 'db.t3.xlarge' => :ebs, 'db.t3.2xlarge' => :ebs,
+      'db.r5.large' => :ebs, 'db.r5.xlarge' => :ebs, 'db.r5.2xlarge' => :ebs, 'db.r5.4xlarge' => :ebs, 'db.r5.12xlarge' => :ebs, 'db.r5.24xlarge' => :ebs,
       'db.t1.micro' => :ebs,
       'c3.large' => :ssd, 'c3.xlarge' => :ssd, 'c3.2xlarge' => :ssd, 'c3.4xlarge' => :ssd, 'c3.8xlarge' => :ssd,
       'i2.large' => :ssd, 'i2.xlarge' => :ssd, 'i2.2xlarge' => :ssd, 'i2.4xlarge' => :ssd, 'i2.8xlarge' => :ssd,
       'i3.large' => :ssd, 'i3.xlarge' => :ssd, 'i3.2xlarge' => :ssd, 'i3.4xlarge' => :ssd, 'i3.8xlarge' => :ssd, 'i3.16xlarge' => :ssd, 'i3.metal' => :ssd, 'i3p.16xlarge' => :ssd,
-      'd2.xlarge' => :ephemeral, 'd2.2xlarge' => :ephemeral, 'd2.4xlarge' => :ephemeral, 'd2.8xlarge' => :ephemeral,
-      'h1.2xlarge' => :ephemeral, 'h1.4xlarge' => :ephemeral, 'h1.8xlarge' => :ephemeral, 'h1.16xlarge' => :ephemeral,
+      'd2.xlarge' => :hdd, 'd2.2xlarge' => :hdd, 'd2.4xlarge' => :hdd, 'd2.8xlarge' => :hdd,
+      'h1.2xlarge' => :hdd, 'h1.4xlarge' => :hdd, 'h1.8xlarge' => :hdd, 'h1.16xlarge' => :hdd,
       'r3.large' => :ssd, 'r3.xlarge' => :ssd, 'r3.2xlarge' => :ssd, 'r3.4xlarge' => :ssd, 'r3.8xlarge' => :ssd,
       'r4.large' => :ebs, 'r4.xlarge' => :ebs, 'r4.2xlarge' => :ebs, 'r4.4xlarge' => :ebs, 'r4.8xlarge' => :ebs, 'r4.16xlarge' => :ebs,
       'r5.large' => :ebs, 'r5.xlarge' => :ebs, 'r5.2xlarge' => :ebs, 'r5.4xlarge' => :ebs, 'r5.12xlarge' => :ebs, 'r5.24xlarge' => :ebs, 'r5.metal' => :ebs,
