@@ -230,8 +230,28 @@ module AwsPricing
         METAL_TO_NF_TABLE
       end
 
+      SORTED_SIZE_TABLE = [
+          "nano"    ,
+          "micro"   ,
+          "small"   ,
+          "medium"  ,
+          "large"   ,
+          "xlarge"  ,
+          "2xlarge" ,
+          "3xlarge" ,
+          "4xlarge" ,
+          "6xlarge" ,
+          "8xlarge" ,
+          "9xlarge" ,
+          "10xlarge",
+          "12xlarge",
+          "16xlarge",
+          "18xlarge",
+          "24xlarge",
+          "32xlarge",
+          "metal"
+       ]
 
-      # Remove metal from this array? force adoption of this
       # NB: 'metal' is not in this table (since it's family specific), see #api_name_to_nf
       SIZE_TO_NF_TABLE = {
           "nano"    => 0.25,
