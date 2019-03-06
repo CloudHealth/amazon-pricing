@@ -9,5 +9,6 @@
 #++
 module AwsPricing
 
-VERSION = '0.1.134' # [major,minor.fix]: Support for db.r5 and db.t3 rds instances
+VERSION = '0.1.135' # [major,minor.fix]: Moving instance-type methods to be class methods rather than instance methods
+
 end
