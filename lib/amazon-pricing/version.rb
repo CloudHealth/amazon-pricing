@@ -9,6 +9,6 @@
 #++
 module AwsPricing
 
-VERSION = '0.1.135' # [major,minor.fix]: Moving instance-type methods to be class methods rather than instance methods
+VERSION = '0.1.136' # [major,minor.fix]: Adding table to hold sorted instance sizes 
 
 end
