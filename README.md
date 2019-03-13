@@ -1,6 +1,17 @@
 Amazon Web Services Pricing Ruby Gem
 ====================================
 
+*_NOTICE OF FUTURE UPDATES TO THE GEM_*
+====================================
+This project is no longer being maintained and will be deprecated in the future. Issues and pull requests will no longer be accepted. If you have scripts that utilize this project, consider using alternate libraries.
+
+Amazon has updated the method it uses to provide pricing information to be an API; as such the methods contained within this Gem are no longer useful for obtaining pricing information.
+
+Updates to the gem will be few and far between; please contact *nbeavers@vmware.com* with any questions.
+
+Information on Amazon's pricing api is available here: 
+https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/price-changes.html
+
 [![Test Report](https://ci.solanolabs.com/cloudhealthtech/amazon-pricing/badges/branches/master)](https://ci.solanolabs.com/cloudhealthtech/amazon-pricing/suites/48198)
 [![Gem Version](https://badge.fury.io/rb/amazon-pricing.svg)](http://badge.fury.io/rb/amazon-pricing)
 [![Code Climate](https://codeclimate.com/github/CloudHealth/amazon-pricing/badges/gpa.svg)](https://codeclimate.com/github/CloudHealth/amazon-pricing)
