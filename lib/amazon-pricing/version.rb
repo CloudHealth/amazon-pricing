@@ -9,6 +9,6 @@
 #++
 module AwsPricing
 
-VERSION = '0.1.136' # [major,minor.fix]: Updating README to reflect end of updates to gem
+VERSION = '2.1.000' # [major,minor.fix]: MAJOR: Gem is no longer going to be actively supported or maintained. Information in readme; reachout to nbeavers@vmware.com for more information.
 
 end
