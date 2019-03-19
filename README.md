@@ -7,7 +7,7 @@ This project is no longer being maintained and will be deprecated in the future.
 
 Amazon has updated the method it uses to provide pricing information to be an API; as such the methods contained within this Gem are no longer useful for obtaining pricing information.
 
-Updates to the gem will be few and far between; please contact *nbeavers@vmware.com* with any questions.
+Updates to the gem will be few and far between; please contact *cht-aws-pricing-services@groups.vmware.com* with any questions.
 
 Information on Amazon's pricing api is available here: 
 https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/price-changes.html
