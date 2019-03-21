@@ -195,7 +195,8 @@ module AwsPricing
             type = sizes[-2].split('.').last      # 'metal' already largest, so 2nd largest
           end
         end
-        size_to_nf[type]
+        full_type = type.gsub(/xl$/, 'xlarge')
+        size_to_nf[full_type]
       end
 
       # note: the next smaller type may _not_ be supported for a given family
