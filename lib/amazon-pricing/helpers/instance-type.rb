@@ -196,11 +196,7 @@ module AwsPricing
           end
         end
         full_type = type.gsub(/xl$/, 'xlarge')
-        nf = size_to_nf[full_type]
-        if nf.nil?
-          raise "No normalization factor found for api name: #{name}"
-        end
-        nf
+        size_to_nf[full_type]
       end
 
       # note: the next smaller type may _not_ be supported for a given family
