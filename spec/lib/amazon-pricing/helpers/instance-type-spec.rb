@@ -27,8 +27,4 @@ describe 'AwsPricing::Helper::InstanceType' do
       expect(nf).to eq(AwsPricing::Helper::InstanceType.api_name_to_nf("#{size}xlarge"))
     end
   end
-
-  it 'should raise an exception if api_name_to_nf cannot find a nf' do
-    expect{AwsPricing::Helper::InstanceType.api_name_to_nf('bogus')}.to raise_error(RuntimeError)
-  end
 end
