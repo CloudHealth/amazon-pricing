@@ -12,7 +12,7 @@ if (env.BRANCH_NAME == 'master') {
 }
 
 // NODE FOR RUBY2.3.3-RAILS3.2
-node('testing') {
+node('management-testing') {
     try {
         timestamps {
             stage('Setup_2.3.3-3.0') {
