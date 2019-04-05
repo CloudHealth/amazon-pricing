@@ -7,6 +7,7 @@
 # License::   Distributes under the same terms as Ruby
 # Home::      http://github.com/CloudHealth/amazon-pricing
 #++
+
 module AwsPricing
 
   class UnknownTypeError < NameError
@@ -663,9 +664,9 @@ module AwsPricing
       'm5ad.large' => [265, 16000], # EBS Optimized
       'm5ad.xlarge' => [265, 16000], # EBS Optimized
       'm5ad.2xlarge' => [265, 16000], # EBS Optimized
-      'm5ad.4xlarge' => [265, 16000],
-      'm5ad.12xlarge' => [675, 30000],
-      'm5ad.24xlarge' => [1250, 60000],
+      'm5ad.4xlarge' => [265, 16000],  # EBS Optimized
+      'm5ad.12xlarge' => [675, 30000],  # EBS Optimized
+      'm5ad.24xlarge' => [1250, 60000],  # EBS Optimized
       'p2.xlarge'  => [  94,  6000], # EBSOptimized
       'p2.8xlarge' => [ 625, 32500], # EBSOptimized
       'p2.16xlarge'=> [1250, 65000], # EBSOptimized
@@ -706,9 +707,9 @@ module AwsPricing
       'r5ad.large' => [265, 16000],  # EBS Optimized
       'r5ad.xlarge' => [265, 16000],  # EBS Optimized
       'r5ad.2xlarge' => [265, 16000],  # EBS Optimized
-      'r5ad.4xlarge' => [265, 16000],
-      'r5ad.12xlarge' => [675, 30000],
-      'r5ad.24xlarge' => [1250, 60000],
+      'r5ad.4xlarge' => [265, 16000],  # EBS Optimized
+      'r5ad.12xlarge' => [675, 30000],  # EBS Optimized
+      'r5ad.24xlarge' => [1250, 60000],  # EBS Optimized
       # t1.micro is EBS-only
       # t2.large is EBS-only
       # t2.medium is EBS-only
