@@ -299,7 +299,7 @@ module AwsPricing
       'r5.large' => 0, 'r5.xlarge' => 0, 'r5.2xlarge' => 0, 'r5.4xlarge' => 0, 'r5.12xlarge' => 0, 'r5.24xlarge' => 0, 'r5.metal' => 0, # ebs-optimized
       'r5a.large' => 0, 'r5a.xlarge' => 0, 'r5a.2xlarge' => 0, 'r5a.4xlarge' => 0, 'r5a.12xlarge' => 0, 'r5a.24xlarge' => 0, #ebs-only
       'r5d.large' => 75, 'r5d.xlarge' => 150, 'r5d.2xlarge' => 300, 'r5d.4xlarge' => 600, 'r5d.12xlarge' => 1800, 'r5d.24xlarge' => 3600, 'r5d.metal' => 3600, #NVMe
-      'r5ad.large' => 75, 'r5ad.xlarge' => 150, 'r5ad.2xlarge' => 300, 'r5ad.4xlarge' => 600,  'r5ad.12xlarge' => 1800, 'r5ad.24xlarge' => 3200 # NVMe
+      'r5ad.large' => 75, 'r5ad.xlarge' => 150, 'r5ad.2xlarge' => 300, 'r5ad.4xlarge' => 600,  'r5ad.12xlarge' => 1800, 'r5ad.24xlarge' => 3200, # NVMe
       't2.nano' => 0, 't2.micro' => 0, 't2.small' => 0, 't2.medium' => 0, 't2.large' => 0, 't2.xlarge' => 0, 't2.2xlarge' => 0,
       't3.nano' => 0, 't3.micro' => 0, 't3.small' => 0, 't3.medium' => 0, 't3.large' => 0, 't3.xlarge' => 0, 't3.2xlarge' => 0, #ebs-only
       'c4.large' => 0, 'c4.xlarge' => 0, 'c4.2xlarge' => 0, 'c4.4xlarge' => 0, 'c4.8xlarge' => 0,
