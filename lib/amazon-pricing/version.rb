@@ -9,6 +9,6 @@
 #++
 module AwsPricing
 
-VERSION = '0.1.136' # [major,minor.fix]: Adding support for xl instance sizes to InstanceType module
+VERSION = '0.1.137' # [major,minor.fix]: Adding support for m5ad, r5ad instances
 
 end

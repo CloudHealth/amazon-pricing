@@ -394,6 +394,18 @@ module AwsPricing
       'm5d.12xlarge' => :ten_gigabit,
       'm5d.24xlarge' => :twentyfive_gigabit,
       'm5d.metal' => :twentyfive_gigabit,
+      'm5a.large' => :ten_gigabit, # upto 10G
+      'm5a.xlarge' => :ten_gigabit, # upto 10G
+      'm5a.2xlarge' => :ten_gigabit, # upto 10G
+      'm5a.4xlarge' => :ten_gigabit, # upto 10G
+      'm5a.12xlarge' => :ten_gigabit,
+      'm5a.24xlarge' => :twenty_gigabit,
+      'm5ad.large' => :ten_gigabit, # upto 10G
+      'm5ad.xlarge' => :ten_gigabit, # upto 10G
+      'm5ad.2xlarge' => :ten_gigabit, # upto 10G
+      'm5ad.4xlarge' => :ten_gigabit, # upto 10G
+      'm5ad.12xlarge' => :ten_gigabit,
+      'm5ad.24xlarge' => :twenty_gigabit,
       'p2.xlarge' =>   :high,
       'p2.8xlarge' =>  :ten_gigabit,
       'p2.16xlarge' => :twenty_gigabit,
@@ -426,6 +438,18 @@ module AwsPricing
       'r5d.12xlarge' => :ten_gigabit,
       'r5d.24xlarge' => :twentyfive_gigabit,
       'r5d.metal' => :twentyfive_gigabit,
+      'r5a.large' => :ten_gigabit, # upto 10G
+      'r5a.xlarge' => :ten_gigabit, # upto 10G
+      'r5a.2xlarge' => :ten_gigabit, # upto 10G
+      'r5a.4xlarge' => :ten_gigabit, # upto 10G
+      'r5a.12xlarge' => :ten_gigabit,
+      'r5a.24xlarge' => :twenty_gigabit,
+      'r5ad.large' => :ten_gigabit, # upto 10G
+      'r5ad.xlarge' => :ten_gigabit, # upto 10G
+      'r5ad.2xlarge' => :ten_gigabit, # upto 10G
+      'r5ad.4xlarge' => :ten_gigabit, # upto 10G
+      'r5ad.12xlarge' => :ten_gigabit,
+      'r5ad.24xlarge' => :twenty_gigabit,
       't1.micro' => :very_low,
       't2.large' => :low_to_moderate,
       't2.medium' => :low_to_moderate,
@@ -456,22 +480,9 @@ module AwsPricing
       'z1d.6xlarge' => :ten_gigabit,
       'z1d.12xlarge' => :twentyfive_gigabit,
       'z1d.metal' => :twentyfive_gigabit,
-      'm5a.large' => :ten_gigabit, # upto 10G
-      'm5a.xlarge' => :ten_gigabit, # upto 10G
-      'm5a.2xlarge' => :ten_gigabit, # upto 10G
-      'm5a.4xlarge' => :ten_gigabit, # upto 10G
-      'm5a.12xlarge' => :ten_gigabit,
-      'm5a.24xlarge' => :twenty_gigabit,
-      'r5a.large' => :ten_gigabit, # upto 10G
-      'r5a.xlarge' => :ten_gigabit, # upto 10G
-      'r5a.2xlarge' => :ten_gigabit, # upto 10G
-      'r5a.4xlarge' => :ten_gigabit, # upto 10G
-      'r5a.12xlarge' => :ten_gigabit,
-      'r5a.24xlarge' => :twenty_gigabit,
       'u-6tb1.metal' =>  :twentyfive_gigabit,
       'u-9tb1.metal' =>  :twentyfive_gigabit,
       'u-12tb1.metal' => :twentyfive_gigabit,
-
     }
 
   end
