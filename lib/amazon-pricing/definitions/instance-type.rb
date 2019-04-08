@@ -379,7 +379,7 @@ module AwsPricing
       'm5.large' => :ebs, 'm5.xlarge' => :ebs, 'm5.2xlarge' => :ebs, 'm5.4xlarge' => :ebs, 'm5.12xlarge' => :ebs, 'm5.24xlarge' => :ebs, 'm5.metal' => :ebs,
       'm5d.large' => :ssd, 'm5d.xlarge' => :ssd, 'm5d.2xlarge' => :ssd, 'm5d.4xlarge' => :ssd, 'm5d.12xlarge' => :ssd, 'm5d.24xlarge' => :ssd, 'm5d.metal' => :ssd,
       'm5a.large' => :ebs, 'm5a.xlarge' => :ebs, 'm5a.2xlarge' => :ebs, 'm5a.4xlarge' => :ebs, 'm5a.12xlarge' => :ebs, 'm5a.24xlarge' => :ebs,
-      'm5ad.large' => :ssd, 'm5ad.xlarge' => :ssd, 'm5ad.2xlarge' => :ssd, 'm5ad.4xlarge' => :ssd, 'm5ad.12xlarge' => :ssd, 'm5ad.12xlarge' => :ssd,
+      'm5ad.large' => :ssd, 'm5ad.xlarge' => :ssd, 'm5ad.2xlarge' => :ssd, 'm5ad.4xlarge' => :ssd, 'm5ad.12xlarge' => :ssd, 'm5ad.24xlarge' => :ssd,
       'c1.medium' => :ephemeral, 'c1.xlarge' => :ephemeral,
       'hi1.4xlarge' => :ssd,
       'cg1.4xlarge' => :ephemeral,
