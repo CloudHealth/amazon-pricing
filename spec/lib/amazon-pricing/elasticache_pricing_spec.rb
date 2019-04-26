@@ -3,7 +3,7 @@ require 'spec_helper'
 describe AwsPricing::ElastiCachePriceList do
   # When new regions are introduced and elasticache prices are not available
   # in the new regions yet, add the new regions to NEW_REGIONS.
-  NEW_REGIONS = [ "ap-northeast-3", "us-gov-east-1", "eu-north-1"]
+  NEW_REGIONS = [ "ap-northeast-3", "us-gov-east-1", "eu-north-1", "ap-east-1"]
   before(:all) do
     @pricing = AwsPricing::ElastiCachePriceList.new
     @node_types = [:memcached]
