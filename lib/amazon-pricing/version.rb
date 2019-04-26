@@ -9,6 +9,6 @@
 #++
 module AwsPricing
 
-VERSION = '0.1.138' # [major,minor.fix]: Adding support for new Hong Kong region
+VERSION = '0.1.138' # [major,minor.fix]: Adding support for new Hong Kong region, t3a instances
 
 end

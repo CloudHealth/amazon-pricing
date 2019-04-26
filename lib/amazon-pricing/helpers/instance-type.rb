@@ -4,7 +4,7 @@ module AwsPricing
 
 
       VPC_ONLY_INSTANCE_FAMILIES = ['a1', 'c4', 'c5', 'c5d', 'c5n', 'f1', 'g3', 'g3s', 'h1', 'i3', 'i3p', 'm4', 'm5', 'm5d', 'm5a', 'm5ad',
-        'p2', 'p3', 'p3dn', 'r4', 't2', 't3', 'x1', 'x1e', 'r5', 'r5d', 'r5a', 'r5ad', 'z1d', 'u-6tb1', 'u-9tb1', 'u-12tb1']
+        'p2', 'p3', 'p3dn', 'r4', 't2', 't3', 't3a', 'x1', 'x1e', 'r5', 'r5d', 'r5a', 'r5ad', 'z1d', 'u-6tb1', 'u-9tb1', 'u-12tb1']
 
       METAL = 'metal'.freeze
       # the following family sizes should be kept in size order, see #api_name_to_nf below
@@ -27,7 +27,9 @@ module AwsPricing
         'BurstableInstances' => {
             'CurrentGen' => {
                 'T2' => ['t2.nano', 't2.micro', 't2.small', 't2.medium', 't2.large', 't2.xlarge', 't2.2xlarge'],
-                'T3' => ['t3.nano', 't3.micro', 't3.small', 't3.medium', 't3.large', 't3.xlarge', 't3.2xlarge']
+                'T3' => ['t3.nano', 't3.micro', 't3.small', 't3.medium', 't3.large', 't3.xlarge', 't3.2xlarge'],
+                'T3A' => ['t3a.nano', 't3a.micro', 't3a.small', 't3a.medium', 't3a.large', 't3a.xlarge', 't3a.2xlarge']
+
             }
         },
         'ComputeOptimized' => {
