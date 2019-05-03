@@ -17,6 +17,58 @@ describe 'AwsPricing::Helper::InstanceType' do
     end
   end
 
+  it 'should return correct NF values' do
+    expected_nf_values = {
+        "nano"    => 0.25,
+        "micro"   => 0.5,
+        "small"   => 1,
+        "medium"  => 2,
+        "large"   => 4,
+        "xlarge"  => 8,
+        "2xlarge" => 16,
+        "3xlarge" => 24,
+        "4xlarge" => 32,
+        "6xlarge" => 48,
+        "8xlarge" => 64,
+        "9xlarge" => 72,
+        "10xlarge" => 80,
+        "12xlarge" => 96,
+        "16xlarge" => 128,
+        "18xlarge" => 144,
+        "24xlarge" => 192,
+        "32xlarge" => 256,
+        }
+      metal_nf_values = {
+        'u-6tb1.metal' => 896,
+        'u-9tb1.metal' => 896,
+        'u-12tb1.metal' => 896,
+        'i3.metal' => 128,
+        'm5.metal' => 192,
+        'm5d.metal' => 192,
+        'r5.metal' => 192,
+        'r5d.metal' => 192,
+        'z1d.metal' => 96
+      }
+
+      # test famliies with metal instance
+      test_families = ['r5', 'm5', 'z1d']
+      test_families.each do | instance_family |
+        expected_nf_values.each do | test_size, nf_value |
+          api_name = instance_family + '.' + test_size
+          expect(AwsPricing::Helper::InstanceType.api_name_to_nf(api_name)).to eq nf_value
+        end
+        expect(AwsPricing::Helper::InstanceType.api_name_to_nf(instance_family + '.' + 'metal')).to eq metal_nf_values[instance_family + '.' + 'metal']
+      end
+
+      # test instance family without metal size; should return nil
+      instance_family = 't3'
+      expected_nf_values.each do | test_size, nf_value |
+        api_name = instance_family + '.' + test_size
+        expect(AwsPricing::Helper::InstanceType.api_name_to_nf(api_name)).to eq nf_value
+      end
+      expect(AwsPricing::Helper::InstanceType.api_name_to_nf(instance_family + '.' + 'metal')).to eq nil
+  end
+
   it 'should lookup *xl instance as *xlarge' do
     expect(AwsPricing::Helper::InstanceType.api_name_to_nf('xl')).to(
         eq(AwsPricing::Helper::InstanceType.api_name_to_nf('xlarge')))
