@@ -9,6 +9,6 @@
 #++
 module AwsPricing
 
-VERSION = '0.1.139' # [major,minor.fix]: Adding additional unit tests
+VERSION = '0.1.140' # [major,minor.fix]: Adding support for i3en instances
 
 end

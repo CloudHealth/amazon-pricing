@@ -32,6 +32,11 @@ module AwsPricing
 
             }
         },
+        'I/O Optimized' => {
+            'CurrentGen' => {
+                'I3EN' => ['i3en.large', 'i3en.xlarge', 'i3en.2xlarge', 'i3en.3xlarge', 'i3en.6xlarge', 'i3en.12xlarge', 'i3en.24xlarge']
+            }
+        },
         'ComputeOptimized' => {
             'CurrentGen' => {
                 'C3' => ['c3.large', 'c3.xlarge', 'c3.2xlarge', 'c3.4xlarge', 'c3.8xlarge'],
