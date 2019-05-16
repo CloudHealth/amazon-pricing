@@ -9,6 +9,6 @@
 #++
 module AwsPricing
 
-VERSION = '0.1.140' # [major,minor.fix]: Adding support for i3en instances
+VERSION = '0.1.141' # [major,minor.fix]: Removing unused code 
 
 end
