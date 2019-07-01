@@ -322,7 +322,7 @@ module AwsPricing
       'p3dn.24xlarge' => 1800,
       'f1.2xlarge' => 470, 'f1.4xlarge' => 940, 'f1.16xlarge' => 3760,
       'z1d.large' => 75, 'z1d.xlarge' => 150, 'z1d.2xlarge' => 300, 'z1d.3xlarge' => 450, 'z1d.6xlarge' => 900, 'z1d.12xlarge' => 1800, 'z1d.metal' => 1800, # NVMe
-      'db.z1d.large' => 75, 'db.z1d.xlarge' => 150, 'db.z1d.2xlarge' => 300, 'db.z1d.3xlarge' => 450, 'db.z1d.6xlarge' => 900, 'db.z1d.12xlarge' => 1800
+      'db.z1d.large' => 75, 'db.z1d.xlarge' => 150, 'db.z1d.2xlarge' => 300, 'db.z1d.3xlarge' => 450, 'db.z1d.6xlarge' => 900, 'db.z1d.12xlarge' => 1800,
       'u-6tb1.metal' =>  0, #ebs-only
       'u-9tb1.metal' =>  0, #ebs-only
       'u-12tb1.metal' => 0, #ebs-only
