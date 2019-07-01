@@ -9,6 +9,6 @@
 #++
 module AwsPricing
 
-VERSION = '2.1.000' # [major,minor.fix]: MAJOR: Gem is no longer going to be actively supported or maintained. Information in readme; reachout to cht-aws-pricing-services@groups.vmware.com for more information.
+VERSION = '0.1.142' # [major,minor.fix]: MAJOR: Gem is no longer going to be actively supported or maintained. Information in readme; reachout to cht-aws-pricing-services@groups.vmware.com for more information.
 
 end

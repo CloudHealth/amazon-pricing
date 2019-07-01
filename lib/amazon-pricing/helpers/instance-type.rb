@@ -3,7 +3,8 @@ module AwsPricing
     module InstanceType
 
 
-      VPC_ONLY_INSTANCE_FAMILIES = ['a1', 'c4', 'c5', 'c5d', 'c5n', 'f1', 'g3', 'g3s', 'h1', 'i3', 'i3p', 'm4', 'm5', 'm5d', 'm5a', 'p2', 'p3', 'p3dn', 'r4', 't2', 't3', 'x1', 'x1e', 'r5', 'r5d', 'r5a', 'z1d', 'u-6tb1', 'u-9tb1', 'u-12tb1']
+      VPC_ONLY_INSTANCE_FAMILIES = ['a1', 'c4', 'c5', 'c5d', 'c5n', 'f1', 'g3', 'g3s', 'h1', 'i3', 'i3p', 'm4', 'm5', 'm5d', 'm5a', 'm5ad',
+        'p2', 'p3', 'p3dn', 'r4', 't2', 't3', 't3a', 'x1', 'x1e', 'r5', 'r5d', 'r5a', 'r5ad', 'z1d', 'u-6tb1', 'u-9tb1', 'u-12tb1']
 
       METAL = 'metal'.freeze
       # the following family sizes should be kept in size order, see #api_name_to_nf below
@@ -15,6 +16,8 @@ module AwsPricing
                 'M5' => ['m5.large', 'm5.xlarge', 'm5.2xlarge', 'm5.4xlarge', 'm5.12xlarge', 'm5.24xlarge', 'm5.metal'],
                 'M5D' => ['m5d.large', 'm5d.xlarge', 'm5d.2xlarge', 'm5d.4xlarge', 'm5d.12xlarge', 'm5d.24xlarge', 'm5d.metal'],
                 'M5A' => ['m5a.large', 'm5a.xlarge', 'm5a.2xlarge', 'm5a.4xlarge', 'm5a.12xlarge', 'm5a.24xlarge'],
+                'M5AD' => ['m5ad.large', 'm5ad.xlarge', 'm5ad.2xlarge', 'm5ad.4xlarge', 'm5ad.12xlarge', 'm5ad.24xlarge'],
+
             },
             'PreviousGen' => {
                 'M1' => ['m1.small', 'm1.medium', 'm1.large', 'm1.xlarge'],
@@ -24,7 +27,14 @@ module AwsPricing
         'BurstableInstances' => {
             'CurrentGen' => {
                 'T2' => ['t2.nano', 't2.micro', 't2.small', 't2.medium', 't2.large', 't2.xlarge', 't2.2xlarge'],
-                'T3' => ['t3.nano', 't3.micro', 't3.small', 't3.medium', 't3.large', 't3.xlarge', 't3.2xlarge']
+                'T3' => ['t3.nano', 't3.micro', 't3.small', 't3.medium', 't3.large', 't3.xlarge', 't3.2xlarge'],
+                'T3A' => ['t3a.nano', 't3a.micro', 't3a.small', 't3a.medium', 't3a.large', 't3a.xlarge', 't3a.2xlarge']
+
+            }
+        },
+        'I/O Optimized' => {
+            'CurrentGen' => {
+                'I3EN' => ['i3en.large', 'i3en.xlarge', 'i3en.2xlarge', 'i3en.3xlarge', 'i3en.6xlarge', 'i3en.12xlarge', 'i3en.24xlarge']
             }
         },
         'ComputeOptimized' => {
@@ -47,6 +57,7 @@ module AwsPricing
                 'R5' => ['r5.large', 'r5.xlarge', 'r5.2xlarge', 'r5.4xlarge', 'r5.12xlarge', 'r5.24xlarge', 'r5.metal'],
                 'R5D' => ['r5d.large', 'r5d.xlarge', 'r5d.2xlarge', 'r5d.4xlarge', 'r5d.12xlarge', 'r5d.24xlarge', 'r5d.metal'],
                 'R5A' => ['r5a.large', 'r5a.xlarge', 'r5a.2xlarge', 'r5a.4xlarge', 'r5a.12xlarge', 'r5a.24xlarge'],
+                'R5AD' => ['r5ad.large', 'r5ad.xlarge', 'r5ad.2xlarge', 'r5ad.4xlarge', 'r5ad.12xlarge', 'r5ad.24xlarge'],
                 'X1'  => ['x1.16xlarge', 'x1.32xlarge'],
                 'X1E'  => ['x1e.xlarge', 'x1e.2xlarge', 'x1e.4xlarge', 'x1e.8xlarge', 'x1e.16xlarge', 'x1e.32xlarge'],
                 'Z1D' => ['z1d.large', 'z1d.xlarge', 'z1d.2xlarge', 'z1d.3xlarge', 'z1d.6xlarge', 'z1d.12xlarge', 'z1d.metal'],
@@ -195,7 +206,8 @@ module AwsPricing
             type = sizes[-2].split('.').last      # 'metal' already largest, so 2nd largest
           end
         end
-        size_to_nf[type]
+        full_type = type.gsub(/xl$/, 'xlarge')
+        size_to_nf[full_type]
       end
 
       # note: the next smaller type may _not_ be supported for a given family
