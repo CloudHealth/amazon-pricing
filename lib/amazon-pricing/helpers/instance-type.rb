@@ -271,7 +271,9 @@ module AwsPricing
         'm5d.metal' => 192,
         'r5.metal' => 192,
         'r5d.metal' => 192,
-        'z1d.metal' => 96
+        'z1d.metal' => 96,
+        'c5.metal' => 192,
+        'i3en.metal' => 192
       }
 
     end
