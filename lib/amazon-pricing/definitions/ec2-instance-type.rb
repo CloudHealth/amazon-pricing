@@ -159,6 +159,7 @@ module AwsPricing
         :moderate => 500,
         :high => 1000,
         :ten_gigabit => 10000,
+        :twelve_gigabit => 12000,
         :twenty_gigabit => 20000,
         :twentyfive_gigabit => 25000, # presumes ENA
         :fifty_gigabit => 50000,
@@ -174,6 +175,7 @@ module AwsPricing
         'Moderate' => :moderate,
         'High' => :high,
         '10 Gigabit'=> :ten_gigabit,
+        '12 Gigabit'=> :twelve_gigabit,
         'Up to 10 Gigabit' => :ten_gigabit,
         '20 Gigabit' => :twenty_gigabit,
         'Up to 25 Gigabit' => :twentyfive_gigabit,
