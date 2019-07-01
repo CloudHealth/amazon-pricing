@@ -299,7 +299,7 @@ module AwsPricing
       'c3.large' => 32, 'c3.xlarge' => 80, 'c3.2xlarge' => 160, 'c3.4xlarge' => 320, 'c3.8xlarge' => 640,
       'i2.xlarge' => 800, 'i2.2xlarge' => 1600, 'i2.4xlarge' => 3200, 'i2.8xlarge' => 6400,
       'i3.large' => 475, 'i3.xlarge' => 950, 'i3.2xlarge' => 1900, 'i3.4xlarge' => 3800, 'i3.8xlarge' => 7600, 'i3.16xlarge' => 15200, 'i3.metal' => 15200, 'i3p.16xlarge' => 15200,
-      'i3en.large'=> 0, 'i3en.xlarge'=> 0, 'i3en.2xlarge'=> 0, 'i3en.3xlarge'=> 0, 'i3en.6xlarge'=> 0, 'i3en.12xlarge'=> 0, 'i3en.24xlarge'=> 0, 'i3en.metal' => 0 # ebs only
+      'i3en.large'=> 0, 'i3en.xlarge'=> 0, 'i3en.2xlarge'=> 0, 'i3en.3xlarge'=> 0, 'i3en.6xlarge'=> 0, 'i3en.12xlarge'=> 0, 'i3en.24xlarge'=> 0, 'i3en.metal' => 0, # ebs only
       'd2.xlarge' => 6000, 'd2.2xlarge' => 12000, 'd2.4xlarge' => 24000, 'd2.8xlarge' => 48000,
       'h1.2xlarge' => 2000, 'h1.4xlarge' => 4000, 'h1.8xlarge' => 8000, 'h1.16xlarge' => 16000,
       'r3.large' => 32, 'r3.xlarge' => 80, 'r3.2xlarge' => 160, 'r3.4xlarge' => 320, 'r3.8xlarge' => 640,
@@ -409,7 +409,7 @@ module AwsPricing
       'c3.large' => :ssd, 'c3.xlarge' => :ssd, 'c3.2xlarge' => :ssd, 'c3.4xlarge' => :ssd, 'c3.8xlarge' => :ssd,
       'i2.large' => :ssd, 'i2.xlarge' => :ssd, 'i2.2xlarge' => :ssd, 'i2.4xlarge' => :ssd, 'i2.8xlarge' => :ssd,
       'i3.large' => :ssd, 'i3.xlarge' => :ssd, 'i3.2xlarge' => :ssd, 'i3.4xlarge' => :ssd, 'i3.8xlarge' => :ssd, 'i3.16xlarge' => :ssd, 'i3.metal' => :ssd, 'i3p.16xlarge' => :ssd,
-      'i3en.large'=> :ebs, 'i3en.xlarge'=> :ebs, 'i3en.2xlarge'=> :ebs, 'i3en.3xlarge'=> :ebs, 'i3en.6xlarge'=> :ebs, 'i3en.12xlarge'=> :ebs, 'i3en.24xlarge'=> :ebs, 'i3en.metal' => :ebs # ebs only
+      'i3en.large'=> :ebs, 'i3en.xlarge'=> :ebs, 'i3en.2xlarge'=> :ebs, 'i3en.3xlarge'=> :ebs, 'i3en.6xlarge'=> :ebs, 'i3en.12xlarge'=> :ebs, 'i3en.24xlarge'=> :ebs, 'i3en.metal' => :ebs, # ebs only
       'd2.xlarge' => :hdd, 'd2.2xlarge' => :hdd, 'd2.4xlarge' => :hdd, 'd2.8xlarge' => :hdd,
       'h1.2xlarge' => :hdd, 'h1.4xlarge' => :hdd, 'h1.8xlarge' => :hdd, 'h1.16xlarge' => :hdd,
       'r3.large' => :ssd, 'r3.xlarge' => :ssd, 'r3.2xlarge' => :ssd, 'r3.4xlarge' => :ssd, 'r3.8xlarge' => :ssd,
