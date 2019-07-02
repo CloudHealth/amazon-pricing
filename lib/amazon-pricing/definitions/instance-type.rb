@@ -322,7 +322,6 @@ module AwsPricing
       'p3dn.24xlarge' => 1800,
       'f1.2xlarge' => 470, 'f1.4xlarge' => 940, 'f1.16xlarge' => 3760,
       'z1d.large' => 75, 'z1d.xlarge' => 150, 'z1d.2xlarge' => 300, 'z1d.3xlarge' => 450, 'z1d.6xlarge' => 900, 'z1d.12xlarge' => 1800, 'z1d.metal' => 1800, # NVMe
-      'db.z1d.large' => 75, 'db.z1d.xlarge' => 150, 'db.z1d.2xlarge' => 300, 'db.z1d.3xlarge' => 450, 'db.z1d.6xlarge' => 900, 'db.z1d.12xlarge' => 1800,
       'u-6tb1.metal' =>  0, #ebs-only
       'u-9tb1.metal' =>  0, #ebs-only
       'u-12tb1.metal' => 0, #ebs-only
@@ -377,7 +376,6 @@ module AwsPricing
       'p3.2xlarge' => 64, 'p3.8xlarge' => 64, 'p3.16xlarge' => 64,
       'p3dn.24xlarge' => 64,
       'z1d.large' => 64, 'z1d.xlarge' => 64, 'z1d.2xlarge' => 64, 'z1d.3xlarge' => 64, 'z1d.6xlarge' => 64, 'z1d.12xlarge' => 64, 'z1d.metal' => 64,
-      'db.z1d.large' => 64, 'db.z1d.xlarge' => 64, 'db.z1d.2xlarge' => 64, 'db.z1d.3xlarge' => 64, 'db.z1d.6xlarge' => 64, 'db.z1d.12xlarge' => 64,
       'u-6tb1.metal' =>  64,
       'u-9tb1.metal' =>  64,
       'u-12tb1.metal' => 64,
@@ -434,7 +432,6 @@ module AwsPricing
       'p3dn.24xlarge' => :ssd,
       'f1.2xlarge' => :ssd, 'f1.4xlarge' => :ssd,'f1.16xlarge' => :ssd,
       'z1d.large' => :ssd, 'z1d.xlarge' => :ssd, 'z1d.2xlarge' => :ssd, 'z1d.3xlarge' => :ssd, 'z1d.6xlarge' => :ssd, 'z1d.12xlarge' => :ssd, 'z1d.metal' => :ssd,
-      'db.z1d.large' => :ssd, 'db.z1d.xlarge' => :ssd, 'db.z1d.2xlarge' => :ssd, 'db.z1d.3xlarge' => :ssd, 'db.z1d.6xlarge' => :ssd, 'db.z1d.12xlarge' => :ssd,
       'u-6tb1.metal' =>  :ebs,
       'u-9tb1.metal' =>  :ebs,
       'u-12tb1.metal' => :ebs,
