@@ -9,6 +9,6 @@
 #++
 module AwsPricing
 
-VERSION = '0.1.142' # [major,minor.fix]: adding new m5*, r5*, c5, i3en.metal sizes
+VERSION = '0.1.143' # [major,minor.fix]: adding network capacity description hash
 
 end
