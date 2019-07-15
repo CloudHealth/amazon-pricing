@@ -191,6 +191,9 @@ module AwsPricing
         '100 Gigabit' => :one_hundred_gigabit
     }
 
+    # Map for network capacity descriptions. Called from instance-type.rb to
+    # populate network capacity on the aws asset page. If network_capacity is
+    # "0" We will default to unknown. Occurs for Host instances.
     @Network_Capacity_Descriptions = ActiveSupport::HashWithIndifferentAccess.new(
         very_low: "Very Low",
         low: "Low",
@@ -200,7 +203,8 @@ module AwsPricing
         ten_gigabit: "10 Gigabit",
         twentyfive_gigabit: "25 Gigabit",
         twenty_gigabit: "20 Gigabit",
-        fifty_gigabit: "50 Gigabit"
+        fifty_gigabit: "50 Gigabit",
+        one_hundered_gigabit: "100 Gigabit",
     ).freeze
 
   end
