@@ -146,6 +146,10 @@ module AwsPricing
       [api_name, name]
     end
 
+    def self.get_network_capacity_descriptions
+      return @Network_Capacity_Descriptions
+    end
+
     # throughput values for performance ratings
     # Amazon informally tells customers that they translate as follows:
     #   Low = 100 Mbps
@@ -159,6 +163,7 @@ module AwsPricing
         :moderate => 500,
         :high => 1000,
         :ten_gigabit => 10000,
+        :twelve_gigabit => 12000,
         :twenty_gigabit => 20000,
         :twentyfive_gigabit => 25000, # presumes ENA
         :fifty_gigabit => 50000,
@@ -168,19 +173,35 @@ module AwsPricing
     # Use in population of profiles, takes in string value that amazon uses to reflect network capacity
     # Returns symbol we use to map to numeric value
     @Network_String_To_Sym = {
-        'Very Low' =>  :very_low,
+        'Very Low' => :very_low,
         'Low' => :low,
         'Low to Moderate' => :low_to_moderate,
         'Moderate' => :moderate,
         'High' => :high,
+        '10,000 Mbps' => :ten_gigabit,
+        'Up to 10,000 Mbps' => :ten_gigabit,
         '10 Gigabit'=> :ten_gigabit,
+        '12 Gigabit'=> :twelve_gigabit,
         'Up to 10 Gigabit' => :ten_gigabit,
         '20 Gigabit' => :twenty_gigabit,
         'Up to 25 Gigabit' => :twentyfive_gigabit,
+        '25,000 Mbps' => :twentyfive_gigabit,
         '25 Gigabit' => :twentyfive_gigabit,
         '50 Gigabit' => :fifty_gigabit,
         '100 Gigabit' => :one_hundred_gigabit
     }
 
+    @Network_Capacity_Descriptions = {
+        very_low: "Very Low",
+        low: "Low",
+        low_to_moderate: "Low to Moderate",
+        moderate: "Moderate",
+        high: "High",
+        ten_gigabit: "10 Gigabit",
+        twentyfive_gigabit: "25 Gigabit",
+        twenty_gigabit: "20 Gigabit",
+        fifty_gigabit: "50 Gigabit",
+        one_hundered_gigabit: "100 Gigabit",
+    }
   end
 end
