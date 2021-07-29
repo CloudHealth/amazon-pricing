@@ -1,4 +1,5 @@
 FROM ubuntu:14.04
+RUN apt-get update && apt-get upgrade -y
 
 # Install https packages for apt
 RUN apt-get update && apt-get install -y apt-transport-https ca-certificates
