@@ -7,7 +7,7 @@ group :development do
 end
 
 group :test do
-  gem 'rake', '11.3.0'
+  gem 'rake', '13.0.6'
   gem 'test-unit', '3.2.3'
   gem 'rspec', '~> 2.11.0'
   gem 'simplecov', require: false
